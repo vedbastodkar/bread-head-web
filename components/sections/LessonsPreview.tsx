@@ -66,16 +66,18 @@ export default function LessonsPreview() {
           </p>
         </FadeUp>
 
-        {/* 16:9 aspect wrapper — height scales with width, no layout shift */}
-        <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-6">
-          <Image
-            src="/assets/lesson_home_screen.png"
-            alt="Bread Head lesson in progress"
-            fill
-            className="object-cover object-top"
-            sizes="(max-width: 768px) 100vw, 900px"
-            quality={80}
-          />
+        {/* Phone screenshot — portrait 9:19.5, centered, max-width so it reads as a phone */}
+        <div className="flex justify-center mb-6">
+          <div className="relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[480px] aspect-[9/19.5] rounded-2xl overflow-hidden">
+            <Image
+              src="/assets/lesson_home_screen.png"
+              alt="Bread Head lesson in progress"
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 640px) 340px, (max-width: 1024px) 400px, 480px"
+              quality={80}
+            />
+          </div>
         </div>
 
         {/* Horizontal scroll */}
