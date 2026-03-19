@@ -5,6 +5,7 @@
 // h2: Playfair bold (non-italic — informational)
 // Pass 3: heading block FadeUp delay 0, card row FadeUp delay 0.15
 
+import Image  from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 
 const lessons = [
@@ -42,28 +43,32 @@ const lessons = [
 
 export default function LessonsPreview() {
   return (
-    <section className="bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-36">
+    <section className="bg-bgSage">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
         {/* Header */}
         <FadeUp delay={0}>
-          <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-5">
+          <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
             The Curriculum
           </p>
 
           <h2
-            className="font-display font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-4 max-w-xl"
+            className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-2 max-w-xl"
             style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
           >
             Real topics. Zero condescension.
           </h2>
 
-          <p className="font-body text-[16px] leading-[1.7] mb-14 max-w-lg"
+          <p className="font-body text-[16px] leading-[1.7] mb-6 max-w-lg"
              style={{ color: 'rgba(26,46,26,0.65)' }}>
             Every lesson is 5–9 minutes, built around a decision a real teen
             actually has to make.
           </p>
         </FadeUp>
+
+        {/* Lesson screenshot placeholder — swap src when asset is ready */}
+        {/* SHOOT: Pay Stub lesson on iPhone, held naturally, good light, slight angle */}
+        {/* <Image src="/assets/lesson-screen.png" alt="Lesson preview" width={600} height={340} className="rounded-2xl w-full object-cover mb-6" /> */}
 
         {/* Horizontal scroll */}
         <FadeUp delay={0.15}>

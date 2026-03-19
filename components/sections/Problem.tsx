@@ -8,29 +8,35 @@ import WordReveal from '@/app/components/WordReveal'
 export default function Problem() {
   return (
     <section className="bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-36">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
         {/* Eyebrow */}
-        <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-7">
+        <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
           The Gap
         </p>
 
-        {/* WordReveal — headlineIndex=0 renders "Schools teach algebra." as Playfair h2 */}
-        <div className="max-w-3xl mb-14">
+        {/* H2 — DM Sans 700, not Playfair */}
+        <h2
+          className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-3 max-w-2xl"
+          style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
+        >
+          Schools teach algebra.
+        </h2>
+
+        {/* WordReveal — sub-lines only, no headlineIndex */}
+        <div className="max-w-3xl mb-6">
           <WordReveal
             lines={[
-              'Schools teach algebra.',
               'Not how to read a pay stub.',
               'Not how a mortgage works.',
               'Not what a credit score actually means.',
             ]}
-            headlineIndex={0}
           />
         </div>
 
         {/* Stat + closer copy */}
         <div
-          className="mt-20 pt-10 flex flex-col sm:flex-row sm:items-start gap-8 max-w-2xl"
+          className="mt-8 pt-6 flex flex-col sm:flex-row sm:items-start gap-8 max-w-2xl"
           style={{ borderTop: '0.5px solid rgba(26,46,26,0.12)' }}
         >
           {/* Stat number — Playfair 700 48px */}

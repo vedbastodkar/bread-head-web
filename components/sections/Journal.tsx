@@ -6,6 +6,9 @@
 // Pass 3: journal card wrapped in FadeUp delay 0.1
 
 import FadeUp from '@/app/components/FadeUp'
+// Image placeholder — uncomment and swap src when asset is ready
+// SHOOT: teen at desk with notebook/phone, natural window light, warm tones, unposed
+// import Image from 'next/image'
 
 const entry = {
   week:  'Week 3',
@@ -24,13 +27,15 @@ const entry = {
 export default function Journal() {
   return (
     <section className="bg-bgSage">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-36">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
           {/* ── Left: journal entry card ────────────────────── */}
           <FadeUp delay={0.1}>
           <div>
-            <div className="bg-cardBg card-border card-hover rounded-2xl overflow-hidden">
+            {/* Journal photo placeholder — uncomment when /assets/journal-photo.jpg is ready */}
+            {/* <Image src="/assets/journal-photo.jpg" alt="" width={480} height={240} className="rounded-2xl object-cover w-full mb-4" /> */}
+            <div className="bg-cardBg card-border card-hover rounded-2xl overflow-hidden" style={{ borderTop: '3px solid #4A5D4A' }}>
 
               {/* Card header */}
               <div
@@ -71,7 +76,7 @@ export default function Journal() {
                   </span>
                   <span
                     className="font-body font-medium text-[12px] text-brandGreen px-2.5 py-1 rounded-full"
-                    style={{ background: 'rgba(74,93,74,0.10)' }}
+                    style={{ background: 'rgba(74,93,74,0.08)', border: '0.5px solid rgba(74,93,74,0.2)' }}
                   >
                     {entry.mood}
                   </span>
@@ -83,7 +88,7 @@ export default function Journal() {
                     <span
                       key={tag}
                       className="font-body font-medium text-[12px] text-brandGreen px-3 py-1.5 rounded-full"
-                      style={{ background: 'rgba(74,93,74,0.10)' }}
+                      style={{ background: 'rgba(74,93,74,0.08)', border: '0.5px solid rgba(74,93,74,0.2)' }}
                     >
                       {tag}
                     </span>
@@ -100,7 +105,7 @@ export default function Journal() {
                   Next prompt
                 </p>
                 <p className="font-body text-[14px]"
-                   style={{ color: 'rgba(26,46,26,0.65)' }}>
+                   style={{ color: 'rgba(26,46,26,0.55)', fontStyle: 'italic' }}>
                   {entry.nextPrompt}
                 </p>
               </div>
@@ -112,13 +117,13 @@ export default function Journal() {
           {/* ── Right: copy ──────────────────────────────────── */}
           <div>
             {/* Eyebrow */}
-            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-6">
+            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
               Your Money, Your Words
             </p>
 
-            {/* H2 — Playfair italic */}
+            {/* H2 — DM Sans 700, not Playfair */}
             <h2
-              className="font-display italic font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-8 max-w-md"
+              className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-3 max-w-md"
               style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
             >
               Reflection is the skill schools skip hardest.

@@ -19,25 +19,25 @@ const achievements = [
 export default function Gamification() {
   return (
     <section className="bg-textTitle grain-overlay">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-36">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
           {/* ── Left: copy ──────────────────────────────────── */}
           <div>
             {/* Eyebrow — accentGold (gold rules in this section) */}
-            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-accentGold mb-6">
+            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-accentGold mb-2">
               Built to Stick
             </p>
 
-            {/* H2 — Playfair italic, bgSage text */}
+            {/* H2 — DM Sans 700, not Playfair */}
             <h2
-              className="font-display italic font-bold text-bgSage tracking-[-0.02em] leading-[1.08] mb-8"
+              className="font-body font-bold text-bgSage tracking-[-0.02em] leading-[1.08] mb-3"
               style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
             >
               Learning that rewards showing up.
             </h2>
 
-            <p className="font-body text-[16px] leading-[1.7] mb-6 max-w-lg"
+            <p className="font-body text-[16px] leading-[1.7] mb-3 max-w-lg"
                style={{ color: 'rgba(230,237,217,0.65)' }}>
               Every lesson earns XP. Every day you practice builds your streak.
               Every week you finish smarter than the last.
@@ -50,7 +50,7 @@ export default function Gamification() {
             </p>
 
             {/* Feature list */}
-            <ul className="mt-9 space-y-3.5">
+            <ul className="mt-5 space-y-3">
               {[
                 'XP points for every lesson and journal entry',
                 'Daily streaks with milestone rewards',
@@ -106,7 +106,7 @@ export default function Gamification() {
                   <div>
                     <CountUp
                     target={12}
-                    className="font-body font-semibold text-accentGold text-[15px] leading-none"
+                    className="font-display font-bold text-accentGold text-[15px] leading-none"
                     style={{}}
                   />
                     <p className="font-body text-[9px]"
@@ -152,14 +152,15 @@ export default function Gamification() {
                     style={
                       a.earned
                         ? {
-                            background: 'rgba(209,169,69,0.12)',
-                            border: '0.5px solid rgba(209,169,69,0.40)',
+                            background: 'rgba(209,169,69,0.08)',
+                            border: '1.5px solid #D1A945',
                             color: '#D1A945',
                           }
                         : {
                             background: 'rgba(255,255,255,0.04)',
                             border: '0.5px solid rgba(255,255,255,0.10)',
                             color: 'rgba(230,237,217,0.22)',
+                            opacity: 0.35,
                           }
                     }
                   >

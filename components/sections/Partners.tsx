@@ -30,17 +30,17 @@ const partnerTypes = [
 
 export default function Partners() {
   return (
-    <section className="bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-36">
+    <section className="bg-bgSage">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
         {/* Header row */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-end mb-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-end mb-10">
           <div>
-            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-5">
+            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
               Institutional Grade
             </p>
             <h2
-              className="font-display font-bold text-textTitle tracking-[-0.02em] leading-[1.08]"
+              className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08]"
               style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
             >
               Bringing Bread Head to every classroom.
@@ -71,7 +71,7 @@ export default function Partners() {
 
         {/* Stats row — Playfair 700 48px per spec */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20 pb-20"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-10 pb-10"
           style={{ borderBottom: '0.5px solid rgba(26,46,26,0.10)' }}
         >
           {/* 2,400+ — CountUp with format + suffix */}
@@ -124,15 +124,14 @@ export default function Partners() {
           </FadeUp>
         </div>
 
-        {/* Partner type columns */}
-        <div className="grid md:grid-cols-3 gap-10">
+        {/* Partner type columns — white cards on sage */}
+        <div className="grid md:grid-cols-3 gap-6">
           {partnerTypes.map((p) => (
-            <div key={p.label} className="flex flex-col">
-              <span className="font-body font-medium text-[11px] mb-5"
-                    style={{ color: 'rgba(26,46,26,0.25)' }}>
+            <div key={p.label} className="bg-cardBg card-border rounded-2xl p-7 flex flex-col">
+              <span className="font-body font-bold text-brandGreen text-[13px] mb-4">
                 {p.number}
               </span>
-              <h3 className="font-body font-semibold text-textTitle text-[20px] leading-snug mb-4">
+              <h3 className="font-body font-semibold text-textTitle text-[20px] leading-snug mb-3">
                 {p.label}
               </h3>
               <p className="font-body text-[14px] leading-[1.7] flex-1"

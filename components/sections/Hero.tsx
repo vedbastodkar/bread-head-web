@@ -11,8 +11,11 @@ import MagneticButton from '@/app/components/MagneticButton'
 
 export default function Hero() {
   return (
-    <section className="bg-bgSage min-h-screen flex items-center">
-      <div className="max-w-7xl mx-auto w-full px-6 lg:px-8 py-24 lg:py-32">
+    <section
+      className="bg-bgSage min-h-screen flex items-center"
+      style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9' }}
+    >
+      <div className="max-w-7xl mx-auto w-full px-6 lg:px-8 py-12 pt-20 lg:pt-24 lg:pb-16">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
           {/* ── Left: copy ──────────────────────────────────── */}
@@ -21,7 +24,7 @@ export default function Hero() {
             {/* Eyebrow — FadeUp delay 0 */}
             <FadeUp delay={0}>
               <p
-                className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-6"
+                className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2"
                 style={{ color: '#4A5D4A' }}
               >
                 Personal Finance · Built for Teens
@@ -31,8 +34,8 @@ export default function Hero() {
             {/* H1 — FadeUp delay 0.1 */}
             <FadeUp delay={0.1}>
               <h1
-                className="font-display italic font-bold text-textTitle leading-[1.06] tracking-[-0.02em] mb-7"
-                style={{ fontSize: 'clamp(44px, 6vw, 72px)' }}
+                className="font-display italic font-bold text-textTitle leading-[1.06] tracking-[-0.02em] mb-3"
+                style={{ fontSize: 'clamp(36px, 5vw, 58px)' }}
               >
                 The money stuff school forgot to teach you.
               </h1>
@@ -41,7 +44,7 @@ export default function Hero() {
             {/* Sub — FadeUp delay 0.2 */}
             <FadeUp delay={0.2}>
               <p
-                className="font-body text-[16px] leading-[1.7] mb-10 max-w-[480px]"
+                className="font-body text-[16px] leading-[1.7] mb-5 max-w-[480px]"
                 style={{ color: 'rgba(26,46,26,0.65)' }}
               >
                 Bite-sized lessons on pay stubs, credit, and taxes. A budget
@@ -52,9 +55,12 @@ export default function Hero() {
 
             {/* Stat callout card — FadeUp delay 0.28 */}
             <FadeUp delay={0.28}>
-              <div className="bg-cardBg card-border rounded-2xl p-7 mb-10 max-w-[420px] flex items-start gap-5">
-                {/* CountUp replaces static "73%" */}
-                <CountUp target={73} suffix="%" />
+              <div
+                className="rounded-2xl p-7 mb-6 max-w-[420px] flex items-start gap-5"
+                style={{ background: '#E6EDD9', border: '0.5px solid rgba(74,93,74,0.2)' }}
+              >
+                {/* 73% in brandGreen */}
+                <CountUp target={73} suffix="%" className="font-display font-bold text-brandGreen leading-none" style={{ fontSize: '48px' }} />
                 <p
                   className="font-body text-[14px] leading-[1.6]"
                   style={{ color: 'rgba(26,46,26,0.65)' }}
