@@ -4,6 +4,7 @@
 // Transparent → bgSage with blur on scroll.
 // useMotionValueEvent avoids manual addEventListener.
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { useScroll, useMotionValueEvent } from 'framer-motion'
 
@@ -37,19 +38,15 @@ export default function Nav() {
           : '0.5px solid transparent',
       }}
     >
-      {/* Logo — Playfair italic */}
-      <span
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
-          fontWeight: 700,
-          fontSize: '20px',
-          color: '#1A2E1A',
-          letterSpacing: '-0.01em',
-        }}
-      >
-        Bread Head
-      </span>
+      {/* Logo */}
+      <Image
+        src="/assets/logo_w_text.png"
+        alt="Bread Head"
+        height={32}
+        width={120}
+        style={{ objectFit: 'contain', objectPosition: 'left' }}
+        priority
+      />
 
       {/* Links + CTA */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
