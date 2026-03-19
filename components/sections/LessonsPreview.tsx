@@ -66,9 +66,7 @@ export default function LessonsPreview() {
           </p>
         </FadeUp>
 
-        {/* Lesson screenshot placeholder — swap src when asset is ready */}
-        {/* SHOOT: Pay Stub lesson on iPhone, held naturally, good light, slight angle */}
-        {/* <Image src="/assets/lesson-screen.png" alt="Lesson preview" width={600} height={340} className="rounded-2xl w-full object-cover mb-6" /> */}
+        <Image src="/assets/lesson_home_screen.png" alt="Lesson preview" width={600} height={340} className="rounded-2xl w-full object-cover mb-6" />
 
         {/* Horizontal scroll */}
         <FadeUp delay={0.15}>

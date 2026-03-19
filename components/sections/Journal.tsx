@@ -5,10 +5,8 @@
 // accentGold: NOT used here
 // Pass 3: journal card wrapped in FadeUp delay 0.1
 
+import Image  from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
-// Image placeholder — uncomment and swap src when asset is ready
-// SHOOT: teen at desk with notebook/phone, natural window light, warm tones, unposed
-// import Image from 'next/image'
 
 const entry = {
   week:  'Week 3',
@@ -33,8 +31,7 @@ export default function Journal() {
           {/* ── Left: journal entry card ────────────────────── */}
           <FadeUp delay={0.1}>
           <div>
-            {/* Journal photo placeholder — uncomment when /assets/journal-photo.jpg is ready */}
-            {/* <Image src="/assets/journal-photo.jpg" alt="" width={480} height={240} className="rounded-2xl object-cover w-full mb-4" /> */}
+            <Image src="/assets/journal_photo.png" alt="" width={480} height={240} className="rounded-2xl object-cover w-full mb-4" />
             <div className="bg-cardBg card-border card-hover rounded-2xl overflow-hidden" style={{ borderTop: '3px solid #4A5D4A' }}>
 
               {/* Card header */}
