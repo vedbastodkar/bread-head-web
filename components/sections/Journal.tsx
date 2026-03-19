@@ -26,12 +26,22 @@ export default function Journal() {
   return (
     <section className="bg-bgSage">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
           {/* ── Left: journal entry card ────────────────────── */}
           <FadeUp delay={0.1}>
           <div>
-            <Image src="/assets/journal_photo.png" alt="" width={480} height={240} className="rounded-2xl object-cover w-full mb-4" />
+            {/* 4:3 aspect wrapper — sits in 45%-wide left column on desktop */}
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden mb-4">
+              <Image
+                src="/assets/journal_photo.png"
+                alt=""
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 540px"
+                quality={85}
+              />
+            </div>
             <div className="bg-cardBg card-border card-hover rounded-2xl overflow-hidden" style={{ borderTop: '3px solid #4A5D4A' }}>
 
               {/* Card header */}

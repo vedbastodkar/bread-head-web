@@ -66,7 +66,17 @@ export default function LessonsPreview() {
           </p>
         </FadeUp>
 
-        <Image src="/assets/lesson_home_screen.png" alt="Lesson preview" width={600} height={340} className="rounded-2xl w-full object-cover mb-6" />
+        {/* 16:9 aspect wrapper — height scales with width, no layout shift */}
+        <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-6">
+          <Image
+            src="/assets/lesson_home_screen.png"
+            alt="Bread Head lesson in progress"
+            fill
+            className="object-cover object-top"
+            sizes="(max-width: 768px) 100vw, 900px"
+            quality={80}
+          />
+        </div>
 
         {/* Horizontal scroll */}
         <FadeUp delay={0.15}>

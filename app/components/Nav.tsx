@@ -42,8 +42,9 @@ export default function Nav() {
       <Image
         src="/assets/logo_w_text.png"
         alt="Bread Head"
-        height={32}
         width={120}
+        height={32}
+        sizes="120px"
         style={{ objectFit: 'contain', objectPosition: 'left' }}
         priority
       />
