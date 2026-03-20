@@ -71,7 +71,20 @@
   .scroll-row::-webkit-scrollbar {
     display: none;
   }
+}
 
+@keyframes waterfall {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.waterfall-scroll {
+  animation: waterfall 20s linear infinite;
+}
+.waterfall-scroll:hover {
+  animation-play-state: paused;
+}
+
+@layer utilities {
   /*
    * SVG fractal-noise grain overlay — apply to dark sections only.
    * (§5 Gamification, §8 Final CTA)
