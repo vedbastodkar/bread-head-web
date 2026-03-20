@@ -18,6 +18,7 @@ import LessonsPreview from '@/components/sections/LessonsPreview'
 import Gamification   from '@/components/sections/Gamification'
 import Journal        from '@/components/sections/Journal'
 import Partners       from '@/components/sections/Partners'
+import WhyItMatters  from '@/components/sections/WhyItMatters'
 import FinalCTA       from '@/components/sections/FinalCTA'
 import Footer         from '@/app/components/Footer'
 
@@ -32,6 +33,7 @@ export default function Home() {
       <Gamification />
       <Journal />
       <Partners />
+      <WhyItMatters />
       <FinalCTA />
       <Footer />
     </main>

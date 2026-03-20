@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 import PartnerForm from './PartnerForm'
+import WhyItMatters from '@/components/sections/WhyItMatters'
 
 export const metadata: Metadata = {
   title: 'Partners — Bread Head',
@@ -69,12 +70,6 @@ const PARTNER_TYPES = [
   },
 ]
 
-// ── Gap stats ─────────────────────────────────────────────────────
-const GAP_STATS = [
-  { number: '73%', label: 'of teens have never seen a pay stub' },
-  { number: '0 hrs', label: 'required financial education in most US states' },
-  { number: '$1,300', label: 'average credit card debt of adults under 25' },
-]
 
 export default function PartnersPage() {
   return (
@@ -349,120 +344,42 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* ── WHY BREAD HEAD ──────────────────────────────────────── */}
+      {/* ── WHY IT MATTERS — stat grid ───────────────────────── */}
+      <WhyItMatters bg="#FFFFFF" />
+
+      {/* ── WHY IT MATTERS — prose ──────────────────────────────── */}
       <section style={{ background: '#FFFFFF' }}>
         <div
           style={{
             maxWidth: '1200px',
             margin: '0 auto',
-            paddingTop: '80px',
+            paddingTop: '0',
             paddingBottom: '80px',
             paddingLeft: '24px',
             paddingRight: '24px',
           }}
         >
           <FadeUp delay={0}>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#4A5D4A',
-                marginBottom: '16px',
-                lineHeight: 1,
-              }}
-            >
-              Why It Matters
-            </p>
-
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 700,
-                fontSize: 'clamp(26px, 3vw, 40px)',
-                color: '#1A2E1A',
-                lineHeight: 1.15,
-                marginBottom: 0,
-              }}
-            >
-              The gap is real. The solution is ready.
-            </h2>
-
-            <div
-              className="partners-why-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '64px',
-                marginTop: '48px',
-                alignItems: 'start',
-              }}
-            >
-              {/* Left: gap stats */}
-              <div>
-                {GAP_STATS.map((s, i) => (
-                  <div
-                    key={s.number}
-                    style={{
-                      borderBottom:
-                        i < GAP_STATS.length - 1
-                          ? '0.5px solid rgba(26,46,26,0.08)'
-                          : 'none',
-                      paddingBottom: i < GAP_STATS.length - 1 ? '32px' : '0',
-                      marginBottom: i < GAP_STATS.length - 1 ? '32px' : '0',
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 700,
-                        fontSize: '52px',
-                        color: '#4A5D4A',
-                        lineHeight: 1,
-                        marginBottom: '8px',
-                      }}
-                    >
-                      {s.number}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 400,
-                        fontSize: '14px',
-                        color: 'rgba(26,46,26,0.6)',
-                        margin: 0,
-                      }}
-                    >
-                      {s.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Right: paragraphs */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {[
-                  "Financial illiteracy isn't a personal failing. It's a systemic gap. The teenagers who struggle most with money in their twenties weren't irresponsible — they were just never taught.",
-                  "Bread Head exists to close that gap at scale. And we can only do that with institutional partners who believe the same thing.",
-                  "Every partnership directly funds expanded access for students who can't afford to learn these lessons the hard way.",
-                ].map((text, i) => (
-                  <p
-                    key={i}
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 400,
-                      fontSize: '15px',
-                      color: 'rgba(26,46,26,0.65)',
-                      lineHeight: 1.75,
-                      margin: 0,
-                    }}
-                  >
-                    {text}
-                  </p>
-                ))}
-              </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '680px' }}>
+              {[
+                "Financial illiteracy isn't a personal failing. It's a systemic gap. The teenagers who struggle most with money in their twenties weren't irresponsible — they were just never taught.",
+                "Bread Head exists to close that gap at scale. And we can only do that with institutional partners who believe the same thing.",
+                "Every partnership directly funds expanded access for students who can't afford to learn these lessons the hard way.",
+              ].map((text, i) => (
+                <p
+                  key={i}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    margin: 0,
+                  }}
+                >
+                  {text}
+                </p>
+              ))}
             </div>
           </FadeUp>
         </div>

@@ -107,6 +107,15 @@ html {
 }
 
 @layer utilities {
+  /* Source pill hover — dark fill, light text */
+  .source-pill:hover {
+    background: #1A2E1A !important;
+    color: rgba(230,237,217,0.85) !important;
+    border-color: #1A2E1A !important;
+  }
+}
+
+@layer utilities {
   /*
    * SVG fractal-noise grain overlay — apply to dark sections only.
    * (§5 Gamification, §8 Final CTA)
@@ -258,7 +267,12 @@ html {
     min-height: 48px !important;
   }
 
-  /* ── Partners page ── */
+  /* ── Why It Matters grid ── */
+  .why-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── About page ── */
   .partners-hero-stats {
     display: flex !important;
     flex-direction: column !important;
