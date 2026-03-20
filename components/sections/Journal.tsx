@@ -1,7 +1,8 @@
 // ── §6 Journal ──────────────────────────────────────────────────
-// 2-col: left = sticky phone mockup (coded UI), right = text + feature rows
+// 2-col: left = sticky phone mockup (real screenshot), right = text + feature rows
 // Mirror of Lessons section structure
 
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 
 // ── Inline SVG icons for feature rows ────────────────────────────
@@ -32,64 +33,6 @@ function MirrorIcon() {
   )
 }
 
-// ── Bottom nav SVG icons ──────────────────────────────────────────
-function ProgressIcon({ active }: { active: boolean }) {
-  const c = active ? '#4A5D4A' : 'rgba(26,46,26,0.35)'
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="2" y="10" width="3" height="6" rx="1" fill={c}/>
-      <rect x="7.5" y="6" width="3" height="10" rx="1" fill={c}/>
-      <rect x="13" y="2" width="3" height="14" rx="1" fill={c}/>
-    </svg>
-  )
-}
-function LearnIcon({ active }: { active: boolean }) {
-  const c = active ? '#4A5D4A' : 'rgba(26,46,26,0.35)'
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M3 4.5C3 4.5 6 3 9 3C12 3 15 4.5 15 4.5V14C15 14 12 12.5 9 12.5C6 12.5 3 14 3 14V4.5Z" stroke={c} strokeWidth="1.3" strokeLinejoin="round"/>
-      <path d="M9 3V12.5" stroke={c} strokeWidth="1.3"/>
-    </svg>
-  )
-}
-function DashboardIcon({ active }: { active: boolean }) {
-  const c = active ? '#4A5D4A' : 'rgba(26,46,26,0.35)'
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 2.5L15.5 8V15.5H12V11H6V15.5H2.5V8L9 2.5Z" stroke={c} strokeWidth="1.3" strokeLinejoin="round"/>
-    </svg>
-  )
-}
-function BudgetIcon({ active }: { active: boolean }) {
-  const c = active ? '#4A5D4A' : 'rgba(26,46,26,0.35)'
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="2" y="4.5" width="14" height="10" rx="1.5" stroke={c} strokeWidth="1.3"/>
-      <path d="M2 7.5H16" stroke={c} strokeWidth="1.3"/>
-      <circle cx="5.5" cy="11" r="1" fill={c}/>
-    </svg>
-  )
-}
-function JournalIcon({ active }: { active: boolean }) {
-  const c = active ? '#4A5D4A' : 'rgba(26,46,26,0.35)'
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="4" y="2.5" width="10" height="13" rx="1.5" stroke={c} strokeWidth="1.3"/>
-      <path d="M7 6.5H11" stroke={c} strokeWidth="1.3" strokeLinecap="round"/>
-      <path d="M7 9H11" stroke={c} strokeWidth="1.3" strokeLinecap="round"/>
-      <path d="M7 11.5H9.5" stroke={c} strokeWidth="1.3" strokeLinecap="round"/>
-    </svg>
-  )
-}
-
-const navTabs = [
-  { label: 'Progress',  Icon: ProgressIcon,  active: false },
-  { label: 'Learn',     Icon: LearnIcon,      active: false },
-  { label: 'Dashboard', Icon: DashboardIcon,  active: false },
-  { label: 'Budget',    Icon: BudgetIcon,     active: false },
-  { label: 'Journal',   Icon: JournalIcon,    active: true  },
-]
-
 const features = [
   {
     Icon: PencilIcon,
@@ -107,118 +50,6 @@ const features = [
     sub: 'This is a mirror, not a report card',
   },
 ]
-
-function PhoneScreen() {
-  const font = 'var(--font-body), sans-serif'
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F7F9F4', fontFamily: font, overflow: 'hidden' }}>
-
-      {/* Header */}
-      <div style={{ padding: '16px 20px 4px' }}>
-        <p style={{ margin: 0, fontWeight: 600, fontSize: '18px', color: '#1A2E1A', lineHeight: 1.3 }}>Journal</p>
-      </div>
-
-      {/* Subheader */}
-      <div style={{ padding: '0 20px 12px' }}>
-        <p style={{ margin: 0, fontWeight: 400, fontSize: '12px', color: 'rgba(26,46,26,0.5)' }}>Week 3 · 3 entries</p>
-      </div>
-
-      {/* Card 1 — New Entry CTA */}
-      <div style={{
-        background: '#1A2E1A', borderRadius: '16px',
-        padding: '14px 18px', margin: '0 14px 8px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexShrink: 0,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ color: '#E6EDD9', fontSize: '22px', lineHeight: 1, fontWeight: 300, marginTop: '-1px' }}>+</span>
-          <span style={{ fontWeight: 600, fontSize: '14px', color: '#E6EDD9' }}>New Journal Entry</span>
-        </div>
-        <span style={{ color: 'rgba(230,237,217,0.5)', fontSize: '18px', lineHeight: 1 }}>›</span>
-      </div>
-
-      {/* Card 2 — View Past Entries */}
-      <div style={{
-        background: 'rgba(26,46,26,0.06)', borderRadius: '16px',
-        padding: '12px 18px', margin: '0 14px 8px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexShrink: 0,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <circle cx="6.5" cy="6.5" r="5" stroke="#1A2E1A" strokeWidth="1.1"/>
-            <path d="M6.5 4V6.5L8 7.8" stroke="#1A2E1A" strokeWidth="1.1" strokeLinecap="round"/>
-          </svg>
-          <span style={{ fontWeight: 500, fontSize: '13px', color: '#1A2E1A' }}>View Past Entries</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{
-            background: 'rgba(74,93,74,0.10)', color: '#4A5D4A',
-            fontWeight: 600, fontSize: '11px',
-            borderRadius: '100px', padding: '2px 7px',
-          }}>3</span>
-          <span style={{ color: 'rgba(26,46,26,0.45)', fontSize: '16px', lineHeight: 1 }}>›</span>
-        </div>
-      </div>
-
-      {/* Card 3 — Latest entry */}
-      <div style={{
-        background: 'white', borderRadius: '16px',
-        padding: '14px 18px', margin: '0 14px 8px',
-        borderTop: '3px solid #4A5D4A',
-        flexShrink: 0,
-      }}>
-        <p style={{ margin: '0 0 3px', fontWeight: 600, fontSize: '13px', color: '#1A2E1A' }}>Coffee Reality Check</p>
-        <p style={{ margin: '0 0 7px', fontWeight: 400, fontSize: '11px', color: 'rgba(26,46,26,0.45)' }}>Thursday, March 14</p>
-        <p style={{ margin: 0, fontWeight: 400, fontSize: '12px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.55 }}>
-          This week I tracked every coffee. $14 in 7 days.
-        </p>
-        <div style={{ display: 'flex', gap: '5px', marginTop: '9px', flexWrap: 'wrap' }}>
-          {['Reflective', 'Awareness', 'Habits'].map((tag) => (
-            <span key={tag} style={{
-              background: 'rgba(74,93,74,0.08)', color: '#4A5D4A',
-              border: '0.5px solid rgba(74,93,74,0.2)',
-              borderRadius: '100px', padding: '2px 9px',
-              fontSize: '10px', fontWeight: 500,
-            }}>{tag}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* Spacer — pushes prompt + nav to bottom */}
-      <div style={{ flex: 1 }} />
-
-      {/* Next prompt strip */}
-      <div style={{ background: 'rgba(74,93,74,0.06)', padding: '11px 18px' }}>
-        <p style={{
-          margin: '0 0 4px', fontWeight: 500, fontSize: '10px',
-          letterSpacing: '0.1em', color: 'rgba(26,46,26,0.4)', textTransform: 'uppercase',
-        }}>Next Prompt</p>
-        <p style={{ margin: 0, fontWeight: 400, fontSize: '11px', color: 'rgba(26,46,26,0.65)', fontStyle: 'italic', lineHeight: 1.5 }}>
-          What&apos;s one purchase this week you wouldn&apos;t make again?
-        </p>
-      </div>
-
-      {/* Bottom nav */}
-      <div style={{
-        background: 'white', borderTop: '0.5px solid rgba(26,46,26,0.08)',
-        display: 'flex', justifyContent: 'space-around',
-        padding: '7px 0 10px', flexShrink: 0,
-      }}>
-        {navTabs.map(({ label, Icon, active }) => (
-          <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-            <Icon active={active} />
-            <span style={{
-              fontWeight: active ? 500 : 400,
-              fontSize: '9px',
-              color: active ? '#4A5D4A' : 'rgba(26,46,26,0.35)',
-            }}>{label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export default function Journal() {
   return (
@@ -250,7 +81,13 @@ export default function Journal() {
 
               {/* Screen content */}
               <div className="absolute inset-0" style={{ top: '28px' }}>
-                <PhoneScreen />
+                <Image
+                  src="/assets/journal_screen.png"
+                  alt="Bread Head journal screen"
+                  fill
+                  className="object-cover object-top"
+                  quality={90}
+                />
               </div>
             </div>
           </div>
