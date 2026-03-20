@@ -16,11 +16,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.registerPlugin(ScrollTrigger)
 
     const lenis = new Lenis({
-      lerp: 0.12,
-      duration: 0.8,
+      lerp: 0.09,
       smoothWheel: true,
-      wheelMultiplier: 1.4,
-      touchMultiplier: 2.0,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 1.2,
+      infinite: false,
     })
 
     let rafId: number
