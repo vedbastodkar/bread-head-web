@@ -2,6 +2,7 @@
 // min-h-screen, flex items-center — content vertically centered
 // No forced top padding — nav overlay handled by fixed positioning
 
+import Image          from 'next/image'
 import FadeUp         from '@/app/components/FadeUp'
 import CountUp        from '@/app/components/CountUp'
 import PhoneParallax  from '@/app/components/PhoneParallax'
@@ -23,7 +24,7 @@ export default function Hero() {
 
             {/* Eyebrow with vertical bar */}
             <FadeUp delay={0}>
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="w-[2px] h-5 bg-brandGreen shrink-0" />
                 <span
                   className="font-body font-semibold uppercase text-brandGreen"
@@ -32,6 +33,12 @@ export default function Hero() {
                   Personal Finance · Built for Teens
                 </span>
               </div>
+              <p
+                className="font-body font-semibold"
+                style={{ fontSize: '13px', color: 'rgba(26,46,26,0.4)', letterSpacing: '0.04em', marginBottom: '16px' }}
+              >
+                Know Your Dough.
+              </p>
             </FadeUp>
 
             {/* H1 */}
@@ -145,111 +152,36 @@ export default function Hero() {
 
                 {/* Phone shell */}
                 <div
-                  className="bg-cardBg card-border overflow-hidden flex flex-col"
+                  className="overflow-hidden relative"
                   style={{
                     width: 'clamp(240px, 20vw, 300px)',
-                    borderRadius: '40px',
+                    borderRadius: '44px',
                     aspectRatio: '9 / 19.5',
-                    boxShadow: 'none',
-                    position: 'relative',
+                    border: '8px solid #1A2E1A',
+                    background: '#1A2E1A',
                     zIndex: 1,
                   }}
                 >
-                  {/* Status bar */}
-                  <div className="flex justify-between items-center px-6 pt-5 pb-2 shrink-0">
-                    <span
-                      className="font-body font-medium text-[10px]"
-                      style={{ color: 'rgba(26,46,26,0.45)' }}
-                    >
-                      9:41
-                    </span>
-                    <div className="flex gap-1">
-                      {[1, 2, 3].map((i) => (
-                        <div
-                          key={i}
-                          className="w-3 h-[5px] rounded-full"
-                          style={{ background: `rgba(26,46,26,${i === 3 ? 0.15 : 0.3})` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* App header */}
-                  <div className="bg-bgSage px-5 py-4 shrink-0">
-                    <p className="font-body font-medium text-[10px] tracking-[0.10em] uppercase text-brandGreen mb-1">
-                      Today&apos;s Lesson
-                    </p>
-                    <p className="font-body font-semibold text-textTitle text-[13px] leading-snug">
-                      Reading Your First Pay Stub
-                    </p>
-                    <div
-                      className="mt-2.5 h-[5px] rounded-full overflow-hidden"
-                      style={{ background: 'rgba(26,46,26,0.08)' }}
-                    >
-                      <div className="h-full w-3/5 bg-brandGreen rounded-full" />
-                    </div>
-                    <p className="font-body text-[10px] mt-1" style={{ color: 'rgba(26,46,26,0.40)' }}>
-                      3 of 5 slides
-                    </p>
-                  </div>
-
-                  {/* Content rows */}
-                  <div className="flex-1 px-5 py-4 flex flex-col gap-3">
-                    {[
-                      { label: 'Gross Pay', value: '$1,240.00', sub: 'What you earned' },
-                      { label: 'Net Pay',   value: '$978.44',   sub: 'What hits your account' },
-                    ].map((row) => (
-                      <div key={row.label} className="bg-bgSage rounded-[12px] px-3.5 py-3">
-                        <p className="font-body font-medium text-[9px] tracking-[0.10em] uppercase text-brandGreen mb-0.5">
-                          {row.label}
-                        </p>
-                        <p className="font-body font-semibold text-textTitle text-[13px]">{row.value}</p>
-                        <p className="font-body text-[9px]" style={{ color: 'rgba(26,46,26,0.45)' }}>
-                          {row.sub}
-                        </p>
-                      </div>
-                    ))}
-
-                    <div className="bg-cardBg card-border rounded-[12px] px-3.5 py-3">
-                      <p className="font-body font-medium text-[9px] tracking-[0.10em] uppercase text-brandGreen mb-0.5">
-                        Quick Check
-                      </p>
-                      <p className="font-body text-[10px] text-textTitle leading-snug">
-                        Why is net pay $261.56 less than gross?
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Bottom nav */}
+                  {/* Notch */}
                   <div
-                    className="shrink-0 flex justify-around py-3 px-2"
-                    style={{ borderTop: '0.5px solid rgba(26,46,26,0.10)' }}
+                    className="absolute top-0 left-0 right-0 z-10 flex items-center justify-center"
+                    style={{ height: '28px', background: '#1A2E1A' }}
                   >
-                    {['Lessons', 'Budget', 'Journal'].map((tab, i) => (
-                      <button
-                        key={tab}
-                        className="font-body font-medium text-[9px] flex flex-col items-center gap-1"
-                        style={{ color: i === 0 ? '#4A5D4A' : 'rgba(26,46,26,0.35)' }}
-                      >
-                        <div
-                          className="w-[14px] h-[14px] rounded-full"
-                          style={{ background: i === 0 ? 'rgba(74,93,74,0.12)' : 'rgba(26,46,26,0.07)' }}
-                        />
-                        {tab}
-                      </button>
-                    ))}
+                    <div className="rounded-full" style={{ width: '80px', height: '6px', background: '#000' }} />
                   </div>
-                </div>
 
-                {/* Floating streak badge */}
-                <div
-                  className="absolute bg-cardBg card-border rounded-2xl px-4 py-3"
-                  style={{ right: '-20px', top: '38%', zIndex: 2 }}
-                >
-                  <p className="font-body text-[10px] mb-0.5" style={{ color: 'rgba(26,46,26,0.40)' }}>
-                    Streak
-                  </p>
-                  <p className="font-body font-semibold text-textTitle text-[13px]">🔥 12 days</p>
+                  {/* Welcome screen image */}
+                  <div className="absolute inset-0" style={{ top: '28px' }}>
+                    <Image
+                      src="/assets/welcome_screen.png"
+                      alt="Bread Head welcome screen"
+                      fill
+                      className="object-cover object-top"
+                      sizes="300px"
+                      quality={90}
+                      priority
+                    />
+                  </div>
                 </div>
 
               </div>
