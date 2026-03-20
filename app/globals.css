@@ -113,6 +113,19 @@ html {
     color: rgba(230,237,217,0.85) !important;
     border-color: #1A2E1A !important;
   }
+
+  /* Partners hero CTAs */
+  .partners-cta-primary:hover { opacity: 0.88 !important; }
+  .partners-cta-ghost:hover   { background: rgba(230,237,217,0.08) !important; }
+
+  /* Partners row CTA link */
+  .partners-row-cta:hover { text-decoration: underline !important; }
+
+  /* Partners Why source link */
+  .partners-source-link:hover { color: #4A5D4A !important; }
+
+  /* Partners submit button */
+  .partners-submit-btn:hover:not(:disabled) { opacity: 0.88 !important; }
 }
 
 @layer utilities {
@@ -272,16 +285,28 @@ html {
     grid-template-columns: 1fr !important;
   }
 
-  /* ── About page ── */
+  /* ── Partners page ── */
+  .partners-hero-inner {
+    flex-direction: column !important;
+    min-height: auto !important;
+    padding-top: 96px !important;
+    padding-bottom: 64px !important;
+  }
+  .partners-hero-text,
   .partners-hero-stats {
-    display: flex !important;
+    flex: unset !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .partners-type-row {
     flex-direction: column !important;
     gap: 24px !important;
   }
-  .partners-type-card {
-    grid-template-columns: 1fr !important;
-    gap: 24px !important;
-    padding: 28px !important;
+  .partners-type-num-block {
+    width: 100% !important;
+  }
+  .partners-type-num-block p:first-child {
+    font-size: 48px !important;
   }
   .partners-why-grid {
     grid-template-columns: 1fr !important;
@@ -290,6 +315,8 @@ html {
   .partners-form-row {
     grid-template-columns: 1fr !important;
   }
+
+  /* ── About page ── */
 
   /* ── About page ── */
   .about-values-grid {
