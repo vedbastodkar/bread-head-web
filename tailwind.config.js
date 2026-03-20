@@ -23,7 +23,7 @@ module.exports = {
       // Ticker / marquee animation
       animation: {
         ticker:    'ticker 25s linear infinite',
-        waterfall: 'waterfall 14s linear infinite',
+        waterfall: 'waterfall 22s linear infinite',
       },
       keyframes: {
         ticker: {
