@@ -296,8 +296,8 @@ export default function PartnersPage() {
             </h2>
           </FadeUp>
 
-          {/* Partner type rows */}
-          <div style={{ marginTop: '48px' }}>
+          {/* ── Desktop rows (lg+) ── */}
+          <div className="hidden lg:block" style={{ marginTop: '48px' }}>
             {PARTNER_TYPES.map((p, i) => (
               <FadeUp key={p.number} delay={0}>
                 <div
@@ -315,7 +315,7 @@ export default function PartnersPage() {
                   }}
                 >
                   {/* Number block */}
-                  <div style={{ width: '160px', flexShrink: 0 }} className="partners-type-num-block">
+                  <div style={{ width: '160px', flexShrink: 0 }}>
                     <p
                       style={{
                         fontFamily: 'var(--font-body)',
@@ -426,6 +426,129 @@ export default function PartnersPage() {
                       </a>
                     )}
                   </div>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+
+          {/* ── Mobile / tablet grid (below lg) ── */}
+          <div className="lg:hidden partners-mobile-grid grid grid-cols-2 gap-4 md:gap-6" style={{ marginTop: '40px' }}>
+            {PARTNER_TYPES.map((p) => (
+              <FadeUp key={p.number} delay={0}>
+                <div
+                  style={{
+                    background: '#FFFFFF',
+                    border: '0.5px solid rgba(26,46,26,0.12)',
+                    borderRadius: '16px',
+                    padding: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
+                  }}
+                >
+                  {/* Top row: label + ghost number */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontWeight: 600,
+                          fontSize: '10px',
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          color: '#4A5D4A',
+                          lineHeight: 1,
+                          margin: 0,
+                        }}
+                      >
+                        {p.title}
+                      </p>
+                      {p.number === '01' && (
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            fontFamily: 'var(--font-body)',
+                            fontWeight: 600,
+                            fontSize: '11px',
+                            color: '#4A5D4A',
+                            background: 'rgba(74,93,74,0.10)',
+                            border: '0.5px solid rgba(74,93,74,0.25)',
+                            borderRadius: '100px',
+                            padding: '3px 12px',
+                            marginTop: '4px',
+                          }}
+                        >
+                          Free forever
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 700,
+                        fontSize: '32px',
+                        color: 'rgba(26,46,26,0.07)',
+                        lineHeight: 1,
+                        margin: 0,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {p.number}
+                    </p>
+                  </div>
+
+                  {/* H3 */}
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      fontSize: '15px',
+                      color: '#1A2E1A',
+                      lineHeight: 1.25,
+                      marginTop: '12px',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {p.title}
+                  </h3>
+
+                  {/* Description — first sentence, line-clamp */}
+                  <p
+                    className="line-clamp-3"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 400,
+                      fontSize: '12px',
+                      color: 'rgba(26,46,26,0.6)',
+                      lineHeight: 1.6,
+                      margin: 0,
+                    }}
+                  >
+                    {p.description.split('. ')[0] + '.'}
+                  </p>
+
+                  {/* CTA — pinned to bottom */}
+                  {p.cta ? (
+                    <a
+                      href="#contact-form"
+                      className="partners-row-cta"
+                      style={{
+                        display: 'inline-block',
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 500,
+                        fontSize: '12px',
+                        color: '#4A5D4A',
+                        textDecoration: 'none',
+                        marginTop: 'auto',
+                        paddingTop: '12px',
+                        transition: 'text-decoration 0.15s ease',
+                      }}
+                    >
+                      Learn more →
+                    </a>
+                  ) : (
+                    <div style={{ marginTop: 'auto', paddingTop: '12px' }} />
+                  )}
                 </div>
               </FadeUp>
             ))}

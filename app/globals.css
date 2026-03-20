@@ -341,3 +341,10 @@ html {
     min-height: 48px !important;
   }
 }
+
+/* ── Partners mobile grid — 1 col below 480px ── */
+@media (max-width: 479px) {
+  .partners-mobile-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
