@@ -22,12 +22,17 @@ module.exports = {
       },
       // Ticker / marquee animation
       animation: {
-        ticker: 'ticker 25s linear infinite',
+        ticker:    'ticker 25s linear infinite',
+        waterfall: 'waterfall 14s linear infinite',
       },
       keyframes: {
         ticker: {
           from: { transform: 'translateX(0)' },
           to:   { transform: 'translateX(-50%)' },
+        },
+        waterfall: {
+          from: { transform: 'translateY(0)' },
+          to:   { transform: 'translateY(-50%)' },
         },
       },
     },
