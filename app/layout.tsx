@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
-import SmoothScroll    from './components/SmoothScroll'
 import Nav            from './components/Nav'
 import PageTransition from './components/PageTransition'
 
@@ -44,7 +43,7 @@ export default function RootLayout({
       <body className="font-body">
         <PageTransition />
         <Nav />
-        <SmoothScroll>{children}</SmoothScroll>
+        {children}
       </body>
     </html>
   )
