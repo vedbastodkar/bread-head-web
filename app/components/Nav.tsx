@@ -7,7 +7,11 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useScroll, useMotionValueEvent } from 'framer-motion'
 
-const LINKS = ['About', 'Lessons', 'Partners']
+const LINKS = [
+  { label: 'About',    href: '/about' },
+  { label: 'Lessons',  href: '/#lessons' },
+  { label: 'Partners', href: '/partners' },
+]
 
 export default function Nav() {
   const { scrollY } = useScroll()
@@ -63,8 +67,8 @@ export default function Nav() {
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>
           {LINKS.map((link) => (
             <a
-              key={link}
-              href="#"
+              key={link.label}
+              href={link.href}
               style={{
                 fontFamily: 'var(--font-body)',
                 fontWeight: 500,
@@ -80,13 +84,13 @@ export default function Nav() {
               onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
             >
-              {link}
+              {link.label}
             </a>
           ))}
 
           {/* CTA — solid brandGreen */}
           <a
-            href="#"
+            href="/#cta"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
@@ -172,8 +176,8 @@ export default function Nav() {
           <nav style={{ width: '100%', maxWidth: '320px' }}>
             {LINKS.map((link) => (
               <a
-                key={link}
-                href="#"
+                key={link.label}
+                href={link.href}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   display: 'block',
@@ -190,13 +194,13 @@ export default function Nav() {
                   minHeight: '44px',
                 }}
               >
-                {link}
+                {link.label}
               </a>
             ))}
 
             {/* Get Early Access CTA */}
             <a
-              href="#"
+              href="/#cta"
               onClick={() => setMenuOpen(false)}
               style={{
                 display: 'flex',

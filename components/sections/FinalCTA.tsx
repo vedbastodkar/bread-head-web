@@ -10,7 +10,7 @@ import MagneticButton from '@/app/components/MagneticButton'
 
 export default function FinalCTA() {
   return (
-    <section className="bg-textTitle grain-overlay">
+    <section id="cta" className="bg-textTitle grain-overlay">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-28 lg:py-40">
         <div className="max-w-2xl mx-auto text-center">
 
