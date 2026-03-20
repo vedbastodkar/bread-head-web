@@ -22,6 +22,9 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/assets/icon_green.png',
+  },
   title: 'Bread Head — Know Your Dough',
   description:
     'The financial literacy app built for teens. Learn real money skills, simulate budgets, and build lasting habits through reflection.',
