@@ -362,7 +362,7 @@ export default function AboutPage() {
                     marginBottom: '4px',
                   }}
                 >
-                  Vedu
+                  Ved Bastodkar
                 </h3>
 
                 {/* Role */}
