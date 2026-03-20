@@ -1,9 +1,9 @@
 // ── §6 Journal ──────────────────────────────────────────────────
 // bg: bgSage (#E6EDD9)
 // Card: bg white, 0.5px border, 16px radius, 28px padding, NO shadows
-// h2: Playfair italic (emotional — "Reflection is the skill...")
-// accentGold: NOT used here
+// h2: DM Sans 700 (not Playfair)
 // Pass 3: journal card wrapped in FadeUp delay 0.1
+// Pass 6: photo is sole left tile (aspect-[4/3]); journal card + copy move to right col
 
 import Image  from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
@@ -26,13 +26,11 @@ export default function Journal() {
   return (
     <section className="bg-bgSage">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-          {/* ── Left: journal entry card ────────────────────── */}
+          {/* ── Left: photo tile only ────────────────────────── */}
           <FadeUp delay={0.1}>
-          <div>
-            {/* 4:3 aspect wrapper — sits in 45%-wide left column on desktop */}
-            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden mb-4">
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
               <Image
                 src="/assets/journal_photo.png"
                 alt=""
@@ -42,6 +40,31 @@ export default function Journal() {
                 quality={85}
               />
             </div>
+          </FadeUp>
+
+          {/* ── Right: copy + journal card ───────────────────── */}
+          <div>
+            {/* Eyebrow */}
+            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
+              Your Money, Your Words
+            </p>
+
+            {/* H2 — DM Sans 700 */}
+            <h2
+              className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-3 max-w-md"
+              style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
+            >
+              Reflection is the skill schools skip hardest.
+            </h2>
+
+            <p className="font-body text-[15px] leading-[1.7] mb-6 max-w-lg"
+               style={{ color: 'rgba(26,46,26,0.65)' }}>
+              Short prompts — 2 to 3 minutes — that surface spending patterns
+              you&apos;d otherwise miss.
+            </p>
+
+            {/* Journal card */}
+            <FadeUp delay={0.2}>
             <div className="bg-cardBg card-border card-hover rounded-2xl overflow-hidden" style={{ borderTop: '3px solid #4A5D4A' }}>
 
               {/* Card header */}
@@ -118,39 +141,10 @@ export default function Journal() {
               </div>
 
             </div>
-          </div>
-          </FadeUp>
-
-          {/* ── Right: copy ──────────────────────────────────── */}
-          <div>
-            {/* Eyebrow */}
-            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
-              Your Money, Your Words
-            </p>
-
-            {/* H2 — DM Sans 700, not Playfair */}
-            <h2
-              className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-3 max-w-md"
-              style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
-            >
-              Reflection is the skill schools skip hardest.
-            </h2>
-
-            <p className="font-body text-[16px] leading-[1.7] mb-6 max-w-lg"
-               style={{ color: 'rgba(26,46,26,0.65)' }}>
-              You can read every lesson about spending and still blow your
-              paycheck — because habits aren&apos;t built by knowing. They&apos;re built
-              by noticing, pausing, and choosing differently next time.
-            </p>
-
-            <p className="font-body text-[15px] leading-[1.7] mb-10 max-w-lg"
-               style={{ color: 'rgba(26,46,26,0.65)' }}>
-              The Bread Head journal gives you short prompts — 2 to 3 minutes —
-              that surface patterns you&apos;d otherwise miss.
-            </p>
+            </FadeUp>
 
             {/* Feature list */}
-            <ul className="space-y-5">
+            <ul className="space-y-5 mt-8">
               {[
                 { label: 'Short prompts', desc: 'Designed to fit in a break, not carve out a block' },
                 { label: 'Pattern view',  desc: 'See your spending emotions over weeks, not days'   },
