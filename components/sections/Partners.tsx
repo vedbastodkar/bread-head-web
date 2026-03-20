@@ -7,6 +7,7 @@
 // Pass 3: stat blocks wrapped in FadeUp (delays 0, 0.1, 0.2, 0.3)
 //         CountUp for 2400+ (format), 3, 100%; "5–9" stays static
 
+import Link    from 'next/link'
 import FadeUp  from '@/app/components/FadeUp'
 import CountUp from '@/app/components/CountUp'
 
@@ -54,18 +55,19 @@ export default function Partners() {
               every teen who needs it — regardless of zip code.
             </p>
             {/* Light-section CTA button */}
-            <a
-              href="mailto:partners@bread-head.org"
+            <Link
+              href="/partners"
               className="inline-flex items-center gap-2 font-body font-medium text-brandGreen rounded-full"
               style={{
                 background: 'rgba(74,93,74,0.10)',
                 border: '1px solid rgba(74,93,74,0.25)',
                 padding: '12px 28px',
                 fontSize: '14px',
+                textDecoration: 'none',
               }}
             >
               Partner with Bread Head →
-            </a>
+            </Link>
           </div>
         </div>
 

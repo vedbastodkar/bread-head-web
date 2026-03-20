@@ -257,4 +257,43 @@ html {
   .touch-cta {
     min-height: 48px !important;
   }
+
+  /* ── Partners page ── */
+  .partners-hero-stats {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+  .partners-type-card {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 28px !important;
+  }
+  .partners-why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .partners-form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── About page ── */
+  .about-founder-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .about-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 32px !important;
+  }
+  .about-cta-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .about-cta-buttons a {
+    width: 100% !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    min-height: 48px !important;
+  }
 }
