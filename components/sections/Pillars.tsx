@@ -49,11 +49,8 @@ export default function Pillars() {
 
         {/* Eyebrow — gold fill + dark outline */}
         <p
-          className="pillars-eyebrow font-body font-semibold text-[13px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase mb-2"
-          style={{
-            color: '#D1A945',
-            WebkitTextStroke: '0.5px #1A2E1A',
-          }}
+          className="pillars-eyebrow font-body font-semibold text-[17px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase mb-2"
+          style={{ color: '#D1A945' }}
         >
           Everything in one place
         </p>

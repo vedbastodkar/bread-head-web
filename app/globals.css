@@ -131,10 +131,6 @@ html {
 /* ── Mobile-only overrides (below 768px) ──────────────────────── */
 @media (max-width: 767px) {
 
-  /* ── Pillars eyebrow — keep gold fill, thinner dark outline on mobile ── */
-  .pillars-eyebrow {
-    -webkit-text-stroke: 0.5px #1A2E1A !important;
-  }
 
   /* ── Hero ── */
   .hero-section {
