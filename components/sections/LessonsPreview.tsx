@@ -43,7 +43,7 @@ const doubled = [...lessons, ...lessons]
 
 export default function LessonsPreview() {
   return (
-    <section id="lessons" style={{ position: 'relative', overflow: 'hidden', paddingTop: '64px', paddingBottom: '64px' }}>
+    <section style={{ position: 'relative', overflow: 'hidden', paddingTop: '64px', paddingBottom: '64px' }}>
       <div
         className="lessons-layout"
         style={{

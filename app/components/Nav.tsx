@@ -9,7 +9,7 @@ import { useScroll, useMotionValueEvent } from 'framer-motion'
 
 const LINKS = [
   { label: 'About',    href: '/about' },
-  { label: 'Lessons',  href: '/#lessons' },
+  { label: 'Lessons',  href: '/' },
   { label: 'Partners', href: '/partners' },
 ]
 
@@ -90,7 +90,7 @@ export default function Nav() {
 
           {/* CTA — solid brandGreen */}
           <a
-            href="/#cta"
+            href="/"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
@@ -200,7 +200,7 @@ export default function Nav() {
 
             {/* Get Early Access CTA */}
             <a
-              href="/#cta"
+              href="/"
               onClick={() => setMenuOpen(false)}
               style={{
                 display: 'flex',

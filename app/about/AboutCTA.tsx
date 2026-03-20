@@ -30,7 +30,7 @@ export default function AboutCTA() {
       </Link>
 
       <Link
-        href="/#cta"
+        href="/"
         style={{
           fontFamily: 'var(--font-body)',
           fontWeight: 600,

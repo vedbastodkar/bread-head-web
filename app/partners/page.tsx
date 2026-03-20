@@ -310,7 +310,7 @@ export default function PartnersPage() {
                     </ul>
 
                     <a
-                      href="#contact"
+                      href="/partners"
                       style={{
                         display: 'inline-block',
                         fontFamily: 'var(--font-body)',
@@ -452,7 +452,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── CONTACT FORM ────────────────────────────────────────── */}
-      <section id="contact" style={{ background: '#E6EDD9' }}>
+      <section style={{ background: '#E6EDD9' }}>
         <div
           style={{
             maxWidth: '800px',
