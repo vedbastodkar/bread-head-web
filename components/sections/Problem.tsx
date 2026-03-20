@@ -31,6 +31,7 @@ export default function Problem() {
               'Not how a mortgage works.',
               'Not what a credit score actually means.',
             ]}
+            gaps={[28, 16, 0]}
           />
         </div>
 
@@ -39,17 +40,13 @@ export default function Problem() {
           className="mt-8 pt-6 flex flex-col md:flex-row md:items-start gap-8 max-w-2xl"
           style={{ borderTop: '0.5px solid rgba(26,46,26,0.12)' }}
         >
-          {/* Stat number — Playfair 700 48px */}
-          <div className="shrink-0">
+          {/* Stat — prose callout */}
+          <div className="shrink-0 max-w-[200px] max-md:max-w-none">
             <p
-              className="font-display font-bold text-textTitle leading-none"
-              style={{ fontSize: '48px' }}
+              className="font-display font-bold text-textTitle leading-[1.1]"
+              style={{ fontSize: '22px' }}
             >
-              0
-            </p>
-            <p className="font-body text-[13px] max-md:text-[14px] mt-2 leading-snug max-w-[140px] max-md:max-w-none"
-               style={{ color: 'rgba(26,46,26,0.50)' }}>
-              required hours of personal finance in the average US high school
+              Nearly 20 states don&apos;t require teaching personal finance at all.
             </p>
           </div>
 
@@ -59,9 +56,9 @@ export default function Problem() {
           <div className="pt-1">
             <p className="font-body text-[15px] leading-[1.7]"
                style={{ color: 'rgba(26,46,26,0.65)' }}>
-              Financial literacy isn&apos;t a nice-to-have. It&apos;s the difference
-              between building wealth in your twenties and spending your thirties
-              undoing decisions you didn&apos;t know were mistakes.
+              Even the states that do rarely go beyond a checkbox. A semester of
+              theory doesn&apos;t build awareness of your own habits, your own
+              patterns, or what your choices are actually costing you.
             </p>
             <p className="font-body font-semibold text-textTitle text-[14px] mt-4">
               Bread Head closes the gap.

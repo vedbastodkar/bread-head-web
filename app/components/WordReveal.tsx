@@ -15,9 +15,11 @@ interface WordRevealProps {
   lines: string[]
   // Line at this index gets Playfair Display italic bold / h2 sizing
   headlineIndex?: number
+  // Bottom margin (px) after each line — defaults to uniform 20px
+  gaps?: number[]
 }
 
-export default function WordReveal({ lines, headlineIndex }: WordRevealProps) {
+export default function WordReveal({ lines, headlineIndex, gaps }: WordRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -48,8 +50,9 @@ export default function WordReveal({ lines, headlineIndex }: WordRevealProps) {
   }, [])
 
   return (
-    <div ref={containerRef} className="space-y-5">
+    <div ref={containerRef}>
       {lines.map((line, i) => {
+        const mb = gaps ? (gaps[i] ?? 0) : 20
         const isHeadline = i === headlineIndex
 
         return (
@@ -62,8 +65,8 @@ export default function WordReveal({ lines, headlineIndex }: WordRevealProps) {
             }
             style={
               isHeadline
-                ? { fontSize: 'clamp(36px, 4vw, 52px)' }
-                : { fontSize: 'clamp(22px, 2.8vw, 36px)', color: 'rgba(26,46,26,0.75)' }
+                ? { fontSize: 'clamp(36px, 4vw, 52px)', marginBottom: mb }
+                : { fontSize: 'clamp(22px, 2.8vw, 36px)', color: 'rgba(26,46,26,0.75)', marginBottom: mb }
             }
           >
             {line.split(' ').map((word, j, arr) => (
