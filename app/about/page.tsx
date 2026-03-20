@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
+
 import Footer from '@/app/components/Footer'
 import AboutCTA from './AboutCTA'
 
@@ -234,7 +235,7 @@ export default function AboutPage() {
                 marginTop: '48px',
               }}
             >
-              {VALUES.map((v, i) => (
+              {VALUES.map((v) => (
                 <div
                   key={v.title}
                   className="card-border card-hover"
@@ -244,39 +245,13 @@ export default function AboutPage() {
                     padding: '32px',
                   }}
                 >
-                  {/* Numbered gold star badge */}
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '44px',
-                      height: '44px',
-                      marginBottom: '20px',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <svg viewBox="0 0 44 44" width="44" height="44" style={{ position: 'absolute', top: 0, left: 0 }}>
-                      <polygon
-                        points="22,2 27.5,16 43,16 31,26 35.5,41 22,32 8.5,41 13,26 1,16 16.5,16"
-                        fill="#D1A945"
-                      />
-                    </svg>
-                    <span
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 700,
-                        fontSize: '16px',
-                        color: '#1A2E1A',
-                        lineHeight: 1,
-                      }}
-                    >
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                  </div>
+                  <Image
+                    src="/assets/bread.png"
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="mb-4"
+                  />
 
                   <h3
                     style={{
