@@ -17,7 +17,7 @@ export default function Problem() {
 
         {/* H2 — DM Sans 700, not Playfair */}
         <h2
-          className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-3 max-w-2xl"
+          className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-5 max-w-2xl"
           style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
         >
           Schools teach algebra.
@@ -31,7 +31,6 @@ export default function Problem() {
               'Not how a mortgage works.',
               'Not what a credit score actually means.',
             ]}
-            gaps={[28, 16, 0]}
           />
         </div>
 
