@@ -4,6 +4,7 @@
 // Mobile: hamburger menu replaces links + CTA.
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useScroll, useMotionValueEvent } from 'framer-motion'
 
@@ -53,15 +54,17 @@ export default function Nav() {
         }}
       >
         {/* Logo — height 44px, width proportional */}
-        <Image
-          src="/assets/logo_w_text.png"
-          alt="Bread Head"
-          width={163}
-          height={44}
-          sizes="163px"
-          style={{ objectFit: 'contain', objectPosition: 'left' }}
-          priority
-        />
+        <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <Image
+            src="/assets/logo_w_text.png"
+            alt="Bread Head"
+            width={163}
+            height={44}
+            sizes="163px"
+            style={{ objectFit: 'contain', objectPosition: 'left' }}
+            priority
+          />
+        </Link>
 
         {/* Desktop: Links + CTA — hidden below 768px */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>

@@ -234,7 +234,7 @@ export default function AboutPage() {
                 marginTop: '48px',
               }}
             >
-              {VALUES.map((v) => (
+              {VALUES.map((v, i) => (
                 <div
                   key={v.title}
                   className="card-border card-hover"
@@ -244,17 +244,39 @@ export default function AboutPage() {
                     padding: '32px',
                   }}
                 >
-                  {/* Icon placeholder */}
+                  {/* Numbered gold star badge */}
                   <div
                     style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '10px',
-                      background: 'rgba(74,93,74,0.10)',
+                      position: 'relative',
+                      width: '44px',
+                      height: '44px',
                       marginBottom: '20px',
                       flexShrink: 0,
                     }}
-                  />
+                  >
+                    <svg viewBox="0 0 44 44" width="44" height="44" style={{ position: 'absolute', top: 0, left: 0 }}>
+                      <polygon
+                        points="22,2 27.5,16 43,16 31,26 35.5,41 22,32 8.5,41 13,26 1,16 16.5,16"
+                        fill="#D1A945"
+                      />
+                    </svg>
+                    <span
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        color: '#1A2E1A',
+                        lineHeight: 1,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </div>
 
                   <h3
                     style={{

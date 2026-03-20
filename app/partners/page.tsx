@@ -94,7 +94,7 @@ export default function PartnersPage() {
     <main>
 
       {/* ── HERO ────────────────────────────────────────────────── */}
-      <section className="grain-overlay" style={{ background: '#1A2E1A' }}>
+      <section style={{ background: '#E6EDD9' }}>
         <div
           className="partners-hero-inner"
           style={{
@@ -113,9 +113,9 @@ export default function PartnersPage() {
           {/* Left: text */}
           <div style={{ flex: '0 0 55%', maxWidth: '55%' }} className="partners-hero-text">
             <FadeUp delay={0}>
-              {/* Eyebrow with gold bar */}
+              {/* Eyebrow with green bar */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ width: '2px', height: '20px', background: '#D1A945', flexShrink: 0 }} />
+                <div style={{ width: '2px', height: '20px', background: '#4A5D4A', flexShrink: 0 }} />
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
@@ -123,7 +123,7 @@ export default function PartnersPage() {
                     fontSize: '11px',
                     letterSpacing: '0.13em',
                     textTransform: 'uppercase',
-                    color: '#D1A945',
+                    color: '#4A5D4A',
                     lineHeight: 1,
                   }}
                 >
@@ -136,7 +136,7 @@ export default function PartnersPage() {
                   fontFamily: 'var(--font-display)',
                   fontStyle: 'italic',
                   fontSize: 'clamp(32px, 4.5vw, 56px)',
-                  color: '#E6EDD9',
+                  color: '#1A2E1A',
                   lineHeight: 1.1,
                   maxWidth: '600px',
                   marginBottom: '20px',
@@ -150,7 +150,7 @@ export default function PartnersPage() {
                   fontFamily: 'var(--font-body)',
                   fontWeight: 400,
                   fontSize: '16px',
-                  color: 'rgba(230,237,217,0.65)',
+                  color: 'rgba(26,46,26,0.65)',
                   lineHeight: 1.7,
                   maxWidth: '500px',
                   marginBottom: '32px',
@@ -169,9 +169,9 @@ export default function PartnersPage() {
                     fontFamily: 'var(--font-body)',
                     fontWeight: 700,
                     fontSize: '14px',
-                    color: '#1A2E1A',
+                    color: '#E6EDD9',
                     textDecoration: 'none',
-                    background: '#D1A945',
+                    background: '#4A5D4A',
                     borderRadius: '100px',
                     padding: '12px 28px',
                     display: 'inline-flex',
@@ -189,10 +189,10 @@ export default function PartnersPage() {
                     fontFamily: 'var(--font-body)',
                     fontWeight: 500,
                     fontSize: '14px',
-                    color: '#E6EDD9',
+                    color: '#1A2E1A',
                     textDecoration: 'none',
                     background: 'transparent',
-                    border: '1px solid rgba(230,237,217,0.25)',
+                    border: '1px solid rgba(26,46,26,0.2)',
                     borderRadius: '100px',
                     padding: '12px 28px',
                     display: 'inline-flex',
@@ -217,8 +217,8 @@ export default function PartnersPage() {
                 <div
                   key={s.number}
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '0.5px solid rgba(230,237,217,0.10)',
+                    background: '#FFFFFF',
+                    border: '0.5px solid rgba(26,46,26,0.10)',
                     borderRadius: '16px',
                     padding: '24px 28px',
                   }}
@@ -228,7 +228,7 @@ export default function PartnersPage() {
                       fontFamily: 'var(--font-display)',
                       fontWeight: 700,
                       fontSize: '52px',
-                      color: '#D1A945',
+                      color: '#1A2E1A',
                       lineHeight: 1,
                       marginBottom: '6px',
                     }}
@@ -240,7 +240,7 @@ export default function PartnersPage() {
                       fontFamily: 'var(--font-body)',
                       fontWeight: 400,
                       fontSize: '13px',
-                      color: 'rgba(230,237,217,0.5)',
+                      color: 'rgba(26,46,26,0.5)',
                       margin: 0,
                     }}
                   >
@@ -254,7 +254,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── PARTNER TYPES ───────────────────────────────────────── */}
-      <section style={{ background: '#E6EDD9' }}>
+      <section style={{ background: '#1A2E1A' }}>
         <div
           style={{
             maxWidth: '1200px',
@@ -274,7 +274,7 @@ export default function PartnersPage() {
                 fontSize: '11px',
                 letterSpacing: '0.13em',
                 textTransform: 'uppercase',
-                color: '#4A5D4A',
+                color: '#D1A945',
                 marginBottom: '16px',
                 lineHeight: 1,
               }}
@@ -287,7 +287,7 @@ export default function PartnersPage() {
                 fontFamily: 'var(--font-display)',
                 fontWeight: 700,
                 fontSize: 'clamp(28px, 3.5vw, 44px)',
-                color: '#1A2E1A',
+                color: '#E6EDD9',
                 lineHeight: 1.15,
                 marginBottom: '16px',
               }}
@@ -310,7 +310,7 @@ export default function PartnersPage() {
                     paddingBottom: '48px',
                     borderBottom:
                       i < PARTNER_TYPES.length - 1
-                        ? '0.5px solid rgba(26,46,26,0.08)'
+                        ? '0.5px solid rgba(230,237,217,0.10)'
                         : 'none',
                   }}
                 >
@@ -321,7 +321,7 @@ export default function PartnersPage() {
                         fontFamily: 'var(--font-body)',
                         fontWeight: 700,
                         fontSize: '80px',
-                        color: 'rgba(26,46,26,0.07)',
+                        color: 'rgba(230,237,217,0.08)',
                         lineHeight: 1,
                         marginBottom: '8px',
                       }}
@@ -335,7 +335,7 @@ export default function PartnersPage() {
                         fontSize: '11px',
                         letterSpacing: '0.13em',
                         textTransform: 'uppercase',
-                        color: '#4A5D4A',
+                        color: '#D1A945',
                         lineHeight: 1,
                         margin: 0,
                       }}
@@ -351,7 +351,7 @@ export default function PartnersPage() {
                         fontFamily: 'var(--font-body)',
                         fontWeight: 700,
                         fontSize: '22px',
-                        color: '#1A2E1A',
+                        color: '#E6EDD9',
                         marginBottom: '12px',
                         display: 'flex',
                         alignItems: 'center',
@@ -367,7 +367,7 @@ export default function PartnersPage() {
                         fontFamily: 'var(--font-body)',
                         fontWeight: 400,
                         fontSize: '15px',
-                        color: 'rgba(26,46,26,0.65)',
+                        color: 'rgba(230,237,217,0.65)',
                         lineHeight: 1.7,
                         maxWidth: '580px',
                         marginBottom: '20px',
@@ -387,7 +387,7 @@ export default function PartnersPage() {
                             fontFamily: 'var(--font-body)',
                             fontWeight: 400,
                             fontSize: '14px',
-                            color: 'rgba(26,46,26,0.65)',
+                            color: 'rgba(230,237,217,0.65)',
                             lineHeight: 1.6,
                           }}
                         >
@@ -397,7 +397,7 @@ export default function PartnersPage() {
                               width: '6px',
                               height: '6px',
                               borderRadius: '2px',
-                              background: '#4A5D4A',
+                              background: '#D1A945',
                               marginTop: '6px',
                               flexShrink: 0,
                             }}
@@ -416,7 +416,7 @@ export default function PartnersPage() {
                           fontFamily: 'var(--font-body)',
                           fontWeight: 500,
                           fontSize: '14px',
-                          color: '#4A5D4A',
+                          color: '#D1A945',
                           textDecoration: 'none',
                           marginTop: '20px',
                           transition: 'text-decoration 0.15s ease',
@@ -463,24 +463,6 @@ export default function PartnersPage() {
                       >
                         {p.title}
                       </p>
-                      {p.number === '01' && (
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            fontFamily: 'var(--font-body)',
-                            fontWeight: 600,
-                            fontSize: '11px',
-                            color: '#4A5D4A',
-                            background: 'rgba(74,93,74,0.10)',
-                            border: '0.5px solid rgba(74,93,74,0.25)',
-                            borderRadius: '100px',
-                            padding: '3px 12px',
-                            marginTop: '4px',
-                          }}
-                        >
-                          Free forever
-                        </span>
-                      )}
                     </div>
                     <p
                       style={{
