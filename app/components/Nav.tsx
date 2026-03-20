@@ -24,8 +24,8 @@ export default function Nav() {
         left: 0,
         right: 0,
         zIndex: 50,
-        height: '64px',
-        padding: '0 40px',
+        height: '72px',
+        padding: '0 48px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -42,9 +42,9 @@ export default function Nav() {
       <Image
         src="/assets/logo_w_text.png"
         alt="Bread Head"
-        width={120}
-        height={32}
-        sizes="120px"
+        width={148}
+        height={40}
+        sizes="148px"
         style={{ objectFit: 'contain', objectPosition: 'left' }}
         priority
       />
