@@ -131,10 +131,9 @@ html {
 /* ── Mobile-only overrides (below 768px) ──────────────────────── */
 @media (max-width: 767px) {
 
-  /* ── Pillars H2 — smaller size + thinner stroke on mobile ── */
-  .pillars-h2 {
-    font-size: clamp(28px, 7vw, 40px) !important;
-    -webkit-text-stroke: 1px #D1A945 !important;
+  /* ── Pillars eyebrow — keep gold fill, thinner dark outline on mobile ── */
+  .pillars-eyebrow {
+    -webkit-text-stroke: 0.5px #1A2E1A !important;
   }
 
   /* ── Hero ── */

@@ -47,19 +47,21 @@ export default function Pillars() {
     <section className="bg-bgSage">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
-        {/* Eyebrow — 13px, 600 weight */}
-        <p className="font-body font-semibold text-[13px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen mb-2">
+        {/* Eyebrow — gold fill + dark outline */}
+        <p
+          className="pillars-eyebrow font-body font-semibold text-[13px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase mb-2"
+          style={{
+            color: '#D1A945',
+            WebkitTextStroke: '0.5px #1A2E1A',
+          }}
+        >
           Everything in one place
         </p>
 
-        {/* H2 — DM Sans 700, gold outline (transparent + text-stroke) */}
+        {/* H2 — DM Sans 700, solid dark green */}
         <h2
-          className="pillars-h2 font-body font-bold tracking-[-0.02em] leading-[1.08] mb-6 max-w-xl"
-          style={{
-            fontSize: 'clamp(32px, 4.5vw, 56px)',
-            color: 'transparent',
-            WebkitTextStroke: '1.5px #D1A945',
-          }}
+          className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-6 max-w-xl"
+          style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}
         >
           Learn. Simulate. Reflect.
         </h2>
