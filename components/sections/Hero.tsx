@@ -1,8 +1,6 @@
 // ── §1 Hero ─────────────────────────────────────────────────────
-// Pass 3 additions (no visual style changes):
-//   · FadeUp wraps eyebrow (0), h1 (0.1), sub (0.2), stat card (0.28), CTA (0.35)
-//   · CountUp replaces static "73%"
-//   · PhoneParallax wraps the phone mockup container
+// min-h-screen, flex items-center — content vertically centered
+// No forced top padding — nav overlay handled by fixed positioning
 
 import FadeUp         from '@/app/components/FadeUp'
 import CountUp        from '@/app/components/CountUp'
@@ -13,39 +11,55 @@ export default function Hero() {
   return (
     <section
       className="bg-bgSage min-h-screen flex items-center"
-      style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9' }}
+      style={{
+        background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9',
+      }}
     >
-      <div className="max-w-7xl mx-auto w-full px-6 lg:px-8 py-12 pt-20 lg:pt-24 lg:pb-16">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div className="max-w-7xl mx-auto w-full px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-          {/* ── Left: copy ──────────────────────────────────── */}
+          {/* ── Left: copy ── */}
           <div>
 
-            {/* Eyebrow — FadeUp delay 0 */}
+            {/* Eyebrow with vertical bar */}
             <FadeUp delay={0}>
-              <p
-                className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2"
-                style={{ color: '#4A5D4A' }}
-              >
-                Personal Finance · Built for Teens
-              </p>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-[2px] h-5 bg-brandGreen shrink-0" />
+                <span
+                  className="font-body font-semibold uppercase text-brandGreen"
+                  style={{ fontSize: '11px', letterSpacing: '0.15em' }}
+                >
+                  Personal Finance · Built for Teens
+                </span>
+              </div>
             </FadeUp>
 
-            {/* H1 — FadeUp delay 0.1 */}
+            {/* H1 */}
             <FadeUp delay={0.1}>
               <h1
-                className="font-display italic font-bold text-textTitle leading-[1.06] tracking-[-0.02em] mb-3"
-                style={{ fontSize: 'clamp(36px, 5vw, 58px)' }}
+                className="font-display italic font-bold text-textTitle tracking-[-0.02em]"
+                style={{
+                  fontSize: 'clamp(32px, 4.5vw, 52px)',
+                  lineHeight: 1.15,
+                  marginBottom: '16px',
+                  maxWidth: '520px',
+                }}
               >
                 The money stuff school forgot to teach you.
               </h1>
             </FadeUp>
 
-            {/* Sub — FadeUp delay 0.2 */}
+            {/* Sub */}
             <FadeUp delay={0.2}>
               <p
-                className="font-body text-[16px] leading-[1.7] mb-5 max-w-[480px]"
-                style={{ color: 'rgba(26,46,26,0.65)' }}
+                className="font-body"
+                style={{
+                  fontSize: '15px',
+                  lineHeight: 1.7,
+                  color: 'rgba(26,46,26,0.65)',
+                  maxWidth: '440px',
+                  marginBottom: '28px',
+                }}
               >
                 Bite-sized lessons on pay stubs, credit, and taxes. A budget
                 simulator that shows tradeoffs before they cost you. A private
@@ -53,17 +67,28 @@ export default function Hero() {
               </p>
             </FadeUp>
 
-            {/* Stat callout card — FadeUp delay 0.28 */}
+            {/* Stat card */}
             <FadeUp delay={0.28}>
               <div
-                className="rounded-2xl p-7 mb-6 max-w-[420px] flex items-start gap-5"
-                style={{ background: '#E6EDD9', border: '0.5px solid rgba(74,93,74,0.2)' }}
+                className="inline-flex items-center gap-4 rounded-2xl"
+                style={{
+                  background: '#FFFFFF',
+                  border: '0.5px solid rgba(26,46,26,0.10)',
+                  borderRadius: '16px',
+                  padding: '16px 20px',
+                  maxWidth: '380px',
+                  marginBottom: '28px',
+                }}
               >
-                {/* 73% in brandGreen */}
-                <CountUp target={73} suffix="%" className="font-display font-bold text-brandGreen leading-none" style={{ fontSize: '48px' }} />
+                <CountUp
+                  target={73}
+                  suffix="%"
+                  className="font-display font-bold text-brandGreen leading-none shrink-0"
+                  style={{ fontSize: '36px' }}
+                />
                 <p
-                  className="font-body text-[14px] leading-[1.6]"
-                  style={{ color: 'rgba(26,46,26,0.65)' }}
+                  className="font-body"
+                  style={{ fontSize: '13px', lineHeight: 1.6, color: 'rgba(26,46,26,0.65)', margin: 0 }}
                 >
                   of teens have never seen a pay stub — yet they&apos;re expected
                   to manage their own money within months of graduation.
@@ -71,27 +96,26 @@ export default function Hero() {
               </div>
             </FadeUp>
 
-            {/* CTA — FadeUp delay 0.35 + MagneticButton */}
+            {/* CTA */}
             <FadeUp delay={0.35}>
               <MagneticButton>
                 <a
                   href="#"
-                  className="inline-flex items-center gap-2 font-body font-medium text-brandGreen rounded-full"
+                  className="inline-flex items-center gap-2 font-body font-semibold rounded-full"
                   style={{
-                    background: 'rgba(74,93,74,0.10)',
-                    border: '1px solid rgba(74,93,74,0.25)',
-                    padding: '12px 28px',
-                    fontSize: '14px',
+                    background: '#4A5D4A',
+                    color: '#E6EDD9',
+                    padding: '14px 32px',
+                    fontSize: '15px',
+                    textDecoration: 'none',
                   }}
                 >
-                  Start Learning Free
-                  <span aria-hidden="true">→</span>
+                  Start Learning Free →
                 </a>
               </MagneticButton>
-
               <p
-                className="font-body text-[12px] mt-4"
-                style={{ color: 'rgba(26,46,26,0.40)' }}
+                className="font-body"
+                style={{ fontSize: '12px', color: 'rgba(26,46,26,0.45)', marginTop: '10px' }}
               >
                 Free to start · No credit card
               </p>
@@ -99,18 +123,36 @@ export default function Hero() {
 
           </div>
 
-          {/* ── Right: phone mockup — PhoneParallax ─────────── */}
+          {/* ── Right: phone mockup ── */}
           <div className="flex justify-center lg:justify-end">
             <PhoneParallax>
-              <div className="relative">
+              <div className="relative flex justify-center items-center">
+
+                {/* Decorative radial glow behind phone */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    width: '340px',
+                    height: '340px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(74,93,74,0.08) 0%, transparent 70%)',
+                    zIndex: 0,
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                />
 
                 {/* Phone shell */}
                 <div
-                  className="w-[260px] lg:w-[280px] bg-cardBg card-border overflow-hidden flex flex-col"
+                  className="bg-cardBg card-border overflow-hidden flex flex-col"
                   style={{
+                    width: 'clamp(240px, 20vw, 300px)',
                     borderRadius: '40px',
                     aspectRatio: '9 / 19.5',
                     boxShadow: 'none',
+                    position: 'relative',
+                    zIndex: 1,
                   }}
                 >
                   {/* Status bar */}
@@ -126,9 +168,7 @@ export default function Hero() {
                         <div
                           key={i}
                           className="w-3 h-[5px] rounded-full"
-                          style={{
-                            background: `rgba(26,46,26,${i === 3 ? 0.15 : 0.3})`,
-                          }}
+                          style={{ background: `rgba(26,46,26,${i === 3 ? 0.15 : 0.3})` }}
                         />
                       ))}
                     </div>
@@ -148,10 +188,7 @@ export default function Hero() {
                     >
                       <div className="h-full w-3/5 bg-brandGreen rounded-full" />
                     </div>
-                    <p
-                      className="font-body text-[10px] mt-1"
-                      style={{ color: 'rgba(26,46,26,0.40)' }}
-                    >
+                    <p className="font-body text-[10px] mt-1" style={{ color: 'rgba(26,46,26,0.40)' }}>
                       3 of 5 slides
                     </p>
                   </div>
@@ -166,19 +203,13 @@ export default function Hero() {
                         <p className="font-body font-medium text-[9px] tracking-[0.10em] uppercase text-brandGreen mb-0.5">
                           {row.label}
                         </p>
-                        <p className="font-body font-semibold text-textTitle text-[13px]">
-                          {row.value}
-                        </p>
-                        <p
-                          className="font-body text-[9px]"
-                          style={{ color: 'rgba(26,46,26,0.45)' }}
-                        >
+                        <p className="font-body font-semibold text-textTitle text-[13px]">{row.value}</p>
+                        <p className="font-body text-[9px]" style={{ color: 'rgba(26,46,26,0.45)' }}>
                           {row.sub}
                         </p>
                       </div>
                     ))}
 
-                    {/* Quick check */}
                     <div className="bg-cardBg card-border rounded-[12px] px-3.5 py-3">
                       <p className="font-body font-medium text-[9px] tracking-[0.10em] uppercase text-brandGreen mb-0.5">
                         Quick Check
@@ -202,10 +233,7 @@ export default function Hero() {
                       >
                         <div
                           className="w-[14px] h-[14px] rounded-full"
-                          style={{
-                            background:
-                              i === 0 ? 'rgba(74,93,74,0.12)' : 'rgba(26,46,26,0.07)',
-                          }}
+                          style={{ background: i === 0 ? 'rgba(74,93,74,0.12)' : 'rgba(26,46,26,0.07)' }}
                         />
                         {tab}
                       </button>
@@ -214,11 +242,11 @@ export default function Hero() {
                 </div>
 
                 {/* Floating streak badge */}
-                <div className="absolute -right-5 top-[38%] bg-cardBg card-border rounded-2xl px-4 py-3">
-                  <p
-                    className="font-body text-[10px] mb-0.5"
-                    style={{ color: 'rgba(26,46,26,0.40)' }}
-                  >
+                <div
+                  className="absolute bg-cardBg card-border rounded-2xl px-4 py-3"
+                  style={{ right: '-20px', top: '38%', zIndex: 2 }}
+                >
+                  <p className="font-body text-[10px] mb-0.5" style={{ color: 'rgba(26,46,26,0.40)' }}>
                     Streak
                   </p>
                   <p className="font-body font-semibold text-textTitle text-[13px]">🔥 12 days</p>

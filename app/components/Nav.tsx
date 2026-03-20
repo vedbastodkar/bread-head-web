@@ -1,8 +1,6 @@
 'use client'
 
-// Sticky nav that fades in on scroll past 80px.
-// Transparent → bgSage with blur on scroll.
-// useMotionValueEvent avoids manual addEventListener.
+// Sticky nav — transparent → bgSage blur on scroll past 80px.
 
 import Image from 'next/image'
 import { useState } from 'react'
@@ -24,8 +22,7 @@ export default function Nav() {
         left: 0,
         right: 0,
         zIndex: 50,
-        height: '72px',
-        padding: '0 48px',
+        padding: '20px 32px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -38,13 +35,13 @@ export default function Nav() {
           : '0.5px solid transparent',
       }}
     >
-      {/* Logo */}
+      {/* Logo — height 44px, width proportional */}
       <Image
         src="/assets/logo_w_text.png"
         alt="Bread Head"
-        width={148}
-        height={40}
-        sizes="148px"
+        width={163}
+        height={44}
+        sizes="163px"
         style={{ objectFit: 'contain', objectPosition: 'left' }}
         priority
       />
@@ -55,37 +52,38 @@ export default function Nav() {
           <a
             key={link}
             href="#"
-            className="nav-link"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 500,
               fontSize: '14px',
-              color: '#1A2E1A',
+              letterSpacing: '0.03em',
+              color: 'rgba(26,46,26,0.7)',
               textDecoration: 'none',
               transition: 'color 0.2s ease',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#4A5D4A')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#1A2E1A')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
           >
             {link}
           </a>
         ))}
 
-        {/* CTA — light button style from Pass 2 */}
+        {/* CTA — solid brandGreen */}
         <a
           href="#"
           style={{
             fontFamily: 'var(--font-body)',
-            fontWeight: 500,
-            fontSize: '13px',
-            color: '#4A5D4A',
+            fontWeight: 600,
+            fontSize: '14px',
+            color: '#E6EDD9',
             textDecoration: 'none',
-            background: 'rgba(74,93,74,0.10)',
-            border: '1px solid rgba(74,93,74,0.25)',
+            background: '#4A5D4A',
             borderRadius: '100px',
-            padding: '8px 20px',
-            transition: 'background 0.2s ease',
+            padding: '10px 22px',
+            transition: 'opacity 0.2s ease',
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
         >
           Get Early Access
         </a>
