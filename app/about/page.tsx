@@ -29,11 +29,11 @@ const VALUES = [
   },
   {
     title: 'Recognition drives growth',
-    body: "People change faster when they can recognize their own behavior clearly. Seeing your habits, patterns, and blind spots in real terms is more powerful than being lectured or handed generic advice. Bread Head helps teens notice what's actually happening, so they can make better decisions on purpose.",
+    body: "Seeing your habits and blind spots clearly beats any lecture. Bread Head helps teens recognize what's actually happening with their money so they can make better decisions on purpose.",
   },
   {
     title: 'Ownership over excuses',
-    body: "Financial growth takes ownership. Not perfection, not shame — ownership. When teens can track their choices, reflect on them, and follow through over time, they build real discipline. Bread Head is designed to turn responsibility into a habit, not a one-time motivation spike.",
+    body: "Financial growth takes ownership, not perfection or shame. Bread Head is built to help teens track their choices, reflect over time, and turn responsibility into a lasting habit — not a one-time motivation spike.",
   },
 ]
 
