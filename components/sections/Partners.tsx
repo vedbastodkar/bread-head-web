@@ -14,23 +14,23 @@ import CountUp from '@/app/components/CountUp'
 const partnerTypes = [
   {
     number: '01',
+    label: 'Individual Students',
+    body: 'No school or program required. Any student can download Bread Head for free and start learning immediately — on any device, at any pace.',
+  },
+  {
+    number: '02',
     label: 'Schools & Districts',
     body: 'Integrate Bread Head into existing economics or life skills courses. Standards-aligned lessons, progress dashboards, and zero cost to students.',
   },
   {
-    number: '02',
+    number: '03',
     label: 'Youth Organizations',
     body: 'Bring financial literacy to after-school programs, summer camps, and community centers. Self-paced format works without a classroom structure.',
   },
   {
-    number: '03',
+    number: '04',
     label: 'Corporate & Foundation',
     body: 'Fund access for underserved communities, sponsor a cohort, or partner to build curriculum around your financial products — responsibly.',
-  },
-  {
-    number: '04',
-    label: 'Individual Students',
-    body: 'No school or program required. Any student can download Bread Head for free and start learning immediately — on any device, at any pace.',
   },
 ]
 

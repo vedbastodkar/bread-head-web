@@ -13,6 +13,20 @@ export const metadata: Metadata = {
 const PARTNER_TYPES = [
   {
     number: '01',
+    title: 'Individual Students',
+    badge: 'Free forever',
+    description:
+      'No school. No program. No institution required. Bread Head is free to download and use for any student, anywhere. If you\'re a teen who wants to learn how money actually works, just get the app.',
+    features: [
+      'Free to download, free to use — always',
+      'No account required to start',
+      'Works on iPhone and Android',
+      'No ads, no upsells, no paywalls',
+    ],
+    cta: null,
+  },
+  {
+    number: '02',
     title: 'Schools & Districts',
     badge: 'Most common',
     description:
@@ -26,7 +40,7 @@ const PARTNER_TYPES = [
     cta: 'Talk to us about your district →',
   },
   {
-    number: '02',
+    number: '03',
     title: 'Youth Organizations',
     badge: null,
     description:
@@ -40,7 +54,7 @@ const PARTNER_TYPES = [
     cta: 'Talk to us about your program →',
   },
   {
-    number: '03',
+    number: '04',
     title: 'Corporate & Foundation',
     badge: null,
     description:
@@ -52,20 +66,6 @@ const PARTNER_TYPES = [
       'Direct community investment',
     ],
     cta: 'Talk to us about funding →',
-  },
-  {
-    number: '04',
-    title: 'Individual Students',
-    badge: 'Free forever',
-    description:
-      'No school. No program. No institution required. Bread Head is free to download and use for any student, anywhere. If you\'re a teen who wants to learn how money actually works, just get the app.',
-    features: [
-      'Free to download, free to use — always',
-      'No account required to start',
-      'Works on iPhone and Android',
-      'No ads, no upsells, no paywalls',
-    ],
-    cta: null,
   },
 ]
 
