@@ -178,7 +178,7 @@ export default function PartnersPage() {
       </section>
 
       {/* ── PARTNER TYPES ───────────────────────────────────────── */}
-      <section style={{ background: '#E6EDD9' }}>
+      <section style={{ background: '#1A2E1A' }}>
         <div
           style={{
             maxWidth: '1200px',
@@ -197,7 +197,7 @@ export default function PartnersPage() {
                 fontSize: '11px',
                 letterSpacing: '0.13em',
                 textTransform: 'uppercase',
-                color: '#4A5D4A',
+                color: '#D1A945',
                 marginBottom: '16px',
                 lineHeight: 1,
               }}
@@ -210,7 +210,7 @@ export default function PartnersPage() {
                 fontFamily: 'var(--font-display)',
                 fontWeight: 700,
                 fontSize: 'clamp(28px, 3.5vw, 44px)',
-                color: '#1A2E1A',
+                color: '#E6EDD9',
                 lineHeight: 1.15,
                 marginBottom: '48px',
               }}

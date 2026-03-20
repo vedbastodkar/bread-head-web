@@ -114,7 +114,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── MISSION ───────────────────────────────────────────────── */}
-      <section style={{ background: '#E6EDD9' }}>
+      <section style={{ background: '#1A2E1A' }}>
         <div
           style={{
             maxWidth: '900px',
@@ -135,7 +135,7 @@ export default function AboutPage() {
                 fontSize: '11px',
                 letterSpacing: '0.13em',
                 textTransform: 'uppercase',
-                color: '#4A5D4A',
+                color: '#D1A945',
                 marginBottom: '24px',
                 lineHeight: 1,
               }}
@@ -149,7 +149,7 @@ export default function AboutPage() {
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
                 fontSize: 'clamp(24px, 3.5vw, 42px)',
-                color: '#1A2E1A',
+                color: '#E6EDD9',
                 lineHeight: 1.3,
                 marginBottom: 0,
               }}
@@ -167,7 +167,7 @@ export default function AboutPage() {
                 fontFamily: 'var(--font-body)',
                 fontWeight: 400,
                 fontSize: '16px',
-                color: 'rgba(26,46,26,0.65)',
+                color: 'rgba(230,237,217,0.65)',
                 lineHeight: 1.7,
                 marginTop: '32px',
                 marginBottom: 0,
