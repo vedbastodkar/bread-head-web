@@ -27,6 +27,14 @@ const VALUES = [
     title: 'Access for everyone',
     body: "A teen in a well-funded district shouldn't have a better financial future than one who isn't. We're building toward universal access, regardless of zip code.",
   },
+  {
+    title: 'Recognition drives growth',
+    body: "People change faster when they can recognize their own behavior clearly. Seeing your habits, patterns, and blind spots in real terms is more powerful than being lectured or handed generic advice. Bread Head helps teens notice what's actually happening, so they can make better decisions on purpose.",
+  },
+  {
+    title: 'Ownership over excuses',
+    body: "Financial growth takes ownership. Not perfection, not shame — ownership. When teens can track their choices, reflect on them, and follow through over time, they build real discipline. Bread Head is designed to turn responsibility into a habit, not a one-time motivation spike.",
+  },
 ]
 
 // ── Stats bar data ────────────────────────────────────────────────
@@ -217,9 +225,10 @@ export default function AboutPage() {
 
             {/* Value cards grid */}
             <div
+              className="about-values-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '24px',
                 marginTop: '48px',
               }}

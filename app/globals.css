@@ -278,6 +278,9 @@ html {
   }
 
   /* ── About page ── */
+  .about-values-grid {
+    grid-template-columns: 1fr !important;
+  }
   .about-founder-grid {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
