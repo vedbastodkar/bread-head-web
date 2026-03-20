@@ -27,6 +27,11 @@ const partnerTypes = [
     label: 'Corporate & Foundation',
     body: 'Fund access for underserved communities, sponsor a cohort, or partner to build curriculum around your financial products — responsibly.',
   },
+  {
+    number: '04',
+    label: 'Individual Students',
+    body: 'No school or program required. Any student can download Bread Head for free and start learning immediately — on any device, at any pace.',
+  },
 ]
 
 export default function Partners() {
@@ -127,7 +132,7 @@ export default function Partners() {
         </div>
 
         {/* Partner type columns — white cards on sage */}
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {partnerTypes.map((p) => (
             <div key={p.label} className="bg-cardBg card-border rounded-2xl p-7 flex flex-col">
               <span className="font-body font-bold text-brandGreen text-[13px] mb-4">

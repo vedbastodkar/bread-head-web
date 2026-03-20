@@ -53,6 +53,20 @@ const PARTNER_TYPES = [
     ],
     cta: 'Talk to us about funding →',
   },
+  {
+    number: '04',
+    title: 'Individual Students',
+    badge: 'Free forever',
+    description:
+      'No school. No program. No institution required. Bread Head is free to download and use for any student, anywhere. If you\'re a teen who wants to learn how money actually works, just get the app.',
+    features: [
+      'Free to download, free to use — always',
+      'No account required to start',
+      'Works on iPhone and Android',
+      'No ads, no upsells, no paywalls',
+    ],
+    cta: null,
+  },
 ]
 
 // ── Gap stats ─────────────────────────────────────────────────────
@@ -201,7 +215,7 @@ export default function PartnersPage() {
                 marginBottom: '48px',
               }}
             >
-              Three ways to partner.
+              Four ways to partner.
             </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -309,21 +323,23 @@ export default function PartnersPage() {
                       ))}
                     </ul>
 
-                    <a
-                      href="/partners"
-                      style={{
-                        display: 'inline-block',
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 500,
-                        fontSize: '14px',
-                        color: '#4A5D4A',
-                        textDecoration: 'none',
-                        marginTop: '24px',
-                        transition: 'text-decoration 0.15s ease',
-                      }}
-                    >
-                      {p.cta}
-                    </a>
+                    {p.cta && (
+                      <a
+                        href="/partners"
+                        style={{
+                          display: 'inline-block',
+                          fontFamily: 'var(--font-body)',
+                          fontWeight: 500,
+                          fontSize: '14px',
+                          color: '#4A5D4A',
+                          textDecoration: 'none',
+                          marginTop: '24px',
+                          transition: 'text-decoration 0.15s ease',
+                        }}
+                      >
+                        {p.cta}
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
