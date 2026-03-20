@@ -41,10 +41,9 @@ const VALUES = [
 
 // ── Stats bar data ────────────────────────────────────────────────
 const STATS = [
-  { number: '2,400+', label: 'teens on the waitlist' },
-  { number: '5–9 min', label: 'per lesson, no fluff' },
-  { number: '3', label: 'core features: learn, simulate, reflect' },
   { number: '100%', label: 'free for students, always' },
+  { number: '5 min', label: 'lessons, no fluff' },
+  { number: 'Learn. Simulate. Reflect.', label: '', small: true },
 ]
 
 export default function AboutPage() {
@@ -432,7 +431,7 @@ export default function AboutPage() {
               className="about-stats-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
+                gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '32px',
                 textAlign: 'center',
               }}
@@ -443,9 +442,9 @@ export default function AboutPage() {
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontWeight: 700,
-                      fontSize: '48px',
+                      fontSize: s.small ? 'clamp(18px, 2vw, 26px)' : '48px',
                       color: '#D1A945',
-                      lineHeight: 1,
+                      lineHeight: 1.2,
                       marginBottom: '10px',
                     }}
                   >
