@@ -39,13 +39,17 @@ export default function Problem() {
           className="mt-8 pt-6 flex flex-col md:flex-row md:items-start gap-8 max-w-2xl"
           style={{ borderTop: '0.5px solid rgba(26,46,26,0.12)' }}
         >
-          {/* Stat — prose callout */}
-          <div className="shrink-0 max-w-[200px] max-md:max-w-none">
+          {/* Stat — big number + label */}
+          <div className="shrink-0">
             <p
-              className="font-display font-bold text-textTitle leading-[1.1]"
-              style={{ fontSize: '22px' }}
+              className="font-display font-bold text-textTitle leading-none"
+              style={{ fontSize: '48px' }}
             >
-              Nearly 20 states don&apos;t require teaching personal finance at all.
+              21
+            </p>
+            <p className="font-body text-[13px] max-md:text-[14px] mt-2 leading-snug max-w-[140px] max-md:max-w-none"
+               style={{ color: 'rgba(26,46,26,0.50)' }}>
+              states don&apos;t require personal finance education in high school
             </p>
           </div>
 
