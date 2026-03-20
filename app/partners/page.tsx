@@ -14,7 +14,7 @@ const PARTNER_TYPES = [
   {
     number: '01',
     title: 'Individual Students',
-    badge: 'Free forever',
+    badge: null,
     description:
       'No school. No program. No institution required. Bread Head is free to download and use for any student, anywhere. If you\'re a teen who wants to learn how money actually works, just get the app.',
     features: [
