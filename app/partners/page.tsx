@@ -28,7 +28,7 @@ const PARTNER_TYPES = [
   {
     number: '02',
     title: 'Schools & Districts',
-    badge: 'Most common',
+    badge: null,
     description:
       'Integrate Bread Head into existing economics, life skills, or financial literacy courses. Lessons are standards-aligned, self-paced, and require zero teacher training to deploy.',
     features: [
