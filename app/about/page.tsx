@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 import AboutCTA from './AboutCTA'
@@ -330,24 +331,14 @@ export default function AboutPage() {
               }}
             >
               {/* Left: founder photo */}
-              <div
-                style={{
-                  width: '100%',
-                  borderRadius: '20px',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              <div style={{ borderRadius: '20px', overflow: 'hidden' }}>
+                <Image
                   src="/assets/ved_photo.png"
                   alt="Ved Bastodkar, founder of Bread Head"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    objectFit: 'cover',
-                    objectPosition: 'center top',
-                  }}
+                  width={480}
+                  height={600}
+                  style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
                 />
               </div>
 
