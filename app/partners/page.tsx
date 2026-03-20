@@ -81,7 +81,7 @@ export default function PartnersPage() {
     <main>
 
       {/* ── HERO ────────────────────────────────────────────────── */}
-      <section style={{ background: '#1A2E1A' }}>
+      <section style={{ background: '#E6EDD9' }}>
         <div
           style={{
             maxWidth: '1200px',
@@ -100,7 +100,7 @@ export default function PartnersPage() {
                 fontSize: '11px',
                 letterSpacing: '0.13em',
                 textTransform: 'uppercase',
-                color: '#D1A945',
+                color: '#4A5D4A',
                 marginBottom: '16px',
                 lineHeight: 1,
               }}
@@ -113,7 +113,7 @@ export default function PartnersPage() {
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
                 fontSize: 'clamp(32px, 5vw, 60px)',
-                color: '#E6EDD9',
+                color: '#1A2E1A',
                 lineHeight: 1.1,
                 maxWidth: '720px',
                 marginBottom: '24px',
@@ -127,7 +127,7 @@ export default function PartnersPage() {
                 fontFamily: 'var(--font-body)',
                 fontWeight: 400,
                 fontSize: '17px',
-                color: 'rgba(230,237,217,0.7)',
+                color: 'rgba(26,46,26,0.65)',
                 lineHeight: 1.7,
                 maxWidth: '560px',
                 marginBottom: '40px',
@@ -152,7 +152,7 @@ export default function PartnersPage() {
                       fontFamily: 'var(--font-display)',
                       fontWeight: 700,
                       fontSize: '48px',
-                      color: '#D1A945',
+                      color: '#1A2E1A',
                       lineHeight: 1,
                       marginBottom: '8px',
                     }}
@@ -164,7 +164,7 @@ export default function PartnersPage() {
                       fontFamily: 'var(--font-body)',
                       fontWeight: 400,
                       fontSize: '13px',
-                      color: 'rgba(230,237,217,0.55)',
+                      color: 'rgba(26,46,26,0.5)',
                       margin: 0,
                     }}
                   >

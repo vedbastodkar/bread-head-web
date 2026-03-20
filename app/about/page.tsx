@@ -42,7 +42,7 @@ export default function AboutPage() {
     <main>
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
-      <section style={{ background: '#1A2E1A' }}>
+      <section style={{ background: '#E6EDD9' }}>
         <div
           style={{
             maxWidth: '1200px',
@@ -62,7 +62,7 @@ export default function AboutPage() {
                 fontSize: '11px',
                 letterSpacing: '0.13em',
                 textTransform: 'uppercase',
-                color: '#D1A945',
+                color: '#4A5D4A',
                 marginBottom: '16px',
                 lineHeight: 1,
               }}
@@ -76,7 +76,7 @@ export default function AboutPage() {
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
                 fontSize: 'clamp(36px, 5vw, 64px)',
-                color: '#E6EDD9',
+                color: '#1A2E1A',
                 lineHeight: 1.1,
                 maxWidth: '700px',
                 marginBottom: '24px',
@@ -91,7 +91,7 @@ export default function AboutPage() {
                 fontFamily: 'var(--font-body)',
                 fontWeight: 400,
                 fontSize: '17px',
-                color: 'rgba(230,237,217,0.7)',
+                color: 'rgba(26,46,26,0.65)',
                 lineHeight: 1.7,
                 maxWidth: '580px',
                 margin: 0,
