@@ -12,17 +12,17 @@ export default function Ticker() {
 
   return (
     <div
-      className="bg-bgSage overflow-hidden py-3"
+      className="bg-bgSage overflow-hidden py-2 md:py-3"
       style={{ borderTop: '1px solid rgba(74,93,74,0.12)', borderBottom: '1px solid rgba(74,93,74,0.12)' }}
       aria-hidden="true"
     >
       {/* animate-ticker: 0 → -50% over 25s — defined in tailwind.config.js */}
       <div className="flex whitespace-nowrap animate-ticker will-change-transform">
-        <span className="shrink-0 font-body font-medium text-[14px] tracking-[0.08em] text-brandGreen select-none">
+        <span className="shrink-0 font-body font-medium text-[13px] md:text-[14px] tracking-[0.08em] text-brandGreen select-none">
           {content}
         </span>
         {/* Second copy makes the loop visually seamless */}
-        <span className="shrink-0 font-body font-medium text-[14px] tracking-[0.08em] text-brandGreen select-none">
+        <span className="shrink-0 font-body font-medium text-[13px] md:text-[14px] tracking-[0.08em] text-brandGreen select-none">
           {content}
         </span>
       </div>

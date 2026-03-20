@@ -1,6 +1,7 @@
 'use client'
 
 // ── §4 Lessons Preview ──────────────────────────────────────────
+// Mobile: single column, phone hidden, waterfall height 400px
 
 import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
@@ -44,6 +45,7 @@ export default function LessonsPreview() {
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingTop: '64px', paddingBottom: '64px' }}>
       <div
+        className="lessons-layout"
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -55,16 +57,19 @@ export default function LessonsPreview() {
         }}
       >
 
-        {/* ── Left column 55% ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '55%' }}>
+        {/* ── Left column 55% → full width on mobile ── */}
+        <div
+          className="lessons-left-col"
+          style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '55%' }}
+        >
 
           {/* Title block */}
           <FadeUp delay={0}>
-            <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
+            <p className="font-body font-medium text-[11px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen mb-2">
               The Curriculum
             </p>
             <h2
-              className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-2"
+              className="lessons-h2 font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-2"
               style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
             >
               Real topics. Zero condescension.
@@ -77,6 +82,7 @@ export default function LessonsPreview() {
 
           {/* Waterfall container */}
           <div
+            className="lessons-waterfall-wrap"
             style={{
               height: '560px',
               overflow: 'hidden',
@@ -86,7 +92,7 @@ export default function LessonsPreview() {
           >
             <div className="flex flex-col gap-4 waterfall-scroll">
               {doubled.map((lesson, i) => (
-                <div key={i} className="bg-cardBg card-border rounded-2xl p-6 flex flex-col w-full">
+                <div key={i} className="bg-cardBg card-border card-hover rounded-2xl p-5 md:p-6 flex flex-col w-full">
                   <span
                     className="font-body font-medium text-[11px] tracking-[0.10em] uppercase text-brandGreen w-fit mb-4"
                     style={{ background: 'rgba(74,93,74,0.10)', borderRadius: '100px', padding: '4px 12px' }}
@@ -94,10 +100,10 @@ export default function LessonsPreview() {
                     {lesson.time}
                   </span>
                   <p className="font-body font-bold text-brandGreen text-[13px] mb-1">{lesson.number}</p>
-                  <h3 className="font-body font-semibold text-textTitle text-[18px] leading-snug mb-2">
+                  <h3 className="font-body font-semibold text-textTitle text-[15px] md:text-[18px] leading-snug mb-2">
                     {lesson.topic}
                   </h3>
-                  <p className="font-body text-[14px] leading-[1.6]"
+                  <p className="font-body text-[13px] md:text-[14px] leading-[1.6]"
                      style={{ color: 'rgba(26,46,26,0.55)' }}>
                     {lesson.shortDesc}
                   </p>
@@ -105,7 +111,7 @@ export default function LessonsPreview() {
                     className="flex items-center mt-4 pt-4"
                     style={{ borderTop: '0.5px solid rgba(26,46,26,0.08)' }}
                   >
-                    <span className="font-body font-medium text-[13px] text-brandGreen">
+                    <span className="lesson-start-link font-body font-medium text-[13px] text-brandGreen">
                       Start lesson →
                     </span>
                   </div>
@@ -116,7 +122,7 @@ export default function LessonsPreview() {
 
         </div>
 
-        {/* ── Right column 45% — sticky ── */}
+        {/* ── Right column 45% — sticky, hidden below lg ── */}
         <div
           className="hidden lg:block"
           style={{ width: '45%', position: 'sticky', top: '24px', alignSelf: 'flex-start' }}

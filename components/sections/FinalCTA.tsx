@@ -11,7 +11,7 @@ import MagneticButton from '@/app/components/MagneticButton'
 export default function FinalCTA() {
   return (
     <section className="bg-textTitle grain-overlay">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 lg:py-40">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-28 lg:py-40">
         <div className="max-w-2xl mx-auto text-center">
 
           {/* Eyebrow */}
@@ -22,7 +22,7 @@ export default function FinalCTA() {
 
           {/* H2 — Playfair italic, accentGold — approved gold use */}
           <h2
-            className="font-display italic font-bold text-accentGold tracking-[-0.02em] leading-[1.06] mb-8"
+            className="final-cta-h2 font-display italic font-bold text-accentGold tracking-[-0.02em] leading-[1.06] mb-8"
             style={{ fontSize: 'clamp(40px, 5.5vw, 68px)' }}
           >
             Your financial education starts now.
@@ -36,14 +36,14 @@ export default function FinalCTA() {
 
           {/* Email capture */}
           <form
-            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-5"
+            className="final-cta-form flex flex-col md:flex-row gap-3 max-w-md mx-auto mb-5"
             onSubmit={(e) => e.preventDefault()}
           >
             <input
               type="email"
               placeholder="your@email.com"
               aria-label="Email address"
-              className="flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/30 focus:outline-none transition-colors"
+              className="final-cta-input flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/30 focus:outline-none transition-colors"
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '0.5px solid rgba(255,255,255,0.15)',
@@ -55,7 +55,7 @@ export default function FinalCTA() {
             <MagneticButton>
               <button
                 type="submit"
-                className="font-body font-medium text-bgSage bg-brandGreen rounded-full shrink-0 hover:opacity-90 transition-opacity"
+                className="final-cta-btn font-body font-medium text-bgSage bg-brandGreen rounded-full shrink-0 hover:opacity-90 transition-opacity touch-cta"
                 style={{ padding: '12px 28px', fontSize: '14px' }}
               >
                 Get Early Access →

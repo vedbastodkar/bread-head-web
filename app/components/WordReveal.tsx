@@ -58,7 +58,7 @@ export default function WordReveal({ lines, headlineIndex }: WordRevealProps) {
             className={
               isHeadline
                 ? 'font-display italic font-bold text-textTitle tracking-[-0.02em] leading-[1.08]'
-                : 'font-body font-normal leading-snug'
+                : 'word-reveal-sub font-body font-normal leading-snug'
             }
             style={
               isHeadline

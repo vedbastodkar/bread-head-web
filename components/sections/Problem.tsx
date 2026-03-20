@@ -11,7 +11,7 @@ export default function Problem() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
         {/* Eyebrow */}
-        <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
+        <p className="font-body font-medium text-[11px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen mb-2">
           The Gap
         </p>
 
@@ -36,7 +36,7 @@ export default function Problem() {
 
         {/* Stat + closer copy */}
         <div
-          className="mt-8 pt-6 flex flex-col sm:flex-row sm:items-start gap-8 max-w-2xl"
+          className="mt-8 pt-6 flex flex-col md:flex-row md:items-start gap-8 max-w-2xl"
           style={{ borderTop: '0.5px solid rgba(26,46,26,0.12)' }}
         >
           {/* Stat number — Playfair 700 48px */}
@@ -47,13 +47,13 @@ export default function Problem() {
             >
               0
             </p>
-            <p className="font-body text-[13px] mt-2 leading-snug max-w-[140px]"
+            <p className="font-body text-[13px] max-md:text-[14px] mt-2 leading-snug max-w-[140px] max-md:max-w-none"
                style={{ color: 'rgba(26,46,26,0.50)' }}>
               required hours of personal finance in the average US high school
             </p>
           </div>
 
-          <div className="w-px self-stretch hidden sm:block"
+          <div className="w-px self-stretch hidden md:block"
                style={{ background: 'rgba(26,46,26,0.10)' }} />
 
           <div className="pt-1">

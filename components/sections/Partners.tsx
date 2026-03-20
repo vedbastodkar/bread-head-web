@@ -71,13 +71,13 @@ export default function Partners() {
 
         {/* Stats row — Playfair 700 48px per spec */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-10 pb-10"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 mb-10 pb-10"
           style={{ borderBottom: '0.5px solid rgba(26,46,26,0.10)' }}
         >
           {/* 2,400+ — CountUp with format + suffix */}
           <FadeUp delay={0}>
             <div>
-              <CountUp target={2400} suffix="+" format={true} />
+              <CountUp target={2400} suffix="+" format={true} className="partners-stat-num font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }} />
               <p className="font-body text-[13px] mt-3"
                  style={{ color: 'rgba(26,46,26,0.50)' }}>
                 teens on the waitlist
@@ -88,7 +88,7 @@ export default function Partners() {
           {/* 3 — CountUp */}
           <FadeUp delay={0.1}>
             <div>
-              <CountUp target={3} />
+              <CountUp target={3} className="partners-stat-num font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }} />
               <p className="font-body text-[13px] mt-3"
                  style={{ color: 'rgba(26,46,26,0.50)' }}>
                 states in initial rollout
@@ -100,7 +100,7 @@ export default function Partners() {
           <FadeUp delay={0.2}>
             <div>
               <p
-                className="font-display font-bold text-textTitle leading-none mb-3"
+                className="partners-stat-num font-display font-bold text-textTitle leading-none mb-3"
                 style={{ fontSize: '48px' }}
               >
                 5–9
@@ -115,7 +115,7 @@ export default function Partners() {
           {/* 100% — CountUp */}
           <FadeUp delay={0.3}>
             <div>
-              <CountUp target={100} suffix="%" />
+              <CountUp target={100} suffix="%" className="partners-stat-num font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }} />
               <p className="font-body text-[13px] mt-3"
                  style={{ color: 'rgba(26,46,26,0.50)' }}>
                 free for students
@@ -125,7 +125,7 @@ export default function Partners() {
         </div>
 
         {/* Partner type columns — white cards on sage */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
           {partnerTypes.map((p) => (
             <div key={p.label} className="bg-cardBg card-border rounded-2xl p-7 flex flex-col">
               <span className="font-body font-bold text-brandGreen text-[13px] mb-4">

@@ -106,7 +106,7 @@ export default function Gamification() {
                   <div>
                     <CountUp
                     target={12}
-                    className="font-display font-bold text-accentGold text-[15px] leading-none"
+                    className="font-display font-bold text-accentGold text-[15px] max-md:text-[48px] leading-none"
                     style={{}}
                   />
                     <p className="font-body text-[9px]"
@@ -144,11 +144,11 @@ export default function Gamification() {
                  style={{ color: 'rgba(230,237,217,0.40)' }}>
                 Achievements
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="achievements-grid flex flex-wrap gap-2">
                 {achievements.map((a) => (
                   <div
                     key={a.label}
-                    className="font-body font-medium text-[12px] px-3.5 py-1.5 rounded-full"
+                    className="achievement-badge font-body font-medium text-[12px] px-3.5 py-1.5 rounded-full"
                     style={
                       a.earned
                         ? {

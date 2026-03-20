@@ -124,7 +124,7 @@ export default function Journal() {
                 <FadeUp key={label} delay={0.1 + i * 0.05}>
                   <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '20px' }}>
                     {/* Icon block */}
-                    <div style={{
+                    <div className="journal-icon" style={{
                       width: '32px', height: '32px', flexShrink: 0,
                       background: 'rgba(74,93,74,0.10)', borderRadius: '8px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',

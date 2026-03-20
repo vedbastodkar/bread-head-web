@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Global resets ───────────────────────────────────────────── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   body {
     font-family: var(--font-body), sans-serif;
@@ -9,6 +18,11 @@
     color: #1A2E1A;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  section,
+  footer {
+    overflow-x: hidden;
   }
 
   /* Playfair Display ONLY on h1 and h2 — nowhere else */
@@ -44,18 +58,26 @@
   }
 
   /*
-   * Card hover state — apply to white cards in Pillars, LessonsPreview, Journal.
-   * translateY(-4px) on hover, slightly more visible brandGreen border tint.
-   * NO shadow — preserves Pass 2 no-shadow discipline.
+   * Card hover state — pillar cards and waterfall lesson cards.
+   * On hover: lift + subtle scale + green border tint + shadow.
+   * Box-shadow only appears on hover (not a static decorative shadow).
+   * On mouse-leave: springs back via same transition.
    */
   .card-hover {
     transition:
-      transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
-      border-color 0.25s ease;
+      transform 0.22s cubic-bezier(0.25, 0.1, 0.25, 1),
+      border-color 0.22s ease,
+      box-shadow 0.22s ease;
   }
   .card-hover:hover {
-    transform: translateY(-4px);
-    border-color: rgba(74, 93, 74, 0.28);
+    transform: translateY(-8px) scale(1.015);
+    border-color: rgba(74, 93, 74, 0.35);
+    box-shadow: 0 12px 32px rgba(26, 46, 26, 0.08);
+  }
+  .card-hover:not(:hover) {
+    transform: translateY(0) scale(1);
+    border-color: rgba(26, 46, 26, 0.12);
+    box-shadow: none;
   }
 
   /* Horizontal scroll row — hides scrollbar visually */
@@ -103,5 +125,141 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 180px 180px;
+  }
+}
+
+/* ── Mobile-only overrides (below 768px) ──────────────────────── */
+@media (max-width: 767px) {
+
+  /* ── Pillars H2 — smaller size + thinner stroke on mobile ── */
+  .pillars-h2 {
+    font-size: clamp(28px, 7vw, 40px) !important;
+    -webkit-text-stroke: 1px #D1A945 !important;
+  }
+
+  /* ── Hero ── */
+  .hero-section {
+    min-height: 100svh !important;
+    padding-top: 96px !important;   /* pt-24 */
+    padding-bottom: 64px !important; /* pb-16 */
+  }
+  .hero-inner-grid {
+    min-height: auto !important;
+  }
+  .hero-h1 {
+    font-size: clamp(32px, 8vw, 44px) !important;
+    line-height: 1.1 !important;
+  }
+  .hero-stat-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+  }
+  .hero-cta {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── WordReveal sub-lines ── */
+  .word-reveal-sub {
+    font-size: clamp(22px, 6vw, 32px) !important;
+    line-height: 1.2 !important;
+  }
+
+  /* ── Pillar cards — replace left border with top border ── */
+  .pillar-card {
+    border-left: none !important;
+    border-top: 3px solid #4A5D4A !important;
+  }
+  .pillar-ghost-num {
+    font-size: 32px !important;
+  }
+
+  /* ── Lessons section ── */
+  .lessons-layout {
+    flex-direction: column !important;
+  }
+  .lessons-left-col {
+    width: 100% !important;
+  }
+  .lessons-h2 {
+    font-size: clamp(24px, 6vw, 36px) !important;
+  }
+  .lessons-waterfall-wrap {
+    height: 400px !important;
+  }
+  .lesson-start-link {
+    display: flex !important;
+    align-items: center !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    min-height: 44px !important;
+  }
+
+  /* ── Partners stat numbers ── */
+  .partners-stat-num {
+    font-size: 36px !important;
+  }
+
+  /* ── Final CTA ── */
+  .final-cta-h2 {
+    font-size: clamp(28px, 7vw, 40px) !important;
+  }
+  .final-cta-form {
+    flex-direction: column !important;
+  }
+  .final-cta-input {
+    width: 100% !important;
+    font-size: 16px !important;
+    padding: 14px 16px !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+  .final-cta-btn {
+    width: 100% !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    margin-top: 8px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    min-height: 48px !important;
+  }
+
+  /* ── Footer ── */
+  .footer-inner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    padding: 32px 24px !important;
+  }
+
+  /* ── Achievements grid ── */
+  .achievements-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+  .achievement-badge {
+    padding: 8px 4px !important;
+    font-size: 10px !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+  }
+
+  /* ── Journal icon size ── */
+  .journal-icon {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+  }
+
+  /* ── Touch targets — minimum 44×44px ── */
+  .touch-cta {
+    min-height: 48px !important;
   }
 }

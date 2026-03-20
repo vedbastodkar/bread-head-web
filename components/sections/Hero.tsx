@@ -1,6 +1,6 @@
 // ── §1 Hero ─────────────────────────────────────────────────────
 // min-h-screen, flex items-center — content vertically centered
-// No forced top padding — nav overlay handled by fixed positioning
+// Mobile: single column, phone hidden, 100svh, pt-24 pb-16
 
 import Image          from 'next/image'
 import FadeUp         from '@/app/components/FadeUp'
@@ -11,18 +11,17 @@ import MagneticButton from '@/app/components/MagneticButton'
 export default function Hero() {
   return (
     <section
+      className="hero-section flex items-center"
       style={{
         background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9',
         minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
         paddingTop: '80px',
         paddingBottom: '0',
       }}
     >
       <div className="max-w-7xl mx-auto w-full px-6 lg:px-8">
         <div
-          className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+          className="hero-inner-grid grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
           style={{ minHeight: 'calc(100vh - 80px)' }}
         >
 
@@ -51,7 +50,7 @@ export default function Hero() {
             {/* H1 */}
             <FadeUp delay={0.1}>
               <h1
-                className="font-display italic font-bold text-textTitle tracking-[-0.02em]"
+                className="hero-h1 font-display italic font-bold text-textTitle tracking-[-0.02em]"
                 style={{
                   fontSize: 'clamp(32px, 4.5vw, 52px)',
                   lineHeight: 1.15,
@@ -84,7 +83,7 @@ export default function Hero() {
             {/* Stat card */}
             <FadeUp delay={0.28}>
               <div
-                className="inline-flex items-center gap-4 rounded-2xl"
+                className="hero-stat-card inline-flex items-center gap-4 rounded-2xl"
                 style={{
                   background: '#FFFFFF',
                   border: '0.5px solid rgba(26,46,26,0.10)',
@@ -115,7 +114,7 @@ export default function Hero() {
               <MagneticButton>
                 <a
                   href="#"
-                  className="inline-flex items-center gap-2 font-body font-semibold rounded-full"
+                  className="hero-cta inline-flex items-center gap-2 font-body font-semibold rounded-full touch-cta"
                   style={{
                     background: '#4A5D4A',
                     color: '#E6EDD9',
@@ -128,7 +127,7 @@ export default function Hero() {
                 </a>
               </MagneticButton>
               <p
-                className="font-body"
+                className="font-body max-md:text-center"
                 style={{ fontSize: '12px', color: 'rgba(26,46,26,0.45)', marginTop: '10px' }}
               >
                 Free to start · No credit card
@@ -137,8 +136,8 @@ export default function Hero() {
 
           </div>
 
-          {/* ── Right: phone mockup ── */}
-          <div className="flex justify-center lg:justify-end">
+          {/* ── Right: phone mockup — hidden on mobile ── */}
+          <div className="hidden md:flex justify-center lg:justify-end">
             <PhoneParallax>
               <div className="relative flex justify-center items-center">
 

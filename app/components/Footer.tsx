@@ -5,6 +5,7 @@ export default function Footer() {
   return (
     <footer style={{ background: '#1A2E1A' }}>
       <div
+        className="footer-inner"
         style={{
           maxWidth: '1280px',
           margin: '0 auto',

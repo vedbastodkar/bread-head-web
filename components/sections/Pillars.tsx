@@ -1,9 +1,8 @@
 // ── §3 Pillars ──────────────────────────────────────────────────
 // bg: bgSage (#E6EDD9)
-// Cards: bg white, 0.5px border, 16px radius, 28px padding, NO shadows
-// h2: Playfair italic (emotional — "Learn. Simulate. Reflect.")
-// h3: DM Sans 600, 20px
-// Pass 3: each card wrapped in FadeUp with delays 0, 0.15, 0.3
+// H2: gold outline (transparent + text-stroke #D1A945)
+// Card top row: label left, ghost number right
+// Mobile: top border replaces left border
 
 import FadeUp from '@/app/components/FadeUp'
 
@@ -48,60 +47,63 @@ export default function Pillars() {
     <section className="bg-bgSage">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
-        {/* Eyebrow */}
-        <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
+        {/* Eyebrow — 13px, 600 weight */}
+        <p className="font-body font-semibold text-[13px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen mb-2">
           Everything in one place
         </p>
 
-        {/* H2 — DM Sans 700, not Playfair */}
+        {/* H2 — DM Sans 700, gold outline (transparent + text-stroke) */}
         <h2
-          className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-6 max-w-xl"
-          style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
+          className="pillars-h2 font-body font-bold tracking-[-0.02em] leading-[1.08] mb-6 max-w-xl"
+          style={{
+            fontSize: 'clamp(32px, 4.5vw, 56px)',
+            color: 'transparent',
+            WebkitTextStroke: '1.5px #D1A945',
+          }}
         >
           Learn. Simulate. Reflect.
         </h2>
 
         {/* Three cards */}
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-5 max-md:gap-4">
           {pillars.map((pillar, i) => (
             <FadeUp key={pillar.number} delay={i * 0.15}>
             <div
-              className="card-border card-hover rounded-2xl p-7 flex flex-col relative overflow-hidden"
+              className="pillar-card card-border card-hover rounded-2xl p-7 max-md:p-6 flex flex-col"
               style={{
                 background: i % 2 === 1 ? '#E6EDD9' : '#FFFFFF',
                 borderLeft: '3px solid #4A5D4A',
               }}
             >
-              {/* Ghost number — large, behind content */}
-              <span
-                className="absolute top-3 right-4 font-body font-bold select-none pointer-events-none"
-                style={{ fontSize: '56px', color: 'rgba(74,93,74,0.08)', lineHeight: 1, zIndex: 0 }}
-                aria-hidden="true"
-              >
-                {pillar.number}
-              </span>
-
-              {/* Label row */}
-              <div className="flex items-center gap-3 mb-5 relative z-10">
-                <div className="flex-1 h-px" style={{ background: 'rgba(26,46,26,0.10)' }} />
-                <span className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen">
+              {/* Top row: label left, ghost number right */}
+              <div className="flex justify-between items-start mb-5">
+                {/* Label — flush left, no pill */}
+                <span className="font-body font-semibold text-[10px] tracking-[0.13em] uppercase text-brandGreen">
                   {pillar.label}
+                </span>
+                {/* Ghost number — top right, in flow */}
+                <span
+                  className="font-body font-bold select-none pointer-events-none"
+                  style={{ fontSize: '52px', color: 'rgba(26,46,26,0.07)', lineHeight: 1, textAlign: 'right' }}
+                  aria-hidden="true"
+                >
+                  {pillar.number}
                 </span>
               </div>
 
-              {/* H3 — DM Sans 600, 20px */}
-              <h3 className="font-body font-semibold text-textTitle text-[20px] leading-snug mb-3 relative z-10">
+              {/* H3 — DM Sans 600, 18px, flush left */}
+              <h3 className="font-body font-semibold text-textTitle text-[18px] leading-[1.25] mb-[10px]">
                 {pillar.headline}
               </h3>
 
               {/* Body */}
-              <p className="font-body text-[15px] leading-[1.7] mb-5 flex-1 relative z-10"
-                 style={{ color: 'rgba(26,46,26,0.65)' }}>
+              <p className="font-body text-[14px] leading-[1.65] mb-4 flex-1"
+                 style={{ color: 'rgba(26,46,26,0.60)' }}>
                 {pillar.body}
               </p>
 
-              {/* Bullets — tighter, square dot */}
-              <ul className="space-y-1.5 relative z-10">
+              {/* Bullets — square dot */}
+              <ul className="space-y-1.5">
                 {pillar.bullets.map((b) => (
                   <li key={b} className="flex items-center">
                     <span
@@ -115,7 +117,7 @@ export default function Pillars() {
                         verticalAlign: 'middle',
                       }}
                     />
-                    <span className="font-body text-[14px]"
+                    <span className="font-body text-[14px] max-md:text-[13px]"
                           style={{ color: 'rgba(26,46,26,0.65)' }}>
                       {b}
                     </span>
