@@ -82,7 +82,7 @@ export default function Journal() {
               {/* Screen content */}
               <div className="absolute inset-0" style={{ top: '28px' }}>
                 <Image
-                  src="/assets/journal_screen.png"
+                  src="/assets/journal_photo.png"
                   alt="Bread Head journal screen"
                   fill
                   className="object-cover object-top"
