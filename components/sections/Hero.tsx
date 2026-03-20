@@ -11,13 +11,20 @@ import MagneticButton from '@/app/components/MagneticButton'
 export default function Hero() {
   return (
     <section
-      className="bg-bgSage min-h-screen flex items-center"
       style={{
         background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        paddingTop: '80px',
+        paddingBottom: '0',
       }}
     >
-      <div className="max-w-7xl mx-auto w-full px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="max-w-7xl mx-auto w-full px-6 lg:px-8">
+        <div
+          className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+          style={{ minHeight: 'calc(100vh - 80px)' }}
+        >
 
           {/* ── Left: copy ── */}
           <div>
@@ -154,7 +161,7 @@ export default function Hero() {
                 <div
                   className="overflow-hidden relative"
                   style={{
-                    width: 'clamp(240px, 20vw, 300px)',
+                    width: 'clamp(340px, 30vw, 460px)',
                     borderRadius: '44px',
                     aspectRatio: '9 / 19.5',
                     border: '8px solid #1A2E1A',
