@@ -240,7 +240,8 @@ export default function PartnersPage() {
                         fontFamily: 'var(--font-body)',
                         fontWeight: 700,
                         fontSize: '48px',
-                        color: 'rgba(26,46,26,0.08)',
+                        color: '#D1A945',
+                        WebkitTextStroke: '1.5px #1A2E1A',
                         lineHeight: 1,
                         marginBottom: '8px',
                       }}
