@@ -1,11 +1,13 @@
-// ── §4 Lessons Preview ──────────────────────────────────────────
-// bg: white (#FFFFFF)
-// Cards: bg white, 0.5px border, 16px radius, 28px padding, NO shadows
-// Horizontal scroll row of 5 lesson topic cards + "more" card
-// h2: Playfair bold (non-italic — informational)
-// Pass 3: heading block FadeUp delay 0, card row FadeUp delay 0.15
+'use client'
 
-import Image  from 'next/image'
+// ── §4 Lessons Preview ──────────────────────────────────────────
+// 2-col: left = eyebrow + h2 + auto-carousel; right = sticky phone mockup
+// Carousel auto-advances every 3.5s, fade+slide transition 400ms
+// Phone: device frame with notch, sticky centered in right col
+
+import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
+import { AnimatePresence, motion } from 'framer-motion'
 import FadeUp from '@/app/components/FadeUp'
 
 const lessons = [
@@ -30,7 +32,7 @@ const lessons = [
   {
     number: '04',
     topic: 'Mortgages for People Who Rent Right Now',
-    shortDesc: 'What you\'re really signing when you buy a home.',
+    shortDesc: "What you're really signing when you buy a home.",
     time: '9 min',
   },
   {
@@ -42,109 +44,161 @@ const lessons = [
 ]
 
 export default function LessonsPreview() {
+  const [index, setIndex] = useState(0)
+  const [direction, setDirection] = useState(1) // 1 = forward
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const advance = () => {
+    setDirection(1)
+    setIndex((i) => (i + 1) % lessons.length)
+  }
+
+  useEffect(() => {
+    intervalRef.current = setInterval(advance, 3500)
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [])
+
+  const lesson = lessons[index]
+
   return (
     <section className="bg-bgSage">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-8 py-12 lg:py-20">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
 
-        {/* Header */}
-        <FadeUp delay={0}>
-          <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
-            The Curriculum
-          </p>
+          {/* ── Left column (55%) ── */}
+          <div className="w-full lg:w-[55%] flex flex-col">
 
-          <h2
-            className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-2 max-w-xl"
-            style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
-          >
-            Real topics. Zero condescension.
-          </h2>
-
-          <p className="font-body text-[16px] leading-[1.7] mb-6 max-w-lg"
-             style={{ color: 'rgba(26,46,26,0.65)' }}>
-            Every lesson is 5–9 minutes, built around a decision a real teen
-            actually has to make.
-          </p>
-        </FadeUp>
-
-        {/* Phone screenshot — portrait 9:19.5, centered, max-width so it reads as a phone */}
-        <div className="flex justify-center mb-6">
-          <div className="relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[480px] aspect-[9/19.5] rounded-2xl overflow-hidden">
-            <Image
-              src="/assets/lesson_home_screen.png"
-              alt="Bread Head lesson in progress"
-              fill
-              className="object-cover object-top"
-              sizes="(max-width: 640px) 340px, (max-width: 1024px) 400px, 480px"
-              quality={80}
-            />
-          </div>
-        </div>
-
-        {/* Horizontal scroll */}
-        <FadeUp delay={0.15}>
-        <div className="scroll-row">
-          <div className="flex gap-4 pb-3" style={{ width: 'max-content' }}>
-            {lessons.map((lesson) => (
-              <div
-                key={lesson.topic}
-                className="bg-cardBg card-border card-hover rounded-2xl p-7 flex flex-col w-[300px] lg:w-[320px] shrink-0"
+            {/* Header */}
+            <FadeUp delay={0}>
+              <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase text-brandGreen mb-2">
+                The Curriculum
+              </p>
+              <h2
+                className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-8"
+                style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
               >
-                {/* Duration pill — DM Sans 500, 11px, uppercase, softGreen bg */}
-                <span
-                  className="font-body font-medium text-[11px] tracking-[0.10em] uppercase text-brandGreen w-fit mb-5 px-3 py-1 rounded-full"
-                  style={{ background: 'rgba(74,93,74,0.10)', borderRadius: '100px', padding: '4px 12px' }}
+                Real topics. Zero condescension.
+              </h2>
+            </FadeUp>
+
+            {/* Carousel card */}
+            <div className="relative overflow-hidden" style={{ minHeight: '260px' }}>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={lesson.topic}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
                 >
-                  {lesson.time}
-                </span>
+                  <div className="bg-cardBg card-border rounded-2xl p-7 flex flex-col w-full">
+                    {/* Duration pill */}
+                    <span
+                      className="font-body font-medium text-[11px] tracking-[0.10em] uppercase text-brandGreen w-fit mb-5"
+                      style={{ background: 'rgba(74,93,74,0.10)', borderRadius: '100px', padding: '4px 12px' }}
+                    >
+                      {lesson.time}
+                    </span>
 
-                {/* Title */}
-                <h3 className="font-body font-semibold text-textTitle text-[16px] leading-snug mb-2">
-                  {lesson.topic}
-                </h3>
+                    {/* Lesson number + title */}
+                    <p className="font-body font-bold text-brandGreen text-[13px] mb-1">
+                      {lesson.number}
+                    </p>
+                    <h3 className="font-body font-semibold text-textTitle text-[20px] leading-snug mb-2">
+                      {lesson.topic}
+                    </h3>
 
-                {/* Short one-line description */}
-                <p className="font-body text-[13px] leading-[1.6] flex-1"
-                   style={{ color: 'rgba(26,46,26,0.55)' }}>
-                  {lesson.shortDesc}
-                </p>
+                    {/* Short description */}
+                    <p
+                      className="font-body text-[14px] leading-[1.6] flex-1"
+                      style={{ color: 'rgba(26,46,26,0.55)' }}
+                    >
+                      {lesson.shortDesc}
+                    </p>
 
-                {/* Divider + CTA */}
-                <div className="flex items-center justify-between mt-auto"
-                     style={{ borderTop: '0.5px solid rgba(26,46,26,0.08)', paddingTop: '16px', marginTop: '20px' }}>
-                  <span className="font-body font-medium text-[13px] text-brandGreen">
-                    Start lesson →
-                  </span>
+                    {/* Divider + CTA */}
+                    <div
+                      className="flex items-center mt-auto"
+                      style={{ borderTop: '0.5px solid rgba(26,46,26,0.08)', paddingTop: '16px', marginTop: '20px' }}
+                    >
+                      <span className="font-body font-medium text-[13px] text-brandGreen">
+                        Start lesson →
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Dot indicators */}
+            <div className="flex items-center gap-2 mt-5">
+              {lessons.map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    width:  i === index ? '20px' : '6px',
+                    height: '6px',
+                    background: i === index ? '#4A5D4A' : 'rgba(74,93,74,0.20)',
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* "More coming" note */}
+            <p
+              className="font-body font-medium text-[11px] tracking-[0.08em] mt-4"
+              style={{ color: 'rgba(26,46,26,0.30)' }}
+            >
+              Subscriptions, investing, renting vs. buying, and more — coming soon.
+            </p>
+          </div>
+
+          {/* ── Right column (45%): sticky phone ── */}
+          <div className="w-full lg:w-[45%] flex justify-center">
+            <div
+              className="lg:sticky flex items-center justify-center"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              {/* Device frame */}
+              <div
+                className="relative rounded-[44px] overflow-hidden"
+                style={{
+                  width: 'clamp(240px, 28vw, 320px)',
+                  aspectRatio: '9/19.5',
+                  border: '8px solid #1A2E1A',
+                  background: '#1A2E1A',
+                }}
+              >
+                {/* Status bar / notch */}
+                <div
+                  className="absolute top-0 left-0 right-0 z-10 flex items-center justify-center"
+                  style={{ height: '28px', background: '#1A2E1A' }}
+                >
+                  <div
+                    className="rounded-full"
+                    style={{ width: '80px', height: '6px', background: '#000' }}
+                  />
+                </div>
+
+                {/* App screenshot — fills below the status bar */}
+                <div className="absolute inset-0" style={{ top: '28px' }}>
+                  <Image
+                    src="/assets/lesson_home_screen.png"
+                    alt="Bread Head lesson in progress"
+                    fill
+                    className="object-cover object-top"
+                    sizes="(max-width: 1024px) 240px, 320px"
+                    quality={85}
+                  />
                 </div>
               </div>
-            ))}
-
-            {/* "More coming" card */}
-            <div
-              className="bg-cardBg card-border rounded-2xl p-7 flex flex-col items-center justify-center w-[300px] lg:w-[320px] shrink-0 text-center"
-            >
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center mb-4"
-                style={{ background: 'rgba(74,93,74,0.10)' }}
-              >
-                <span className="font-body font-semibold text-brandGreen text-lg leading-none">+</span>
-              </div>
-              <h3 className="font-body font-semibold text-textTitle text-[16px] mb-2">
-                More lessons on the way
-              </h3>
-              <p className="font-body text-[14px]"
-                 style={{ color: 'rgba(26,46,26,0.50)' }}>
-                Subscriptions, investing, renting vs. buying, and more.
-              </p>
             </div>
           </div>
+
         </div>
-
-        <p className="font-body font-medium text-[11px] tracking-[0.08em] mt-5"
-           style={{ color: 'rgba(26,46,26,0.30)' }}>
-          ← Scroll to explore all lessons →
-        </p>
-        </FadeUp>
-
       </div>
     </section>
   )
