@@ -117,7 +117,6 @@ export default function PartnersPage() {
               {/* Eyebrow with green bar */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ width: '2px', height: '20px', background: '#4A5D4A', flexShrink: 0 }} />
-                <Image src="/assets/icon_clear.png" alt="" width={15} height={15} style={{ opacity: 0.6 }} />
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
@@ -269,7 +268,6 @@ export default function PartnersPage() {
           <FadeUp delay={0}>
             {/* Eyebrow */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.5 }} />
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
@@ -556,7 +554,6 @@ export default function PartnersPage() {
         >
           <FadeUp delay={0}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
@@ -695,7 +692,6 @@ export default function PartnersPage() {
         >
           <FadeUp delay={0}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
               <p
                 style={{
                   fontFamily: 'var(--font-body)',

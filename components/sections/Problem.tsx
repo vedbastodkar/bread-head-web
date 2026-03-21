@@ -13,7 +13,6 @@ export default function Problem() {
 
         {/* Eyebrow */}
         <div className="flex items-center gap-2 mb-2">
-          <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
           <p className="font-body font-medium text-[11px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen" style={{ margin: 0 }}>
             The Gap
           </p>

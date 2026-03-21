@@ -50,7 +50,6 @@ export default function Pillars() {
 
         {/* Eyebrow — gold fill + dark outline */}
         <div className="flex items-center gap-2 mb-2">
-          <Image src="/assets/icon_clear.png" alt="" width={17} height={17} style={{ opacity: 0.65 }} />
           <p
             className="pillars-eyebrow font-body font-semibold text-[17px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase"
             style={{ color: '#D1A945', margin: 0 }}
@@ -82,7 +81,6 @@ export default function Pillars() {
               <div className="flex justify-between items-start mb-5">
                 {/* Label — flush left with bread icon */}
                 <span className="inline-flex items-center gap-1.5 font-body font-semibold text-[10px] tracking-[0.13em] uppercase text-brandGreen">
-                  <Image src="/assets/icon_clear.png" alt="" width={13} height={13} style={{ opacity: 0.55 }} />
                   {pillar.label}
                 </span>
                 {/* Ghost number — top right, in flow */}

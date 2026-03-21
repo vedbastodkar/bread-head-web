@@ -32,7 +32,6 @@ export default function Hero() {
             <FadeUp delay={0}>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-[2px] h-5 bg-brandGreen shrink-0" />
-                <Image src="/assets/icon_clear.png" alt="" width={16} height={16} style={{ opacity: 0.6 }} />
                 <span
                   className="font-body font-semibold uppercase text-brandGreen"
                   style={{ fontSize: '11px', letterSpacing: '0.15em' }}

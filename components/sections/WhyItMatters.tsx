@@ -77,7 +77,6 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
         <FadeUp delay={0}>
           {/* Eyebrow */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-            <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: dark ? 0.55 : 0.55 }} />
             <p
               style={{
                 fontFamily: 'var(--font-body)',
