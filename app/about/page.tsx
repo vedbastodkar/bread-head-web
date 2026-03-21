@@ -307,7 +307,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 700,
-                    fontSize: '28px',
+                    fontSize: '34px',
                     color: '#1A2E1A',
                     marginBottom: '4px',
                   }}
@@ -320,7 +320,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '14px',
+                    fontSize: '16px',
                     color: '#4A5D4A',
                     marginBottom: '24px',
                     lineHeight: 1,
@@ -334,7 +334,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -350,7 +350,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -365,7 +365,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: 0,
@@ -436,7 +436,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 700,
-                    fontSize: '28px',
+                    fontSize: '34px',
                     color: '#1A2E1A',
                     marginBottom: '4px',
                   }}
@@ -449,7 +449,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '14px',
+                    fontSize: '16px',
                     color: '#4A5D4A',
                     marginBottom: '24px',
                     lineHeight: 1,
@@ -463,7 +463,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -475,7 +475,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -487,7 +487,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -499,7 +499,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: 0,
@@ -567,7 +567,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 700,
-                    fontSize: '28px',
+                    fontSize: '34px',
                     color: '#1A2E1A',
                     marginBottom: '4px',
                   }}
@@ -580,7 +580,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '14px',
+                    fontSize: '16px',
                     color: '#4A5D4A',
                     marginBottom: '24px',
                     lineHeight: 1,
@@ -594,7 +594,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -606,7 +606,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -618,7 +618,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: '16px',
@@ -630,7 +630,7 @@ export default function AboutPage() {
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontWeight: 400,
-                    fontSize: '15px',
+                    fontSize: '17px',
                     color: 'rgba(26,46,26,0.65)',
                     lineHeight: 1.75,
                     marginBottom: 0,
