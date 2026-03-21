@@ -19,7 +19,7 @@ const PARTNER_TYPES = [
     features: [
       'Free to download, free to use — always',
       'No account required to start',
-      'Works on iPhone and Android',
+      'Available on iPhone',
       'No ads, no upsells, no paywalls',
     ],
     cta: null,
