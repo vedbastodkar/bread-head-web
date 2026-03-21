@@ -211,7 +211,6 @@ export default function PartnersPage() {
           <div style={{ flex: '0 0 45%', maxWidth: '45%', display: 'flex', flexDirection: 'column', gap: '16px' }} className="partners-hero-stats">
             <FadeUp delay={0.1}>
               {[
-                { number: '2,400+', label: 'teens on the waitlist' },
                 { number: '100%', label: 'free for students, always' },
               ].map((s) => (
                 <div
