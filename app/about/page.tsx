@@ -382,6 +382,268 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── DORIAN ────────────────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        {/* Thin divider */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ height: '1px', background: 'rgba(26,46,26,0.12)' }} />
+        </div>
+
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            paddingTop: '80px',
+            paddingBottom: '80px',
+            paddingLeft: '24px',
+            paddingRight: '24px',
+          }}
+        >
+          <FadeUp delay={0}>
+            <div
+              className="about-founder-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '2fr 3fr',
+                gap: '64px',
+                alignItems: 'center',
+              }}
+            >
+              {/* Left: photo */}
+              <div style={{ borderRadius: '20px', overflow: 'hidden', alignSelf: 'center' }}>
+                <Image
+                  src="/assets/dorian_photo.png"
+                  alt="Dorian Matuszak, Head of Lesson Content Design at Bread Head"
+                  width={480}
+                  height={600}
+                  style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+
+              {/* Right: bio */}
+              <div>
+                {/* Eyebrow */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                  <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
+                    Financial Learning Design
+                  </p>
+                </div>
+
+                {/* Name */}
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '28px',
+                    color: '#1A2E1A',
+                    marginBottom: '4px',
+                  }}
+                >
+                  Dorian Matuszak
+                </h3>
+
+                {/* Role */}
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '14px',
+                    color: '#4A5D4A',
+                    marginBottom: '24px',
+                    lineHeight: 1,
+                  }}
+                >
+                  Head of Lesson Content Design
+                </p>
+
+                {/* Bio paragraphs */}
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: '16px',
+                  }}
+                >
+                  At Bread Head, I design the lessons that shape how people learn about money.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: '16px',
+                  }}
+                >
+                  I&apos;m interested in making financial education feel less like something you&apos;re supposed to get through and more like something that actually helps. A lot of financial content is either overloaded with jargon or stripped down so much that it loses substance. I work on building lessons that are easy to follow without feeling shallow.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: '16px',
+                  }}
+                >
+                  That means thinking carefully about flow, tone, and what makes information stick. The best learning experiences don&apos;t just explain something well. They make people feel capable of using what they learned in real life.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: 0,
+                  }}
+                >
+                  That&apos;s what I try to build at Bread Head: financial education that feels clear, relevant, and genuinely worth paying attention to.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ── MASON ─────────────────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        {/* Thin divider */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ height: '1px', background: 'rgba(26,46,26,0.12)' }} />
+        </div>
+
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            paddingTop: '80px',
+            paddingBottom: '80px',
+            paddingLeft: '24px',
+            paddingRight: '24px',
+          }}
+        >
+          <FadeUp delay={0}>
+            <div
+              className="about-founder-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '2fr 3fr',
+                gap: '64px',
+                alignItems: 'center',
+              }}
+            >
+              {/* Left: photo */}
+              <div style={{ borderRadius: '20px', overflow: 'hidden', alignSelf: 'center' }}>
+                <Image
+                  src="/assets/mason_photo.png"
+                  alt="Mason Thies, Head of Marketing and Media Design at Bread Head"
+                  width={480}
+                  height={600}
+                  style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+
+              {/* Right: bio */}
+              <div>
+                {/* Eyebrow */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                  <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
+                    Media Manager
+                  </p>
+                </div>
+
+                {/* Name */}
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 700,
+                    fontSize: '28px',
+                    color: '#1A2E1A',
+                    marginBottom: '4px',
+                  }}
+                >
+                  Mason Thies
+                </h3>
+
+                {/* Role */}
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '14px',
+                    color: '#4A5D4A',
+                    marginBottom: '24px',
+                    lineHeight: 1,
+                  }}
+                >
+                  Head of Marketing &amp; Media Design
+                </p>
+
+                {/* Bio paragraphs */}
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: '16px',
+                  }}
+                >
+                  I manage media for Bread Head with one goal in mind — make financial education actually reach people.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: '16px',
+                  }}
+                >
+                  What stood out wasn&apos;t a lack of information. It was a lack of connection. The content exists, but it rarely lands in a way that people engage with, or remember.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: '16px',
+                  }}
+                >
+                  My background is in digital media and content strategy. I focus on how ideas move — what makes someone stop scrolling, what makes them care, and what makes them come back.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 400,
+                    fontSize: '15px',
+                    color: 'rgba(26,46,26,0.65)',
+                    lineHeight: 1.75,
+                    marginBottom: 0,
+                  }}
+                >
+                  The goal is simple. Take something that&apos;s usually ignored and make it impossible to overlook. If the message doesn&apos;t reach people, it doesn&apos;t matter how good it is. That&apos;s the gap I try to work on every day.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
       {/* ── STATS BAR ─────────────────────────────────────────────── */}
       <section style={{ background: '#1A2E1A' }}>
         <div
