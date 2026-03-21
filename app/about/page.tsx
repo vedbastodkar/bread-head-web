@@ -292,12 +292,6 @@ export default function AboutPage() {
               {/* Right: bio */}
               <div>
                 {/* Eyebrow */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
-                    The Founder
-                  </p>
-                </div>
-
                 {/* Name */}
                 <h3
                   style={{
@@ -315,9 +309,9 @@ export default function AboutPage() {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontWeight: 400,
+                    fontWeight: 700,
                     fontSize: '16px',
-                    color: '#4A5D4A',
+                    color: '#D1A945',
                     marginBottom: '24px',
                     lineHeight: 1,
                   }}
@@ -419,13 +413,6 @@ export default function AboutPage() {
 
               {/* Right: bio */}
               <div>
-                {/* Eyebrow */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
-                    Financial Learning Design
-                  </p>
-                </div>
-
                 {/* Name */}
                 <h3
                   style={{
@@ -443,9 +430,9 @@ export default function AboutPage() {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontWeight: 400,
+                    fontWeight: 700,
                     fontSize: '16px',
-                    color: '#4A5D4A',
+                    color: '#D1A945',
                     marginBottom: '24px',
                     lineHeight: 1,
                   }}
@@ -549,13 +536,6 @@ export default function AboutPage() {
 
               {/* Right: bio */}
               <div>
-                {/* Eyebrow */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                      <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
-                    Media Manager
-                  </p>
-                </div>
-
                 {/* Name */}
                 <h3
                   style={{
@@ -573,9 +553,9 @@ export default function AboutPage() {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontWeight: 400,
+                    fontWeight: 700,
                     fontSize: '16px',
-                    color: '#4A5D4A',
+                    color: '#D1A945',
                     marginBottom: '24px',
                     lineHeight: 1,
                   }}
