@@ -1,21 +1,21 @@
 // ── Why It Matters — reusable stat grid section ──────────────────
-// Used on: homepage (bgSage), partners page (white)
-// 2×2 grid with shared 1px borders, no gutters.
-// Each cell: hero number (serif italic), descriptor, Source pill (top-right).
+// Used on: homepage (dark #1A2E1A), partners page (white)
+// 2×2 grid with shared borders, no gutters.
+// Each cell: prefix small on top, hero number big + left, descriptor below.
 
 import FadeUp from '@/app/components/FadeUp'
 
 interface StatCard {
-  prefix?: string       // text before the accented hero figure
-  hero: string          // the accented key figure
-  suffix?: string       // text after the hero figure (muted)
-  label: string         // descriptor line
+  prefix?: string       // small label above the hero figure
+  hero: string          // the big key figure
+  suffix?: string       // muted text after the hero (inline)
+  label: string         // descriptor below
   source: string        // citation URL
 }
 
 const STATS: StatCard[] = [
   {
-    prefix: 'More than ',
+    prefix: 'More than',
     hero: '1 in 3',
     label: 'dollars of U.S. wealth inequality can be traced back to differences in financial knowledge — not income, not circumstance.',
     source: 'https://pensionresearchcouncil.wharton.upenn.edu/wp-content/uploads/2015/08/WP2015-01.pdf',
@@ -43,9 +43,23 @@ interface Props {
 }
 
 export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
-  const border = bg === '#FFFFFF'
-    ? '1px solid rgba(26,46,26,0.10)'
-    : '1px solid rgba(26,46,26,0.13)'
+  const dark = bg === '#1A2E1A'
+
+  const border = dark
+    ? '1px solid rgba(230,237,217,0.10)'
+    : bg === '#FFFFFF'
+      ? '1px solid rgba(26,46,26,0.10)'
+      : '1px solid rgba(26,46,26,0.13)'
+
+  const eyebrowColor  = dark ? '#D1A945'               : '#4A5D4A'
+  const headingColor  = dark ? '#E6EDD9'               : '#1A2E1A'
+  const cellBg        = dark ? 'rgba(230,237,217,0.03)' : bg === '#FFFFFF' ? '#FFFFFF' : '#E6EDD9'
+  const heroColor     = dark ? '#D1A945'               : '#4A5D4A'
+  const prefixColor   = dark ? 'rgba(230,237,217,0.40)' : 'rgba(26,46,26,0.40)'
+  const suffixColor   = dark ? 'rgba(230,237,217,0.30)' : 'rgba(26,46,26,0.30)'
+  const labelColor    = dark ? 'rgba(230,237,217,0.60)' : 'rgba(26,46,26,0.60)'
+  const pillColor     = dark ? 'rgba(230,237,217,0.45)' : 'rgba(26,46,26,0.50)'
+  const pillBorder    = dark ? 'rgba(230,237,217,0.20)' : 'rgba(26,46,26,0.18)'
 
   return (
     <section style={{ background: bg }}>
@@ -68,7 +82,7 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
               fontSize: '11px',
               letterSpacing: '0.13em',
               textTransform: 'uppercase',
-              color: '#4A5D4A',
+              color: eyebrowColor,
               marginBottom: '16px',
               lineHeight: 1,
             }}
@@ -82,15 +96,15 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
               fontFamily: 'var(--font-display)',
               fontWeight: 700,
               fontSize: 'clamp(26px, 3vw, 40px)',
-              color: '#1A2E1A',
+              color: headingColor,
               lineHeight: 1.15,
               marginBottom: '40px',
             }}
           >
-            The gap is real. The solution is ready.
+            The gap is real. The solution? Bread Head.
           </h2>
 
-          {/* 2×2 stat grid — shared borders, no gutters */}
+          {/* 2×2 stat grid */}
           <div
             className="why-grid"
             style={{
@@ -103,16 +117,16 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
           >
             {STATS.map((s, i) => {
               const isLeft = i % 2 === 0
-              const isTop = i < 2
+              const isTop  = i < 2
               return (
                 <div
                   key={i}
                   style={{
                     position: 'relative',
                     padding: '40px',
-                    borderRight: isLeft ? border : 'none',
-                    borderBottom: isTop ? border : 'none',
-                    background: bg === '#FFFFFF' ? '#FFFFFF' : '#E6EDD9',
+                    borderRight:  isLeft ? border : 'none',
+                    borderBottom: isTop  ? border : 'none',
+                    background: cellBg,
                   }}
                 >
                   {/* Source pill — absolute top-right */}
@@ -129,8 +143,8 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
                       fontWeight: 500,
                       fontSize: '10px',
                       letterSpacing: '0.04em',
-                      color: 'rgba(26,46,26,0.5)',
-                      border: '0.5px solid rgba(26,46,26,0.18)',
+                      color: pillColor,
+                      border: `0.5px solid ${pillBorder}`,
                       borderRadius: '100px',
                       padding: '4px 10px',
                       textDecoration: 'none',
@@ -141,26 +155,39 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
                     Source
                   </a>
 
-                  {/* Hero number */}
+                  {/* Prefix — small label above the number */}
+                  {s.prefix && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 500,
+                        fontSize: '12px',
+                        color: prefixColor,
+                        lineHeight: 1,
+                        marginBottom: '6px',
+                      }}
+                    >
+                      {s.prefix}
+                    </p>
+                  )}
+
+                  {/* Hero number — big, left-aligned */}
                   <p
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontStyle: 'italic',
                       fontWeight: 700,
-                      fontSize: 'clamp(48px, 5vw, 72px)',
+                      fontSize: 'clamp(52px, 6vw, 80px)',
                       lineHeight: 1,
                       marginBottom: '16px',
-                      color: '#1A2E1A',
+                      color: heroColor,
                     }}
                   >
-                    {s.prefix && (
-                      <span style={{ color: 'rgba(26,46,26,0.35)', fontSize: '0.55em', fontStyle: 'italic' }}>
-                        {s.prefix}
-                      </span>
-                    )}
-                    <span style={{ color: '#4A5D4A' }}>{s.hero}</span>
+                    {s.hero}
                     {s.suffix && (
-                      <span style={{ color: 'rgba(26,46,26,0.3)', fontSize: '0.65em' }}>{s.suffix}</span>
+                      <span style={{ color: suffixColor, fontSize: '0.55em', fontStyle: 'italic' }}>
+                        {s.suffix}
+                      </span>
                     )}
                   </p>
 
@@ -170,7 +197,7 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
                       fontFamily: 'var(--font-body)',
                       fontWeight: 400,
                       fontSize: '14px',
-                      color: 'rgba(26,46,26,0.6)',
+                      color: labelColor,
                       lineHeight: 1.65,
                       margin: 0,
                       maxWidth: '380px',

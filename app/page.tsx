@@ -28,7 +28,7 @@ export default function Home() {
     <main>
       <Hero />
       <Problem />
-      <WhyItMatters bg="#FFFFFF" />
+      <WhyItMatters bg="#1A2E1A" />
       <Pillars />
       <Ticker />
       <LessonsPreview />
