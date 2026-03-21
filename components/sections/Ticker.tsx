@@ -3,13 +3,31 @@
 // Pure CSS animation — no JS, no Framer Motion.
 // Duplicate spans ensure the loop is seamless at any viewport width.
 
-const TICKER_ITEMS =
-  'Pay Stubs\u2002·\u2002Mortgages\u2002·\u2002Taxes 101\u2002·\u2002Credit Scores\u2002·\u2002Budgeting\u2002·\u2002Investing Basics\u2002·\u2002'
+import Image from 'next/image'
+
+const TICKER_ITEMS = ['Pay Stubs', 'Mortgages', 'Taxes 101', 'Credit Scores', 'Budgeting', 'Investing Basics']
+
+// Repeat 4× so the span width comfortably exceeds any viewport
+const items = Array.from({ length: 4 }, () => TICKER_ITEMS).flat()
+
+function TickerContent() {
+  return (
+    <span className="inline-flex items-center shrink-0">
+      {items.map((item, i) => (
+        <span key={i} className="inline-flex items-center">
+          <span className="font-body font-medium text-[13px] md:text-[14px] tracking-[0.08em] text-brandGreen select-none">
+            {item}
+          </span>
+          <span className="inline-flex items-center mx-3 md:mx-4" aria-hidden="true">
+            <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.38 }} />
+          </span>
+        </span>
+      ))}
+    </span>
+  )
+}
 
 export default function Ticker() {
-  // Repeat enough to guarantee span width > max viewport before duplicating
-  const content = TICKER_ITEMS.repeat(6)
-
   return (
     <div
       className="bg-bgSage overflow-hidden py-2 md:py-3"
@@ -18,13 +36,9 @@ export default function Ticker() {
     >
       {/* animate-ticker: 0 → -50% over 25s — defined in tailwind.config.js */}
       <div className="flex whitespace-nowrap animate-ticker will-change-transform">
-        <span className="shrink-0 font-body font-medium text-[13px] md:text-[14px] tracking-[0.08em] text-brandGreen select-none">
-          {content}
-        </span>
+        <TickerContent />
         {/* Second copy makes the loop visually seamless */}
-        <span className="shrink-0 font-body font-medium text-[13px] md:text-[14px] tracking-[0.08em] text-brandGreen select-none">
-          {content}
-        </span>
+        <TickerContent />
       </div>
     </div>
   )

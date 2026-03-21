@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 import PartnerForm from './PartnerForm'
@@ -114,8 +115,9 @@ export default function PartnersPage() {
           <div style={{ flex: '0 0 55%', maxWidth: '55%' }} className="partners-hero-text">
             <FadeUp delay={0}>
               {/* Eyebrow with green bar */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ width: '2px', height: '20px', background: '#4A5D4A', flexShrink: 0 }} />
+                <Image src="/assets/icon_clear.png" alt="" width={15} height={15} style={{ opacity: 0.6 }} />
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
@@ -266,20 +268,23 @@ export default function PartnersPage() {
         >
           <FadeUp delay={0}>
             {/* Eyebrow */}
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#D1A945',
-                marginBottom: '16px',
-                lineHeight: 1,
-              }}
-            >
-              Who We Work With
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.5 }} />
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                  letterSpacing: '0.13em',
+                  textTransform: 'uppercase',
+                  color: '#D1A945',
+                  margin: 0,
+                  lineHeight: 1,
+                }}
+              >
+                Who We Work With
+              </p>
+            </div>
 
             <h2
               style={{
@@ -550,20 +555,23 @@ export default function PartnersPage() {
           }}
         >
           <FadeUp delay={0}>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#4A5D4A',
-                marginBottom: '16px',
-                lineHeight: 1,
-              }}
-            >
-              Why It Matters
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                  letterSpacing: '0.13em',
+                  textTransform: 'uppercase',
+                  color: '#4A5D4A',
+                  margin: 0,
+                  lineHeight: 1,
+                }}
+              >
+                Why It Matters
+              </p>
+            </div>
 
             <h2
               style={{
@@ -686,20 +694,23 @@ export default function PartnersPage() {
           }}
         >
           <FadeUp delay={0}>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#4A5D4A',
-                marginBottom: '16px',
-                lineHeight: 1,
-              }}
-            >
-              Get In Touch
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                  letterSpacing: '0.13em',
+                  textTransform: 'uppercase',
+                  color: '#4A5D4A',
+                  margin: 0,
+                  lineHeight: 1,
+                }}
+              >
+                Get In Touch
+              </p>
+            </div>
 
             <h2
               style={{

@@ -6,6 +6,7 @@
 // Submit button: brandGreen bg, bgSage text
 // Email input: rgba(255,255,255,0.08) bg, rgba(255,255,255,0.15) border
 
+import Image from 'next/image'
 import MagneticButton from '@/app/components/MagneticButton'
 
 export default function FinalCTA() {
@@ -13,6 +14,11 @@ export default function FinalCTA() {
     <section className="bg-textTitle grain-overlay">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-28 lg:py-40">
         <div className="max-w-2xl mx-auto text-center">
+
+          {/* Bread icon mark */}
+          <div className="flex justify-center mb-6">
+            <Image src="/assets/icon_clear.png" alt="" width={40} height={40} style={{ opacity: 0.7 }} />
+          </div>
 
           {/* Eyebrow */}
           <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase mb-8"

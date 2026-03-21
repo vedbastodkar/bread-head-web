@@ -3,6 +3,7 @@
 // Pass 3: WordReveal replaces h2 + data-reveal block
 // Stat: Playfair 700 48px
 
+import Image from 'next/image'
 import WordReveal from '@/app/components/WordReveal'
 
 export default function Problem() {
@@ -11,9 +12,12 @@ export default function Problem() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
         {/* Eyebrow */}
-        <p className="font-body font-medium text-[11px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen mb-2">
-          The Gap
-        </p>
+        <div className="flex items-center gap-2 mb-2">
+          <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+          <p className="font-body font-medium text-[11px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase text-brandGreen" style={{ margin: 0 }}>
+            The Gap
+          </p>
+        </div>
 
         {/* H2 — DM Sans 700, not Playfair */}
         <h2

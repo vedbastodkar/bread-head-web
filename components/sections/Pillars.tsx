@@ -4,6 +4,7 @@
 // Card top row: label left, ghost number right
 // Mobile: top border replaces left border
 
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 
 const pillars = [
@@ -48,12 +49,15 @@ export default function Pillars() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
 
         {/* Eyebrow — gold fill + dark outline */}
-        <p
-          className="pillars-eyebrow font-body font-semibold text-[17px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase mb-2"
-          style={{ color: '#D1A945' }}
-        >
-          Everything in one place
-        </p>
+        <div className="flex items-center gap-2 mb-2">
+          <Image src="/assets/icon_clear.png" alt="" width={17} height={17} style={{ opacity: 0.65 }} />
+          <p
+            className="pillars-eyebrow font-body font-semibold text-[17px] tracking-[0.13em] max-md:tracking-[0.08em] uppercase"
+            style={{ color: '#D1A945', margin: 0 }}
+          >
+            Everything in one place
+          </p>
+        </div>
 
         {/* H2 — DM Sans 700, solid dark green */}
         <h2
@@ -76,8 +80,9 @@ export default function Pillars() {
             >
               {/* Top row: label left, ghost number right */}
               <div className="flex justify-between items-start mb-5">
-                {/* Label — flush left, no pill */}
-                <span className="font-body font-semibold text-[10px] tracking-[0.13em] uppercase text-brandGreen">
+                {/* Label — flush left with bread icon */}
+                <span className="inline-flex items-center gap-1.5 font-body font-semibold text-[10px] tracking-[0.13em] uppercase text-brandGreen">
+                  <Image src="/assets/icon_clear.png" alt="" width={13} height={13} style={{ opacity: 0.55 }} />
                   {pillar.label}
                 </span>
                 {/* Ghost number — top right, in flow */}

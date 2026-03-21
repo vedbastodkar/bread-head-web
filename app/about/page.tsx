@@ -64,20 +64,12 @@ export default function AboutPage() {
         >
           <FadeUp delay={0}>
             {/* Eyebrow */}
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#4A5D4A',
-                marginBottom: '16px',
-                lineHeight: 1,
-              }}
-            >
-              Our Story
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
+                Our Story
+              </p>
+            </div>
 
             {/* H1 */}
             <h1
@@ -129,20 +121,12 @@ export default function AboutPage() {
         >
           <FadeUp delay={0}>
             {/* Eyebrow */}
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#D1A945',
-                marginBottom: '24px',
-                lineHeight: 1,
-              }}
-            >
-              The Mission
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '24px' }}>
+              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.5 }} />
+              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#D1A945', margin: 0, lineHeight: 1 }}>
+                The Mission
+              </p>
+            </div>
 
             {/* Pull quote */}
             <h2
@@ -195,20 +179,12 @@ export default function AboutPage() {
         >
           <FadeUp delay={0}>
             {/* Eyebrow */}
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '11px',
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                color: '#4A5D4A',
-                marginBottom: '16px',
-                lineHeight: 1,
-              }}
-            >
-              What We Believe
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
+                What We Believe
+              </p>
+            </div>
 
             {/* Section H2 */}
             <h2
@@ -319,20 +295,12 @@ export default function AboutPage() {
               {/* Right: bio */}
               <div>
                 {/* Eyebrow */}
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 600,
-                    fontSize: '11px',
-                    letterSpacing: '0.13em',
-                    textTransform: 'uppercase',
-                    color: '#4A5D4A',
-                    marginBottom: '16px',
-                    lineHeight: 1,
-                  }}
-                >
-                  The Founder
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                  <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: 0.55 }} />
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, lineHeight: 1 }}>
+                    The Founder
+                  </p>
+                </div>
 
                 {/* Name */}
                 <h3

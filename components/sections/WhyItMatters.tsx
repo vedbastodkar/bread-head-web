@@ -3,6 +3,7 @@
 // 2×2 grid with shared borders, no gutters.
 // Each cell: prefix small on top, hero number big + left, descriptor below.
 
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 
 interface StatCard {
@@ -75,20 +76,23 @@ export default function WhyItMatters({ bg = '#E6EDD9' }: Props) {
       >
         <FadeUp delay={0}>
           {/* Eyebrow */}
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 600,
-              fontSize: '11px',
-              letterSpacing: '0.13em',
-              textTransform: 'uppercase',
-              color: eyebrowColor,
-              marginBottom: '16px',
-              lineHeight: 1,
-            }}
-          >
-            Why It Matters
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+            <Image src="/assets/icon_clear.png" alt="" width={14} height={14} style={{ opacity: dark ? 0.55 : 0.55 }} />
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: '11px',
+                letterSpacing: '0.13em',
+                textTransform: 'uppercase',
+                color: eyebrowColor,
+                margin: 0,
+                lineHeight: 1,
+              }}
+            >
+              Why It Matters
+            </p>
+          </div>
 
           {/* H2 */}
           <h2
