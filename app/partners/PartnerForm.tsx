@@ -1,7 +1,5 @@
 'use client'
 
-// TODO: replace with Formspree endpoint — https://formspree.io/f/YOUR_ID
-
 import { useState } from 'react'
 
 const inputStyle: React.CSSProperties = {
@@ -46,13 +44,15 @@ export default function PartnerForm() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
-    // TODO: wire up Formspree:
-    // const res = await fetch('https://formspree.io/f/YOUR_ID', {
-    //   method: 'POST',
-    //   body: new FormData(e.currentTarget),
-    //   headers: { Accept: 'application/json' },
-    // })
-    await new Promise((r) => setTimeout(r, 600))
+    const form = e.currentTarget
+    const data = Object.fromEntries(new FormData(form))
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+    } catch {}
     setSubmitted(true)
     setLoading(false)
   }

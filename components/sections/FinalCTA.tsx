@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 // ── §8 Final CTA ─────────────────────────────────────────────────
 // bg: textTitle (#1A2E1A) — dark
 // h2: Playfair Display italic, accentGold (#D1A945) — approved gold use
@@ -10,6 +12,21 @@ import Image from 'next/image'
 import MagneticButton from '@/app/components/MagneticButton'
 
 export default function FinalCTA() {
+  const [submitted, setSubmitted] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value
+    try {
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+    } catch {}
+    setSubmitted(true)
+  }
+
   return (
     <section className="bg-textTitle grain-overlay">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-28 lg:py-40">
@@ -37,12 +54,18 @@ export default function FinalCTA() {
           </p>
 
           {/* Email capture */}
+          {submitted ? (
+            <p className="font-body text-[15px] mb-5" style={{ color: 'rgba(230,237,217,0.65)' }}>
+              ✓ You&apos;re on the list. We&apos;ll be in touch soon.
+            </p>
+          ) : (
           <form
             className="final-cta-form flex flex-col md:flex-row gap-3 max-w-md mx-auto mb-5"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSubmit}
           >
             <input
               type="email"
+              name="email"
               placeholder="your@email.com"
               aria-label="Email address"
               className="final-cta-input flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/30 focus:outline-none transition-colors"
@@ -64,6 +87,7 @@ export default function FinalCTA() {
               </button>
             </MagneticButton>
           </form>
+          )}
 
           {/* Fine print */}
           <p className="font-body text-[12px]"
