@@ -11,51 +11,61 @@ const units = [
     number: '01',
     topic: 'Introduction to Personal Finance',
     shortDesc: 'What money is, how the system works, and why it matters to you now — not someday.',
+    detail: 'Covers the basics of how money moves, what financial systems exist, and how to start thinking about your own money clearly.',
   },
   {
     number: '02',
     topic: 'Income and Career Planning',
     shortDesc: 'How you get paid, what affects your earnings, and how to build toward what you actually want.',
+    detail: 'Pay stubs, gross vs. net income, hourly vs. salary, raises, side income, and how career decisions connect to long-term financial outcomes.',
   },
   {
     number: '03',
     topic: 'Budgeting',
     shortDesc: 'Where your money goes, how to take control of it, and why it doesn\'t have to feel like punishment.',
+    detail: 'Building a budget that actually works, tracking spending, understanding needs vs. wants, and making adjustments without burning out.',
   },
   {
     number: '04',
     topic: 'Credit and Loans',
     shortDesc: 'What borrowing actually costs you, how credit scores work, and when debt is worth it.',
+    detail: 'Credit scores, credit cards, interest rates, student loans, car loans, and how to borrow without digging a hole you can\'t get out of.',
   },
   {
     number: '05',
     topic: 'Saving',
     shortDesc: 'How to make saving automatic, what to save for first, and how to build a cushion that holds.',
+    detail: 'Emergency funds, short- and long-term saving goals, high-yield savings accounts, and strategies that work even on a small income.',
   },
   {
     number: '06',
     topic: 'Investing',
     shortDesc: 'How the market works, why starting early beats starting big, and what to actually do with money you\'re not spending.',
+    detail: 'Stocks, index funds, compound growth, retirement accounts (Roth IRA, 401k), risk tolerance, and how to start investing with almost nothing.',
   },
   {
     number: '07',
     topic: 'Insurance',
     shortDesc: 'What it is, when you need it, and how to not get caught off guard by the fine print.',
+    detail: 'Health, auto, renters, and life insurance — what each covers, what it costs, and how to evaluate whether a plan is actually worth it.',
   },
   {
     number: '08',
     topic: 'Taxes',
     shortDesc: 'What gets taken from your paycheck, how to file, and how to stop leaving money on the table.',
+    detail: 'Federal and state taxes, W-2s, 1099s, deductions, credits, how to file for free, and what happens if you don\'t.',
   },
   {
     number: '09',
     topic: 'Other Topics',
     shortDesc: 'Banking, scams, big purchases, and the money stuff that doesn\'t fit neatly into one category.',
+    detail: 'Choosing a bank, avoiding financial scams, buying a car, renting an apartment, and other real decisions you\'ll face sooner than you think.',
   },
   {
     number: '10',
     topic: 'Next Steps and Reflection',
     shortDesc: 'Where you are, where you\'re going, and how to keep building real financial habits from here.',
+    detail: 'Reviewing what you\'ve learned, setting financial goals, building a personal plan, and figuring out what to focus on next.',
   },
 ]
 
@@ -134,14 +144,12 @@ export default function LessonsPreview() {
                      style={{ color: 'rgba(26,46,26,0.55)' }}>
                     {unit.shortDesc}
                   </p>
-                  <div
-                    className="flex items-center mt-4 pt-4"
-                    style={{ borderTop: '0.5px solid rgba(26,46,26,0.08)' }}
+                  <p
+                    className="font-body text-[12px] leading-[1.6] mt-4 pt-4"
+                    style={{ borderTop: '0.5px solid rgba(26,46,26,0.08)', color: 'rgba(26,46,26,0.4)' }}
                   >
-                    <span className="lesson-start-link font-body font-medium text-[13px] text-brandGreen">
-                      Start unit →
-                    </span>
-                  </div>
+                    {unit.detail}
+                  </p>
                 </div>
               ))}
             </div>
