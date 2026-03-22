@@ -96,7 +96,7 @@ export default function LessonsPreview() {
             </h2>
             <p className="font-body text-[15px] leading-[1.7]"
                style={{ color: 'rgba(26,46,26,0.55)', maxWidth: '480px' }}>
-              10 units. Each one 10–20 mini lessons, 3–5 minutes long. Built around decisions real teens actually have to make.
+              10 units. Each one 8–15 mini lessons, 3–5 minutes long. Built around decisions real teens actually have to make.
             </p>
           </FadeUp>
 
@@ -124,7 +124,7 @@ export default function LessonsPreview() {
                       className="font-body font-medium text-[11px] tracking-[0.10em] uppercase w-fit"
                       style={{ background: 'rgba(26,46,26,0.06)', borderRadius: '100px', padding: '4px 12px', color: 'rgba(26,46,26,0.45)' }}
                     >
-                      10–20 lessons · 3–5 min each
+                      8–15 lessons · 3–5 min each
                     </span>
                   </div>
                   <h3 className="font-body font-semibold text-textTitle text-[15px] md:text-[18px] leading-snug mb-2">
