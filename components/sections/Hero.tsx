@@ -135,8 +135,8 @@ export default function Hero() {
 
           </div>
 
-          {/* ── Right: phone mockup — hidden on mobile ── */}
-          <div className="hidden md:flex justify-center lg:justify-end">
+          {/* ── Right: phone mockup — desktop only ── */}
+          <div className="hidden lg:flex justify-center lg:justify-end">
             <PhoneParallax>
               <div className="relative flex justify-center items-center">
 
