@@ -6,40 +6,60 @@
 import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 
-const lessons = [
+const units = [
   {
     number: '01',
-    topic: 'Reading Your First Pay Stub',
-    shortDesc: 'Decode every line of your paycheck.',
-    time: '6 min',
+    topic: 'Introduction to Personal Finance',
+    shortDesc: 'What money is, how the system works, and why it matters to you now — not someday.',
   },
   {
     number: '02',
-    topic: 'How Credit Scores Actually Work',
-    shortDesc: 'The three-digit number that follows you everywhere.',
-    time: '7 min',
+    topic: 'Income and Career Planning',
+    shortDesc: 'How you get paid, what affects your earnings, and how to build toward what you actually want.',
   },
   {
     number: '03',
-    topic: 'Taxes: What Gets Taken & Why',
-    shortDesc: 'Where your money goes and why.',
-    time: '8 min',
+    topic: 'Budgeting',
+    shortDesc: 'Where your money goes, how to take control of it, and why it doesn\'t have to feel like punishment.',
   },
   {
     number: '04',
-    topic: 'Mortgages for People Who Rent Right Now',
-    shortDesc: "What you're really signing when you buy a home.",
-    time: '9 min',
+    topic: 'Credit and Loans',
+    shortDesc: 'What borrowing actually costs you, how credit scores work, and when debt is worth it.',
   },
   {
     number: '05',
-    topic: 'Compound Interest: The Eighth Wonder',
-    shortDesc: 'Make your money work while you sleep.',
-    time: '5 min',
+    topic: 'Saving',
+    shortDesc: 'How to make saving automatic, what to save for first, and how to build a cushion that holds.',
+  },
+  {
+    number: '06',
+    topic: 'Investing',
+    shortDesc: 'How the market works, why starting early beats starting big, and what to actually do with money you\'re not spending.',
+  },
+  {
+    number: '07',
+    topic: 'Insurance',
+    shortDesc: 'What it is, when you need it, and how to not get caught off guard by the fine print.',
+  },
+  {
+    number: '08',
+    topic: 'Taxes',
+    shortDesc: 'What gets taken from your paycheck, how to file, and how to stop leaving money on the table.',
+  },
+  {
+    number: '09',
+    topic: 'Other Topics',
+    shortDesc: 'Banking, scams, big purchases, and the money stuff that doesn\'t fit neatly into one category.',
+  },
+  {
+    number: '10',
+    topic: 'Next Steps and Reflection',
+    shortDesc: 'Where you are, where you\'re going, and how to keep building real financial habits from here.',
   },
 ]
 
-const doubled = [...lessons, ...lessons]
+const doubled = [...units, ...units]
 
 export default function LessonsPreview() {
   return (
@@ -76,7 +96,7 @@ export default function LessonsPreview() {
             </h2>
             <p className="font-body text-[15px] leading-[1.7]"
                style={{ color: 'rgba(26,46,26,0.55)', maxWidth: '480px' }}>
-              Every lesson is 5–9 minutes, built around a decision a real teen actually has to make.
+              10 units. Each one 10–20 mini lessons, 3–5 minutes long. Built around decisions real teens actually have to make.
             </p>
           </FadeUp>
 
@@ -91,28 +111,35 @@ export default function LessonsPreview() {
             }}
           >
             <div className="flex flex-col gap-4 waterfall-scroll">
-              {doubled.map((lesson, i) => (
+              {doubled.map((unit, i) => (
                 <div key={i} className="bg-cardBg card-border card-hover rounded-2xl p-5 md:p-6 flex flex-col w-full">
-                  <span
-                    className="font-body font-medium text-[11px] tracking-[0.10em] uppercase text-brandGreen w-fit mb-4"
-                    style={{ background: 'rgba(74,93,74,0.10)', borderRadius: '100px', padding: '4px 12px' }}
-                  >
-                    {lesson.time}
-                  </span>
-                  <p className="font-body font-bold text-brandGreen text-[13px] mb-1">{lesson.number}</p>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span
+                      className="font-body font-medium text-[11px] tracking-[0.10em] uppercase text-brandGreen w-fit"
+                      style={{ background: 'rgba(74,93,74,0.10)', borderRadius: '100px', padding: '4px 12px' }}
+                    >
+                      Unit {unit.number}
+                    </span>
+                    <span
+                      className="font-body font-medium text-[11px] tracking-[0.10em] uppercase w-fit"
+                      style={{ background: 'rgba(26,46,26,0.06)', borderRadius: '100px', padding: '4px 12px', color: 'rgba(26,46,26,0.45)' }}
+                    >
+                      10–20 lessons · 3–5 min each
+                    </span>
+                  </div>
                   <h3 className="font-body font-semibold text-textTitle text-[15px] md:text-[18px] leading-snug mb-2">
-                    {lesson.topic}
+                    {unit.topic}
                   </h3>
                   <p className="font-body text-[13px] md:text-[14px] leading-[1.6]"
                      style={{ color: 'rgba(26,46,26,0.55)' }}>
-                    {lesson.shortDesc}
+                    {unit.shortDesc}
                   </p>
                   <div
                     className="flex items-center mt-4 pt-4"
                     style={{ borderTop: '0.5px solid rgba(26,46,26,0.08)' }}
                   >
                     <span className="lesson-start-link font-body font-medium text-[13px] text-brandGreen">
-                      Start lesson →
+                      Start unit →
                     </span>
                   </div>
                 </div>
