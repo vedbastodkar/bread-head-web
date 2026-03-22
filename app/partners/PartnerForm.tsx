@@ -83,15 +83,15 @@ export default function PartnerForm() {
               style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <div>
-            <label htmlFor="org" style={labelStyle}>Organization name *</label>
-            <input id="org" name="org" type="text" required autoComplete="organization"
+            <label htmlFor="org" style={labelStyle}>Organization name <span style={{ fontWeight: 400, color: 'rgba(26,46,26,0.4)' }}>(optional)</span></label>
+            <input id="org" name="org" type="text" autoComplete="organization"
               style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
         </div>
 
         {/* Row 3: Partner type — custom chevron */}
         <div style={{ marginBottom: '20px', position: 'relative' }}>
-          <label htmlFor="partnerType" style={labelStyle}>Partner type *</label>
+          <label htmlFor="partnerType" style={labelStyle}>What best describes you? *</label>
           <div style={{ position: 'relative' }}>
             <select
               id="partnerType" name="partnerType" required
@@ -99,6 +99,7 @@ export default function PartnerForm() {
               onFocus={onFocus} onBlur={onBlur}
             >
               <option value="">Select one…</option>
+              <option value="question">Just have a question</option>
               <option value="individual">Individual Student</option>
               <option value="school">School / District</option>
               <option value="youth">Youth Organization</option>
