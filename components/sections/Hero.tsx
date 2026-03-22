@@ -14,7 +14,8 @@ export default function Hero() {
       className="hero-section flex items-center"
       style={{
         background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9',
-        minHeight: '100vh',
+        minHeight: '100svh',
+        maxHeight: '100svh',
         paddingTop: '80px',
         paddingBottom: '0',
       }}
@@ -22,7 +23,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto w-full px-6 lg:px-8">
         <div
           className="hero-inner-grid grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
-          style={{ minHeight: 'calc(100vh - 80px)' }}
+          style={{ minHeight: 'calc(100svh - 80px)' }}
         >
 
           {/* ── Left: copy ── */}
