@@ -14,16 +14,14 @@ export default function Hero() {
       className="hero-section flex items-center"
       style={{
         background: 'radial-gradient(ellipse at 30% 50%, rgba(74,93,74,0.08) 0%, transparent 60%), #E6EDD9',
-        minHeight: '100svh',
-        maxHeight: '100svh',
-        paddingTop: '80px',
-        paddingBottom: '0',
+        paddingTop: '140px',
+        paddingBottom: '80px',
       }}
     >
       <div className="max-w-7xl mx-auto w-full px-6 lg:px-8">
         <div
           className="hero-inner-grid grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
-          style={{ minHeight: 'calc(100svh - 80px)' }}
+          style={{}}
         >
 
           {/* ── Left: copy ── */}
@@ -53,7 +51,7 @@ export default function Hero() {
               <h1
                 className="hero-h1 font-display italic font-bold text-textTitle tracking-[-0.02em]"
                 style={{
-                  fontSize: 'clamp(32px, 4.5vw, 52px)',
+                  fontSize: '48px',
                   lineHeight: 1.15,
                   marginBottom: '16px',
                   maxWidth: '520px',
@@ -161,7 +159,7 @@ export default function Hero() {
                 <div
                   className="overflow-hidden relative"
                   style={{
-                    width: 'clamp(340px, 30vw, 460px)',
+                    width: '380px',
                     borderRadius: '44px',
                     aspectRatio: '9 / 19.5',
                     border: '8px solid #1A2E1A',
