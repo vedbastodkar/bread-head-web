@@ -322,6 +322,16 @@ html {
     gap: 28px !important;
   }
 
+  /* ── Lessons page ── */
+  .lessons-hero-grid {
+    grid-template-columns: 1fr !important;
+    padding-top: 120px !important;
+    padding-bottom: 64px !important;
+  }
+  .lessons-hero-phone { display: none !important; }
+  .lessons-approach-grid { grid-template-columns: 1fr !important; }
+  .lessons-units-grid { grid-template-columns: 1fr !important; }
+
   /* ── Congressional Win section ── */
   .congressional-inner {
     grid-template-columns: 1fr !important;

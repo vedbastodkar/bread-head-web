@@ -10,7 +10,7 @@ import { useScroll, useMotionValueEvent } from 'framer-motion'
 
 const LINKS = [
   { label: 'About',    href: '/about' },
-  { label: 'Lessons',  href: '/' },
+  { label: 'Lessons',  href: '/lessons' },
   { label: 'Partners', href: '/partners' },
 ]
 
