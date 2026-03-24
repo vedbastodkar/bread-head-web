@@ -399,25 +399,34 @@ export default function CurriculumAccordion() {
                   {/* Separator */}
                   <div style={{ height: '1px', background: 'rgba(74,93,74,0.12)', marginLeft: '88px' }} />
 
-                  {/* 2-col grid of lesson rows */}
-                  <div
-                    className="curriculum-lesson-grid"
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      background: 'rgba(26,46,26,0.04)',
-                      gap: '1px',
-                    }}
-                  >
-                    {unit.lessons.map((lesson, i) => (
-                      <LessonRow key={lesson} lesson={lesson} index={i} />
-                    ))}
-
-                    {/* If odd number of lessons, fill last cell */}
-                    {unit.lessons.length % 2 !== 0 && (
-                      <div style={{ background: '#FAFCF8' }} />
-                    )}
-                  </div>
+                  {/* 2-col layout: first half down left, second half down right */}
+                  {(() => {
+                    const half = Math.ceil(unit.lessons.length / 2)
+                    const left = unit.lessons.slice(0, half)
+                    const right = unit.lessons.slice(half)
+                    return (
+                      <div
+                        className="curriculum-lesson-grid"
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr',
+                          background: 'rgba(26,46,26,0.04)',
+                          gap: '1px',
+                        }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                          {left.map((lesson, i) => (
+                            <LessonRow key={lesson} lesson={lesson} index={i} />
+                          ))}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+                          {right.map((lesson, i) => (
+                            <LessonRow key={lesson} lesson={lesson} index={half + i} />
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })()}
                 </motion.div>
               )}
             </AnimatePresence>
