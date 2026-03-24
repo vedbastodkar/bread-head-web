@@ -106,13 +106,15 @@ export default function Nav() {
                   transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                   style={{
                     position: 'fixed',
-                    top: '64px',
+                    top: '84px',
                     left: 0,
                     right: 0,
-                    background: scrolled ? 'rgba(230,237,217,0.97)' : '#E6EDD9',
+                    background: 'rgba(230,237,217,0.97)',
                     backdropFilter: 'blur(12px)',
                     WebkitBackdropFilter: 'blur(12px)',
+                    borderTop: '0.5px solid rgba(26,46,26,0.10)',
                     borderBottom: '0.5px solid rgba(26,46,26,0.10)',
+                    boxShadow: '0 4px 16px rgba(26,46,26,0.06)',
                     pointerEvents: appHovered ? 'auto' : 'none',
                     display: 'flex',
                     justifyContent: 'center',
