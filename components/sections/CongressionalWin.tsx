@@ -176,7 +176,7 @@ export default function CongressionalWin() {
                 letterSpacing: '0.01em',
               }}
             >
-              View My Winning App →
+              View Official Listing →
             </a>
 
             {/* Location caption */}

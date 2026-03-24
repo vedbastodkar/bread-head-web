@@ -30,12 +30,12 @@ export default function Home() {
       <Hero />
       <Problem />
       <WhyItMatters bg="#1A2E1A" />
+      <AwardStrip />
       <Pillars />
       <Ticker />
       <LessonsPreview />
       <Gamification />
       <Journal />
-      <AwardStrip />
       <Partners />
       <FinalCTA />
       <Footer />

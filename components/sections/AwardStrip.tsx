@@ -130,7 +130,7 @@ export default function AwardStrip() {
                   paddingBottom: '1px',
                 }}
               >
-                View the winning app ↗
+                View official listing ↗
               </a>
             </div>
 
