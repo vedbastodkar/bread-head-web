@@ -330,7 +330,7 @@ html {
   }
   .lessons-hero-phone { display: none !important; }
   .lessons-approach-grid { grid-template-columns: 1fr !important; }
-  .lessons-units-grid { grid-template-columns: 1fr !important; }
+  .unit-lessons-grid { grid-template-columns: 1fr !important; }
 
   /* ── Congressional Win section ── */
   .congressional-inner {
@@ -371,6 +371,7 @@ html {
 
 /* ── Tablet overrides (768px–1023px) ──────────────────────────── */
 @media (min-width: 768px) and (max-width: 1023px) {
+  .unit-lessons-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .hero-section {
     padding-top: 120px !important;
     padding-bottom: 64px !important;

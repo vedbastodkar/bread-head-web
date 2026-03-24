@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
-import LessonDemo from './LessonDemo'
 
 export const metadata: Metadata = {
   title: 'Lessons — Bread Head',
@@ -230,134 +229,165 @@ export default function LessonsPage() {
         </div>
       </section>
 
-      {/* ── INTERACTIVE DEMO ──────────────────────────────────────── */}
+      {/* ── CURRICULUM ────────────────────────────────────────────── */}
       <section style={{ background: '#E6EDD9' }}>
         <div
           style={{
-            maxWidth: '900px',
+            maxWidth: '1100px',
             margin: '0 auto',
-            paddingTop: '80px',
-            paddingBottom: '80px',
+            paddingTop: '96px',
+            paddingBottom: '96px',
             paddingLeft: '24px',
             paddingRight: '24px',
           }}
         >
+          {/* Section header */}
           <FadeUp delay={0}>
-            <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '12px' }}>
-                Try It
+            <div style={{ marginBottom: '64px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '14px' }}>
+                Full Curriculum · 10 Units
               </p>
               <h2
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontWeight: 700,
-                  fontSize: 'clamp(24px, 3vw, 38px)',
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(28px, 3.2vw, 44px)',
                   color: '#1A2E1A',
-                  lineHeight: 1.15,
-                  marginBottom: '12px',
+                  lineHeight: 1.1,
+                  marginBottom: '14px',
                 }}
               >
-                A real lesson. Right now.
+                Everything you actually need to know.
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.65 }}>
-                This is 3 slides from Unit 02. Tap through, answer the question, and see how it feels.
+                Each unit is 8–15 lessons · 3–5 minutes each · tap through, answer to unlock, understand the why.
               </p>
             </div>
           </FadeUp>
 
-          <LessonDemo />
-        </div>
-      </section>
-
-      {/* ── CURRICULUM ────────────────────────────────────────────── */}
-      <section style={{ background: '#FFFFFF' }}>
-        <div
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            paddingTop: '80px',
-            paddingBottom: '80px',
-            paddingLeft: '24px',
-            paddingRight: '24px',
-          }}
-        >
-          <FadeUp delay={0}>
-            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '16px' }}>
-              10 Units
-            </p>
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 700,
-                fontSize: 'clamp(26px, 3vw, 40px)',
-                color: '#1A2E1A',
-                lineHeight: 1.15,
-                marginBottom: '8px',
-              }}
-            >
-              Everything you actually need to know.
-            </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(26,46,26,0.55)', marginBottom: '48px' }}>
-              8–15 lessons per unit · 3–5 min each · built around real decisions
-            </p>
-          </FadeUp>
-
-          <div
-            className="lessons-units-grid"
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2px', background: 'rgba(26,46,26,0.07)', borderRadius: '20px', overflow: 'hidden' }}
-          >
-            {UNITS.map((unit, i) => (
-              <FadeUp key={unit.number} delay={Math.floor(i / 2) * 0.06}>
+          {/* Unit cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {UNITS.map((unit, unitIdx) => (
+              <FadeUp key={unit.number} delay={unitIdx * 0.04}>
                 <div
+                  className="card-border card-hover"
                   style={{
                     background: '#FFFFFF',
-                    padding: '32px',
-                    height: '100%',
-                    boxSizing: 'border-box',
+                    borderRadius: '20px',
+                    padding: '40px 48px',
+                    position: 'relative',
+                    overflow: 'hidden',
                   }}
                 >
+                  {/* Ghost number */}
+                  <div
+                    aria-hidden
+                    style={{
+                      position: 'absolute',
+                      right: '32px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 700,
+                      fontSize: '160px',
+                      color: 'rgba(26,46,26,0.04)',
+                      lineHeight: 1,
+                      userSelect: 'none',
+                      pointerEvents: 'none',
+                      letterSpacing: '-0.04em',
+                    }}
+                  >
+                    {unit.number}
+                  </div>
+
                   {/* Header row */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '6px', flexWrap: 'wrap' }}>
                     <span
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontWeight: 700,
                         fontSize: '11px',
-                        letterSpacing: '0.10em',
+                        letterSpacing: '0.12em',
                         textTransform: 'uppercase',
                         color: '#4A5D4A',
                         background: 'rgba(74,93,74,0.10)',
                         borderRadius: '100px',
-                        padding: '4px 12px',
-                        whiteSpace: 'nowrap',
+                        padding: '5px 14px',
                         flexShrink: 0,
                       }}
                     >
                       Unit {unit.number}
                     </span>
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '15px', color: '#1A2E1A', margin: 0, lineHeight: 1.3 }}>
-                      {unit.topic}
-                    </p>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '12px',
+                        color: 'rgba(26,46,26,0.35)',
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      {unit.lessons.length} lessons
+                    </span>
                   </div>
-                  {/* Lesson list */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {unit.lessons.map((lesson) => (
-                      <span
+
+                  {/* Unit title */}
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontStyle: 'italic',
+                      fontSize: 'clamp(20px, 2vw, 28px)',
+                      color: '#1A2E1A',
+                      lineHeight: 1.15,
+                      marginBottom: '28px',
+                    }}
+                  >
+                    {unit.topic}
+                  </h3>
+
+                  {/* Divider */}
+                  <div style={{ height: '1px', background: 'rgba(26,46,26,0.08)', marginBottom: '24px' }} />
+
+                  {/* Numbered lesson list */}
+                  <div
+                    className="unit-lessons-grid"
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 1fr)',
+                      gap: '10px 32px',
+                    }}
+                  >
+                    {unit.lessons.map((lesson, lessonIdx) => (
+                      <div
                         key={lesson}
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '12px',
-                          color: 'rgba(26,46,26,0.55)',
-                          background: 'rgba(26,46,26,0.05)',
-                          borderRadius: '6px',
-                          padding: '3px 9px',
-                          lineHeight: 1.6,
-                        }}
+                        style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}
                       >
-                        {lesson}
-                      </span>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontWeight: 700,
+                            fontSize: '11px',
+                            color: '#4A5D4A',
+                            flexShrink: 0,
+                            minWidth: '18px',
+                            lineHeight: 1.6,
+                          }}
+                        >
+                          {lessonIdx + 1}.
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '13px',
+                            color: 'rgba(26,46,26,0.65)',
+                            lineHeight: 1.55,
+                          }}
+                        >
+                          {lesson}
+                        </span>
+                      </div>
                     ))}
                   </div>
+
                 </div>
               </FadeUp>
             ))}
