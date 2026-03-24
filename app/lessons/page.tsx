@@ -167,10 +167,10 @@ export default function LessonsPage() {
             style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}
           >
             {APPROACH.map((item, i) => (
-              <FadeUp key={item.number} delay={i * 0.1}>
+              <FadeUp key={item.number} delay={i * 0.1} style={{ height: '100%' }}>
                 <div
                   className="card-border card-hover"
-                  style={{ background: '#FFFFFF', borderRadius: '20px', padding: '36px 32px' }}
+                  style={{ background: '#FFFFFF', borderRadius: '20px', padding: '36px 32px', height: '100%', boxSizing: 'border-box' }}
                 >
                   <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '36px', color: '#D1A945', lineHeight: 1, marginBottom: '16px' }}>
                     {item.number}

@@ -12,6 +12,7 @@ interface FadeUpProps {
   delay?: number
   duration?: number
   className?: string
+  style?: React.CSSProperties
 }
 
 export default function FadeUp({
@@ -19,6 +20,7 @@ export default function FadeUp({
   delay = 0,
   duration = 0.6,
   className,
+  style,
 }: FadeUpProps) {
   const ref = useRef<HTMLDivElement>(null)
   // Trigger when 15% of the element is visible; fire once only
@@ -28,6 +30,7 @@ export default function FadeUp({
     <motion.div
       ref={ref}
       className={className}
+      style={style}
       initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
       transition={{
