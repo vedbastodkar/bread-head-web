@@ -45,7 +45,7 @@ export default function LessonsPage() {
     <main>
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
-      <section style={{ background: '#1A2E1A', overflow: 'hidden' }}>
+      <section style={{ background: '#E6EDD9', overflow: 'hidden' }}>
         <div
           style={{
             maxWidth: '1200px',
@@ -64,7 +64,7 @@ export default function LessonsPage() {
           {/* Left: copy */}
           <FadeUp delay={0}>
             <div>
-              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D1A945', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '16px' }}>
                 The Curriculum
               </p>
               <h1
@@ -72,18 +72,18 @@ export default function LessonsPage() {
                   fontFamily: 'var(--font-display)',
                   fontStyle: 'italic',
                   fontSize: 'clamp(32px, 4vw, 56px)',
-                  color: '#E6EDD9',
+                  color: '#1A2E1A',
                   lineHeight: 1.1,
                   marginBottom: '24px',
                 }}
               >
-                Not a course.<br />A conversation.
+                Not just a course.
               </h1>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(230,237,217,0.65)', lineHeight: 1.75, marginBottom: '16px', maxWidth: '480px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px', maxWidth: '480px' }}>
                 Bread Head teaches personal finance the way you actually learn — by doing, not by reading.
                 Tap through bite-sized slides, answer to move forward, and understand exactly why you got it right or wrong.
               </p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(230,237,217,0.65)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '480px' }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '480px' }}>
                 10 units. 8–15 lessons each. 3–5 minutes per lesson.
               </p>
               <a
@@ -95,8 +95,8 @@ export default function LessonsPage() {
                   fontFamily: 'var(--font-body)',
                   fontWeight: 700,
                   fontSize: '15px',
-                  color: '#1A2E1A',
-                  background: '#D1A945',
+                  color: '#E6EDD9',
+                  background: '#4A5D4A',
                   padding: '14px 30px',
                   borderRadius: '100px',
                   textDecoration: 'none',
@@ -115,7 +115,7 @@ export default function LessonsPage() {
                   width: '280px',
                   borderRadius: '40px',
                   aspectRatio: '9/19.5',
-                  border: '7px solid rgba(230,237,217,0.15)',
+                  border: '7px solid #1A2E1A',
                   background: '#111D11',
                   overflow: 'hidden',
                   position: 'relative',
