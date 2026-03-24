@@ -3,10 +3,43 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+// ── SVG helpers ─────────────────────────────────────────────────────
+
+function LessonCircle({ n }: { n: number }) {
+  const small = n >= 10
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden style={{ flexShrink: 0 }}>
+      <circle cx="13" cy="13" r="11.5" stroke="#4A5D4A" strokeWidth="1.25"/>
+      <text
+        x="13" y={small ? "17.5" : "17.5"}
+        textAnchor="middle"
+        fill="#4A5D4A"
+        fontSize={small ? "8.5" : "10"}
+        fontFamily="system-ui, -apple-system, sans-serif"
+        fontWeight="600"
+        letterSpacing="-0.02em"
+      >
+        {n}
+      </text>
+    </svg>
+  )
+}
+
+function ArrowRight() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden style={{ flexShrink: 0, opacity: 0.22 }}>
+      <path d="M4.5 2.5l4 4-4 4" stroke="#1A2E1A" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
+// ── Data ─────────────────────────────────────────────────────────────
+
 const UNITS = [
   {
     number: '01',
     topic: 'Introduction to Personal Finance',
+    tag: 'Foundation',
     lessons: [
       'What is Personal Finance?',
       'Why Personal Finance Matters',
@@ -18,6 +51,7 @@ const UNITS = [
   {
     number: '02',
     topic: 'Income and Career Planning',
+    tag: 'Earning',
     lessons: [
       'What is Income?',
       'Types of Income',
@@ -41,6 +75,7 @@ const UNITS = [
   {
     number: '03',
     topic: 'Budgeting',
+    tag: 'Spending',
     lessons: [
       'What is a Budget?',
       'Why Budget?',
@@ -57,6 +92,7 @@ const UNITS = [
   {
     number: '04',
     topic: 'Credit and Loans',
+    tag: 'Borrowing',
     lessons: [
       'What is Credit?',
       'Credit Cards vs. Debit Cards',
@@ -83,6 +119,7 @@ const UNITS = [
   {
     number: '05',
     topic: 'Saving',
+    tag: 'Saving',
     lessons: [
       'Why Save?',
       'Emergency Fund vs. Goal-Based Saving',
@@ -99,6 +136,7 @@ const UNITS = [
   {
     number: '06',
     topic: 'Investing',
+    tag: 'Growing',
     lessons: [
       'What is Investing?',
       'Risk vs. Reward',
@@ -111,6 +149,7 @@ const UNITS = [
   {
     number: '07',
     topic: 'Insurance',
+    tag: 'Protection',
     lessons: [
       'What is Insurance?',
       'Why Insurance Matters',
@@ -131,6 +170,7 @@ const UNITS = [
   {
     number: '08',
     topic: 'Taxes',
+    tag: 'Taxes',
     lessons: [
       'What Are Taxes and Why Do We Pay Them?',
       'Types of Taxes: Income',
@@ -146,6 +186,7 @@ const UNITS = [
   {
     number: '09',
     topic: 'Other Topics',
+    tag: 'Real Life',
     lessons: [
       'Financial Scams and Fraud',
       'Phishing and Fake Scholarships',
@@ -170,6 +211,7 @@ const UNITS = [
   {
     number: '10',
     topic: 'Next Steps and Reflection',
+    tag: 'Reflection',
     lessons: [
       'Putting It All Together',
       'Setting Financial Goals',
@@ -180,6 +222,8 @@ const UNITS = [
     ],
   },
 ]
+
+// ── Component ─────────────────────────────────────────────────────────
 
 export default function CurriculumAccordion() {
   const [open, setOpen] = useState<Set<string>>(new Set(['01']))
@@ -192,116 +236,151 @@ export default function CurriculumAccordion() {
     })
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {UNITS.map((unit) => {
         const isOpen = open.has(unit.number)
+
         return (
           <div
             key={unit.number}
-            className="card-border"
             style={{
               background: '#FFFFFF',
               borderRadius: '16px',
               overflow: 'hidden',
+              border: isOpen
+                ? '1px solid rgba(74,93,74,0.30)'
+                : '1px solid rgba(26,46,26,0.10)',
+              boxShadow: isOpen
+                ? '0 8px 32px rgba(26,46,26,0.08)'
+                : 'none',
+              transition: 'border-color 0.2s ease, box-shadow 0.25s ease',
             }}
           >
-            {/* ── Header / trigger ── */}
+
+            {/* ── Trigger ── */}
             <button
               onClick={() => toggle(unit.number)}
               style={{
                 width: '100%',
                 display: 'flex',
-                alignItems: 'center',
-                gap: '20px',
-                padding: '28px 36px',
-                background: 'transparent',
+                alignItems: 'stretch',
+                background: isOpen ? '#FAFCF8' : '#FFFFFF',
                 border: 'none',
                 cursor: 'pointer',
+                padding: 0,
+                transition: 'background 0.2s ease',
                 textAlign: 'left',
-                position: 'relative',
-                overflow: 'hidden',
               }}
             >
-              {/* Ghost number */}
-              <span
-                aria-hidden
+              {/* Chapter number gutter */}
+              <div
                 style={{
-                  position: 'absolute',
-                  left: '20px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 700,
-                  fontSize: '88px',
-                  color: isOpen ? 'rgba(74,93,74,0.07)' : 'rgba(26,46,26,0.04)',
-                  lineHeight: 1,
-                  letterSpacing: '-0.04em',
-                  userSelect: 'none',
-                  pointerEvents: 'none',
-                  transition: 'color 0.2s ease',
+                  width: '88px',
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRight: `2px solid ${isOpen ? 'rgba(74,93,74,0.18)' : 'rgba(26,46,26,0.07)'}`,
+                  transition: 'border-color 0.2s ease',
+                  padding: '24px 0',
                 }}
               >
-                {unit.number}
-              </span>
-
-              {/* Content — offset past ghost */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, paddingLeft: '72px', flexWrap: 'wrap' }}>
                 <span
                   style={{
-                    fontFamily: 'var(--font-body)',
+                    fontFamily: 'var(--font-display)',
+                    fontStyle: 'italic',
                     fontWeight: 700,
-                    fontSize: '11px',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: isOpen ? '#4A5D4A' : 'rgba(26,46,26,0.40)',
-                    background: isOpen ? 'rgba(74,93,74,0.10)' : 'rgba(26,46,26,0.05)',
-                    borderRadius: '100px',
-                    padding: '4px 12px',
-                    flexShrink: 0,
-                    transition: 'color 0.2s, background 0.2s',
+                    fontSize: '42px',
+                    color: isOpen ? '#4A5D4A' : 'rgba(26,46,26,0.22)',
+                    lineHeight: 1,
+                    letterSpacing: '-0.03em',
+                    transition: 'color 0.2s ease',
+                    userSelect: 'none',
                   }}
                 >
-                  Unit {unit.number}
+                  {unit.number}
                 </span>
+              </div>
+
+              {/* Title area */}
+              <div
+                style={{
+                  flex: 1,
+                  padding: '22px 24px 22px 28px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  gap: '5px',
+                  minWidth: 0,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      fontSize: '10px',
+                      letterSpacing: '0.13em',
+                      textTransform: 'uppercase',
+                      color: isOpen ? '#4A5D4A' : 'rgba(26,46,26,0.35)',
+                      background: isOpen ? 'rgba(74,93,74,0.10)' : 'rgba(26,46,26,0.05)',
+                      borderRadius: '100px',
+                      padding: '3px 10px',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    {unit.tag}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '12px',
+                      color: 'rgba(26,46,26,0.30)',
+                    }}
+                  >
+                    {unit.lessons.length} lessons
+                  </span>
+                </div>
 
                 <h3
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontStyle: 'italic',
-                    fontSize: 'clamp(17px, 1.8vw, 24px)',
-                    color: isOpen ? '#1A2E1A' : 'rgba(26,46,26,0.70)',
+                    fontSize: 'clamp(16px, 1.6vw, 22px)',
+                    color: isOpen ? '#1A2E1A' : 'rgba(26,46,26,0.65)',
                     lineHeight: 1.2,
                     margin: 0,
-                    flex: 1,
-                    transition: 'color 0.2s',
+                    transition: 'color 0.2s ease',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
                   {unit.topic}
                 </h3>
               </div>
 
-              {/* Right: count + chevron */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    color: 'rgba(26,46,26,0.35)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {unit.lessons.length} lessons
-                </span>
+              {/* Chevron */}
+              <div
+                style={{
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingRight: '28px',
+                }}
+              >
                 <motion.svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
+                  width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden
                   animate={{ rotate: isOpen ? 180 : 0 }}
                   transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
-                  style={{ flexShrink: 0 }}
                 >
-                  <path d="M3 6l5 5 5-5" stroke="rgba(26,46,26,0.40)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path
+                    d="M3.5 6.5l5.5 5.5 5.5-5.5"
+                    stroke={isOpen ? '#4A5D4A' : 'rgba(26,46,26,0.30)'}
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </motion.svg>
               </div>
             </button>
@@ -310,67 +389,79 @@ export default function CurriculumAccordion() {
             <AnimatePresence initial={false}>
               {isOpen && (
                 <motion.div
-                  key="content"
+                  key="body"
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.26, ease: [0.25, 0.1, 0.25, 1] }}
+                  transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
                   style={{ overflow: 'hidden' }}
                 >
-                  <div style={{ borderTop: '1px solid rgba(26,46,26,0.07)' }}>
-                    <div
-                      className="unit-lessons-grid"
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gap: '2px',
-                        background: 'rgba(26,46,26,0.05)',
-                      }}
-                    >
-                      {unit.lessons.map((lesson, i) => (
-                        <div
-                          key={lesson}
-                          style={{
-                            background: '#FAFCF8',
-                            padding: '14px 20px',
-                            display: 'flex',
-                            alignItems: 'baseline',
-                            gap: '10px',
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-body)',
-                              fontWeight: 700,
-                              fontSize: '11px',
-                              color: '#4A5D4A',
-                              flexShrink: 0,
-                              minWidth: '20px',
-                              lineHeight: 1.6,
-                            }}
-                          >
-                            {i + 1}.
-                          </span>
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-body)',
-                              fontSize: '13px',
-                              color: 'rgba(26,46,26,0.70)',
-                              lineHeight: 1.55,
-                            }}
-                          >
-                            {lesson}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                  {/* Separator */}
+                  <div style={{ height: '1px', background: 'rgba(74,93,74,0.12)', marginLeft: '88px' }} />
+
+                  {/* 2-col grid of lesson rows */}
+                  <div
+                    className="curriculum-lesson-grid"
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      background: 'rgba(26,46,26,0.04)',
+                      gap: '1px',
+                    }}
+                  >
+                    {unit.lessons.map((lesson, i) => (
+                      <LessonRow key={lesson} lesson={lesson} index={i} />
+                    ))}
+
+                    {/* If odd number of lessons, fill last cell */}
+                    {unit.lessons.length % 2 !== 0 && (
+                      <div style={{ background: '#FAFCF8' }} />
+                    )}
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
+
           </div>
         )
       })}
+    </div>
+  )
+}
+
+// ── Individual lesson row (separate component for hover state) ──────
+
+function LessonRow({ lesson, index }: { lesson: string; index: number }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? '#F0F5ED' : '#FAFCF8',
+        padding: '13px 20px 13px 22px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        transition: 'background 0.14s ease',
+        cursor: 'default',
+      }}
+    >
+      <LessonCircle n={index + 1} />
+      <span
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: '13.5px',
+          color: hovered ? '#1A2E1A' : 'rgba(26,46,26,0.70)',
+          lineHeight: 1.45,
+          flex: 1,
+          transition: 'color 0.14s ease',
+        }}
+      >
+        {lesson}
+      </span>
+      <ArrowRight />
     </div>
   )
 }
