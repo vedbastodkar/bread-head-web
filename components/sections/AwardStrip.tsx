@@ -4,40 +4,47 @@ import Link from 'next/link'
 
 export default function AwardStrip() {
   return (
-    <section style={{ background: '#FFFFFF', overflow: 'hidden' }}>
+    <section style={{ background: '#FFFFFF' }}>
       <div
         className="award-strip-inner"
         style={{
+          maxWidth: '1100px',
+          margin: '0 auto',
+          padding: '80px 24px',
           display: 'grid',
-          gridTemplateColumns: '48% 52%',
+          gridTemplateColumns: '46% 54%',
+          gap: '56px',
           alignItems: 'stretch',
-          minHeight: '480px',
         }}
       >
 
-        {/* ── Photo — full height left column ── */}
-        <div style={{ position: 'relative', minHeight: '480px' }}>
-          <Image
-            src="/assets/omar_townhall_wide.png"
-            alt="Congressional App Challenge award ceremony, Minneapolis"
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center center' }}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            quality={90}
-          />
-        </div>
+        {/* ── Photo — framed, matches text height ── */}
+        <FadeUp delay={0}>
+          <div
+            style={{
+              position: 'relative',
+              height: '100%',
+              minHeight: '320px',
+              borderRadius: '20px',
+              overflow: 'hidden',
+              border: '1px solid rgba(26,46,26,0.10)',
+              boxShadow: '0 12px 48px rgba(26,46,26,0.12)',
+            }}
+          >
+            <Image
+              src="/assets/omar_townhall_wide.png"
+              alt="Congressional App Challenge award ceremony, Minneapolis"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center center' }}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={90}
+            />
+          </div>
+        </FadeUp>
 
         {/* ── Copy ── */}
         <FadeUp delay={0.08}>
-          <div
-            style={{
-              padding: '72px 56px 72px 64px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              height: '100%',
-            }}
-          >
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
             {/* Badge */}
             <div style={{ marginBottom: '20px' }}>

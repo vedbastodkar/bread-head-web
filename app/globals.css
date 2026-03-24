@@ -319,10 +319,7 @@ html {
   /* ── Award strip (homepage) ── */
   .award-strip-inner {
     grid-template-columns: 1fr !important;
-    min-height: unset !important;
-  }
-  .award-strip-inner > div:first-child {
-    min-height: 260px !important;
+    gap: 28px !important;
   }
 
   /* ── Congressional Win section ── */
