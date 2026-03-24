@@ -4,49 +4,43 @@ import Link from 'next/link'
 
 export default function AwardStrip() {
   return (
-    <section style={{ background: '#FFFFFF' }}>
+    <section style={{ background: '#FFFFFF', overflow: 'hidden' }}>
       <div
         className="award-strip-inner"
         style={{
-          maxWidth: '960px',
-          margin: '0 auto',
-          padding: '80px 24px',
           display: 'grid',
-          gridTemplateColumns: '320px 1fr',
-          gap: '48px',
-          alignItems: 'center',
+          gridTemplateColumns: '48% 52%',
+          alignItems: 'stretch',
+          minHeight: '480px',
         }}
       >
 
-        {/* ── Photo ── */}
-        <FadeUp delay={0}>
-          <div
-            style={{
-              borderRadius: '16px',
-              overflow: 'hidden',
-              border: '1px solid rgba(26,46,26,0.08)',
-              boxShadow: '0 8px 32px rgba(26,46,26,0.10)',
-              aspectRatio: '16/10',
-              position: 'relative',
-            }}
-          >
-            <Image
-              src="/assets/omar_townhall_wide.png"
-              alt="Congressional App Challenge award ceremony, Minneapolis"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center center' }}
-              sizes="320px"
-              quality={90}
-            />
-          </div>
-        </FadeUp>
+        {/* ── Photo — full height left column ── */}
+        <div style={{ position: 'relative', minHeight: '480px' }}>
+          <Image
+            src="/assets/omar_townhall_wide.png"
+            alt="Congressional App Challenge award ceremony, Minneapolis"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center center' }}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={90}
+          />
+        </div>
 
         {/* ── Copy ── */}
         <FadeUp delay={0.08}>
-          <div>
+          <div
+            style={{
+              padding: '72px 56px 72px 64px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
 
             {/* Badge */}
-            <div style={{ marginBottom: '16px' }}>
+            <div style={{ marginBottom: '20px' }}>
               <span
                 style={{
                   display: 'inline-flex',
@@ -77,10 +71,10 @@ export default function AwardStrip() {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
-                fontSize: 'clamp(22px, 2.8vw, 36px)',
+                fontSize: 'clamp(22px, 2.4vw, 38px)',
                 color: '#1A2E1A',
                 lineHeight: 1.15,
-                marginBottom: '10px',
+                marginBottom: '12px',
               }}
             >
               Congressional App Challenge Winner.
@@ -93,7 +87,8 @@ export default function AwardStrip() {
                 fontSize: '15px',
                 color: 'rgba(26,46,26,0.60)',
                 lineHeight: 1.65,
-                marginBottom: '24px',
+                marginBottom: '28px',
+                maxWidth: '400px',
               }}
             >
               Bread Head was selected as the winning app for Minnesota&apos;s 5th Congressional
