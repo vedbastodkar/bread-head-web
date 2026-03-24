@@ -106,9 +106,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── CONGRESSIONAL WIN ─────────────────────────────────────── */}
-      <CongressionalWin />
-
       {/* ── MISSION ───────────────────────────────────────────────── */}
       <section style={{ background: '#1A2E1A' }}>
         <div
@@ -166,6 +163,9 @@ export default function AboutPage() {
           </FadeUp>
         </div>
       </section>
+
+      {/* ── CONGRESSIONAL WIN ─────────────────────────────────────── */}
+      <CongressionalWin />
 
       {/* ── VALUES ────────────────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF' }}>
