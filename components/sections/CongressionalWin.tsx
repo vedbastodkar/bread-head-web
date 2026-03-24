@@ -4,6 +4,7 @@ import FadeUp from '@/app/components/FadeUp'
 export default function CongressionalWin() {
   return (
     <section
+      id="CongressionalWin"
       className="congressional-win"
       style={{ position: 'relative', overflow: 'hidden' }}
     >

@@ -123,7 +123,7 @@ export default function AwardStrip() {
                 <span className="inline md:hidden">View official listing →</span>
               </a>
               <Link
-                href="/about"
+                href="/about#CongressionalWin"
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontWeight: 700,
