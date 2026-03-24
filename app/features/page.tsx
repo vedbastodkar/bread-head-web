@@ -8,37 +8,6 @@ export const metadata: Metadata = {
   description: 'Three tools built to make financial literacy stick: bite-sized lessons, a personal budget tracker, and a reflection journal.',
 }
 
-// SVG icons for each feature
-function BookIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden>
-      <rect x="6" y="4" width="14" height="24" rx="2" stroke="#E6EDD9" strokeWidth="1.6"/>
-      <path d="M6 8h14M6 12h14M6 16h9" stroke="#E6EDD9" strokeWidth="1.4" strokeLinecap="round"/>
-      <path d="M22 10l4 4-4 4" stroke="#D1A945" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  )
-}
-
-function BudgetIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden>
-      <circle cx="16" cy="16" r="11" stroke="#E6EDD9" strokeWidth="1.6"/>
-      <path d="M16 5v11l7 7" stroke="#D1A945" strokeWidth="1.6" strokeLinecap="round"/>
-      <path d="M16 16L9 9" stroke="#E6EDD9" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.5"/>
-    </svg>
-  )
-}
-
-function JournalIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden>
-      <rect x="7" y="5" width="18" height="22" rx="2" stroke="#E6EDD9" strokeWidth="1.6"/>
-      <path d="M11 11h10M11 15h10M11 19h6" stroke="#E6EDD9" strokeWidth="1.4" strokeLinecap="round"/>
-      <path d="M20 19l2-2 2 2-2 2-2-2z" fill="#D1A945"/>
-    </svg>
-  )
-}
-
 const FEATURES = [
   {
     number: '01',
@@ -46,7 +15,7 @@ const FEATURES = [
     tagline: 'Learn by discovering, not by being told.',
     description: '10 units. 80+ lessons. Tap through slides, answer to unlock, and understand exactly why you got it right or wrong.',
     href: '/lessons',
-    icon: <BookIcon />,
+    iconName: 'book' as const,
     stat: '80+ lessons',
   },
   {
@@ -55,7 +24,7 @@ const FEATURES = [
     tagline: 'See where your money actually goes.',
     description: 'Set your income, build spending categories, and track your budget live. No spreadsheets. No shame. Just clarity.',
     href: '/budgeting',
-    icon: <BudgetIcon />,
+    iconName: 'budget' as const,
     stat: 'Real-time tracking',
   },
   {
@@ -64,7 +33,7 @@ const FEATURES = [
     tagline: 'Reflection is the skill schools skip hardest.',
     description: 'Short daily prompts to help you notice your money patterns, understand your habits, and choose differently next time.',
     href: '/journal',
-    icon: <JournalIcon />,
+    iconName: 'journal' as const,
     stat: '2–3 min prompts',
   },
 ]
@@ -134,7 +103,7 @@ export default function FeaturesPage() {
                   description={f.description}
                   href={f.href}
                   stat={f.stat}
-                  icon={f.icon}
+                  iconName={f.iconName}
                 />
               </FadeUp>
             ))}
