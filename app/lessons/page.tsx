@@ -172,7 +172,7 @@ export default function LessonsPage() {
                   className="card-border card-hover"
                   style={{ background: '#FFFFFF', borderRadius: '20px', padding: '36px 32px' }}
                 >
-                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '28px', color: 'rgba(26,46,26,0.08)', lineHeight: 1, marginBottom: '20px' }}>
+                  <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '36px', color: '#D1A945', lineHeight: 1, marginBottom: '16px' }}>
                     {item.number}
                   </p>
                   <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '18px', color: '#1A2E1A', lineHeight: 1.3, marginBottom: '12px' }}>
