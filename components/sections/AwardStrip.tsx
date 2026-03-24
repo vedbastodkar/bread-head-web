@@ -100,38 +100,40 @@ export default function AwardStrip() {
               District — a nationwide competition run by the U.S. House of Representatives.
             </p>
 
-            {/* Links row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
-              <Link
-                href="/about"
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  color: '#4A5D4A',
-                  textDecoration: 'none',
-                  borderBottom: '1.5px solid rgba(74,93,74,0.35)',
-                  paddingBottom: '1px',
-                }}
-              >
-                Our story →
-              </Link>
+            {/* Buttons row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
               <a
                 href="https://www.congressionalappchallenge.us/25-MN05/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   fontSize: '14px',
-                  color: 'rgba(26,46,26,0.40)',
+                  color: '#1A2E1A',
+                  background: '#D1A945',
                   textDecoration: 'none',
-                  borderBottom: '1.5px solid rgba(26,46,26,0.15)',
-                  paddingBottom: '1px',
+                  padding: '11px 22px',
+                  borderRadius: '100px',
                 }}
               >
                 View official listing ↗
               </a>
+              <Link
+                href="/about"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  color: '#E6EDD9',
+                  background: '#4A5D4A',
+                  textDecoration: 'none',
+                  padding: '11px 22px',
+                  borderRadius: '100px',
+                }}
+              >
+                See more →
+              </Link>
             </div>
 
           </div>
