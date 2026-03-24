@@ -12,7 +12,7 @@ export default function AwardStrip() {
           margin: '0 auto',
           padding: '80px 24px',
           display: 'grid',
-          gridTemplateColumns: '180px 1fr',
+          gridTemplateColumns: '320px 1fr',
           gap: '48px',
           alignItems: 'center',
         }}
@@ -26,16 +26,16 @@ export default function AwardStrip() {
               overflow: 'hidden',
               border: '1px solid rgba(26,46,26,0.08)',
               boxShadow: '0 8px 32px rgba(26,46,26,0.10)',
-              aspectRatio: '3/4',
+              aspectRatio: '16/10',
               position: 'relative',
             }}
           >
             <Image
-              src="/assets/omar_townhall_presenting_award.png"
-              alt="Ved Bastodkar receiving the Congressional App Challenge award"
+              src="/assets/omar_townhall_wide.png"
+              alt="Congressional App Challenge award ceremony, Minneapolis"
               fill
-              style={{ objectFit: 'cover', objectPosition: 'center top' }}
-              sizes="180px"
+              style={{ objectFit: 'cover', objectPosition: 'center center' }}
+              sizes="320px"
               quality={90}
             />
           </div>
