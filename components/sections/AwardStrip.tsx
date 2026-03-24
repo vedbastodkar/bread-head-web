@@ -112,7 +112,8 @@ export default function AwardStrip() {
                   borderRadius: '100px',
                 }}
               >
-                View official listing ↗
+                <span className="hidden md:inline">View official listing ↗</span>
+                <span className="inline md:hidden">View official listing →</span>
               </a>
               <Link
                 href="/about"
