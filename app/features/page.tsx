@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 
@@ -37,14 +38,17 @@ const FEATURES = [
 
 const WHY = [
   {
+    number: '01',
     lead: 'Learn without tracking or reflecting.',
     body: 'You understand compound interest, opportunity cost, and why budgets matter. Then you get paid on Friday and the money is gone by Sunday. Knowledge without reflection is just trivia — it doesn\'t change behavior on its own.',
   },
   {
+    number: '02',
     lead: 'Track without learning or reflecting.',
     body: 'You can see every dollar you\'ve spent. You can watch yourself make the same bad call every single month. But seeing a problem you don\'t understand — and haven\'t thought about — doesn\'t fix it. It just makes you feel worse.',
   },
   {
+    number: '03',
     lead: 'Reflect without tracking or learning.',
     body: 'You know you\'re off with money. You feel it. But reflection without data is just a feeling, and feelings without knowledge don\'t point anywhere useful. You can\'t course-correct without something real to work from.',
   },
@@ -98,7 +102,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      {/* ── FEATURE TILES + WHY SECTION ── */}
+      {/* ── FEATURE TILES ── */}
       <section style={{ background: '#FFFFFF' }}>
         <div
           style={{
@@ -110,11 +114,9 @@ export default function FeaturesPage() {
             paddingRight: '24px',
           }}
         >
-
-          {/* Tiles */}
           <div
             className="features-grid"
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '96px' }}
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}
           >
             {FEATURES.map((f, i) => (
               <FadeUp key={f.number} delay={i * 0.1} style={{ height: '100%' }}>
@@ -148,61 +150,113 @@ export default function FeaturesPage() {
               </FadeUp>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Why all three */}
+      {/* ── WHY ALL THREE — dark section ── */}
+      <section style={{ background: '#1A2E1A', position: 'relative', overflow: 'hidden' }}>
+
+        {/* Decorative bread — top right */}
+        <div style={{ position: 'absolute', top: '-32px', right: '-24px', opacity: 0.07, pointerEvents: 'none', transform: 'rotate(18deg)' }}>
+          <Image src="/assets/bread.png" alt="" width={220} height={220} aria-hidden />
+        </div>
+        {/* Decorative bread — bottom left */}
+        <div style={{ position: 'absolute', bottom: '40px', left: '-16px', opacity: 0.05, pointerEvents: 'none', transform: 'rotate(-12deg)' }}>
+          <Image src="/assets/bread.png" alt="" width={140} height={140} aria-hidden />
+        </div>
+
+        <div
+          style={{
+            maxWidth: '1100px',
+            margin: '0 auto',
+            paddingTop: '96px',
+            paddingBottom: '96px',
+            paddingLeft: '24px',
+            paddingRight: '24px',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          {/* Header */}
           <FadeUp delay={0}>
-            <div style={{ borderTop: '1px solid rgba(26,46,26,0.08)', paddingTop: '72px' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '16px' }}>
-                Why All Three
-              </p>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(26px, 3vw, 42px)',
-                  color: '#1A2E1A',
-                  lineHeight: 1.15,
-                  marginBottom: '16px',
-                  maxWidth: '600px',
-                }}
-              >
-                Each tool is incomplete without the others.
-              </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.75, marginBottom: '56px', maxWidth: '580px' }}>
-                Most financial apps do one thing. Bread Head is built around a complete cycle — because knowing, tracking, and reflecting don&apos;t work in isolation.
-              </p>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D1A945', marginBottom: '16px' }}>
+              Why All Three
+            </p>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(28px, 3.2vw, 48px)',
+                color: '#F5F0E8',
+                lineHeight: 1.1,
+                marginBottom: '16px',
+                maxWidth: '640px',
+              }}
+            >
+              Each tool is incomplete without the others.
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, maxWidth: '560px', marginBottom: '0' }}>
+              Most financial apps do one thing. Bread Head is built around a complete cycle — because knowing, tracking, and reflecting don&apos;t work in isolation.
+            </p>
+          </FadeUp>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-                {WHY.map((item, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      paddingTop: '32px',
-                      paddingBottom: '32px',
-                      borderTop: '1px solid rgba(26,46,26,0.08)',
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1.6fr',
-                      gap: '48px',
-                      alignItems: 'start',
-                    }}
-                    className="why-row"
-                  >
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '17px', color: '#1A2E1A', lineHeight: 1.4, margin: 0 }}>
-                      {item.lead}
-                    </p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(26,46,26,0.58)', lineHeight: 1.75, margin: 0 }}>
-                      {item.body}
-                    </p>
+          {/* Rows */}
+          <div style={{ marginTop: '64px' }}>
+            {WHY.map((item, i) => (
+              <FadeUp key={i} delay={i * 0.08}>
+                <div
+                  className="why-row"
+                  style={{
+                    paddingTop: '36px',
+                    paddingBottom: '36px',
+                    borderTop: '1px solid rgba(209,169,69,0.18)',
+                    display: 'grid',
+                    gridTemplateColumns: '64px 1fr 1.5fr',
+                    gap: '32px',
+                    alignItems: 'start',
+                  }}
+                >
+                  {/* Number + bread accent */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', paddingTop: '2px' }}>
+                    <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 700, fontSize: '28px', color: '#D1A945', lineHeight: 1 }}>
+                      {item.number}
+                    </span>
+                    <Image src="/assets/bread.png" alt="" width={28} height={28} style={{ opacity: 0.55 }} aria-hidden />
                   </div>
-                ))}
-                <div style={{ paddingTop: '40px', borderTop: '1px solid rgba(26,46,26,0.08)' }}>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: '#1A2E1A', lineHeight: 1.75, maxWidth: '640px', fontWeight: 500 }}>
-                    The loop closes when you have all three. The lessons teach you what to do. The budget tracker shows you what you&apos;re actually doing. The journal helps you understand the gap between them — and close it.
+
+                  {/* Lead */}
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '17px', color: '#F5F0E8', lineHeight: 1.4, margin: 0 }}>
+                    {item.lead}
+                  </p>
+
+                  {/* Body */}
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, margin: 0 }}>
+                    {item.body}
                   </p>
                 </div>
+              </FadeUp>
+            ))}
+
+            {/* Closing */}
+            <FadeUp delay={0.24}>
+              <div
+                style={{
+                  marginTop: '0',
+                  paddingTop: '40px',
+                  paddingBottom: '8px',
+                  borderTop: '1px solid rgba(209,169,69,0.18)',
+                  borderLeft: '3px solid #D1A945',
+                  paddingLeft: '28px',
+                  marginLeft: '96px',
+                }}
+                className="why-closing"
+              >
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: 'rgba(245,240,232,0.80)', lineHeight: 1.8, margin: 0, maxWidth: '660px' }}>
+                  The loop closes when you have all three. The lessons teach you what to do. The budget tracker shows you what you&apos;re actually doing. The journal helps you understand the gap between them — and close it.
+                </p>
               </div>
-            </div>
-          </FadeUp>
+            </FadeUp>
+          </div>
         </div>
       </section>
 
