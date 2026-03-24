@@ -100,22 +100,24 @@ export default function Nav() {
                   App
                 </a>
 
-                {/* Dropdown menu */}
+                {/* Dropdown — flush extension of the nav bar */}
                 <motion.div
-                  animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -6 }}
-                  transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+                  animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -2 }}
+                  transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                   style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 12px)',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: '#FFFFFF',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 32px rgba(26,46,26,0.12), 0 1px 4px rgba(26,46,26,0.06)',
-                    border: '0.5px solid rgba(26,46,26,0.10)',
-                    padding: '6px',
-                    minWidth: '160px',
+                    position: 'fixed',
+                    top: '64px',
+                    left: 0,
+                    right: 0,
+                    background: scrolled ? 'rgba(230,237,217,0.97)' : '#E6EDD9',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    borderBottom: '0.5px solid rgba(26,46,26,0.10)',
                     pointerEvents: appHovered ? 'auto' : 'none',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '4px',
+                    padding: '10px 32px',
                   }}
                 >
                   {APP_SUB_LINKS.map((sub) => (
@@ -123,25 +125,16 @@ export default function Nav() {
                       key={sub.href}
                       href={sub.href}
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
                         fontFamily: 'var(--font-body)',
                         fontWeight: 500,
-                        fontSize: '13.5px',
-                        color: 'rgba(26,46,26,0.70)',
+                        fontSize: '13px',
+                        color: 'rgba(26,46,26,0.65)',
                         textDecoration: 'none',
-                        padding: '9px 14px',
-                        borderRadius: '7px',
-                        transition: 'color 0.14s ease, background 0.14s ease',
+                        padding: '6px 16px',
+                        transition: 'color 0.14s ease',
                       }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#1A2E1A'
-                        e.currentTarget.style.background = 'rgba(26,46,26,0.05)'
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = 'rgba(26,46,26,0.70)'
-                        e.currentTarget.style.background = 'transparent'
-                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = '#1A2E1A' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(26,46,26,0.65)' }}
                     >
                       {sub.label}
                     </a>
