@@ -19,6 +19,7 @@ import Ticker         from '@/components/sections/Ticker'
 import LessonsPreview from '@/components/sections/LessonsPreview'
 import Gamification   from '@/components/sections/Gamification'
 import Journal        from '@/components/sections/Journal'
+import AwardStrip     from '@/components/sections/AwardStrip'
 import Partners       from '@/components/sections/Partners'
 import FinalCTA       from '@/components/sections/FinalCTA'
 import Footer         from '@/app/components/Footer'
@@ -34,6 +35,7 @@ export default function Home() {
       <LessonsPreview />
       <Gamification />
       <Journal />
+      <AwardStrip />
       <Partners />
       <FinalCTA />
       <Footer />

@@ -4,6 +4,7 @@ import FadeUp from '@/app/components/FadeUp'
 
 import Footer from '@/app/components/Footer'
 import AboutCTA from './AboutCTA'
+import CongressionalWin from '@/components/sections/CongressionalWin'
 
 export const metadata: Metadata = {
   title: 'About — Bread Head',
@@ -104,6 +105,9 @@ export default function AboutPage() {
           </FadeUp>
         </div>
       </section>
+
+      {/* ── CONGRESSIONAL WIN ─────────────────────────────────────── */}
+      <CongressionalWin />
 
       {/* ── MISSION ───────────────────────────────────────────────── */}
       <section style={{ background: '#1A2E1A' }}>

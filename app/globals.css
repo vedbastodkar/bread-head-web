@@ -316,6 +316,22 @@ html {
 
   /* ── About page ── */
 
+  /* ── Award strip (homepage) ── */
+  .award-strip-inner {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+
+  /* ── Congressional Win section ── */
+  .congressional-inner {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+  }
+
   /* ── About page ── */
   .about-values-grid {
     grid-template-columns: 1fr !important;
@@ -338,6 +354,11 @@ html {
     box-sizing: border-box !important;
     min-height: 48px !important;
   }
+}
+
+/* ── Congressional Win CTA hover ─────────────────────────────── */
+.congressional-cta:hover {
+  opacity: 0.88 !important;
 }
 
 /* ── Tablet overrides (768px–1023px) ──────────────────────────── */
