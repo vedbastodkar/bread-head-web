@@ -362,6 +362,13 @@ html {
     box-sizing: border-box !important;
     min-height: 48px !important;
   }
+
+  /* ── Features hub page ── */
+  .features-grid { grid-template-columns: 1fr !important; }
+
+  /* ── Budgeting and Journal how-it-works grids ── */
+  .budgeting-how-grid { grid-template-columns: 1fr !important; }
+  .journal-features-grid { grid-template-columns: 1fr !important; }
 }
 
 /* ── Congressional Win CTA hover ─────────────────────────────── */
