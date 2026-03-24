@@ -28,16 +28,46 @@ const APPROACH = [
 ]
 
 const UNITS = [
-  { number: '01', topic: 'Introduction to Personal Finance',  desc: 'How money works, why it matters now, and how to start thinking clearly about your own.' },
-  { number: '02', topic: 'Income and Career Planning',         desc: 'Pay stubs, gross vs. net, hourly vs. salary, and how career decisions shape long-term finances.' },
-  { number: '03', topic: 'Budgeting',                          desc: 'Where your money goes, how to take control of it, and why it doesn\'t have to feel like punishment.' },
-  { number: '04', topic: 'Credit and Loans',                   desc: 'Credit scores, interest rates, student loans, and when debt is actually worth it.' },
-  { number: '05', topic: 'Saving',                             desc: 'Emergency funds, short- and long-term goals, and strategies that work on any income.' },
-  { number: '06', topic: 'Investing',                          desc: 'Compound growth, index funds, Roth IRA, 401k — why starting early beats starting big.' },
-  { number: '07', topic: 'Insurance',                          desc: 'Health, auto, renters, life — what each covers, what it costs, and how to evaluate a plan.' },
-  { number: '08', topic: 'Taxes',                              desc: 'W-2s, 1099s, deductions, credits, how to file for free, and what happens if you don\'t.' },
-  { number: '09', topic: 'Other Topics',                       desc: 'Banking, scams, buying a car, renting an apartment — real decisions you\'ll face sooner than you think.' },
-  { number: '10', topic: 'Next Steps and Reflection',          desc: 'Review what you\'ve learned, set financial goals, and build a plan from here.' },
+  {
+    number: '01', topic: 'Introduction to Personal Finance',
+    lessons: ['What is personal finance?', 'Why does it matter?', 'Start Early', 'What it looks like for you', 'Course Overview'],
+  },
+  {
+    number: '02', topic: 'Income and Career Planning',
+    lessons: ['What is Income?', 'Types of Income', 'Earned vs. Unearned Income', 'Active Income', 'Passive Income', 'Side Hustles', 'Self-Employment', 'Entrepreneurship', 'Jobs vs. Careers', 'Hourly vs. Salary Pay', 'Minimum Wage and Worker Rights', 'How to Read a Pay Stub', 'Employee Benefits', 'Education and Experience', 'Skill Building and Networking', 'Internships & First Jobs', 'Negotiating Pay and Growth'],
+  },
+  {
+    number: '03', topic: 'Budgeting',
+    lessons: ['What is a budget?', 'Why budget?', 'Needs vs. Wants', 'Debt, Savings, and Loans', 'Budgeting Methods', '50/30/20 Rule', 'The Envelope Method', 'Building Your Own Budget', 'Budgeting Tools & Apps', 'Goals, Sticking to It, Adjusting'],
+  },
+  {
+    number: '04', topic: 'Credit and Loans',
+    lessons: ['What is credit?', 'Credit Cards vs. Debit Cards', 'Credit Scores: What, Why, and How', 'Building Credit Safely', 'Interest, APR, and Debt Traps', 'Borrowing Smart', 'Installment Loans', 'How Loans Work', 'Interest and Amortization', 'Loan Terms & Down Payments', 'Principal vs. Interest Payments', 'Renting vs. Buying a Home', 'Mortgages', 'Escrow, APR, and Closing Costs', 'Student Loans', 'FAFSA, Interest, and Repayment Options', 'Buying vs. Leasing a Car', 'Budgeting for Big Purchases', 'Utility Bills, Leases, and Responsibilities'],
+  },
+  {
+    number: '05', topic: 'Saving',
+    lessons: ['Why Save?', 'Emergency Fund vs. Goal-Based Saving', 'How Much to Save', 'Savings Accounts & Interest', 'Compound Interest', 'Saving Habits & Mindset', 'Retirement Savings', '401k and Roth IRA'],
+  },
+  {
+    number: '06', topic: 'Investing',
+    lessons: ['What is Investing?', 'Risk vs. Reward', 'Stocks, Bonds, Index Funds, and ETFs', 'Time Horizon and Compound Growth', 'Diversification', 'Investing Apps and Getting Started'],
+  },
+  {
+    number: '07', topic: 'Insurance',
+    lessons: ['What is Insurance?', 'Why Insurance Matters', 'Health and Life Insurance', 'Auto and Renters Insurance', 'Premiums', 'Deductibles', 'Claims', 'Understanding Policies', 'Disputing Claims', 'When Teens Should Care', 'Auto Loans Require Car Insurance', 'Mortgages Require Homeowners\' Insurance'],
+  },
+  {
+    number: '08', topic: 'Taxes',
+    lessons: ['What Are Taxes and Why Do We Pay Them?', 'Types of Taxes: Income, Sales, Property', 'How Jobs Are Taxed', 'W-2s, 1099s, and Pay Stubs', 'Filing Basics for Teens', 'Deductions, Refunds, and Withholdings'],
+  },
+  {
+    number: '09', topic: 'Other Topics',
+    lessons: ['Banking Basics', 'Avoiding Financial Scams', 'Buying a Car', 'Renting an Apartment', 'Understanding Utility Bills', 'Big Financial Decisions'],
+  },
+  {
+    number: '10', topic: 'Next Steps and Reflection',
+    lessons: ['Putting It All Together', 'Setting Financial Goals', 'Reflection & Action Plan', 'Avoiding Common Mistakes', 'Planning Your Financial Future', 'Where to Go Next: Books, Apps, Mentors'],
+  },
 ]
 
 export default function LessonsPage() {
@@ -281,37 +311,52 @@ export default function LessonsPage() {
                 <div
                   style={{
                     background: '#FFFFFF',
-                    padding: '28px 32px',
-                    display: 'flex',
-                    gap: '20px',
-                    alignItems: 'flex-start',
+                    padding: '32px',
+                    height: '100%',
+                    boxSizing: 'border-box',
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 700,
-                      fontSize: '11px',
-                      letterSpacing: '0.10em',
-                      textTransform: 'uppercase',
-                      color: '#4A5D4A',
-                      background: 'rgba(74,93,74,0.10)',
-                      borderRadius: '100px',
-                      padding: '4px 12px',
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                      marginTop: '2px',
-                    }}
-                  >
-                    {unit.number}
-                  </span>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '15px', color: '#1A2E1A', margin: '0 0 6px', lineHeight: 1.3 }}>
+                  {/* Header row */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 700,
+                        fontSize: '11px',
+                        letterSpacing: '0.10em',
+                        textTransform: 'uppercase',
+                        color: '#4A5D4A',
+                        background: 'rgba(74,93,74,0.10)',
+                        borderRadius: '100px',
+                        padding: '4px 12px',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Unit {unit.number}
+                    </span>
+                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '15px', color: '#1A2E1A', margin: 0, lineHeight: 1.3 }}>
                       {unit.topic}
                     </p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.65, margin: 0 }}>
-                      {unit.desc}
-                    </p>
+                  </div>
+                  {/* Lesson list */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {unit.lessons.map((lesson) => (
+                      <span
+                        key={lesson}
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '12px',
+                          color: 'rgba(26,46,26,0.55)',
+                          background: 'rgba(26,46,26,0.05)',
+                          borderRadius: '6px',
+                          padding: '3px 9px',
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        {lesson}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </FadeUp>
