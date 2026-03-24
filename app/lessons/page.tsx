@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
+import CurriculumAccordion from './CurriculumAccordion'
 
 export const metadata: Metadata = {
   title: 'Lessons — Bread Head',
@@ -26,48 +27,6 @@ const APPROACH = [
   },
 ]
 
-const UNITS = [
-  {
-    number: '01', topic: 'Introduction to Personal Finance',
-    lessons: ['What is personal finance?', 'Why does it matter?', 'Start Early', 'What it looks like for you', 'Course Overview'],
-  },
-  {
-    number: '02', topic: 'Income and Career Planning',
-    lessons: ['What is Income?', 'Types of Income', 'Earned vs. Unearned Income', 'Active Income', 'Passive Income', 'Side Hustles', 'Self-Employment', 'Entrepreneurship', 'Jobs vs. Careers', 'Hourly vs. Salary Pay', 'Minimum Wage and Worker Rights', 'How to Read a Pay Stub', 'Employee Benefits', 'Education and Experience', 'Skill Building and Networking', 'Internships & First Jobs', 'Negotiating Pay and Growth'],
-  },
-  {
-    number: '03', topic: 'Budgeting',
-    lessons: ['What is a budget?', 'Why budget?', 'Needs vs. Wants', 'Debt, Savings, and Loans', 'Budgeting Methods', '50/30/20 Rule', 'The Envelope Method', 'Building Your Own Budget', 'Budgeting Tools & Apps', 'Goals, Sticking to It, Adjusting'],
-  },
-  {
-    number: '04', topic: 'Credit and Loans',
-    lessons: ['What is credit?', 'Credit Cards vs. Debit Cards', 'Credit Scores: What, Why, and How', 'Building Credit Safely', 'Interest, APR, and Debt Traps', 'Borrowing Smart', 'Installment Loans', 'How Loans Work', 'Interest and Amortization', 'Loan Terms & Down Payments', 'Principal vs. Interest Payments', 'Renting vs. Buying a Home', 'Mortgages', 'Escrow, APR, and Closing Costs', 'Student Loans', 'FAFSA, Interest, and Repayment Options', 'Buying vs. Leasing a Car', 'Budgeting for Big Purchases', 'Utility Bills, Leases, and Responsibilities'],
-  },
-  {
-    number: '05', topic: 'Saving',
-    lessons: ['Why Save?', 'Emergency Fund vs. Goal-Based Saving', 'How Much to Save', 'Savings Accounts & Interest', 'Compound Interest', 'Saving Habits & Mindset', 'Retirement Savings', '401k and Roth IRA'],
-  },
-  {
-    number: '06', topic: 'Investing',
-    lessons: ['What is Investing?', 'Risk vs. Reward', 'Stocks, Bonds, Index Funds, and ETFs', 'Time Horizon and Compound Growth', 'Diversification', 'Investing Apps and Getting Started'],
-  },
-  {
-    number: '07', topic: 'Insurance',
-    lessons: ['What is Insurance?', 'Why Insurance Matters', 'Health and Life Insurance', 'Auto and Renters Insurance', 'Premiums', 'Deductibles', 'Claims', 'Understanding Policies', 'Disputing Claims', 'When Teens Should Care', 'Auto Loans Require Car Insurance', 'Mortgages Require Homeowners\' Insurance'],
-  },
-  {
-    number: '08', topic: 'Taxes',
-    lessons: ['What Are Taxes and Why Do We Pay Them?', 'Types of Taxes: Income, Sales, Property', 'How Jobs Are Taxed', 'W-2s, 1099s, and Pay Stubs', 'Filing Basics for Teens', 'Deductions, Refunds, and Withholdings'],
-  },
-  {
-    number: '09', topic: 'Other Topics',
-    lessons: ['Banking Basics', 'Avoiding Financial Scams', 'Buying a Car', 'Renting an Apartment', 'Understanding Utility Bills', 'Big Financial Decisions'],
-  },
-  {
-    number: '10', topic: 'Next Steps and Reflection',
-    lessons: ['Putting It All Together', 'Setting Financial Goals', 'Reflection & Action Plan', 'Avoiding Common Mistakes', 'Planning Your Financial Future', 'Where to Go Next: Books, Apps, Mentors'],
-  },
-]
 
 export default function LessonsPage() {
   return (
@@ -241,9 +200,8 @@ export default function LessonsPage() {
             paddingRight: '24px',
           }}
         >
-          {/* Section header */}
           <FadeUp delay={0}>
-            <div style={{ marginBottom: '64px' }}>
+            <div style={{ marginBottom: '56px' }}>
               <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '14px' }}>
                 Full Curriculum · 10 Units
               </p>
@@ -260,138 +218,12 @@ export default function LessonsPage() {
                 Everything you actually need to know.
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.65 }}>
-                Each unit is 8–15 lessons · 3–5 minutes each · tap through, answer to unlock, understand the why.
+                Tap any unit to see every lesson inside it. Each one is 3–5 minutes — tap through slides, answer to unlock, understand the why.
               </p>
             </div>
           </FadeUp>
 
-          {/* Unit cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {UNITS.map((unit, unitIdx) => (
-              <FadeUp key={unit.number} delay={unitIdx * 0.04}>
-                <div
-                  className="card-border card-hover"
-                  style={{
-                    background: '#FFFFFF',
-                    borderRadius: '20px',
-                    padding: '40px 48px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {/* Ghost number */}
-                  <div
-                    aria-hidden
-                    style={{
-                      position: 'absolute',
-                      right: '32px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      fontFamily: 'var(--font-display)',
-                      fontWeight: 700,
-                      fontSize: '160px',
-                      color: 'rgba(26,46,26,0.04)',
-                      lineHeight: 1,
-                      userSelect: 'none',
-                      pointerEvents: 'none',
-                      letterSpacing: '-0.04em',
-                    }}
-                  >
-                    {unit.number}
-                  </div>
-
-                  {/* Header row */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '6px', flexWrap: 'wrap' }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 700,
-                        fontSize: '11px',
-                        letterSpacing: '0.12em',
-                        textTransform: 'uppercase',
-                        color: '#4A5D4A',
-                        background: 'rgba(74,93,74,0.10)',
-                        borderRadius: '100px',
-                        padding: '5px 14px',
-                        flexShrink: 0,
-                      }}
-                    >
-                      Unit {unit.number}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '12px',
-                        color: 'rgba(26,46,26,0.35)',
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      {unit.lessons.length} lessons
-                    </span>
-                  </div>
-
-                  {/* Unit title */}
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontStyle: 'italic',
-                      fontSize: 'clamp(20px, 2vw, 28px)',
-                      color: '#1A2E1A',
-                      lineHeight: 1.15,
-                      marginBottom: '28px',
-                    }}
-                  >
-                    {unit.topic}
-                  </h3>
-
-                  {/* Divider */}
-                  <div style={{ height: '1px', background: 'rgba(26,46,26,0.08)', marginBottom: '24px' }} />
-
-                  {/* Numbered lesson list */}
-                  <div
-                    className="unit-lessons-grid"
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(3, 1fr)',
-                      gap: '10px 32px',
-                    }}
-                  >
-                    {unit.lessons.map((lesson, lessonIdx) => (
-                      <div
-                        key={lesson}
-                        style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontWeight: 700,
-                            fontSize: '11px',
-                            color: '#4A5D4A',
-                            flexShrink: 0,
-                            minWidth: '18px',
-                            lineHeight: 1.6,
-                          }}
-                        >
-                          {lessonIdx + 1}.
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '13px',
-                            color: 'rgba(26,46,26,0.65)',
-                            lineHeight: 1.55,
-                          }}
-                        >
-                          {lesson}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                </div>
-              </FadeUp>
-            ))}
-          </div>
+          <CurriculumAccordion />
         </div>
       </section>
 
