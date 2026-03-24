@@ -24,7 +24,7 @@ export default function CongressionalWin() {
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(110deg, rgba(7,11,38,0.93) 0%, rgba(7,11,38,0.82) 55%, rgba(7,11,38,0.60) 100%)',
+            'linear-gradient(110deg, rgba(26,46,26,0.93) 0%, rgba(26,46,26,0.82) 55%, rgba(26,46,26,0.60) 100%)',
           zIndex: 1,
         }}
       />
@@ -168,7 +168,7 @@ export default function CongressionalWin() {
                 fontFamily: 'var(--font-body)',
                 fontWeight: 700,
                 fontSize: '15px',
-                color: '#07092A',
+                color: '#1A2E1A',
                 background: '#D4AF5A',
                 padding: '14px 30px',
                 borderRadius: '100px',
