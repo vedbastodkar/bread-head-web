@@ -6,7 +6,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { useScroll, useMotionValueEvent } from 'framer-motion'
+import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
 
 const LINKS = [
   { label: 'About',    href: '/about' },
@@ -14,14 +14,20 @@ const LINKS = [
   { label: 'Partners', href: '/partners' },
 ]
 
+const APP_SUB_LINKS = [
+  { label: 'Lessons',   href: '/lessons' },
+  { label: 'Budgeting', href: '/budgeting' },
+  { label: 'Journal',   href: '/journal' },
+]
+
 export default function Nav() {
   const { scrollY } = useScroll()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [appHovered, setAppHovered] = useState(false)
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
 
-  // Lock body scroll when overlay is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden'
@@ -53,7 +59,7 @@ export default function Nav() {
             : '0.5px solid transparent',
         }}
       >
-        {/* Logo — height 44px, width proportional */}
+        {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
           <Image
             src="/assets/logo_w_text.png"
@@ -66,32 +72,111 @@ export default function Nav() {
           />
         </Link>
 
-        {/* Desktop: Links + CTA — hidden below 768px */}
+        {/* Desktop: Links + CTA */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>
-          {LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 500,
-                fontSize: '14px',
-                letterSpacing: '0.03em',
-                color: 'rgba(26,46,26,0.7)',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-                minHeight: '44px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
-            >
-              {link.label}
-            </a>
-          ))}
+          {LINKS.map((link) =>
+            link.label === 'App' ? (
+              <div
+                key="App"
+                style={{ position: 'relative' }}
+                onMouseEnter={() => setAppHovered(true)}
+                onMouseLeave={() => setAppHovered(false)}
+              >
+                <a
+                  href={link.href}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 500,
+                    fontSize: '14px',
+                    letterSpacing: '0.03em',
+                    color: appHovered ? '#1A2E1A' : 'rgba(26,46,26,0.7)',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s ease',
+                    minHeight: '44px',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  App
+                </a>
 
-          {/* CTA — solid brandGreen */}
+                {/* Dropdown pill */}
+                <motion.div
+                  animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -4 }}
+                  transition={{ duration: 0.16, ease: [0.25, 0.1, 0.25, 1] }}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#FFFFFF',
+                    borderRadius: '100px',
+                    boxShadow: '0 4px 20px rgba(26,46,26,0.12)',
+                    border: '0.5px solid rgba(26,46,26,0.08)',
+                    padding: '5px 6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '2px',
+                    whiteSpace: 'nowrap',
+                    pointerEvents: appHovered ? 'auto' : 'none',
+                  }}
+                >
+                  {APP_SUB_LINKS.map((sub, i) => (
+                    <span key={sub.href} style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                      {i > 0 && (
+                        <span style={{ color: 'rgba(26,46,26,0.18)', fontSize: '10px', padding: '0 2px' }}>·</span>
+                      )}
+                      <a
+                        href={sub.href}
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontWeight: 500,
+                          fontSize: '12px',
+                          color: 'rgba(26,46,26,0.60)',
+                          textDecoration: 'none',
+                          padding: '4px 10px',
+                          borderRadius: '100px',
+                          transition: 'color 0.15s ease, background 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#1A2E1A'
+                          e.currentTarget.style.background = 'rgba(26,46,26,0.05)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = 'rgba(26,46,26,0.60)'
+                          e.currentTarget.style.background = 'transparent'
+                        }}
+                      >
+                        {sub.label}
+                      </a>
+                    </span>
+                  ))}
+                </motion.div>
+              </div>
+            ) : (
+              <a
+                key={link.label}
+                href={link.href}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  letterSpacing: '0.03em',
+                  color: 'rgba(26,46,26,0.7)',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s ease',
+                  minHeight: '44px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
+              >
+                {link.label}
+              </a>
+            )
+          )}
+
           <a
             href="/"
             style={{
@@ -115,7 +200,7 @@ export default function Nav() {
           </a>
         </div>
 
-        {/* Mobile: Hamburger button — shown below 768px */}
+        {/* Mobile: Hamburger */}
         <button
           className="flex md:hidden flex-col items-center justify-center"
           onClick={() => setMenuOpen(true)}
@@ -136,7 +221,7 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Mobile full-screen overlay menu */}
+      {/* Mobile overlay menu */}
       {menuOpen && (
         <div
           style={{
@@ -151,7 +236,6 @@ export default function Nav() {
             padding: '24px',
           }}
         >
-          {/* Close button — top right, 44×44 touch target */}
           <button
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
@@ -175,7 +259,6 @@ export default function Nav() {
             ✕
           </button>
 
-          {/* Nav links + CTA */}
           <nav style={{ width: '100%', maxWidth: '320px' }}>
             {LINKS.map((link) => (
               <a
@@ -200,8 +283,26 @@ export default function Nav() {
                 {link.label}
               </a>
             ))}
+            {/* App sub-links on mobile */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', paddingTop: '12px', paddingBottom: '12px', borderBottom: '0.5px solid rgba(26,46,26,0.1)' }}>
+              {APP_SUB_LINKS.map((sub) => (
+                <a
+                  key={sub.href}
+                  href={sub.href}
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontWeight: 500,
+                    fontSize: '13px',
+                    color: 'rgba(26,46,26,0.50)',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {sub.label}
+                </a>
+              ))}
+            </div>
 
-            {/* Get Early Access CTA */}
             <a
               href="/"
               onClick={() => setMenuOpen(false)}

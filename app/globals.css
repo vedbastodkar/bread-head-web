@@ -369,6 +369,9 @@ html {
   /* ── Budgeting and Journal how-it-works grids ── */
   .budgeting-how-grid { grid-template-columns: 1fr !important; }
   .journal-features-grid { grid-template-columns: 1fr !important; }
+
+  /* ── Features "why all three" rows ── */
+  .why-row { grid-template-columns: 1fr !important; gap: 8px !important; }
 }
 
 /* ── Congressional Win CTA hover ─────────────────────────────── */
