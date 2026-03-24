@@ -100,56 +100,51 @@ export default function Nav() {
                   App
                 </a>
 
-                {/* Dropdown pill */}
+                {/* Dropdown menu */}
                 <motion.div
-                  animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -4 }}
-                  transition={{ duration: 0.16, ease: [0.25, 0.1, 0.25, 1] }}
+                  animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -6 }}
+                  transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
                   style={{
                     position: 'absolute',
-                    top: 'calc(100% + 6px)',
+                    top: 'calc(100% + 12px)',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     background: '#FFFFFF',
-                    borderRadius: '100px',
-                    boxShadow: '0 4px 20px rgba(26,46,26,0.12)',
-                    border: '0.5px solid rgba(26,46,26,0.08)',
-                    padding: '5px 6px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '2px',
-                    whiteSpace: 'nowrap',
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 32px rgba(26,46,26,0.12), 0 1px 4px rgba(26,46,26,0.06)',
+                    border: '0.5px solid rgba(26,46,26,0.10)',
+                    padding: '6px',
+                    minWidth: '160px',
                     pointerEvents: appHovered ? 'auto' : 'none',
                   }}
                 >
-                  {APP_SUB_LINKS.map((sub, i) => (
-                    <span key={sub.href} style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-                      {i > 0 && (
-                        <span style={{ color: 'rgba(26,46,26,0.18)', fontSize: '10px', padding: '0 2px' }}>·</span>
-                      )}
-                      <a
-                        href={sub.href}
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontWeight: 500,
-                          fontSize: '12px',
-                          color: 'rgba(26,46,26,0.60)',
-                          textDecoration: 'none',
-                          padding: '4px 10px',
-                          borderRadius: '100px',
-                          transition: 'color 0.15s ease, background 0.15s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.color = '#1A2E1A'
-                          e.currentTarget.style.background = 'rgba(26,46,26,0.05)'
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.color = 'rgba(26,46,26,0.60)'
-                          e.currentTarget.style.background = 'transparent'
-                        }}
-                      >
-                        {sub.label}
-                      </a>
-                    </span>
+                  {APP_SUB_LINKS.map((sub) => (
+                    <a
+                      key={sub.href}
+                      href={sub.href}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 500,
+                        fontSize: '13.5px',
+                        color: 'rgba(26,46,26,0.70)',
+                        textDecoration: 'none',
+                        padding: '9px 14px',
+                        borderRadius: '7px',
+                        transition: 'color 0.14s ease, background 0.14s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#1A2E1A'
+                        e.currentTarget.style.background = 'rgba(26,46,26,0.05)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'rgba(26,46,26,0.70)'
+                        e.currentTarget.style.background = 'transparent'
+                      }}
+                    >
+                      {sub.label}
+                    </a>
                   ))}
                 </motion.div>
               </div>
