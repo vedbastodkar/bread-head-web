@@ -5,7 +5,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
 
 const LINKS = [
@@ -25,6 +25,10 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [appHovered, setAppHovered] = useState(false)
+  const leaveTimer = useRef<ReturnType<typeof setTimeout>>()
+
+  const showApp = () => { clearTimeout(leaveTimer.current); setAppHovered(true) }
+  const hideApp = () => { leaveTimer.current = setTimeout(() => setAppHovered(false), 80) }
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
 
@@ -79,8 +83,8 @@ export default function Nav() {
               <div
                 key="App"
                 style={{ position: 'relative' }}
-                onMouseEnter={() => setAppHovered(true)}
-                onMouseLeave={() => setAppHovered(false)}
+                onMouseEnter={showApp}
+                onMouseLeave={hideApp}
               >
                 <a
                   href={link.href}
@@ -102,6 +106,8 @@ export default function Nav() {
 
                 {/* Dropdown — flush extension of the nav bar */}
                 <motion.div
+                  onMouseEnter={showApp}
+                  onMouseLeave={hideApp}
                   animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -2 }}
                   transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                   style={{
