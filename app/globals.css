@@ -370,6 +370,7 @@ html {
   .budgeting-how-grid { grid-template-columns: 1fr !important; }
   .budgeting-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .journal-features-grid { grid-template-columns: 1fr !important; }
+  .system-row { grid-template-columns: 1fr !important; gap: 8px !important; }
   .warning-row { grid-template-columns: 1fr !important; gap: 12px !important; }
   .prompt-row { grid-template-columns: 1fr !important; gap: 6px !important; }
 

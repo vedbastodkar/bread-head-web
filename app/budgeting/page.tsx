@@ -205,8 +205,90 @@ export default function BudgetingPage() {
         </div>
       </section>
 
-      {/* ── KEY METRICS ── */}
+      {/* ── THE SYSTEM ── */}
       <section style={{ background: '#E6EDD9' }}>
+        <div
+          style={{
+            maxWidth: '1100px',
+            margin: '0 auto',
+            paddingTop: '80px',
+            paddingBottom: '80px',
+            paddingLeft: '24px',
+            paddingRight: '24px',
+          }}
+        >
+          <FadeUp delay={0}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#4A5D4A', marginBottom: '16px' }}>
+              The System
+            </p>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(26px, 3vw, 42px)',
+                color: '#1A2E1A',
+                lineHeight: 1.15,
+                marginBottom: '16px',
+                maxWidth: '600px',
+              }}
+            >
+              Every dollar has a category. Every category tells a story.
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.75, maxWidth: '560px', marginBottom: '56px' }}>
+              Bread Head is built around three building blocks. Together they give you a complete, live picture of your money every month.
+            </p>
+          </FadeUp>
+
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {[
+              {
+                label: 'Categories',
+                title: 'Your budget, organized the way you live.',
+                body: 'Create spending categories that fit your actual life — Groceries, Rent, Dining, Savings, whatever makes sense to you. Allocate a portion of your income to each. Every category tracks what you put in vs. what you\'ve spent in real time.',
+              },
+              {
+                label: 'Fixed Payments',
+                title: 'Recurring bills committed before you spend a dollar.',
+                body: 'Subscriptions, rent, phone bills — fixed payments live inside categories as committed costs. They\'re deducted at the start of the month so Available Bread always reflects what\'s actually free to spend, not just what you haven\'t touched yet.',
+              },
+              {
+                label: 'Transactions',
+                title: 'Every expense and income, tagged and counted.',
+                body: 'Log a purchase or income in seconds. One modal handles both. Every transaction is tagged to a category and updates your budget and Available Bread instantly — no manual math, no end-of-month surprises.',
+              },
+            ].map((item, i) => (
+              <FadeUp key={item.label} delay={i * 0.08}>
+                <div
+                  className="system-row"
+                  style={{
+                    paddingTop: '32px',
+                    paddingBottom: '32px',
+                    borderTop: '1px solid rgba(26,46,26,0.10)',
+                    display: 'grid',
+                    gridTemplateColumns: '200px 1fr 1.6fr',
+                    gap: '40px',
+                    alignItems: 'start',
+                  }}
+                >
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#4A5D4A', margin: 0, paddingTop: '3px' }}>
+                    {item.label}
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '16px', color: '#1A2E1A', lineHeight: 1.4, margin: 0 }}>
+                    {item.title}
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: 'rgba(26,46,26,0.58)', lineHeight: 1.75, margin: 0 }}>
+                    {item.body}
+                  </p>
+                </div>
+              </FadeUp>
+            ))}
+            <div style={{ borderTop: '1px solid rgba(26,46,26,0.10)' }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── KEY METRICS ── */}
+      <section style={{ background: '#FFFFFF' }}>
         <div
           style={{
             maxWidth: '1100px',
@@ -246,16 +328,17 @@ export default function BudgetingPage() {
                   style={{
                     background: '#FFFFFF',
                     borderRadius: '16px',
-                    padding: '28px 24px',
+                    padding: '28px 24px 32px',
                     height: '100%',
                     boxSizing: 'border-box',
                     border: '1px solid rgba(26,46,26,0.08)',
+                    borderTop: '3px solid #D1A945',
                   }}
                 >
-                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '13px', color: '#1A2E1A', lineHeight: 1.3, marginBottom: '10px' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '15px', color: '#1A2E1A', lineHeight: 1.25, marginBottom: '12px' }}>
                     {m.name}
                   </p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.65, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.7, margin: 0 }}>
                     {m.description}
                   </p>
                 </div>
