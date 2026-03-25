@@ -4,24 +4,43 @@ import Footer from '@/app/components/Footer'
 
 export const metadata: Metadata = {
   title: 'Journal — Bread Head',
-  description: 'Short daily prompts to help you notice your money patterns, understand your habits, and build a healthier relationship with spending.',
+  description: 'Short reflection prompts tied to your real financial activity. Notice your patterns, understand your habits, and build awareness that sticks.',
 }
 
 const FEATURES = [
   {
     number: '01',
-    title: 'Short prompts. Not essays.',
-    body: 'Each journal prompt takes 2–3 minutes. Designed to fit in a break, not carve out a block in your day.',
+    title: 'Tied to your actual activity.',
+    body: 'Journal entries are linked to your real financial data — not generic prompts. What you write connects to what you\'ve been spending, saving, and doing.',
   },
   {
     number: '02',
-    title: 'Notice your patterns.',
-    body: 'See your money emotions and habits over weeks, not just days. Anxiety, impulse, avoidance — patterns you can\'t fix until you can see them.',
+    title: 'Short by design.',
+    body: 'Each prompt takes 2–3 minutes. The goal isn\'t to write essays about money — it\'s to surface one thought, notice one pattern, or name one feeling before it drives a decision.',
   },
   {
     number: '03',
-    title: 'A mirror, not a report card.',
-    body: 'There are no wrong answers. The journal isn\'t grading you — it\'s helping you understand yourself. That\'s the whole point.',
+    title: 'Month in Review.',
+    body: 'At the end of each month, the journal surfaces a summary of your financial activity and prompts you to reflect on the full picture — what worked, what didn\'t, and what to do differently.',
+  },
+]
+
+const PROMPTS = [
+  {
+    prompt: 'You logged three dining transactions this week. How did each one feel — planned, impulsive, or social?',
+    context: 'After a spending pattern surfaces',
+  },
+  {
+    prompt: 'Your savings rate dropped below target this month. What got in the way — an unexpected expense, or a gradual drift?',
+    context: 'After a T2 savings warning',
+  },
+  {
+    prompt: 'You stayed under budget in every category this week. What made that easier than usual?',
+    context: 'After a strong week',
+  },
+  {
+    prompt: 'You allocated everything in your budget this month. How does having every dollar assigned feel compared to before?',
+    context: 'After first full zero-based budget',
   },
 ]
 
@@ -59,10 +78,10 @@ export default function JournalPage() {
               Reflection is the skill schools skip hardest.
             </h1>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px', maxWidth: '520px' }}>
-              You can read every lesson about spending and still blow your paycheck — because habits aren&apos;t built by knowing. They&apos;re built by noticing, pausing, and choosing differently next time.
+              You can know exactly how budgets work, track every dollar you spend, and still keep making the same choices. That&apos;s not a knowledge problem — it&apos;s a reflection problem.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '520px' }}>
-              The Bread Head journal turns that reflection into a daily practice.
+              The Bread Head journal surfaces prompts tied to your real financial activity — not generic advice, but questions based on what you&apos;re actually doing.
             </p>
             <a
               href="/"
@@ -86,7 +105,7 @@ export default function JournalPage() {
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
+      {/* ── HOW IT WORKS ── */}
       <section style={{ background: '#FFFFFF' }}>
         <div
           style={{
@@ -105,8 +124,8 @@ export default function JournalPage() {
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
-                fontWeight: 700,
-                fontSize: 'clamp(26px, 3vw, 40px)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(26px, 3vw, 42px)',
                 color: '#1A2E1A',
                 lineHeight: 1.15,
                 marginBottom: '56px',
@@ -130,10 +149,10 @@ export default function JournalPage() {
                   <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '36px', color: '#D1A945', lineHeight: 1, marginBottom: '16px' }}>
                     {item.number}
                   </p>
-                  <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '18px', color: '#1A2E1A', lineHeight: 1.3, marginBottom: '12px' }}>
+                  <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '17px', color: '#1A2E1A', lineHeight: 1.3, marginBottom: '12px' }}>
                     {item.title}
                   </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(26,46,26,0.60)', lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(26,46,26,0.60)', lineHeight: 1.7, margin: 0 }}>
                     {item.body}
                   </p>
                 </div>
@@ -143,14 +162,77 @@ export default function JournalPage() {
         </div>
       </section>
 
-      {/* ── CLOSING ── */}
+      {/* ── EXAMPLE PROMPTS ── */}
       <section style={{ background: '#1A2E1A' }}>
         <div
           style={{
-            maxWidth: '900px',
+            maxWidth: '1100px',
             margin: '0 auto',
             paddingTop: '96px',
             paddingBottom: '96px',
+            paddingLeft: '24px',
+            paddingRight: '24px',
+          }}
+        >
+          <FadeUp delay={0}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D1A945', marginBottom: '16px' }}>
+              Example Prompts
+            </p>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: 'clamp(26px, 3.2vw, 46px)',
+                color: '#F5F0E8',
+                lineHeight: 1.12,
+                marginBottom: '16px',
+                maxWidth: '600px',
+              }}
+            >
+              Questions that come from your data, not a template.
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, maxWidth: '540px', marginBottom: '64px' }}>
+              Prompts surface based on what&apos;s actually happened in your budget — a pattern, a warning, a good week, or a full month closed out.
+            </p>
+          </FadeUp>
+
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {PROMPTS.map((p, i) => (
+              <FadeUp key={i} delay={i * 0.08}>
+                <div
+                  className="prompt-row"
+                  style={{
+                    paddingTop: '32px',
+                    paddingBottom: '32px',
+                    borderTop: '1px solid rgba(245,240,232,0.08)',
+                    display: 'grid',
+                    gridTemplateColumns: '200px 1fr',
+                    gap: '48px',
+                    alignItems: 'start',
+                  }}
+                >
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.30)', margin: 0, paddingTop: '3px' }}>
+                    {p.context}
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(15px, 1.4vw, 18px)', color: 'rgba(245,240,232,0.80)', lineHeight: 1.6, margin: 0 }}>
+                    &ldquo;{p.prompt}&rdquo;
+                  </p>
+                </div>
+              </FadeUp>
+            ))}
+            <div style={{ borderTop: '1px solid rgba(245,240,232,0.08)' }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section style={{ background: '#E6EDD9' }}>
+        <div
+          style={{
+            maxWidth: '600px',
+            margin: '0 auto',
+            paddingTop: '80px',
+            paddingBottom: '80px',
             paddingLeft: '24px',
             paddingRight: '24px',
             textAlign: 'center',
@@ -161,15 +243,15 @@ export default function JournalPage() {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontStyle: 'italic',
-                fontSize: 'clamp(26px, 3.5vw, 44px)',
-                color: '#E6EDD9',
+                fontSize: 'clamp(26px, 3.5vw, 40px)',
+                color: '#1A2E1A',
                 lineHeight: 1.2,
-                marginBottom: '20px',
+                marginBottom: '16px',
               }}
             >
               Your money story, in your own words.
             </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(230,237,217,0.60)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '520px', margin: '0 auto 40px' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.7, marginBottom: '36px' }}>
               The journal doesn&apos;t track your net worth. It tracks how you think and feel about money — which is where every financial decision actually starts.
             </p>
             <a
@@ -181,8 +263,8 @@ export default function JournalPage() {
                 fontFamily: 'var(--font-body)',
                 fontWeight: 700,
                 fontSize: '15px',
-                color: '#1A2E1A',
-                background: '#D1A945',
+                color: '#E6EDD9',
+                background: '#4A5D4A',
                 padding: '14px 32px',
                 borderRadius: '100px',
                 textDecoration: 'none',
