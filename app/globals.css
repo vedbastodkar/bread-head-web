@@ -402,6 +402,24 @@ html {
   }
 }
 
+/* ── Footer social icon ── */
+.footer-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(230, 237, 217, 0.10);
+  color: rgba(230, 237, 217, 0.55);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.footer-social-icon:hover {
+  background: rgba(230, 237, 217, 0.18);
+  color: rgba(230, 237, 217, 0.90);
+}
+
 /* ── Partners mobile grid — 1 col below 480px ── */
 @media (max-width: 479px) {
   .partners-mobile-grid {

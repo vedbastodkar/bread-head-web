@@ -27,8 +27,9 @@ export default function Nav() {
   const [appHovered, setAppHovered] = useState(false)
   const leaveTimer = useRef<ReturnType<typeof setTimeout>>()
 
-  const showApp = () => { clearTimeout(leaveTimer.current); setAppHovered(true) }
-  const hideApp = () => { leaveTimer.current = setTimeout(() => setAppHovered(false), 80) }
+  const showApp    = () => { clearTimeout(leaveTimer.current); setAppHovered(true) }
+  const cancelHide = () => { clearTimeout(leaveTimer.current) }
+  const hideApp    = () => { leaveTimer.current = setTimeout(() => setAppHovered(false), 150) }
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
 
@@ -44,6 +45,8 @@ export default function Nav() {
   return (
     <>
       <nav
+        onMouseLeave={hideApp}
+        onMouseEnter={cancelHide}
         style={{
           position: 'fixed',
           top: 0,
@@ -84,7 +87,6 @@ export default function Nav() {
                 key="App"
                 style={{ position: 'relative' }}
                 onMouseEnter={showApp}
-                onMouseLeave={hideApp}
               >
                 <a
                   href={link.href}
@@ -106,13 +108,13 @@ export default function Nav() {
 
                 {/* Dropdown — flush extension of the nav bar */}
                 <motion.div
-                  onMouseEnter={showApp}
+                  onMouseEnter={cancelHide}
                   onMouseLeave={hideApp}
                   animate={{ opacity: appHovered ? 1 : 0, y: appHovered ? 0 : -2 }}
                   transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                   style={{
                     position: 'fixed',
-                    top: '84px',
+                    top: '92px',
                     left: 0,
                     right: 0,
                     background: 'rgba(230,237,217,0.97)',

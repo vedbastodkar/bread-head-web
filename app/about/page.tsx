@@ -334,11 +334,13 @@ export default function AboutPage() {
                     marginBottom: '16px',
                   }}
                 >
-                  I built Bread Head because I got to the end of high school and
-                  realized I had no idea how any of it worked — taxes, credit,
-                  rent, insurance. The frustration wasn&apos;t that the information
-                  was hard to find. It was that no one had ever thought to teach
-                  it.
+                  I&apos;m still in high school, and what I kept running into was
+                  that the resources out there for teens just aren&apos;t put together
+                  right. Some tools have budgeting but no lessons behind them —
+                  so what&apos;s the point? Others have content but skip journaling
+                  entirely, which is always the first thing to get cut. The
+                  individual pieces exist. Nobody had combined them in a way that
+                  actually works.
                 </p>
                 <p
                   style={{
@@ -365,10 +367,14 @@ export default function AboutPage() {
                     marginBottom: 0,
                   }}
                 >
-                  The goal is a world where every teenager — regardless of
-                  where they grew up or what their parents knew — graduates
-                  with the financial foundation to make real decisions. We&apos;re
-                  nowhere near there yet. That&apos;s why this exists.
+                  The thing with teens is that we have to drive the change
+                  ourselves. That&apos;s why Bread Head is built around
+                  self-reflection — not to check a box, but because it&apos;s
+                  how you actually figure out what you need to do. It&apos;s
+                  not connected to parents like most financial apps. There&apos;s
+                  no one watching over your shoulder to tell you what to do or
+                  get upset instead of actually helping you reflect. It&apos;s
+                  just you, looking at your own habits honestly.
                 </p>
               </div>
             </div>

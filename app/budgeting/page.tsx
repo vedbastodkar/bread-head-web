@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 
@@ -244,17 +245,32 @@ export default function BudgetingPage() {
               {
                 label: 'Categories',
                 title: 'Your budget, organized the way you live.',
-                body: 'Create spending categories that fit your actual life — Groceries, Rent, Dining, Savings, whatever makes sense to you. Allocate a portion of your income to each. Every category tracks what you put in vs. what you\'ve spent in real time.',
+                bullets: [
+                  'Create categories that fit your life — Groceries, Rent, Dining, Savings',
+                  'Allocate a portion of monthly income to each',
+                  'Track allocated amount vs. actual spending in real time',
+                  'Archive categories you\'re not using without losing history',
+                ],
               },
               {
                 label: 'Fixed Payments',
                 title: 'Recurring bills committed before you spend a dollar.',
-                body: 'Subscriptions, rent, phone bills — fixed payments live inside categories as committed costs. They\'re deducted at the start of the month so Available Bread always reflects what\'s actually free to spend, not just what you haven\'t touched yet.',
+                bullets: [
+                  'Add subscriptions, rent, phone bills as fixed payments inside a category',
+                  'Committed at the start of the month before discretionary spending',
+                  'Available Bread always reflects what\'s actually free — not just unspent',
+                  'High fixed payment ratio triggers a Significant (T2) warning',
+                ],
               },
               {
                 label: 'Transactions',
                 title: 'Every expense and income, tagged and counted.',
-                body: 'Log a purchase or income in seconds. One modal handles both. Every transaction is tagged to a category and updates your budget and Available Bread instantly — no manual math, no end-of-month surprises.',
+                bullets: [
+                  'Log an expense or income with one tap — one modal handles both',
+                  'Every transaction is tagged to a category',
+                  'Budget and Available Bread update instantly on save',
+                  'Transactions feed the Insights Engine for trend analysis',
+                ],
               },
             ].map((item, i) => (
               <FadeUp key={item.label} delay={i * 0.08}>
@@ -276,9 +292,14 @@ export default function BudgetingPage() {
                   <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '16px', color: '#1A2E1A', lineHeight: 1.4, margin: 0 }}>
                     {item.title}
                   </p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: 'rgba(26,46,26,0.58)', lineHeight: 1.75, margin: 0 }}>
-                    {item.body}
-                  </p>
+                  <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {item.bullets.map((b) => (
+                      <li key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                        <span style={{ color: '#D1A945', fontSize: '13px', lineHeight: '22px', flexShrink: 0 }}>—</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(26,46,26,0.60)', lineHeight: 1.6 }}>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </FadeUp>
             ))}
@@ -335,6 +356,7 @@ export default function BudgetingPage() {
                     borderTop: '3px solid #D1A945',
                   }}
                 >
+                  <Image src="/assets/bread.png" alt="" width={36} height={36} style={{ marginBottom: '16px', opacity: 0.75 }} aria-hidden />
                   <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '15px', color: '#1A2E1A', lineHeight: 1.25, marginBottom: '12px' }}>
                     {m.name}
                   </p>
