@@ -402,6 +402,20 @@ html {
   }
 }
 
+/* ── Footer legal bar ── */
+.footer-legal-link {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  color: #4A5D4A;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+.footer-legal-link:hover {
+  color: #6a8a6a;
+}
+
 /* ── Footer social icon ── */
 .footer-social-icon {
   display: flex;
