@@ -91,18 +91,6 @@ export default function Footer() {
           gap: '10px',
         }}
       >
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontWeight: 400,
-            fontSize: '12px',
-            color: 'rgba(230,237,217,0.28)',
-            margin: 0,
-          }}
-        >
-          © 2026 Bread Head
-        </p>
-
         <div style={{ display: 'flex', gap: '24px' }}>
           <Link
             href="/privacy-notice"
