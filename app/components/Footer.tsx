@@ -1,71 +1,46 @@
-// Footer — dark bg bleeds from Final CTA.
-
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Footer() {
   return (
     <footer style={{ background: '#1A2E1A' }}>
-      {/* Centered bread icon mark */}
-      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '32px' }}>
-        <Image src="/assets/icon_clear.png" alt="" width={22} height={22} style={{ opacity: 0.28 }} />
-      </div>
-
-      {/* Main footer row — logo + nav */}
       <div
         className="footer-inner"
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '16px 48px 28px',
+          padding: '32px 48px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '12px',
+          gap: '16px',
         }}
       >
-        <span
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
-            fontWeight: 400,
-            fontSize: '16px',
-            color: 'rgba(230,237,217,0.50)',
-          }}
-        >
-          Bread Head
-        </span>
+        {/* Left — icon + wordmark */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Image
+            src="/assets/icon_clear.png"
+            alt=""
+            width={28}
+            height={28}
+            style={{ opacity: 0.45 }}
+          />
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: '20px',
+              color: 'rgba(230,237,217,0.55)',
+            }}
+          >
+            Bread Head
+          </span>
+        </div>
 
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontWeight: 400,
-            fontSize: '13px',
-            color: 'rgba(230,237,217,0.38)',
-            margin: 0,
-          }}
-        >
-          About · Blog · Partners · Contact
-        </p>
-      </div>
-
-      {/* Combined bottom bar — social + legal */}
-      <div style={{ borderTop: '1px solid rgba(230,237,217,0.10)' }}>
-        <div
-          className="footer-bottom-inner"
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '28px 48px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '20px',
-          }}
-        >
-          {/* Instagram */}
+        {/* Right — Instagram + Privacy Notice */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
           <a
             href="https://www.instagram.com/breadhead_mn/"
             target="_blank"
@@ -89,15 +64,9 @@ export default function Footer() {
             </svg>
           </a>
 
-          {/* Legal links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
-            <Link href="/privacy-notice" className="footer-legal-link">
-              Privacy Notice
-            </Link>
-            <Link href="/privacy-notice#terms" className="footer-legal-link">
-              Terms of Use
-            </Link>
-          </div>
+          <Link href="/privacy-notice" className="footer-legal-link">
+            Privacy Notice
+          </Link>
         </div>
       </div>
     </footer>
