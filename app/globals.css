@@ -251,6 +251,12 @@ html {
     gap: 16px !important;
     padding: 32px 24px !important;
   }
+  .footer-bottom-inner {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px !important;
+    padding: 24px !important;
+  }
 
   /* ── Achievements grid ── */
   .achievements-grid {
@@ -406,14 +412,14 @@ html {
 .footer-legal-link {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 15px;
   color: #4A5D4A;
   text-decoration: none;
   letter-spacing: 0.01em;
   transition: color 0.2s;
 }
 .footer-legal-link:hover {
-  color: #6a8a6a;
+  color: #7aA07a;
 }
 
 /* ── Footer social icon ── */
