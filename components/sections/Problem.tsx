@@ -72,6 +72,41 @@ export default function Problem() {
           </div>
         </div>
 
+        {/* Mission tile */}
+        <div
+          className="mt-10 rounded-2xl px-8 py-10"
+          style={{ background: '#4A5D4A', maxWidth: '680px' }}
+        >
+          <p
+            className="font-body font-semibold uppercase tracking-[0.13em]"
+            style={{ fontSize: '11px', color: 'rgba(209,169,69,0.75)', marginBottom: '16px' }}
+          >
+            Our Mission
+          </p>
+          <p
+            className="font-display"
+            style={{
+              fontStyle: 'italic',
+              fontSize: 'clamp(20px, 2.5vw, 28px)',
+              color: '#D1A945',
+              lineHeight: 1.35,
+              marginBottom: '28px',
+            }}
+          >
+            Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth — so they can take control of their future no matter where they&apos;re starting from.
+          </p>
+          <a
+            href="/about"
+            className="inline-flex items-center gap-2 font-body font-medium"
+            style={{ fontSize: '14px', color: 'rgba(230,237,217,0.70)', textDecoration: 'none' }}
+          >
+            See more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
       </div>
     </section>
   )
