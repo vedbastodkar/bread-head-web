@@ -138,28 +138,8 @@ export default function AboutPage() {
                 marginBottom: 0,
               }}
             >
-              Financial literacy isn&apos;t a privilege.
-              <br />
-              It&apos;s a right. And right now,
-              <br />
-              most teenagers don&apos;t have it.
+              Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth — so they can take control of their future no matter where they&apos;re starting from.
             </h2>
-
-            {/* Supporting copy */}
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 400,
-                fontSize: '16px',
-                color: 'rgba(230,237,217,0.65)',
-                lineHeight: 1.7,
-                marginTop: '32px',
-                marginBottom: 0,
-              }}
-            >
-              We&apos;re closing the gap between what schools teach and what life
-              actually requires — one 5-minute lesson at a time.
-            </p>
           </FadeUp>
         </div>
       </section>
