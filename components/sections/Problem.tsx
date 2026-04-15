@@ -1,9 +1,6 @@
 // ── §2 Problem ──────────────────────────────────────────────────
-// bg: white (#FFFFFF)
-// Pass 3: WordReveal replaces h2 + data-reveal block
-// Stat: Playfair 700 48px
+// bg: white (#FFFFFF), followed by full-width bgSage mission strip
 
-import Image from 'next/image'
 import WordReveal from '@/app/components/WordReveal'
 
 export default function Problem() {
@@ -18,7 +15,7 @@ export default function Problem() {
           </p>
         </div>
 
-        {/* H2 — DM Sans 700, not Playfair */}
+        {/* H2 */}
         <h2
           className="font-body font-bold text-textTitle tracking-[-0.02em] leading-[1.08] mb-5 max-w-2xl"
           style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}
@@ -26,7 +23,7 @@ export default function Problem() {
           Schools teach algebra.
         </h2>
 
-        {/* WordReveal — sub-lines only, no headlineIndex */}
+        {/* WordReveal */}
         <div className="max-w-3xl mb-6">
           <WordReveal
             lines={[
@@ -42,12 +39,8 @@ export default function Problem() {
           className="mt-8 pt-6 flex flex-col md:flex-row md:items-start gap-8 max-w-2xl"
           style={{ borderTop: '0.5px solid rgba(26,46,26,0.12)' }}
         >
-          {/* Stat — big number + label */}
           <div className="shrink-0">
-            <p
-              className="font-display font-bold text-textTitle leading-none"
-              style={{ fontSize: '48px' }}
-            >
+            <p className="font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }}>
               21
             </p>
             <p className="font-body text-[13px] max-md:text-[14px] mt-2 leading-snug max-w-[140px] max-md:max-w-none"
@@ -56,12 +49,10 @@ export default function Problem() {
             </p>
           </div>
 
-          <div className="w-px self-stretch hidden md:block"
-               style={{ background: 'rgba(26,46,26,0.10)' }} />
+          <div className="w-px self-stretch hidden md:block" style={{ background: 'rgba(26,46,26,0.10)' }} />
 
           <div className="pt-1">
-            <p className="font-body text-[15px] leading-[1.7]"
-               style={{ color: 'rgba(26,46,26,0.65)' }}>
+            <p className="font-body text-[15px] leading-[1.7]" style={{ color: 'rgba(26,46,26,0.65)' }}>
               Even the states that do rarely go beyond a checkbox. A semester of
               theory doesn&apos;t build awareness of your own habits, your own
               patterns, or what your choices are actually costing you.
@@ -70,8 +61,6 @@ export default function Problem() {
               Bread Head closes the gap.
             </p>
           </div>
-        </div>
-
         </div>
 
       </div>
