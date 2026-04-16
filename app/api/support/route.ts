@@ -12,6 +12,15 @@ const SUBJECT_LABELS: Record<string, string> = {
   other: 'Other',
 }
 
+function escHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 function supportHtml(fields: {
   name: string
   email: string
@@ -19,7 +28,7 @@ function supportHtml(fields: {
   message: string
 }) {
   const { name, email, subject, message } = fields
-  const subjectLabel = SUBJECT_LABELS[subject] ?? subject
+  const subjectLabel = escHtml(SUBJECT_LABELS[subject] ?? subject)
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -46,13 +55,13 @@ function supportHtml(fields: {
           <tr>
             <td style="padding:32px 36px;">
               <p style="margin:0 0 24px;font-size:15px;color:#1A2E1A;line-height:1.6;">
-                You have a new message from <strong>${name}</strong>.
+                You have a new message from <strong>${escHtml(name)}</strong>.
               </p>
 
               <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid rgba(26,46,26,0.1);border-radius:8px;overflow:hidden;margin-bottom:24px;">
                 ${[
-                  ['Name', name],
-                  ['Email', email],
+                  ['Name', escHtml(name)],
+                  ['Email', escHtml(email)],
                   ['Subject', subjectLabel],
                 ].map(([label, value], i) => `
                 <tr style="background:${i % 2 === 0 ? '#fafaf8' : '#ffffff'};">
@@ -62,12 +71,12 @@ function supportHtml(fields: {
               </table>
 
               <p style="margin:0 0 8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(26,46,26,0.45);">Message</p>
-              <div style="background:#f5f5f0;border-radius:8px;padding:16px;font-size:14px;color:#1A2E1A;line-height:1.7;white-space:pre-wrap;">${message || '—'}</div>
+              <div style="background:#f5f5f0;border-radius:8px;padding:16px;font-size:14px;color:#1A2E1A;line-height:1.7;white-space:pre-wrap;">${escHtml(message || '—')}</div>
 
               <table cellpadding="0" cellspacing="0" style="margin-top:28px;">
                 <tr>
                   <td style="background:#1A2E1A;border-radius:100px;padding:12px 24px;">
-                    <a href="mailto:${email}" style="color:#E6EDD9;font-size:14px;font-weight:600;text-decoration:none;">Reply to ${name} →</a>
+                    <a href="mailto:${escHtml(email)}" style="color:#E6EDD9;font-size:14px;font-weight:600;text-decoration:none;">Reply to ${escHtml(name)} →</a>
                   </td>
                 </tr>
               </table>
@@ -93,6 +102,10 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY)
   const data = await req.json()
   const { name, email, subject, message } = data
+
+  if (!name || !email || !subject) {
+    return NextResponse.json({ ok: false, error: 'Missing required fields' }, { status: 400 })
+  }
 
   const subjectLabel = SUBJECT_LABELS[subject] ?? 'Inquiry'
 
