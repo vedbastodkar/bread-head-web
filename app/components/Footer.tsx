@@ -39,8 +39,8 @@ export default function Footer() {
           </span>
         </div>
 
-        {/* Right — Instagram + Privacy Notice */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+        {/* Right — Instagram + Support + Privacy Notice + copyright */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '28px', flexWrap: 'wrap' }}>
           <a
             href="https://www.instagram.com/breadhead_mn/"
             target="_blank"
@@ -64,9 +64,24 @@ export default function Footer() {
             </svg>
           </a>
 
+          <Link href="/support" className="footer-legal-link">
+            Support
+          </Link>
+
           <Link href="/privacy-notice" className="footer-legal-link">
             Privacy Notice
           </Link>
+
+          <span
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontWeight: 400,
+              fontSize: '12px',
+              color: 'rgba(230,237,217,0.3)',
+            }}
+          >
+            © 2026 Bread Head
+          </span>
         </div>
       </div>
     </footer>
