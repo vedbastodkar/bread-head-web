@@ -112,7 +112,7 @@ export default function Hero() {
             <FadeUp delay={0.35}>
               <MagneticButton>
                 <a
-                  href="#"
+                  href="https://apps.apple.com/us/app/bread-head-app/id6762026967"
                   className="hero-cta inline-flex items-center gap-2 font-body font-semibold rounded-full touch-cta"
                   style={{
                     background: '#4A5D4A',
@@ -122,7 +122,7 @@ export default function Hero() {
                     textDecoration: 'none',
                   }}
                 >
-                  Start Learning Free →
+                  Download on the app store today →
                 </a>
               </MagneticButton>
               <p
