@@ -176,7 +176,7 @@ export default function Nav() {
           )}
 
           <a
-            href="/"
+            href="https://apps.apple.com/us/app/bread-head-app/id6762026967"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
@@ -194,7 +194,7 @@ export default function Nav() {
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Get Early Access
+            Download on App Store
           </a>
         </div>
 
@@ -302,7 +302,7 @@ export default function Nav() {
             </div>
 
             <a
-              href="/"
+              href="https://apps.apple.com/us/app/bread-head-app/id6762026967"
               onClick={() => setMenuOpen(false)}
               style={{
                 display: 'flex',
@@ -323,7 +323,7 @@ export default function Nav() {
                 boxSizing: 'border-box',
               }}
             >
-              Get Early Access
+              Download on App Store
             </a>
           </nav>
         </div>
