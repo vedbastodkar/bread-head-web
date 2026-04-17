@@ -30,7 +30,7 @@ export default function AboutCTA() {
       </Link>
 
       <Link
-        href="/"
+        href="https://apps.apple.com/us/app/bread-head-app/id6762026967"
         style={{
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
@@ -47,7 +47,7 @@ export default function AboutCTA() {
         onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(74,93,74,0.16)')}
         onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(74,93,74,0.10)')}
       >
-        Get Early Access
+        Download on App Store
       </Link>
     </div>
   )
