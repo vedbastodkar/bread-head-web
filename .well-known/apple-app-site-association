@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [{
+      "appIDs": ["R3V2J6N739.com.bastodkarved.Diginotes"],
+      "components": [
+        { "/": "/diginotesweb/invite/*" }
+      ]
+    }]
+  }
+}
