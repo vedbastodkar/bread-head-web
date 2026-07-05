@@ -22,10 +22,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Not a teacher account' }, { status: 403 })
   }
 
-  const classesSnap = await adminDb.collection('classes').where('teacherId', '==', decoded.uid).get()
+  // Owner (teacherId) OR co-teacher (teacherIds array). Two queries, deduped —
+  // back-compatible with classes that predate the teacherIds field.
+  const [ownedSnap, coSnap] = await Promise.all([
+    adminDb.collection('classes').where('teacherId', '==', decoded.uid).get(),
+    adminDb.collection('classes').where('teacherIds', 'array-contains', decoded.uid).get(),
+  ])
+  const byId = new Map<string, (typeof ownedSnap.docs)[number]>()
+  for (const d of [...ownedSnap.docs, ...coSnap.docs]) byId.set(d.id, d)
 
   const classes = await Promise.all(
-    classesSnap.docs.map(async (cls) => {
+    Array.from(byId.values()).map(async (cls) => {
       const rosterSnap = await cls.ref.collection('roster').get()
       const assignSnap = await cls.ref.collection('assignments').get()
       const assignments = assignSnap.docs.map((a) => {

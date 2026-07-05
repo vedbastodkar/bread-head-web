@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   }
 
   const ref = await adminDb.collection('classes').add({
-    name, teacherId: teacher.uid, grade, joinCode,
+    name, teacherId: teacher.uid, teacherIds: [teacher.uid], grade, joinCode,
     archived: false, createdAt: FieldValue.serverTimestamp(),
   })
   return NextResponse.json({ id: ref.id, name, joinCode, grade, archived: false })

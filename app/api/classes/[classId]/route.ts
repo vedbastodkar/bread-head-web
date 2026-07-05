@@ -5,18 +5,26 @@ import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
+// Any teacher on the class (owner or co-teacher).
+async function memberClass(uid: string, classId: string) {
+  const doc = await adminDb.collection('classes').doc(classId).get()
+  if (!doc.exists) return null
+  const ids: string[] = doc.get('teacherIds') ?? (doc.get('teacherId') ? [doc.get('teacherId')] : [])
+  return ids.includes(uid) ? doc : null
+}
+
+// The class owner only (co-teachers excluded).
 async function ownsClass(uid: string, classId: string) {
   const doc = await adminDb.collection('classes').doc(classId).get()
   if (!doc.exists) return null
-  if (doc.get('teacherId') !== uid) return null
-  return doc
+  return doc.get('teacherId') === uid ? doc : null
 }
 
 // PATCH /api/classes/[classId]  { name?, grade?, archived? }
 export async function PATCH(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  if (!(await ownsClass(teacher.uid, params.classId)))
+  if (!(await memberClass(teacher.uid, params.classId)))
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await req.json().catch(() => ({}))

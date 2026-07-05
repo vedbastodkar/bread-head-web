@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
   const cls = q.docs[0]
   const cid = cls.id
   const teacherId = cls.get('teacherId') as string | undefined
+  const teacherIds: string[] = cls.get('teacherIds') ?? (teacherId ? [teacherId] : [])
   const userRef = adminDb.collection('users').doc(u.uid)
   const name = ((await userRef.get()).get('profile.name') as string) ?? 'Student'
 
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
   )
   await userRef.update({
     'profile.classIds': FieldValue.arrayUnion(cid),
-    ...(teacherId ? { 'profile.teacherIds': FieldValue.arrayUnion(teacherId) } : {}),
+    ...(teacherIds.length ? { 'profile.teacherIds': FieldValue.arrayUnion(...teacherIds) } : {}),
   })
 
   return NextResponse.json({ ok: true, id: cid, name: cls.get('name') ?? cid })

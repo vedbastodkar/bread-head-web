@@ -23,7 +23,11 @@ export async function POST(req: NextRequest) {
     adminDb.collection('classes').doc(toClassId).get(),
   ])
   if (!fromDoc.exists || !toDoc.exists) return NextResponse.json({ error: 'Class not found' }, { status: 404 })
-  if (fromDoc.get('teacherId') !== teacher.uid || toDoc.get('teacherId') !== teacher.uid)
+  const isMember = (doc: typeof fromDoc) => {
+    const ids: string[] = doc.get('teacherIds') ?? (doc.get('teacherId') ? [doc.get('teacherId')] : [])
+    return ids.includes(teacher.uid)
+  }
+  if (!isMember(fromDoc) || !isMember(toDoc))
     return NextResponse.json({ error: 'Not your class' }, { status: 403 })
 
   const fromRoster = fromDoc.ref.collection('roster').doc(studentUid)
