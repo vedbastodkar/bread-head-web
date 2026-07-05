@@ -62,6 +62,13 @@ export default function LessonPage() {
       if (!isTeacher && t) {
         const id = `unit${t.unit}lesson${t.lesson}`
         if (lessonState(id, done, frontier) === 'locked') t = nextLesson(done)
+        // Still locked (e.g. caught up to the release frontier) → clamp to the
+        // last released lesson so we never drop a student into a locked lesson.
+        const idx = LESSON_ORDER.indexOf(`unit${t!.unit}lesson${t!.lesson}`)
+        if (idx > frontier && frontier >= 0 && frontier < LESSON_ORDER.length) {
+          const m = LESSON_ORDER[frontier].match(/^unit(\d+)lesson(\d+)$/)
+          if (m) t = { unit: Number(m[1]), lesson: Number(m[2]) }
+        }
       }
       const id = `unit${t!.unit}lesson${t!.lesson}`
       setInitialSlide(done.has(id) ? 0 : (slideMap[id] ?? 0)) // resume unless already completed
