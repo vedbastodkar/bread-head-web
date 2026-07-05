@@ -51,6 +51,8 @@ export async function fetchStudentClasses(classIds: string[]): Promise<ClassLite
       asnap.forEach((a) => {
         const ad = a.data() as any
         assignments.push({
+          id: a.id,
+          dueDate: ad.dueDate ?? null,
           lessonIds: ad.lessonIds ?? [],
           scope: ad.scope === 'students' ? 'students' : 'class',
           studentUids: ad.studentUids ?? [],
@@ -91,9 +93,9 @@ export function useStudent() {
           classesLite[i].assignments.forEach((a, j) => {
             const applies = a.scope === 'class' || a.studentUids.includes(user.uid)
             if (applies) assignments.push({
-              id: `${cid}:${j}`,
+              id: a.id ?? `${cid}:${j}`,
               lessonIds: a.lessonIds,
-              dueDate: null,
+              dueDate: a.dueDate ?? null,
               scope: a.scope,
               studentUids: a.studentUids,
               controls: a.controls,

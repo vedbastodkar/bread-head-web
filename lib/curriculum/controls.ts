@@ -26,8 +26,11 @@ export interface ClassPacing {
   throughLesson: number
 }
 
-// Minimal per-assignment shape the resolvers need.
+// Minimal per-assignment shape the resolvers need. `id`/`dueDate` aren't used by
+// the resolvers but ride along so callers can surface assignment metadata.
 export interface AssignmentLite {
+  id?: string
+  dueDate?: string | null
   lessonIds: string[]
   scope: 'class' | 'students'
   studentUids: string[]
