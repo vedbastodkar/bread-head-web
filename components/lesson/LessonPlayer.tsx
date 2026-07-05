@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Lesson, Slide } from '@/lib/curriculum/slideTypes'
 import { isInteractive } from '@/lib/curriculum/slideTypes'
 import { sfEmoji } from '@/lib/sfIcon'
+import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
 
 // Mirrors LessonLogic: slideIndex + completedSlides; interactive slides gate next().
 export function LessonPlayer({
@@ -12,6 +13,7 @@ export function LessonPlayer({
   onNext,
   initialSlide = 0,
   onSlideChange,
+  controls = DEFAULT_CONTROLS,
 }: {
   lesson: Lesson
   onExit?: () => void
@@ -19,6 +21,7 @@ export function LessonPlayer({
   onNext?: () => void          // provided → "Next lesson" button on completion
   initialSlide?: number        // resume from a saved slide
   onSlideChange?: (index: number) => void
+  controls?: LessonControls    // teacher-set enforcement (pacing lives upstream)
 }) {
   const total = lesson.slides.length
   const start = Math.min(Math.max(initialSlide, 0), total - 1)
@@ -28,14 +31,28 @@ export function LessonPlayer({
   const [done, setDone] = useState(false)
   const [reporting, setReporting] = useState(false)
 
+  const [elapsed, setElapsed] = useState(0)
+
   const slide = lesson.slides[index]
   const isLast = index === total - 1
-  const gated = isInteractive(slide) && !completed.has(index)
+  const requireCorrect = controls.lockUntilCorrect
+  const answerGated = isInteractive(slide) && !completed.has(index)
+  const timeLeft = Math.max(0, controls.minSecondsPerSlide - elapsed)
+  const timeGated = timeLeft > 0
+  const gated = answerGated || timeGated
 
   useEffect(() => {
     setMaxReached((m) => Math.max(m, index))
     onSlideChange?.(index)
   }, [index, onSlideChange])
+
+  // Minimum-time-per-slide dwell timer: reset on slide change, tick each second.
+  useEffect(() => {
+    setElapsed(0)
+    if (controls.minSecondsPerSlide <= 0) return
+    const t = setInterval(() => setElapsed((e) => e + 1), 1000)
+    return () => clearInterval(t)
+  }, [index, controls.minSecondsPerSlide])
 
   const markCurrentComplete = useCallback(() => {
     setCompleted((prev) => { const n = new Set(prev); n.add(index); return n })
@@ -103,7 +120,7 @@ export function LessonPlayer({
       {/* slide */}
       <div className="flex-1 flex items-center justify-center px-6 pt-36 pb-36">
         <div className="w-full max-w-3xl lg:w-1/2 lg:max-w-none">
-          <SlideView slide={slide} onAnswered={markCurrentComplete} />
+          <SlideView slide={slide} onAnswered={markCurrentComplete} requireCorrect={requireCorrect} />
         </div>
       </div>
 
@@ -119,11 +136,11 @@ export function LessonPlayer({
 
         <div className="flex items-center gap-1.5 flex-wrap justify-center max-w-[55%]">
           {lesson.slides.map((_, i) => {
-            const reachable = i <= maxReached
+            const reachable = i <= maxReached && !controls.noSkipAhead
             return (
               <button
                 key={i}
-                onClick={() => jump(i)}
+                onClick={() => { if (reachable) jump(i) }}
                 disabled={!reachable}
                 aria-label={`Slide ${i + 1}`}
                 aria-current={i === index}
@@ -141,9 +158,9 @@ export function LessonPlayer({
           onClick={next}
           disabled={gated}
           className="px-7 py-3 rounded-xl bg-brandGreen text-white text-base disabled:opacity-40"
-          title={gated ? 'Answer to continue' : undefined}
+          title={answerGated ? (requireCorrect ? 'Answer correctly to continue' : 'Answer to continue') : timeGated ? 'Please keep reading' : undefined}
         >
-          {isLast ? 'Finish' : 'Next'}
+          {timeGated ? `Next · ${timeLeft}s` : isLast ? 'Finish' : 'Next'}
         </button>
       </div>
 
@@ -201,7 +218,7 @@ function SlideImage({ src }: { src?: string | null }) {
 }
 
 // ---- slide renderers ----
-function SlideView({ slide, onAnswered }: { slide: Slide; onAnswered: () => void }) {
+function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnswered: () => void; requireCorrect: boolean }) {
   switch (slide.type) {
     case 'title':
       return (
@@ -269,11 +286,11 @@ function SlideView({ slide, onAnswered }: { slide: Slide; onAnswered: () => void
         </div>
       )
     case 'trueFalse':
-      return <TrueFalse slide={slide} onAnswered={onAnswered} />
+      return <TrueFalse slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} />
     case 'multipleChoice':
-      return <MultipleChoice slide={slide} onAnswered={onAnswered} />
+      return <MultipleChoice slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} />
     case 'realLifeScenario':
-      return <RealLifeScenario slide={slide} onAnswered={onAnswered} />
+      return <RealLifeScenario slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} />
     case 'thisOrThat':
       return <ThisOrThat slide={slide} onAnswered={onAnswered} />
     case 'mythBusting':
@@ -464,7 +481,7 @@ function Poll({ slide, onAnswered }: { slide: Extract<Slide, { type: 'poll' }>; 
   )
 }
 
-function TrueFalse({ slide, onAnswered }: { slide: Extract<Slide, { type: 'trueFalse' }>; onAnswered: () => void }) {
+function TrueFalse({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide, { type: 'trueFalse' }>; onAnswered: () => void; requireCorrect: boolean }) {
   const [picked, setPicked] = useState<boolean | null>(null)
   const correct = picked !== null && picked === slide.correctAnswer
   return (
@@ -475,7 +492,11 @@ function TrueFalse({ slide, onAnswered }: { slide: Extract<Slide, { type: 'trueF
         {[true, false].map((v) => (
           <button
             key={String(v)}
-            onClick={() => { setPicked(v); onAnswered() }}
+            onClick={() => {
+              if (requireCorrect && picked === slide.correctAnswer) return // already correct
+              setPicked(v)
+              if (!requireCorrect || v === slide.correctAnswer) onAnswered()
+            }}
             className={`px-10 py-4 rounded-2xl shadow-sm text-lg ${
               picked === v ? (v === slide.correctAnswer ? 'bg-brandGreen text-white' : 'bg-red-500 text-white') : 'bg-white text-textTitle'
             }`}
@@ -494,9 +515,10 @@ function TrueFalse({ slide, onAnswered }: { slide: Extract<Slide, { type: 'trueF
   )
 }
 
-function MultipleChoice({ slide, onAnswered }: { slide: Extract<Slide, { type: 'multipleChoice' }>; onAnswered: () => void }) {
+function MultipleChoice({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide, { type: 'multipleChoice' }>; onAnswered: () => void; requireCorrect: boolean }) {
   const [picked, setPicked] = useState<number | null>(null)
   const correctSet = new Set(slide.correctAnswerIndices)
+  const alreadyCorrect = picked !== null && correctSet.has(picked)
   return (
     <div>
       {slide.title && <div className="text-sm uppercase tracking-wider text-textTitle/40 mb-2">{slide.title}</div>}
@@ -509,7 +531,15 @@ function MultipleChoice({ slide, onAnswered }: { slide: Extract<Slide, { type: '
           return (
             <button
               key={i}
-              onClick={() => { if (picked === null) { setPicked(i); onAnswered() } }}
+              onClick={() => {
+                if (requireCorrect) {
+                  if (alreadyCorrect) return           // locked once correct
+                  setPicked(i)
+                  if (correctSet.has(i)) onAnswered()
+                } else if (picked === null) {
+                  setPicked(i); onAnswered()
+                }
+              }}
               className={`w-full text-left px-6 py-5 rounded-2xl shadow-sm transition text-lg ${
                 showState ? (good ? 'bg-brandGreen text-white' : 'bg-red-500 text-white') : 'bg-white text-textTitle hover:bg-white/70'
               }`}
@@ -526,7 +556,7 @@ function MultipleChoice({ slide, onAnswered }: { slide: Extract<Slide, { type: '
   )
 }
 
-function RealLifeScenario({ slide, onAnswered }: { slide: Extract<Slide, { type: 'realLifeScenario' }>; onAnswered: () => void }) {
+function RealLifeScenario({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide, { type: 'realLifeScenario' }>; onAnswered: () => void; requireCorrect: boolean }) {
   const [picked, setPicked] = useState<number | null>(null)
   return (
     <div>
@@ -537,7 +567,15 @@ function RealLifeScenario({ slide, onAnswered }: { slide: Extract<Slide, { type:
           const show = picked !== null && (picked === i || i === slide.correctAnswerIndex)
           const good = i === slide.correctAnswerIndex
           return (
-            <button key={i} onClick={() => { if (picked === null) { setPicked(i); onAnswered() } }}
+            <button key={i} onClick={() => {
+              if (requireCorrect) {
+                if (picked === slide.correctAnswerIndex) return  // locked once correct
+                setPicked(i)
+                if (good) onAnswered()
+              } else if (picked === null) {
+                setPicked(i); onAnswered()
+              }
+            }}
               className={`w-full text-left px-6 py-5 rounded-2xl shadow-sm transition text-lg ${show ? (good ? 'bg-brandGreen text-white' : 'bg-red-500 text-white') : 'bg-white text-textTitle hover:bg-white/70'}`}>
               {o}
             </button>

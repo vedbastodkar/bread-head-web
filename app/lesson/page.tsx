@@ -6,7 +6,15 @@ import { db } from '@/lib/firebase/client'
 import { useAuth } from '@/app/context/AuthContext'
 import { getLesson } from '@/lib/curriculum/lessons'
 import { CATALOG } from '@/lib/curriculum/catalog'
-import { lessonState, nextLesson } from '@/app/student/useStudent'
+import { lessonState, nextLesson, fetchStudentClasses } from '@/app/student/useStudent'
+import {
+  resolvePacingFrontier,
+  resolveControls,
+  LESSON_ORDER,
+  DEFAULT_CONTROLS,
+  type LessonControls,
+  type ClassLite,
+} from '@/lib/curriculum/controls'
 import { LessonPlayer } from '@/components/lesson/LessonPlayer'
 
 type Target = { unit: number; lesson: number }
@@ -25,6 +33,8 @@ export default function LessonPage() {
 
   const [target, setTarget] = useState<Target | null>(null)
   const [initialSlide, setInitialSlide] = useState(0)
+  const [classes, setClasses] = useState<ClassLite[]>([])
+  const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
 
   useEffect(() => {
     if (loading) return
@@ -34,6 +44,12 @@ export default function LessonPage() {
       const d = (snap.data() ?? {}) as any
       const done = new Set<string>(d.lessonProgress?.completedLessons ?? [])
       const slideMap = d.lessonSlide ?? {}
+
+      // Teachers preview without pacing/controls; students load their classes.
+      const classIds: string[] = d.profile?.classIds ?? []
+      const classesLite = isTeacher ? [] : await fetchStudentClasses(classIds)
+      setClasses(classesLite)
+      const frontier = resolvePacingFrontier(classesLite)
 
       let t: Target | null = null
       try {
@@ -45,7 +61,7 @@ export default function LessonPage() {
 
       if (!isTeacher && t) {
         const id = `unit${t.unit}lesson${t.lesson}`
-        if (lessonState(id, done) === 'locked') t = nextLesson(done)
+        if (lessonState(id, done, frontier) === 'locked') t = nextLesson(done)
       }
       const id = `unit${t!.unit}lesson${t!.lesson}`
       setInitialSlide(done.has(id) ? 0 : (slideMap[id] ?? 0)) // resume unless already completed
@@ -54,6 +70,12 @@ export default function LessonPage() {
   }, [loading, user, isTeacher, router])
 
   const lessonId = target ? `unit${target.unit}lesson${target.lesson}` : ''
+
+  // Re-resolve controls whenever the target lesson (or loaded classes) changes.
+  useEffect(() => {
+    if (!lessonId || !user || isTeacher) { setControls(DEFAULT_CONTROLS); return }
+    setControls(resolveControls(lessonId, user.uid, classes))
+  }, [lessonId, user, isTeacher, classes])
 
   const saveSlide = useCallback((i: number) => {
     if (!user || isTeacher || !lessonId) return
@@ -82,14 +104,21 @@ export default function LessonPage() {
     )
   }
 
+  const frontier = resolvePacingFrontier(classes)
   const next = nextAfter(target.unit, target.lesson)
-  const goNext = next ? () => { setInitialSlide(0); setTarget(next) } : undefined
+  const nextAllowed = next
+    ? LESSON_ORDER.indexOf(`unit${next.unit}lesson${next.lesson}`) <= frontier
+    : false
+  const goNext = next && (isTeacher || nextAllowed)
+    ? () => { setInitialSlide(0); setTarget(next) }
+    : undefined
 
   return (
     <LessonPlayer
       key={lessonId}
       lesson={lesson}
       initialSlide={initialSlide}
+      controls={controls}
       onSlideChange={saveSlide}
       onComplete={handleComplete}
       onNext={goNext}
