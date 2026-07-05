@@ -25,7 +25,23 @@ export default function CoursePage() {
   const [busy, setBusy] = useState(false)
   const [preview, setPreview] = useState<{ unit: number; lesson: number } | null>(null)
 
+  // Class-level pacing + default in-lesson controls (seeded from the loaded class).
+  const [pacingEnabled, setPacingEnabled] = useState(false)
+  const [throughUnit, setThroughUnit] = useState(1)
+  const [throughLesson, setThroughLesson] = useState(1)
+  const [classControls, setClassControls] = useState<LessonControls>(DEFAULT_CONTROLS)
+  const [savingSettings, setSavingSettings] = useState(false)
+
   const cls = data?.find((c) => c.id === classId)
+
+  useEffect(() => {
+    if (!cls) return
+    setPacingEnabled(cls.pacing?.enabled ?? false)
+    setThroughUnit(cls.pacing?.throughUnit ?? 1)
+    setThroughLesson(cls.pacing?.throughLesson ?? 1)
+    setClassControls(cls.lessonControls ?? DEFAULT_CONTROLS)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cls?.id])
   const toggleUnitOpen = (unit: number) =>
     setOpenUnits((prev) => { const n = new Set(prev); n.has(unit) ? n.delete(unit) : n.add(unit); return n })
 
@@ -170,10 +186,84 @@ export default function CoursePage() {
   const toggleExpanded = (id: string) =>
     setExpanded((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
 
+  async function saveSettings() {
+    if (!user) return
+    setSavingSettings(true)
+    try {
+      await apiCall(user, `/api/classes/${classId}`, 'PATCH', {
+        pacing: { enabled: pacingEnabled, throughUnit, throughLesson },
+        lessonControls: classControls,
+      })
+      reload()
+    } catch (e: any) { alert(e?.message) } finally { setSavingSettings(false) }
+  }
+
+  const throughUnitLessonCount = CATALOG.find((u) => u.unit === throughUnit)?.lessonCount ?? 1
+
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">Course</h1>
       <p className="text-textTitle/60 text-sm mb-6">Browse the curriculum and assign lessons to the class or specific students.</p>
+
+      {/* Pacing & controls */}
+      <div className="bg-white rounded-2xl shadow-sm p-5 mb-6">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <div className="text-sm font-medium text-textTitle mb-1">Pacing &amp; controls</div>
+            <p className="text-xs text-textTitle/50 max-w-md">Release the curriculum gradually and set default in-lesson rules for this class. Assignments can override these per lesson or per student.</p>
+          </div>
+          <button onClick={saveSettings} disabled={savingSettings}
+            className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
+            {savingSettings ? 'Saving…' : 'Save settings'}
+          </button>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-6 mt-4">
+          {/* Release frontier */}
+          <div>
+            <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
+              <input type="checkbox" checked={pacingEnabled} onChange={(e) => setPacingEnabled(e.target.checked)} />
+              Enable pacing (lock lessons past a point)
+            </label>
+            {pacingEnabled && (
+              <div className="flex items-center gap-2 text-sm text-textTitle/70">
+                <span>Unlock through</span>
+                <select value={throughUnit}
+                  onChange={(e) => { const u = Number(e.target.value); setThroughUnit(u); setThroughLesson(1) }}
+                  className="px-2 py-1 rounded-lg border border-textTitle/15">
+                  {CATALOG.map((u) => <option key={u.unit} value={u.unit}>U{u.unit}</option>)}
+                </select>
+                <span>·</span>
+                <select value={throughLesson} onChange={(e) => setThroughLesson(Number(e.target.value))}
+                  className="px-2 py-1 rounded-lg border border-textTitle/15">
+                  {Array.from({ length: throughUnitLessonCount }, (_, i) => i + 1).map((l) => <option key={l} value={l}>L{l}</option>)}
+                </select>
+              </div>
+            )}
+          </div>
+
+          {/* Default in-lesson controls */}
+          <div className="space-y-2 text-sm text-textTitle/80">
+            <div className="text-xs uppercase tracking-wider text-textTitle/40">Default lesson controls</div>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={classControls.lockUntilCorrect}
+                onChange={(e) => setClassControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
+              Lock until correct answer
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={classControls.noSkipAhead}
+                onChange={(e) => setClassControls((c) => ({ ...c, noSkipAhead: e.target.checked }))} />
+              No skipping ahead
+            </label>
+            <label className="flex items-center justify-between gap-2 max-w-[220px]">
+              <span>Min seconds / slide</span>
+              <input type="number" min={0} max={600} value={classControls.minSecondsPerSlide}
+                onChange={(e) => setClassControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
+                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+            </label>
+          </div>
+        </div>
+      </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* curriculum browser */}

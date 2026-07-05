@@ -24,6 +24,30 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
   if (typeof body.name === 'string' && body.name.trim()) updates.name = body.name.trim()
   if (Array.isArray(body.grade)) updates.grade = body.grade
   if (typeof body.archived === 'boolean') updates.archived = body.archived
+
+  if ('pacing' in body) {
+    const p = body.pacing
+    if (p && typeof p === 'object' && typeof p.enabled === 'boolean'
+        && Number.isInteger(p.throughUnit) && Number.isInteger(p.throughLesson)) {
+      updates.pacing = { enabled: p.enabled, throughUnit: p.throughUnit, throughLesson: p.throughLesson }
+    } else {
+      return NextResponse.json({ error: 'Invalid pacing' }, { status: 400 })
+    }
+  }
+  if ('lessonControls' in body) {
+    const c = body.lessonControls
+    if (c && typeof c === 'object') {
+      updates.lessonControls = {
+        lockUntilCorrect: !!c.lockUntilCorrect,
+        noSkipAhead: !!c.noSkipAhead,
+        minSecondsPerSlide: typeof c.minSecondsPerSlide === 'number' && c.minSecondsPerSlide >= 0
+          ? Math.min(600, Math.round(c.minSecondsPerSlide)) : 0,
+      }
+    } else {
+      return NextResponse.json({ error: 'Invalid lessonControls' }, { status: 400 })
+    }
+  }
+
   if (Object.keys(updates).length === 0)
     return NextResponse.json({ error: 'Nothing to update' }, { status: 400 })
 
