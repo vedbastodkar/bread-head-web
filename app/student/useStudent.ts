@@ -4,8 +4,16 @@ import { useRouter } from 'next/navigation'
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase/client'
 import { useAuth } from '@/app/context/AuthContext'
-import { CATALOG, unitLessonIds } from '@/lib/curriculum/catalog'
-import type { LessonControls } from '@/lib/curriculum/controls'
+import {
+  LESSON_ORDER,
+  DEFAULT_CONTROLS,
+  resolvePacingFrontier,
+  resolveControls,
+  type LessonControls,
+  type ClassLite,
+  type ClassPacing,
+  type AssignmentLite,
+} from '@/lib/curriculum/controls'
 
 export interface StudentAssignment {
   id: string
@@ -23,11 +31,44 @@ export interface StudentData {
   assignments: StudentAssignment[]
 }
 
+// Best-effort load of the student's classes (pacing + controls + assignments).
+// Class-doc reads need the rostered-student rule; if it isn't deployed yet the
+// try/catch degrades to unlimited pacing / default controls.
+export async function fetchStudentClasses(classIds: string[]): Promise<ClassLite[]> {
+  const out: ClassLite[] = []
+  for (const cid of classIds) {
+    let pacing: ClassPacing | null = null
+    let lessonControls: LessonControls | null = null
+    const assignments: AssignmentLite[] = []
+    try {
+      const cdoc = await getDoc(doc(db, 'classes', cid))
+      const cd = (cdoc.data() ?? {}) as any
+      pacing = cd.pacing ?? null
+      lessonControls = cd.lessonControls ?? null
+    } catch { /* rules may block class-doc read until deployed */ }
+    try {
+      const asnap = await getDocs(collection(db, 'classes', cid, 'assignments'))
+      asnap.forEach((a) => {
+        const ad = a.data() as any
+        assignments.push({
+          lessonIds: ad.lessonIds ?? [],
+          scope: ad.scope === 'students' ? 'students' : 'class',
+          studentUids: ad.studentUids ?? [],
+          controls: ad.controls ?? undefined,
+        })
+      })
+    } catch { /* rules may block assignment reads until deployed */ }
+    out.push({ pacing, lessonControls, assignments })
+  }
+  return out
+}
+
 // Reads the signed-in student's own users/{uid} doc (owner-readable by rules).
 export function useStudent() {
   const { user, loading, signOut } = useAuth()
   const router = useRouter()
   const [data, setData] = useState<StudentData | null>(null)
+  const [classes, setClasses] = useState<ClassLite[]>([])
   const [err, setErr] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
 
@@ -39,27 +80,26 @@ export function useStudent() {
         const snap = await getDoc(doc(db, 'users', user.uid))
         const d = (snap.data() ?? {}) as any
         const lp = d.lessonProgress ?? {}
-
-        // assignments across the student's classes (best-effort — needs rules to allow read)
         const classIds: string[] = d.profile?.classIds ?? []
+
+        const classesLite = await fetchStudentClasses(classIds)
+        setClasses(classesLite)
+
+        // Applicable assignments for the "currently assigned" UI.
         const assignments: StudentAssignment[] = []
-        for (const cid of classIds) {
-          try {
-            const asnap = await getDocs(collection(db, 'classes', cid, 'assignments'))
-            asnap.forEach((a) => {
-              const ad = a.data() as any
-              const applies = ad.scope === 'class' || (ad.studentUids ?? []).includes(user.uid)
-              if (applies) assignments.push({
-                id: a.id,
-                lessonIds: ad.lessonIds ?? [],
-                dueDate: ad.dueDate ?? null,
-                scope: ad.scope === 'students' ? 'students' : 'class',
-                studentUids: ad.studentUids ?? [],
-                controls: ad.controls ?? undefined,
-              })
+        classIds.forEach((cid, i) => {
+          classesLite[i].assignments.forEach((a, j) => {
+            const applies = a.scope === 'class' || a.studentUids.includes(user.uid)
+            if (applies) assignments.push({
+              id: `${cid}:${j}`,
+              lessonIds: a.lessonIds,
+              dueDate: null,
+              scope: a.scope,
+              studentUids: a.studentUids,
+              controls: a.controls,
             })
-          } catch { /* rules may block assignment reads until deployed */ }
-        }
+          })
+        })
 
         setData({
           name: d.profile?.name ?? user.email ?? 'Student',
@@ -74,18 +114,33 @@ export function useStudent() {
     })()
   }, [loading, user, router, reloadKey])
 
-  return { data, err, loading, user, signOut, reload: () => setReloadKey((k) => k + 1) }
+  const pacingFrontier = resolvePacingFrontier(classes)
+  const controlsForLesson = (id: string): LessonControls =>
+    user ? resolveControls(id, user.uid, classes) : { ...DEFAULT_CONTROLS }
+
+  return {
+    data, err, loading, user, signOut,
+    pacingFrontier, controlsForLesson,
+    reload: () => setReloadKey((k) => k + 1),
+  }
 }
 
 // ---- linear progression (mirrors iOS: sequential unlock) ----
-export const LESSON_ORDER: string[] = CATALOG.flatMap((u) => unitLessonIds(u.unit))
+export { LESSON_ORDER }
 
 export type LessonState = 'done' | 'open' | 'locked'
 
-export function lessonState(id: string, completed: Set<string>): LessonState {
+// A lesson is locked if it's past the teacher's pacing frontier, OR past the
+// student's own sequential frontier (first not-yet-completed lesson).
+export function lessonState(
+  id: string,
+  completed: Set<string>,
+  pacingFrontier: number = Infinity,
+): LessonState {
   if (completed.has(id)) return 'done'
-  const frontier = LESSON_ORDER.findIndex((x) => !completed.has(x)) // first not-completed
   const idx = LESSON_ORDER.indexOf(id)
+  if (idx > pacingFrontier) return 'locked'
+  const frontier = LESSON_ORDER.findIndex((x) => !completed.has(x)) // first not-completed
   return idx <= frontier ? 'open' : 'locked'
 }
 
