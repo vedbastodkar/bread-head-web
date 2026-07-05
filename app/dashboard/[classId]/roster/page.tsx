@@ -29,7 +29,15 @@ export default function RosterPage() {
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
       <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
         <h1 className="font-display text-3xl text-textTitle">Roster</h1>
-        <JoinInfo joinCode={cls.joinCode} />
+        <div className="flex items-center gap-3 flex-wrap">
+          <Link
+            href={`/dashboard/${cls.id}/handout`}
+            className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70 hover:bg-bgSage"
+          >
+            Print handout
+          </Link>
+          <JoinInfo joinCode={cls.joinCode} />
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm overflow-x-auto">
@@ -62,7 +70,7 @@ export default function RosterPage() {
         </table>
       </div>
       <p className="text-xs text-textTitle/50 mt-3">
-        Students join with the class code above. Creating student accounts from here and printable login cards are coming with the student-app work.
+        Students join with the class code above. Use <span className="font-medium">Print handout</span> for a page you can hand out or project.
       </p>
     </DashboardShell>
   )
