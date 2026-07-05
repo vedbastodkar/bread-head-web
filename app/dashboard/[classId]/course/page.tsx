@@ -2,11 +2,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { useDashboard, apiCall, type Student } from '../../useDashboard'
+import { useDashboard, apiCall, type Student, type Assignment } from '../../useDashboard'
 import { DashboardShell, DashboardLoading } from '../../DashboardShell'
-import { CATALOG, unitLessonIds, unitName } from '@/lib/curriculum/catalog'
+import { CATALOG, unitLessonIds, unitName, parseLessonId } from '@/lib/curriculum/catalog'
 import { isLessonMigrated, lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
+import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
 
 export default function CoursePage() {
   const { classId } = useParams<{ classId: string }>()
@@ -16,6 +17,11 @@ export default function CoursePage() {
   const [scope, setScope] = useState<'class' | 'students'>('class')
   const [targets, setTargets] = useState<Set<string>>(new Set())
   const [due, setDue] = useState('')
+  const [title, setTitle] = useState('')
+  const [overrideControls, setOverrideControls] = useState(false)
+  const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState(false)
   const [preview, setPreview] = useState<{ unit: number; lesson: number } | null>(null)
 
@@ -93,28 +99,76 @@ export default function CoursePage() {
   if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>
 
-  async function assign() {
+  const sameSet = (a: string[], b: Set<string>) => a.length === b.size && a.every((x) => b.has(x))
+
+  function resetComposer() {
+    setSelected(new Set()); setTargets(new Set()); setDue(''); setTitle('')
+    setScope('class'); setOverrideControls(false); setControls(DEFAULT_CONTROLS); setEditingId(null)
+  }
+
+  function startEdit(a: Assignment) {
+    setEditingId(a.id)
+    setSelected(new Set(a.lessonIds))
+    setScope(a.scope)
+    setTargets(new Set(a.studentUids ?? []))
+    setDue(a.dueDate ?? '')
+    setTitle(a.title ?? '')
+    const hasControls = a.controls && Object.keys(a.controls).length > 0
+    setOverrideControls(!!hasControls)
+    setControls({ ...DEFAULT_CONTROLS, ...(a.controls ?? {}) })
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  async function submit() {
     if (!user) return
     if (selected.size === 0) { alert('Select at least one lesson.'); return }
     if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
+
+    // Duplicate guard (create only): warn on an identical lessons+scope+targets assignment.
+    if (!editingId) {
+      const dup = (cls?.assignments ?? []).some((a) =>
+        a.scope === scope &&
+        sameSet(a.lessonIds, selected) &&
+        (scope === 'class' || sameSet(a.studentUids ?? [], targets)),
+      )
+      if (dup && !confirm('An identical assignment already exists. Add another anyway?')) return
+    }
+
+    const payload = {
+      lessonIds: Array.from(selected),
+      scope,
+      studentUids: scope === 'students' ? Array.from(targets) : [],
+      dueDate: due || null,
+      title: title.trim() || null,
+      controls: overrideControls ? controls : null,
+    }
     setBusy(true)
     try {
-      await apiCall(user, `/api/classes/${classId}/assign`, 'POST', {
-        lessonIds: Array.from(selected),
-        scope,
-        studentUids: scope === 'students' ? Array.from(targets) : [],
-        dueDate: due || null,
-      })
-      setSelected(new Set()); setTargets(new Set()); setDue('')
+      if (editingId) await apiCall(user, `/api/classes/${classId}/assign?id=${editingId}`, 'PATCH', payload)
+      else await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
+      resetComposer()
       reload()
     } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
   }
 
   async function removeAssignment(id: string) {
     if (!user) return
-    try { await apiCall(user, `/api/classes/${classId}/assign?id=${id}`, 'DELETE'); reload() }
+    if (!confirm('Remove this assignment?')) return
+    try { await apiCall(user, `/api/classes/${classId}/assign?id=${id}`, 'DELETE'); if (editingId === id) resetComposer(); reload() }
     catch (e: any) { alert(e?.message) }
   }
+
+  // Completion for an assignment: how many target students finished ALL its lessons.
+  function completion(a: Assignment): { done: number; total: number } {
+    const roster = cls!.students
+    const targetStudents = a.scope === 'class' ? roster : roster.filter((s) => (a.studentUids ?? []).includes(s.uid))
+    const total = a.scope === 'class' ? roster.length : (a.studentUids ?? []).length
+    const done = targetStudents.filter((s) => a.lessonIds.every((id) => s.completedLessons.includes(id))).length
+    return { done, total }
+  }
+
+  const toggleExpanded = (id: string) =>
+    setExpanded((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
@@ -175,8 +229,17 @@ export default function CoursePage() {
         {/* assign panel */}
         <div className="space-y-4">
           <div className="bg-white rounded-2xl shadow-sm p-5 lg:sticky lg:top-28">
-            <div className="text-sm font-medium text-textTitle mb-1">Assign {selected.size > 0 && <span className="text-textTitle/50">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}</div>
-            <div className="flex gap-2 my-3">
+            <div className="text-sm font-medium text-textTitle mb-1">
+              {editingId ? 'Edit assignment' : 'Assign'} {selected.size > 0 && <span className="text-textTitle/50">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}
+            </div>
+
+            <input
+              type="text" value={title} onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title (optional)"
+              className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3 mt-2"
+            />
+
+            <div className="flex gap-2 mb-3">
               {(['class', 'students'] as const).map((s) => (
                 <button key={s} onClick={() => setScope(s)}
                   className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${scope === s ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'}`}>
@@ -197,10 +260,44 @@ export default function CoursePage() {
             <label className="block text-sm text-textTitle/70 mb-1">Due date (optional)</label>
             <input type="date" value={due} onChange={(e) => setDue(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3" />
-            <button onClick={assign} disabled={busy}
-              className="w-full px-3 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
-              {busy ? 'Assigning…' : 'Assign'}
-            </button>
+
+            {/* Per-assignment control override */}
+            <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
+              <input type="checkbox" checked={overrideControls} onChange={(e) => setOverrideControls(e.target.checked)} />
+              Custom lesson controls for this assignment
+            </label>
+            {overrideControls && (
+              <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2 text-sm text-textTitle/80">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" checked={controls.lockUntilCorrect}
+                    onChange={(e) => setControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
+                  Lock until correct answer
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" checked={controls.noSkipAhead}
+                    onChange={(e) => setControls((c) => ({ ...c, noSkipAhead: e.target.checked }))} />
+                  No skipping ahead
+                </label>
+                <label className="flex items-center justify-between gap-2">
+                  <span>Min seconds / slide</span>
+                  <input type="number" min={0} max={600} value={controls.minSecondsPerSlide}
+                    onChange={(e) => setControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
+                    className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                </label>
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <button onClick={submit} disabled={busy}
+                className="flex-1 px-3 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
+                {busy ? 'Saving…' : editingId ? 'Save changes' : 'Assign'}
+              </button>
+              {editingId && (
+                <button onClick={resetComposer} className="px-3 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70">
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
 
           {/* existing assignments */}
@@ -209,16 +306,41 @@ export default function CoursePage() {
             {cls.assignments.length === 0 ? (
               <p className="text-xs text-textTitle/50">Nothing assigned yet.</p>
             ) : (
-              <div className="space-y-2">
-                {cls.assignments.map((a) => (
-                  <div key={a.id} className="flex items-start justify-between gap-2 text-xs border-b border-textTitle/5 pb-2 last:border-0">
-                    <div>
-                      <div className="text-textTitle">{a.lessonIds.length} lesson{a.lessonIds.length > 1 ? 's' : ''} · {a.scope === 'class' ? 'Whole class' : `${a.studentUids.length} student${a.studentUids.length > 1 ? 's' : ''}`}</div>
-                      {a.dueDate && <div className="text-textTitle/50">Due {a.dueDate}</div>}
+              <div className="space-y-3">
+                {cls.assignments.map((a) => {
+                  const { done, total } = completion(a)
+                  const isOpen = expanded.has(a.id)
+                  const hasControls = a.controls && Object.keys(a.controls).length > 0
+                  return (
+                    <div key={a.id} className="text-xs border-b border-textTitle/5 pb-3 last:border-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <button onClick={() => toggleExpanded(a.id)} className="text-left flex-1 min-w-0">
+                          <div className="text-textTitle font-medium truncate">
+                            {a.title || `${a.lessonIds.length} lesson${a.lessonIds.length > 1 ? 's' : ''}`} <span className="text-textTitle/40">{isOpen ? '▾' : '▸'}</span>
+                          </div>
+                          <div className="text-textTitle/50">
+                            {a.scope === 'class' ? 'Whole class' : `${(a.studentUids ?? []).length} student${(a.studentUids ?? []).length > 1 ? 's' : ''}`}
+                            {' · '}{done}/{total} done
+                            {a.dueDate && <> · Due {a.dueDate}</>}
+                            {hasControls && <span className="ml-1 inline-block px-1.5 py-0.5 rounded bg-accentGold/20 text-[10px] text-textTitle/70">controls</span>}
+                          </div>
+                        </button>
+                        <div className="flex gap-2 shrink-0">
+                          <button onClick={() => startEdit(a)} className="text-brandGreen hover:underline">Edit</button>
+                          <button onClick={() => removeAssignment(a.id)} className="text-red-600 hover:underline">Remove</button>
+                        </div>
+                      </div>
+                      {isOpen && (
+                        <ul className="mt-2 pl-1 space-y-0.5 text-textTitle/60">
+                          {a.lessonIds.map((id) => {
+                            const p = parseLessonId(id)
+                            return <li key={id}>• {p ? (lessonName(p.unit, p.lesson) ?? `Unit ${p.unit} · Lesson ${p.lesson}`) : id}</li>
+                          })}
+                        </ul>
+                      )}
                     </div>
-                    <button onClick={() => removeAssignment(a.id)} className="text-red-600 hover:underline shrink-0">Remove</button>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>
