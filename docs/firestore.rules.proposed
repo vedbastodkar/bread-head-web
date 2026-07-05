@@ -13,6 +13,13 @@ service cloud.firestore {
     // + WEB: role comes from a custom claim set by the Admin SDK (see seed_demo.py / setRole route)
     function hasRole(r) { return isSignedIn() && request.auth.token.role == r; }
 
+    // + WEB: all teachers on a class (owner + co-teachers). Tolerates the pre-
+    // co-teacher shape where only `teacherId` exists.
+    function classTeachers(c) {
+      return c.teacherIds != null ? c.teacherIds : (c.teacherId != null ? [c.teacherId] : []);
+    }
+    function isClassTeacher(c) { return isSignedIn() && request.auth.uid in classTeachers(c); }
+
     // Deny by default
     match /{document=**} { allow read, write: if false; }
 
@@ -40,24 +47,28 @@ service cloud.firestore {
                   && request.auth.uid in resource.data.profile.teacherIds;
     }
 
-    // + WEB: classes owned by a teacher
+    // + WEB: classes owned or co-taught by a teacher.
+    // Rostered students may READ the class doc (for name / pacing / lessonControls);
+    // they can never write it. Only the owner (teacherId) may delete.
     match /classes/{classId} {
-      allow read:   if isSignedIn() && resource.data.teacherId == request.auth.uid;
+      allow read:   if isClassTeacher(resource.data)
+                    || exists(/databases/$(database)/documents/classes/$(classId)/roster/$(request.auth.uid));
       allow create: if hasRole('teacher') && request.resource.data.teacherId == request.auth.uid;
-      allow update, delete: if resource.data.teacherId == request.auth.uid;
+      allow update: if isClassTeacher(resource.data);
+      allow delete: if resource.data.teacherId == request.auth.uid;
 
-      // roster: teacher (owner of parent class) manages; a student may read their own row
+      // roster: any class teacher manages; a student may read their own row
       match /roster/{studentUid} {
         allow read:  if request.auth.uid == studentUid
-                     || get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid;
-        allow write: if get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid;
+                     || isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
+        allow write: if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
       }
 
-      // + WEB: assignments — teacher (owner) writes; rostered students may read theirs
+      // + WEB: assignments — any class teacher writes; rostered students may read theirs
       match /assignments/{assignmentId} {
-        allow read:  if get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid
+        allow read:  if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data)
                      || exists(/databases/$(database)/documents/classes/$(classId)/roster/$(request.auth.uid));
-        allow write: if get(/databases/$(database)/documents/classes/$(classId)).data.teacherId == request.auth.uid;
+        allow write: if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
       }
     }
 
