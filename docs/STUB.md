@@ -15,15 +15,13 @@ Placeholder features that are wired into the UI but not fully implemented. Each 
 - **MatchConcept** renders as reveal-to-continue rather than drag-to-match (1 use in the whole course).
 - **interactiveGrowthVisual** chart uses a linear model + the passed slider range; the Swift original had a legacy 0–500 cap. Cosmetic.
 
-## Assignments not consumed by the student app
-- **Where:** assign flow writes `classes/{id}/assignments/*`; shown on the Course page.
-- **What's missing:** the student app doesn't read assignments — they're teacher-side metadata only. Assigned lessons aren't surfaced to students, and the Progress view doesn't yet mark assigned-vs-done.
-- **Needs:** (1) student app (iOS + web) reads assignments and shows/locks accordingly; (2) Progress view cross-references assignments with `completedLessons`.
+## Assignments — web consumes them (iOS still doesn't)
+- **Web done:** the assign flow now supports titles, per-assignment in-lesson control overrides, editing, lesson-name display, and per-assignment completion counts. Students see a "Currently assigned to me" section (`StudentHome.tsx`).
+- **Still missing:** the iOS app doesn't read assignments; a Progress view that marks assigned-vs-done across the roster.
 
-## Roster: create student accounts + login cards
-- **Where:** `app/dashboard/[classId]/roster/page.tsx` (note at bottom).
-- **What's missing:** creating student accounts from the teacher UI, and printable login cards.
-- **Blocked on:** identity-model decision — join-code + teacher-provisioned username vs. email login. Login cards can't print passwords we don't store, so this depends on the chosen model.
+## Roster: create student accounts — DEFERRED (handout shipped)
+- **Done:** printable class handout at `app/dashboard/[classId]/handout/page.tsx` (big join code + self-signup steps), linked from the Roster page.
+- **Decision:** students self-register + join by code (already worked); teacher-provisioned accounts were intentionally deferred — no synthetic-email/login-card system.
 
 ## Student experience — deferred
 - **Gamification** — XP / level / streaks / badges / rewards on the dashboard and a celebration on lesson completion. The `gamificationProgress` map already exists in `users/{uid}` (written by iOS) — the web just needs to read + display it, and award on web completion.
@@ -35,7 +33,10 @@ Placeholder features that are wired into the UI but not fully implemented. Each 
 - **Offline support** — none.
 - **Account extras** — notification preferences and theme are not on the account page yet (only name / email / password-reset / sign-out).
 
+## Shipped (was parked)
+- **Co-teachers** — add by email on the class Settings page; `classes.teacherIds[]` + membership checks across the class APIs; owner-only for delete/co-teacher management. **Needs the updated Firestore rules deployed** (`docs/firestore.rules.proposed`).
+- **Lesson pacing** — per-class release frontier ("unlock through Unit X / Lesson Y") on the Course page; enforced in `useStudent`/`/lesson`.
+- **In-lesson controls** — class default + per-assignment override: lock-until-correct, min seconds/slide, no-skip. Enforced client-side in `LessonPlayer` (web only; iOS separate). Also needs the rules deploy for students to read class-level pacing/controls (degrades gracefully until then).
+
 ## Not yet built (parked)
-- **Co-teachers** — invite/lookup flow for a second teacher on a class.
-- **Lesson locking / pacing** — gate which units/lessons are open (Code.org-style locks).
 - **Assessments (Track B)** — separate, non-gated cross-unit assessments where scores are meaningful (in-lesson quizzes are mastery-gated, so no signal).
