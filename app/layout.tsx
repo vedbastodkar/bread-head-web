@@ -3,6 +3,7 @@ import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
 import Nav            from './components/Nav'
 import PageTransition from './components/PageTransition'
+import { AuthProvider } from './context/AuthContext'
 
 // ── Playfair Display — 400, 400i, 700, 700i only ──────────────
 const playfair = Playfair_Display({
@@ -44,9 +45,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="font-body">
-        <PageTransition />
-        <Nav />
-        {children}
+        <AuthProvider>
+          <PageTransition />
+          <Nav />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
