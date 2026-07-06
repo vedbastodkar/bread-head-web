@@ -67,17 +67,21 @@ export async function POST(req: NextRequest) {
   const { email } = await req.json()
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: email,
       subject: `Early access signup — ${email}`,
       html: subscribeHtml(email),
     })
+    if (error) {
+      console.error('Subscribe email error:', error)
+      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+    }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('Subscribe email error:', err)
+    console.error('Subscribe email exception:', err)
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

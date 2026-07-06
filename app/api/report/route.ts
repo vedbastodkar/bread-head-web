@@ -75,16 +75,22 @@ export async function POST(req: NextRequest) {
 
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
-    await resend.emails.send({
+    // The Resend SDK returns API failures in `error` rather than throwing —
+    // check it explicitly so a bad key / unverified domain isn't a silent 200.
+    const { error } = await resend.emails.send({
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       ...(reporter.includes('@') ? { replyTo: reporter } : {}),
       subject: `⚠️ Problem report · ${lessonId} · slide ${slide}`,
       html: reportHtml({ lessonId, slide, text, reporter }),
     })
+    if (error) {
+      console.error('Report email error:', error)
+      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+    }
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('Report email error:', err)
+    console.error('Report email exception:', err)
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }
