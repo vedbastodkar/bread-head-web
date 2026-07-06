@@ -22,8 +22,7 @@ const APP_SUB_LINKS = [
   { label: 'Journal',   href: '/journal' },
 ]
 
-// TODO: replace with the real App Store listing URL once published.
-const APP_STORE_URL = 'https://apps.apple.com/app/bread-head'
+const APP_STORE_URL = 'https://apps.apple.com/us/app/bread-head-app/id6762026967'
 
 export default function Nav() {
   const { scrollY } = useScroll()
