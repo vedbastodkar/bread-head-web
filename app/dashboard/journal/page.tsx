@@ -85,6 +85,7 @@ function JournalEditor({
   const [body, setBody] = useState(entry.body)
   const [seconds, setSeconds] = useState(entry.secondsSpent)
   const [busy, setBusy] = useState(false)
+  const [saveErr, setSaveErr] = useState('')
   const activeRef = useRef(true)
 
   useEffect(() => {
@@ -98,10 +99,14 @@ function JournalEditor({
 
   async function save() {
     setBusy(true)
+    setSaveErr('')
     try {
       await saveEntry({ ...entry, body, wordCount: words, secondsSpent: seconds })
       onSaved()
-    } catch { /* surfaced via reload */ setBusy(false) }
+    } catch (e: any) {
+      setSaveErr(e?.message || 'Could not save. Please try again.')
+      setBusy(false)
+    }
   }
 
   return (
@@ -131,6 +136,7 @@ function JournalEditor({
             </button>
           </div>
         </div>
+        {saveErr && <p className="text-xs text-red-600 mt-2">{saveErr}</p>}
       </div>
     </div>
   )

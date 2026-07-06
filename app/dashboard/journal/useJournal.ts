@@ -32,6 +32,7 @@ export function useJournal() {
     ;(async () => {
       setLoading(true)
       try {
+        setErr('')
         const q = query(collection(db, 'users', user.uid, 'journal'), orderBy('lastModified', 'desc'))
         const snap = await getDocs(q)
         const rows: JournalEntry[] = snap.docs.map((d) => {
