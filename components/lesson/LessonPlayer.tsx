@@ -1,5 +1,6 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import type { Lesson, Slide } from '@/lib/curriculum/slideTypes'
 import { isInteractive } from '@/lib/curriculum/slideTypes'
 import { sfEmoji } from '@/lib/sfIcon'
@@ -81,14 +82,35 @@ export function LessonPlayer({
 
   if (done) {
     return (
-      <div className="min-h-screen bg-bgSage flex flex-col items-center justify-center px-6 text-center">
-        <div className="w-20 h-20 rounded-full bg-brandGreen text-white flex items-center justify-center text-3xl mb-5">✓</div>
-        <h1 className="font-display text-3xl text-textTitle mb-2">Lesson complete!</h1>
-        <p className="text-textTitle/60 mb-8 max-w-md">{lesson.name}</p>
-        <div className="flex items-center gap-3">
+      <div className="min-h-screen bg-bgSage flex flex-col items-center justify-center px-6 text-center relative overflow-hidden">
+        <Confetti />
+        <motion.div
+          initial={{ scale: 0, rotate: -25 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 13 }}
+          className="w-20 h-20 rounded-full bg-brandGreen text-white flex items-center justify-center text-3xl mb-5 relative z-10"
+        >
+          ✓
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
+          className="font-display text-3xl text-textTitle mb-2 relative z-10"
+        >
+          Lesson complete!
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
+          className="text-textTitle/60 mb-8 max-w-md relative z-10"
+        >
+          {lesson.name}
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}
+          className="flex items-center gap-3 relative z-10"
+        >
           <button onClick={onExit} className="px-6 py-3 rounded-xl border border-textTitle/15 text-textTitle/80 hover:bg-white">Back to dashboard</button>
           {onNext && <button onClick={onNext} className="px-6 py-3 rounded-xl bg-brandGreen text-white">Next lesson →</button>}
-        </div>
+        </motion.div>
       </div>
     )
   }
@@ -167,6 +189,47 @@ export function LessonPlayer({
       </div>
 
       {reporting && <ReportModal lesson={lesson.id} slide={index + 1} onSubmit={onReport} onClose={() => setReporting(false)} />}
+    </div>
+  )
+}
+
+// One-shot confetti burst for the completion screen — pops up from the badge,
+// then rains down. Pure framer-motion, no extra dependency.
+function Confetti() {
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: 46 }, (_, i) => ({
+        id: i,
+        x: (Math.random() - 0.5) * 560,
+        rise: 70 + Math.random() * 140,
+        fall: 340 + Math.random() * 240,
+        rot: (Math.random() - 0.5) * 720,
+        delay: Math.random() * 0.25,
+        size: 6 + Math.random() * 9,
+        color: ['#4A5D4A', '#D1A945', '#D4AF5A', '#8FA382', '#1A2E1A'][i % 5],
+        round: Math.random() > 0.5,
+      })),
+    [],
+  )
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      {pieces.map((p) => (
+        <motion.div
+          key={p.id}
+          initial={{ x: 0, y: 0, opacity: 1, rotate: 0 }}
+          animate={{ x: p.x, y: [0, -p.rise, p.fall], opacity: [1, 1, 0], rotate: p.rot }}
+          transition={{ duration: 1.7, ease: 'easeOut', delay: p.delay }}
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '42%',
+            width: p.size,
+            height: p.size,
+            background: p.color,
+            borderRadius: p.round ? '9999px' : '2px',
+          }}
+        />
+      ))}
     </div>
   )
 }
