@@ -369,8 +369,8 @@ export default function CoursePage() {
 
             <div className="flex gap-2 mb-3">
               {(['lesson', 'journal'] as const).map((t) => (
-                <button key={t} onClick={() => setAssignType(t)}
-                  className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${assignType === t ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'}`}>
+                <button key={t} onClick={() => setAssignType(t)} disabled={!!editingId}
+                  className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${assignType === t ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'} ${editingId ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   {t === 'lesson' ? 'Lesson' : 'Journal'}
                 </button>
               ))}
