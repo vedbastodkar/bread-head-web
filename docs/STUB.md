@@ -27,9 +27,9 @@ Placeholder features that are wired into the UI but not fully implemented. Each 
 - **Gamification** — PARTIAL. Student dashboard now **displays** level / XP / lessons from `gamificationProgress` (`StudentHome.tsx`). Still missing: streaks/badges (no such fields exist yet), a lesson-completion celebration, and **awarding XP on web completion** — deferred because the XP/level formula lives in iOS and writing it from web would diverge the shared map.
 - ~~**Report-a-problem sending**~~ — DONE. Send posts to `/api/report` (auth-required) → emails `breadhead.org@gmail.com` via Resend with lesson/slide/reporter. All email routes now send from `noreply@bread-head.org` (verified domain) instead of the `onboarding@resend.dev` sandbox.
 - **Onboarding** — first-time student tour / welcome flow.
-- **Mobile responsiveness** — the right-bubble sidebar and dashboard tiles are desktop-first; test and tune for phones.
+- **Mobile responsiveness** — kept intentionally desktop-first. Students on mobile get a dismissible `AppPrompt` (bottom sheet) nudging them to the iOS app instead of a fully responsive rebuild. Teacher dashboard on mobile is still untuned by design.
 - **App chrome** — the marketing nav still shows on `/dashboard` (both roles). Consider a dedicated app top-bar instead of the marketing `Nav`.
-- **Loading / empty / error states** — thin in places; add skeletons + friendlier errors.
+- ~~**Loading / empty / error states**~~ — DONE for dashboards: `DashboardSkeleton`/`DashboardError` + `StudentSkeleton`/`StudentError` replace bare "Loading…" and raw error dumps (with a retry). Deeper empty-state polish still possible.
 - **Offline support** — none.
 - **Account extras** — notification preferences and theme are not on the account page yet (only name / email / password-reset / sign-out).
 
