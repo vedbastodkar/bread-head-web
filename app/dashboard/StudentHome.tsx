@@ -40,6 +40,13 @@ export function StudentHome() {
     <StudentShell data={data!} user={user} signOut={signOut}>
       <h1 className="font-display text-3xl text-textTitle mb-6">My Dashboard</h1>
 
+      {/* Progress at a glance */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <StatTile label="Level" value={data!.gamification.level} accent />
+        <StatTile label="XP" value={data!.gamification.xp.toLocaleString()} />
+        <StatTile label="Lessons done" value={`${completed.size} / ${TOTAL_LESSONS}`} />
+      </div>
+
       {/* Currently assigned */}
       <section className="mb-6">
         <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">
@@ -110,6 +117,15 @@ export function StudentHome() {
 
       <SectionsPanel user={user} />
     </StudentShell>
+  )
+}
+
+function StatTile({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm p-5 text-center">
+      <div className={`font-display text-3xl mb-1 ${accent ? 'text-accentGold' : 'text-textTitle'}`}>{value}</div>
+      <div className="text-xs uppercase tracking-wider text-textTitle/40">{label}</div>
+    </div>
   )
 }
 

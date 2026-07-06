@@ -23,12 +23,18 @@ export interface StudentAssignment {
   studentUids: string[]
   controls?: Partial<LessonControls>
 }
+export interface Gamification {
+  xp: number
+  lifetimeXP: number
+  level: number
+}
 export interface StudentData {
   name: string
   completedLessons: string[]
   currentUnit: number
   currentLesson: number
   assignments: StudentAssignment[]
+  gamification: Gamification
 }
 
 // Best-effort load of the student's classes (pacing + controls + assignments).
@@ -82,6 +88,7 @@ export function useStudent() {
         const snap = await getDoc(doc(db, 'users', user.uid))
         const d = (snap.data() ?? {}) as any
         const lp = d.lessonProgress ?? {}
+        const gp = d.gamificationProgress ?? {}
         const classIds: string[] = d.profile?.classIds ?? []
 
         const classesLite = await fetchStudentClasses(classIds)
@@ -109,6 +116,11 @@ export function useStudent() {
           currentUnit: lp.currentUnit ?? 1,
           currentLesson: lp.currentLesson ?? 1,
           assignments,
+          gamification: {
+            xp: gp.xp ?? 0,
+            lifetimeXP: gp.lifetimeXP ?? gp.xp ?? 0,
+            level: gp.level ?? 1,
+          },
         })
       } catch (e: any) {
         setErr(e?.message || 'Failed to load')
