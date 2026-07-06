@@ -17,11 +17,15 @@ import {
 
 export interface StudentAssignment {
   id: string
+  classId: string
   lessonIds: string[]
   dueDate: string | null
   scope: 'class' | 'students'
   studentUids: string[]
   controls?: Partial<LessonControls>
+  title?: string | null
+  type?: 'lesson' | 'journal'
+  journal?: { questions: string[]; minWords: number; minSeconds: number }
 }
 export interface Gamification {
   xp: number
@@ -63,6 +67,9 @@ export async function fetchStudentClasses(classIds: string[]): Promise<ClassLite
           scope: ad.scope === 'students' ? 'students' : 'class',
           studentUids: ad.studentUids ?? [],
           controls: ad.controls ?? undefined,
+          title: ad.title ?? null,
+          type: ad.type === 'journal' ? 'journal' : 'lesson',
+          journal: ad.journal ?? undefined,
         })
       })
     } catch { /* rules may block assignment reads until deployed */ }
@@ -101,11 +108,15 @@ export function useStudent() {
             const applies = a.scope === 'class' || a.studentUids.includes(user.uid)
             if (applies) assignments.push({
               id: a.id ?? `${cid}:${j}`,
+              classId: cid,
               lessonIds: a.lessonIds,
               dueDate: a.dueDate ?? null,
               scope: a.scope,
               studentUids: a.studentUids,
               controls: a.controls,
+              title: a.title,
+              type: a.type ?? 'lesson',
+              journal: a.journal,
             })
           })
         })

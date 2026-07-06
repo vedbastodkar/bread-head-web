@@ -16,6 +16,25 @@ export default function JournalPage() {
   const startNew = () =>
     setEditing({ id: newEntryId(), body: '', teacherAssigned: false, wordCount: 0, secondsSpent: 0 })
 
+  const today = new Date().toISOString().slice(0, 10)
+  const journalAssignments = (data?.assignments ?? []).filter((a) => a.type === 'journal')
+
+  // Find the student's existing entry for an assignment, or start a fresh linked one.
+  const openAssigned = (a: NonNullable<typeof data>['assignments'][number]) => {
+    const existing = entries.find((e) => e.assignmentId === a.id)
+    if (existing) { setEditing(existing); return }
+    setEditing({
+      id: newEntryId(),
+      body: '',
+      teacherAssigned: true,
+      assignmentId: a.id,
+      classId: a.classId,
+      questions: a.journal?.questions ?? [],
+      wordCount: 0,
+      secondsSpent: 0,
+    })
+  }
+
   return (
     <StudentShell data={data!} user={user} signOut={signOut}>
       <div className="flex items-center justify-between mb-6">
@@ -29,6 +48,32 @@ export default function JournalPage() {
       </p>
 
       {err && <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-red-600 mb-4">{err}</div>}
+
+      {journalAssignments.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">Assigned prompts</h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {journalAssignments.map((a) => {
+              const entry = entries.find((e) => e.assignmentId === a.id)
+              const overdue = !!a.dueDate && a.dueDate < today && !entry
+              return (
+                <button key={a.id} onClick={() => openAssigned(a)}
+                  className={`text-left bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${overdue ? 'border-red-500' : 'border-accentGold'}`}>
+                  <div className="text-sm font-medium text-textTitle truncate">{a.title || 'Journal prompt'}</div>
+                  <div className="text-xs text-textTitle/55 mt-0.5 line-clamp-2">{a.journal?.questions[0]}</div>
+                  <div className="text-xs mt-1 flex gap-2">
+                    {entry ? <span className="text-brandGreen">Started · {entry.wordCount} words</span> : <span className="text-textTitle/50">Not started</span>}
+                    {a.dueDate && <span className={overdue ? 'text-red-600' : 'text-textTitle/50'}>{overdue ? 'Overdue' : 'Due'} {a.dueDate}</span>}
+                    {a.journal && (a.journal.minWords > 0 || a.journal.minSeconds > 0) && (
+                      <span className="text-textTitle/40">min {a.journal.minWords}w{a.journal.minSeconds ? ` · ${a.journal.minSeconds}s` : ''}</span>
+                    )}
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
       <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">Past entries</h2>
       {loading ? (

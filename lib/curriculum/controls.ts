@@ -37,6 +37,7 @@ export interface AssignmentLite {
   controls?: Partial<LessonControls>
   type?: 'lesson' | 'journal'
   journal?: { questions: string[]; minWords: number; minSeconds: number }
+  title?: string | null
 }
 
 // Minimal per-class shape the resolvers need.
