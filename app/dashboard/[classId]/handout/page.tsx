@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useDashboard } from '../../useDashboard'
-import { DashboardLoading } from '../../DashboardShell'
+import { DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 
 // Print-optimized class handout: students self-register and join with the code.
 // Uses Tailwind `print:` variants to strip the on-screen chrome when printing.
@@ -10,8 +10,8 @@ export default function HandoutPage() {
   const { classId } = useParams<{ classId: string }>()
   const { data, err, loading } = useDashboard()
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
   const cls = data!.find((c) => c.id === classId)
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>
 

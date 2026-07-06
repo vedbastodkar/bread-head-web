@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { TOTAL_LESSONS } from '@/lib/curriculum/catalog'
 import type { StudentData } from './useStudent'
+import { AppPrompt } from '@/app/components/AppPrompt'
 
 interface ShellUser { email?: string | null }
 
@@ -64,6 +65,8 @@ export function StudentShell({
           </div>
         </aside>
       </div>
+
+      <AppPrompt />
     </main>
   )
 }
@@ -72,6 +75,52 @@ export function StudentLoading({ children }: { children: React.ReactNode }) {
   return (
     <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
       <div className="max-w-6xl mx-auto">{children}</div>
+    </main>
+  )
+}
+
+// Loading skeleton mirroring the student shell layout.
+export function StudentSkeleton() {
+  return (
+    <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 min-w-0 order-2 animate-pulse space-y-4">
+          <div className="h-8 w-48 rounded-lg bg-white/70" />
+          <div className="grid grid-cols-3 gap-3">
+            <div className="h-20 rounded-2xl bg-white/70" />
+            <div className="h-20 rounded-2xl bg-white/70" />
+            <div className="h-20 rounded-2xl bg-white/70" />
+          </div>
+          <div className="h-28 rounded-2xl bg-white/70" />
+        </div>
+        <aside className="w-full lg:w-72 shrink-0 order-1">
+          <div className="lg:sticky lg:top-28 bg-white rounded-3xl shadow-sm p-5 animate-pulse space-y-3">
+            <div className="h-4 w-28 rounded bg-bgSage" />
+            <div className="h-2 rounded-full bg-bgSage" />
+            <div className="h-8 rounded-xl bg-bgSage" />
+            <div className="h-8 rounded-xl bg-bgSage" />
+          </div>
+        </aside>
+      </div>
+    </main>
+  )
+}
+
+// Friendly, actionable error state with a retry.
+export function StudentError({ message, onRetry }: { message?: string; onRetry?: () => void }) {
+  return (
+    <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
+      <div className="max-w-md mx-auto bg-white rounded-3xl shadow-sm p-8 text-center mt-10">
+        <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 text-xl">!</div>
+        <h1 className="font-display text-xl text-textTitle mb-1">Couldn&apos;t load this</h1>
+        <p className="text-sm text-textTitle/55 mb-5 break-words">{message || 'Something went wrong. Please try again.'}</p>
+        <button
+          onClick={() => (onRetry ? onRetry() : window.location.reload())}
+          className="px-5 py-2.5 rounded-xl bg-brandGreen text-white text-sm"
+        >
+          Try again
+        </button>
+      </div>
     </main>
   )
 }

@@ -2,15 +2,15 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useDashboard, pctComplete, attentionFlags } from './useDashboard'
-import { DashboardShell, DashboardLoading } from './DashboardShell'
+import { DashboardShell, DashboardSkeleton, DashboardError } from './DashboardShell'
 import { JoinInfo } from './parts'
 
 export function TeacherHome() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
   const [showArchived, setShowArchived] = useState(false)
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
 
   const active = data!.filter((c) => !c.archived)
   const cards = data!.filter((c) => (showArchived ? c.archived : !c.archived))

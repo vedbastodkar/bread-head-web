@@ -2,15 +2,15 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useDashboard, pctComplete, daysSince } from '../../useDashboard'
-import { DashboardShell, DashboardLoading } from '../../DashboardShell'
+import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { CATALOG, TOTAL_LESSONS, unitName, unitLessonIds } from '@/lib/curriculum/catalog'
 
 export default function StudentDetail() {
   const { classId, studentUid } = useParams<{ classId: string; studentUid: string }>()
   const { data, err, loading, user, signOut, reload } = useDashboard()
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
 
   const cls = data!.find((c) => c.id === classId)
   const s = cls?.students.find((x) => x.uid === studentUid)

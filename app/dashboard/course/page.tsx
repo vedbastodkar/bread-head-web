@@ -1,15 +1,15 @@
 'use client'
 import Link from 'next/link'
 import { useStudent } from '@/app/student/useStudent'
-import { StudentShell, StudentLoading } from '@/app/student/StudentShell'
+import { StudentShell, StudentSkeleton, StudentError } from '@/app/student/StudentShell'
 import { CATALOG, unitLessonIds } from '@/lib/curriculum/catalog'
 import { unitObjectives } from '@/lib/curriculum/lessons'
 
 export default function CourseOverview() {
   const { data, err, loading, user, signOut } = useStudent()
 
-  if (loading || (!data && !err)) return <StudentLoading><p className="text-textTitle/60">Loading…</p></StudentLoading>
-  if (err) return <StudentLoading><p className="text-red-600">{err}</p></StudentLoading>
+  if (loading || (!data && !err)) return <StudentSkeleton />
+  if (err) return <StudentError message={err} />
 
   const completed = new Set(data!.completedLessons)
 

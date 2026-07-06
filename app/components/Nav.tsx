@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
+import { APP_STORE_URL } from '@/lib/links'
 
 const LINKS = [
   { label: 'About',    href: '/about' },
@@ -21,8 +22,6 @@ const APP_SUB_LINKS = [
   { label: 'Budgeting', href: '/budgeting' },
   { label: 'Journal',   href: '/journal' },
 ]
-
-const APP_STORE_URL = 'https://apps.apple.com/us/app/bread-head-app/id6762026967'
 
 export default function Nav() {
   const { scrollY } = useScroll()

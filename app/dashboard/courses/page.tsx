@@ -1,14 +1,14 @@
 'use client'
 import Link from 'next/link'
 import { useDashboard, apiCall, pctComplete, attentionFlags, type ClassData } from '../useDashboard'
-import { DashboardShell, DashboardLoading } from '../DashboardShell'
+import { DashboardShell, DashboardSkeleton, DashboardError } from '../DashboardShell'
 
 // Canvas-style "All Courses" — every class, current and past/archived, in one list.
 export default function AllCourses() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
 
   const current = data!.filter((c) => !c.archived)
   const past = data!.filter((c) => c.archived)

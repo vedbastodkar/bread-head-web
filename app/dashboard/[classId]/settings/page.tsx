@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useDashboard, apiCall } from '../../useDashboard'
-import { DashboardShell, DashboardLoading } from '../../DashboardShell'
+import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 
 const GRADES = [6, 7, 8, 9, 10, 11, 12]
 
@@ -36,8 +36,8 @@ export default function ClassSettings() {
     })()
   }, [user, classId])
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>
 
   const save = async () => {

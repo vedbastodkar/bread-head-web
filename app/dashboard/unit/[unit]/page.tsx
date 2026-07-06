@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useStudent, lessonState } from '@/app/student/useStudent'
-import { StudentShell, StudentLoading } from '@/app/student/StudentShell'
+import { StudentShell, StudentLoading, StudentSkeleton, StudentError } from '@/app/student/StudentShell'
 import { CATALOG, unitLessonIds } from '@/lib/curriculum/catalog'
 import { lessonName, lessonSummary, unitObjectives } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
@@ -15,8 +15,8 @@ export default function UnitPage() {
   const router = useRouter()
   const [open, setOpen] = useState(true)
 
-  if (loading || (!data && !err)) return <StudentLoading><p className="text-textTitle/60">Loading…</p></StudentLoading>
-  if (err) return <StudentLoading><p className="text-red-600">{err}</p></StudentLoading>
+  if (loading || (!data && !err)) return <StudentSkeleton />
+  if (err) return <StudentError message={err} />
 
   const u = CATALOG.find((c) => c.unit === unit)
   if (!u) return <StudentLoading><p className="text-textTitle/60">Unit not found.</p></StudentLoading>

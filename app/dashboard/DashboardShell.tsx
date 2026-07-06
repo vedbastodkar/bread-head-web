@@ -150,11 +150,56 @@ const IconUsers = () => <svg {...I({})}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0
 const IconGear = () => <svg {...I({})}><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15H4a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 6 9.4a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 11 4.6V4a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 2.6 1.31 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 2z" /></svg>
 const IconMail = () => <svg {...I({})}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>
 
-// Minimal centered frame for loading/error states (before data is ready).
+// Minimal centered frame for one-off messages (e.g. "not found").
 export function DashboardLoading({ children }: { children: React.ReactNode }) {
   return (
     <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
       <div className="max-w-6xl mx-auto">{children}</div>
+    </main>
+  )
+}
+
+// Loading skeleton that mirrors the shell layout (content + sidebar bubble).
+export function DashboardSkeleton() {
+  return (
+    <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 min-w-0 order-2 animate-pulse space-y-4">
+          <div className="h-8 w-56 rounded-lg bg-white/70" />
+          <div className="h-24 rounded-2xl bg-white/70" />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="h-40 rounded-2xl bg-white/70" />
+            <div className="h-40 rounded-2xl bg-white/70" />
+          </div>
+        </div>
+        <aside className="w-full lg:w-72 shrink-0 order-1">
+          <div className="lg:sticky lg:top-28 bg-white rounded-3xl shadow-sm p-4 animate-pulse space-y-2">
+            <div className="h-4 w-32 rounded bg-bgSage" />
+            <div className="h-8 rounded-xl bg-bgSage" />
+            <div className="h-8 rounded-xl bg-bgSage" />
+            <div className="h-8 rounded-xl bg-bgSage" />
+          </div>
+        </aside>
+      </div>
+    </main>
+  )
+}
+
+// Friendly, actionable error state with a retry.
+export function DashboardError({ message, onRetry }: { message?: string; onRetry?: () => void }) {
+  return (
+    <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
+      <div className="max-w-md mx-auto bg-white rounded-3xl shadow-sm p-8 text-center mt-10">
+        <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 text-xl">!</div>
+        <h1 className="font-display text-xl text-textTitle mb-1">Couldn&apos;t load this</h1>
+        <p className="text-sm text-textTitle/55 mb-5 break-words">{message || 'Something went wrong. Please try again.'}</p>
+        <button
+          onClick={() => (onRetry ? onRetry() : window.location.reload())}
+          className="px-5 py-2.5 rounded-xl bg-brandGreen text-white text-sm"
+        >
+          Try again
+        </button>
+      </div>
     </main>
   )
 }

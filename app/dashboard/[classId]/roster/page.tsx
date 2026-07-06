@@ -2,15 +2,15 @@
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useDashboard, apiCall, daysSince, type Student } from '../../useDashboard'
-import { DashboardShell, DashboardLoading } from '../../DashboardShell'
+import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { JoinInfo } from '../../parts'
 
 export default function RosterPage() {
   const { classId } = useParams<{ classId: string }>()
   const { data, err, loading, user, signOut, reload } = useDashboard()
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
   const cls = data!.find((c) => c.id === classId)
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>
 

@@ -6,7 +6,7 @@ import {
   useDashboard, apiCall, pctComplete, attentionFlags, daysSince, type Student,
 } from '../useDashboard'
 import { JoinInfo } from '../parts'
-import { DashboardShell, DashboardLoading } from '../DashboardShell'
+import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../DashboardShell'
 import { CATALOG, TOTAL_LESSONS, unitName, completedByUnit } from '@/lib/curriculum/catalog'
 
 type SortKey = 'name' | 'done' | 'active'
@@ -17,8 +17,8 @@ export default function ClassDetail() {
   const [sort, setSort] = useState<SortKey>('done')
   const [unitFilter, setUnitFilter] = useState<number | 'all'>('all')
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
 
   const cls = data!.find((c) => c.id === classId)
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>

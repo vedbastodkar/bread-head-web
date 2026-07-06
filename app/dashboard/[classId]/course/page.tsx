@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useDashboard, apiCall, type Student, type Assignment } from '../../useDashboard'
-import { DashboardShell, DashboardLoading } from '../../DashboardShell'
+import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { CATALOG, unitLessonIds, unitName, parseLessonId } from '@/lib/curriculum/catalog'
 import { isLessonMigrated, lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
@@ -111,8 +111,8 @@ export default function CoursePage() {
   const toggleTarget = (uid: string) =>
     setTargets((prev) => { const n = new Set(prev); n.has(uid) ? n.delete(uid) : n.add(uid); return n })
 
-  if (loading || (!data && !err)) return <DashboardLoading><p className="text-textTitle/60">Loading…</p></DashboardLoading>
-  if (err) return <DashboardLoading><p className="text-red-600">{err}</p></DashboardLoading>
+  if (loading || (!data && !err)) return <DashboardSkeleton />
+  if (err) return <DashboardError message={err} />
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>
 
   const sameSet = (a: string[], b: Set<string>) => a.length === b.size && a.every((x) => b.has(x))
