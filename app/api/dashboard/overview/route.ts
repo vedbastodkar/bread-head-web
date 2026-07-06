@@ -35,22 +35,37 @@ export async function GET(req: NextRequest) {
     Array.from(byId.values()).map(async (cls) => {
       const rosterSnap = await cls.ref.collection('roster').get()
       const assignSnap = await cls.ref.collection('assignments').get()
-      const assignments = assignSnap.docs.map((a) => {
+      const assignments = await Promise.all(assignSnap.docs.map(async (a) => {
         const ua = a.get('updatedAt')
+        const isJournal = (a.get('type') ?? 'lesson') === 'journal'
+        let submissions: Record<string, { wordCount: number; secondsSpent: number; status: string; submittedAt: string | null }> | undefined
+        if (isJournal) {
+          const subSnap = await a.ref.collection('submissions').get()
+          submissions = {}
+          subSnap.forEach((s) => {
+            const sa = s.get('submittedAt')
+            submissions![s.id] = {
+              wordCount: s.get('wordCount') ?? 0,
+              secondsSpent: s.get('secondsSpent') ?? 0,
+              status: s.get('status') ?? 'in_progress',
+              submittedAt: sa && typeof sa.toDate === 'function' ? sa.toDate().toISOString() : null,
+            }
+          })
+        }
         return {
           id: a.id,
+          type: (a.get('type') ?? 'lesson') as 'lesson' | 'journal',
+          journal: (a.get('journal') ?? undefined) as { questions: string[]; minWords: number; minSeconds: number } | undefined,
           lessonIds: (a.get('lessonIds') ?? []) as string[],
           scope: (a.get('scope') ?? 'class') as 'class' | 'students',
           studentUids: (a.get('studentUids') ?? []) as string[],
           dueDate: (a.get('dueDate') ?? null) as string | null,
           title: (a.get('title') ?? null) as string | null,
           controls: (a.get('controls') ?? undefined) as Record<string, unknown> | undefined,
-          type: (a.get('type') ?? 'lesson') as 'lesson' | 'journal',
-          journal: (a.get('journal') ?? undefined) as { questions: string[]; minWords: number; minSeconds: number } | undefined,
-          updatedAt:
-            ua && typeof ua.toDate === 'function' ? ua.toDate().toISOString() : null,
+          submissions,
+          updatedAt: ua && typeof ua.toDate === 'function' ? ua.toDate().toISOString() : null,
         }
-      })
+      }))
       const students = await Promise.all(
         rosterSnap.docs.map(async (r) => {
           const uid = r.get('studentUid') as string

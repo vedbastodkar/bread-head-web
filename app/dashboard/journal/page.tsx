@@ -111,6 +111,7 @@ export default function JournalPage() {
           onClose={() => setEditing(null)}
           onSaved={() => { setEditing(null); reload() }}
           saveEntry={saveEntry}
+          user={user}
         />
       )}
     </StudentShell>
@@ -120,12 +121,13 @@ export default function JournalPage() {
 // Full-screen editor with a live word count and an active-time timer that pauses
 // when the tab is hidden. Writes the entry doc on save (content stays private).
 function JournalEditor({
-  entry, onClose, onSaved, saveEntry,
+  entry, onClose, onSaved, saveEntry, user,
 }: {
   entry: JournalEntry
   onClose: () => void
   onSaved: () => void
   saveEntry: (e: JournalEntry) => Promise<void>
+  user: { getIdToken: () => Promise<string> } | null
 }) {
   const [body, setBody] = useState(entry.body)
   const [seconds, setSeconds] = useState(entry.secondsSpent)
@@ -147,6 +149,22 @@ function JournalEditor({
     setSaveErr('')
     try {
       await saveEntry({ ...entry, body, wordCount: words, secondsSpent: seconds })
+      if (entry.teacherAssigned && entry.assignmentId && entry.classId && user) {
+        try {
+          const token = await user.getIdToken()
+          await fetch('/api/journal/submit', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              classId: entry.classId,
+              assignmentId: entry.assignmentId,
+              entryId: entry.id,
+              wordCount: words,
+              secondsSpent: seconds,
+            }),
+          })
+        } catch { /* metadata is best-effort; content is already saved */ }
+      }
       onSaved()
     } catch (e: any) {
       setSaveErr(e?.message || 'Could not save. Please try again.')
