@@ -18,6 +18,9 @@ export default function StudentDetail() {
 
   const doneSet = new Set(s.completedLessons)
   const d = daysSince(s.lastActive)
+  const journalAssignments = cls.assignments.filter(
+    (a) => a.type === 'journal' && (a.scope === 'class' || (a.studentUids ?? []).includes(s.uid)),
+  )
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
@@ -29,6 +32,35 @@ export default function StudentDetail() {
         {' '}last active {d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}
         <span className="text-textTitle/30"> · {s.xp.toLocaleString()} XP · L{s.level}</span>
       </p>
+
+      {journalAssignments.length > 0 && (
+        <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="font-medium text-textTitle">Journal</div>
+            <div className="text-[11px] text-textTitle/40">Responses are private — counts only</div>
+          </div>
+          <div className="space-y-2">
+            {journalAssignments.map((a) => {
+              const sub = a.submissions?.[s.uid]
+              const done = sub?.status === 'complete'
+              return (
+                <div key={a.id} className="flex items-center justify-between text-sm border-b border-textTitle/5 pb-2 last:border-0">
+                  <div className="min-w-0">
+                    <div className="text-textTitle truncate">{a.title || `Journal · ${a.journal?.questions.length ?? 0} question${(a.journal?.questions.length ?? 0) > 1 ? 's' : ''}`}</div>
+                    {a.dueDate && <div className="text-xs text-textTitle/45">Due {a.dueDate}</div>}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className={`text-xs font-medium ${done ? 'text-brandGreen' : sub ? 'text-accentGold' : 'text-textTitle/40'}`}>
+                      {done ? 'Complete' : sub ? 'In progress' : 'Not started'}
+                    </div>
+                    {sub && <div className="text-[11px] text-textTitle/45">{sub.wordCount} words · {Math.floor(sub.secondsSpent / 60)}m</div>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Per-unit, per-lesson drill-down */}
       <div className="space-y-3">
