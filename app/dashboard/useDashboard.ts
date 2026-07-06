@@ -23,6 +23,9 @@ export interface Assignment {
   dueDate: string | null
   title?: string | null
   controls?: Partial<LessonControls>
+  type?: 'lesson' | 'journal'
+  journal?: { questions: string[]; minWords: number; minSeconds: number }
+  submissions?: Record<string, { wordCount: number; secondsSpent: number; status: 'complete' | 'in_progress'; submittedAt: string | null }>
 }
 export interface ClassData {
   id: string

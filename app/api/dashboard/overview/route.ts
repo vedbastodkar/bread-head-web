@@ -45,6 +45,8 @@ export async function GET(req: NextRequest) {
           dueDate: (a.get('dueDate') ?? null) as string | null,
           title: (a.get('title') ?? null) as string | null,
           controls: (a.get('controls') ?? undefined) as Record<string, unknown> | undefined,
+          type: (a.get('type') ?? 'lesson') as 'lesson' | 'journal',
+          journal: (a.get('journal') ?? undefined) as { questions: string[]; minWords: number; minSeconds: number } | undefined,
           updatedAt:
             ua && typeof ua.toDate === 'function' ? ua.toDate().toISOString() : null,
         }

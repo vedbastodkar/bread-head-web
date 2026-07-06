@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
+import { sanitizeJournalConfig } from '@/lib/journal/journal'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -35,6 +36,24 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await req.json().catch(() => ({}))
+  const type = body.type === 'journal' ? 'journal' : 'lesson'
+
+  if (type === 'journal') {
+    const journal = sanitizeJournalConfig(body.journal)
+    if (!journal) return NextResponse.json({ error: 'Add at least one prompt question' }, { status: 400 })
+    const scope = body.scope === 'students' ? 'students' : 'class'
+    const studentUids: string[] = scope === 'students' && Array.isArray(body.studentUids) ? body.studentUids : []
+    if (scope === 'students' && studentUids.length === 0)
+      return NextResponse.json({ error: 'Select at least one student' }, { status: 400 })
+    const dueDate = typeof body.dueDate === 'string' && body.dueDate ? body.dueDate : null
+    const title = typeof body.title === 'string' && body.title.trim() ? body.title.trim() : null
+    const ref = await adminDb.collection('classes').doc(params.classId).collection('assignments').add({
+      type: 'journal', journal, lessonIds: [], scope, studentUids, dueDate, title,
+      createdAt: FieldValue.serverTimestamp(),
+    })
+    return NextResponse.json({ id: ref.id, type: 'journal', journal, scope, studentUids, dueDate, title })
+  }
+
   const lessonIds: string[] = Array.isArray(body.lessonIds) ? body.lessonIds.filter((x: unknown) => typeof x === 'string') : []
   if (lessonIds.length === 0) return NextResponse.json({ error: 'Select at least one lesson' }, { status: 400 })
   const scope = body.scope === 'students' ? 'students' : 'class'
@@ -46,7 +65,7 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
   const controls = sanitizeControls(body.controls)
 
   const ref = await adminDb.collection('classes').doc(params.classId).collection('assignments').add({
-    lessonIds, scope, studentUids, dueDate, title,
+    type: 'lesson', lessonIds, scope, studentUids, dueDate, title,
     ...(controls ? { controls } : {}),
     createdAt: FieldValue.serverTimestamp(),
   })
@@ -82,6 +101,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
   if ('controls' in body) {
     const c = sanitizeControls(body.controls)
     updates.controls = c ?? FieldValue.delete()
+  }
+  if ('journal' in body) {
+    const journal = sanitizeJournalConfig(body.journal)
+    if (!journal) return NextResponse.json({ error: 'Add at least one prompt question' }, { status: 400 })
+    updates.journal = journal
   }
 
   const ref = adminDb.collection('classes').doc(params.classId).collection('assignments').doc(id)

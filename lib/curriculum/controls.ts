@@ -35,6 +35,8 @@ export interface AssignmentLite {
   scope: 'class' | 'students'
   studentUids: string[]
   controls?: Partial<LessonControls>
+  type?: 'lesson' | 'journal'
+  journal?: { questions: string[]; minWords: number; minSeconds: number }
 }
 
 // Minimal per-class shape the resolvers need.
