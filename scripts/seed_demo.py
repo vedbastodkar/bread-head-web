@@ -104,8 +104,10 @@ def seed():
         }, merge=True)
         print(f"\nclass: {cls['name']}  (join {cls['joinCode']})")
 
+        student_uids: list[str] = []
         for email, name in cls["students"]:
             uid = upsert_user(email, STUDENT_PASSWORD, name)
+            student_uids.append(uid)
             unit = random.randint(1, 6)
             lesson = random.randint(1, UNIT_LESSON_COUNTS[unit])
             completed = completed_ids_up_to(unit, lesson)
@@ -145,6 +147,38 @@ def seed():
                 "dueDate": due, "createdAt": now,
             })
             print(f"  + overdue assignment: {cls['overdue_lessons']} due {due}")
+
+        # --- Journal assignment (type='journal') with metadata-only submissions ---
+        # Only seeded on the first class, so the teacher view has a journal example
+        # without duplicating it across every demo class.
+        if cls is CLASSES[0]:
+            journal_ref = db.collection("classes").document(cls["id"]).collection("assignments").document()
+            journal_ref.set({
+                "type": "journal",
+                "journal": {
+                    "questions": ["What's one money goal for this month?", "What might get in the way?"],
+                    "minWords": 30,
+                    "minSeconds": 60,
+                },
+                "lessonIds": [],
+                "scope": "class",
+                "studentUids": [],
+                "dueDate": None,
+                "title": "Monthly money goal",
+                "createdAt": now,
+            })
+            # Two students: one complete, one in progress. NOTE: metadata only — no body.
+            subs = journal_ref.collection("submissions")
+            subs.document(student_uids[0]).set({
+                "wordCount": 48, "secondsSpent": 95, "status": "complete",
+                "entryId": "SEED-ENTRY-0001", "submittedAt": now,
+            })
+            if len(student_uids) > 1:
+                subs.document(student_uids[1]).set({
+                    "wordCount": 12, "secondsSpent": 40, "status": "in_progress",
+                    "entryId": "SEED-ENTRY-0002", "submittedAt": now,
+                })
+            print(f"  + journal assignment: {len(student_uids)} students, 2 seeded submissions")
 
     print("\nDone. Log in as the teacher and open /dashboard.")
     print(f"  email: {TEACHER_EMAIL}\n  pass:  {TEACHER_PASSWORD}")

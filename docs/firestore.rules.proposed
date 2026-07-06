@@ -33,6 +33,10 @@ service cloud.firestore {
     }
 
     // 🔐 Per-user sandbox: anything under /users/{uid}/** is private to that uid.
+    // + WEB: this already covers users/{uid}/journal (personal entry content) —
+    // no new rule needed there. Only the teacher-visible metadata under
+    // classes/{classId}/assignments/{assignmentId}/submissions/{studentUid}
+    // (below) is ever readable by anyone other than the owning student.
     match /users/{userId}/{document=**} {
       allow read, write: if isOwner(userId);
     }
@@ -69,6 +73,15 @@ service cloud.firestore {
         allow read:  if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data)
                      || exists(/databases/$(database)/documents/classes/$(classId)/roster/$(request.auth.uid));
         allow write: if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
+
+        // + WEB: journal submission metadata (counts only — NEVER content).
+        // A class teacher OR the owning student may READ; clients may NOT write
+        // (only the Admin SDK /api/journal/submit route writes these).
+        match /submissions/{studentUid} {
+          allow read:  if request.auth.uid == studentUid
+                       || isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
+          allow write: if false;
+        }
       }
     }
 
