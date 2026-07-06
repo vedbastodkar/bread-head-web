@@ -24,7 +24,7 @@ Placeholder features that are wired into the UI but not fully implemented. Each 
 - **Decision:** students self-register + join by code (already worked); teacher-provisioned accounts were intentionally deferred — no synthetic-email/login-card system.
 
 ## Student experience — deferred
-- **Gamification** — XP / level / streaks / badges / rewards on the dashboard and a celebration on lesson completion. The `gamificationProgress` map already exists in `users/{uid}` (written by iOS) — the web just needs to read + display it, and award on web completion.
+- **Gamification** — PARTIAL. Student dashboard now **displays** level / XP / lessons from `gamificationProgress` (`StudentHome.tsx`). Still missing: streaks/badges (no such fields exist yet), a lesson-completion celebration, and **awarding XP on web completion** — deferred because the XP/level formula lives in iOS and writing it from web would diverge the shared map.
 - ~~**Report-a-problem sending**~~ — DONE. Send posts to `/api/report` (auth-required) → emails `breadhead.org@gmail.com` via Resend with lesson/slide/reporter. All email routes now send from `noreply@bread-head.org` (verified domain) instead of the `onboarding@resend.dev` sandbox.
 - **Onboarding** — first-time student tour / welcome flow.
 - **Mobile responsiveness** — the right-bubble sidebar and dashboard tiles are desktop-first; test and tune for phones.
