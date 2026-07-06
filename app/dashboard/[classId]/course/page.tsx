@@ -18,6 +18,10 @@ export default function CoursePage() {
   const [targets, setTargets] = useState<Set<string>>(new Set())
   const [due, setDue] = useState('')
   const [title, setTitle] = useState('')
+  const [assignType, setAssignType] = useState<'lesson' | 'journal'>('lesson')
+  const [questions, setQuestions] = useState<string[]>([''])
+  const [minWords, setMinWords] = useState(0)
+  const [minSeconds, setMinSeconds] = useState(0)
   const [overrideControls, setOverrideControls] = useState(false)
   const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -120,6 +124,7 @@ export default function CoursePage() {
   function resetComposer() {
     setSelected(new Set()); setTargets(new Set()); setDue(''); setTitle('')
     setScope('class'); setOverrideControls(false); setControls(DEFAULT_CONTROLS); setEditingId(null)
+    setAssignType('lesson'); setQuestions(['']); setMinWords(0); setMinSeconds(0)
   }
 
   function startEdit(a: Assignment) {
@@ -132,17 +137,46 @@ export default function CoursePage() {
     const hasControls = a.controls && Object.keys(a.controls).length > 0
     setOverrideControls(!!hasControls)
     setControls({ ...DEFAULT_CONTROLS, ...(a.controls ?? {}) })
+    setAssignType(a.type === 'journal' ? 'journal' : 'lesson')
+    if (a.type === 'journal' && a.journal) {
+      setQuestions(a.journal.questions.length ? a.journal.questions : [''])
+      setMinWords(a.journal.minWords ?? 0)
+      setMinSeconds(a.journal.minSeconds ?? 0)
+    } else {
+      setQuestions(['']); setMinWords(0); setMinSeconds(0)
+    }
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function submit() {
     if (!user) return
+    if (assignType === 'journal') {
+      const qs = questions.map((q) => q.trim()).filter(Boolean)
+      if (qs.length === 0) { alert('Add at least one prompt question.'); return }
+      if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
+      const payload = {
+        type: 'journal',
+        journal: { questions: qs, minWords, minSeconds },
+        scope,
+        studentUids: scope === 'students' ? Array.from(targets) : [],
+        dueDate: due || null,
+        title: title.trim() || null,
+      }
+      setBusy(true)
+      try {
+        if (editingId) await apiCall(user, `/api/classes/${classId}/assign?id=${editingId}`, 'PATCH', payload)
+        else await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
+        resetComposer(); reload()
+      } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+      return
+    }
     if (selected.size === 0) { alert('Select at least one lesson.'); return }
     if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
 
     // Duplicate guard (create only): warn on an identical lessons+scope+targets assignment.
     if (!editingId) {
       const dup = (cls?.assignments ?? []).some((a) =>
+        a.type !== 'journal' &&
         a.scope === scope &&
         sameSet(a.lessonIds, selected) &&
         (scope === 'class' || sameSet(a.studentUids ?? [], targets)),
@@ -151,6 +185,7 @@ export default function CoursePage() {
     }
 
     const payload = {
+      type: 'lesson',
       lessonIds: Array.from(selected),
       scope,
       studentUids: scope === 'students' ? Array.from(targets) : [],
@@ -180,6 +215,15 @@ export default function CoursePage() {
     const targetStudents = a.scope === 'class' ? roster : roster.filter((s) => (a.studentUids ?? []).includes(s.uid))
     const total = a.scope === 'class' ? roster.length : (a.studentUids ?? []).length
     const done = targetStudents.filter((s) => a.lessonIds.every((id) => s.completedLessons.includes(id))).length
+    return { done, total }
+  }
+
+  // Journal completion = target students whose submission status is 'complete'.
+  function journalCompletion(a: Assignment): { done: number; total: number } {
+    const roster = cls!.students
+    const total = a.scope === 'class' ? roster.length : (a.studentUids ?? []).length
+    const targetStudents = a.scope === 'class' ? roster : roster.filter((s) => (a.studentUids ?? []).includes(s.uid))
+    const done = targetStudents.filter((s) => a.submissions?.[s.uid]?.status === 'complete').length
     return { done, total }
   }
 
@@ -320,7 +364,16 @@ export default function CoursePage() {
         <div className="space-y-4">
           <div className="bg-white rounded-2xl shadow-sm p-5 lg:sticky lg:top-28">
             <div className="text-sm font-medium text-textTitle mb-1">
-              {editingId ? 'Edit assignment' : 'Assign'} {selected.size > 0 && <span className="text-textTitle/50">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}
+              {editingId ? 'Edit assignment' : 'Assign'} {assignType === 'lesson' && selected.size > 0 && <span className="text-textTitle/50">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}
+            </div>
+
+            <div className="flex gap-2 mb-3">
+              {(['lesson', 'journal'] as const).map((t) => (
+                <button key={t} onClick={() => setAssignType(t)}
+                  className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${assignType === t ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'}`}>
+                  {t === 'lesson' ? 'Lesson' : 'Journal'}
+                </button>
+              ))}
             </div>
 
             <input
@@ -328,6 +381,39 @@ export default function CoursePage() {
               placeholder="Title (optional)"
               className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3 mt-2"
             />
+
+            {assignType === 'journal' && (
+              <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2">
+                <div className="text-xs uppercase tracking-wider text-textTitle/40">Prompt questions</div>
+                {questions.map((q, i) => (
+                  <div key={i} className="flex gap-2">
+                    <input
+                      type="text" value={q}
+                      onChange={(e) => setQuestions((qs) => qs.map((x, j) => (j === i ? e.target.value : x)))}
+                      placeholder={`Question ${i + 1}`}
+                      className="flex-1 px-3 py-2 rounded-lg border border-textTitle/15 text-sm"
+                    />
+                    {questions.length > 1 && (
+                      <button onClick={() => setQuestions((qs) => qs.filter((_, j) => j !== i))}
+                        className="px-2 text-textTitle/40 hover:text-red-600">×</button>
+                    )}
+                  </div>
+                ))}
+                <button onClick={() => setQuestions((qs) => [...qs, ''])} className="text-xs text-brandGreen hover:underline">+ Add question</button>
+                <div className="flex items-center justify-between gap-2 pt-1">
+                  <label className="flex items-center gap-2 text-sm text-textTitle/80">Min words
+                    <input type="number" min={0} max={5000} value={minWords}
+                      onChange={(e) => setMinWords(Math.max(0, Number(e.target.value) || 0))}
+                      className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-textTitle/80">Min seconds
+                    <input type="number" min={0} max={7200} value={minSeconds}
+                      onChange={(e) => setMinSeconds(Math.max(0, Number(e.target.value) || 0))}
+                      className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                  </label>
+                </div>
+              </div>
+            )}
 
             <div className="flex gap-2 mb-3">
               {(['class', 'students'] as const).map((s) => (
@@ -351,30 +437,34 @@ export default function CoursePage() {
             <input type="date" value={due} onChange={(e) => setDue(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3" />
 
-            {/* Per-assignment control override */}
-            <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
-              <input type="checkbox" checked={overrideControls} onChange={(e) => setOverrideControls(e.target.checked)} />
-              Custom lesson controls for this assignment
-            </label>
-            {overrideControls && (
-              <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2 text-sm text-textTitle/80">
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" checked={controls.lockUntilCorrect}
-                    onChange={(e) => setControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
-                  Lock until correct answer
+            {/* Per-assignment control override (lesson assignments only) */}
+            {assignType === 'lesson' && (
+              <>
+                <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
+                  <input type="checkbox" checked={overrideControls} onChange={(e) => setOverrideControls(e.target.checked)} />
+                  Custom lesson controls for this assignment
                 </label>
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" checked={controls.noSkipAhead}
-                    onChange={(e) => setControls((c) => ({ ...c, noSkipAhead: e.target.checked }))} />
-                  No skipping ahead
-                </label>
-                <label className="flex items-center justify-between gap-2">
-                  <span>Min seconds / slide</span>
-                  <input type="number" min={0} max={600} value={controls.minSecondsPerSlide}
-                    onChange={(e) => setControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
-                    className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
-                </label>
-              </div>
+                {overrideControls && (
+                  <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2 text-sm text-textTitle/80">
+                    <label className="flex items-center gap-2">
+                      <input type="checkbox" checked={controls.lockUntilCorrect}
+                        onChange={(e) => setControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
+                      Lock until correct answer
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input type="checkbox" checked={controls.noSkipAhead}
+                        onChange={(e) => setControls((c) => ({ ...c, noSkipAhead: e.target.checked }))} />
+                      No skipping ahead
+                    </label>
+                    <label className="flex items-center justify-between gap-2">
+                      <span>Min seconds / slide</span>
+                      <input type="number" min={0} max={600} value={controls.minSecondsPerSlide}
+                        onChange={(e) => setControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
+                        className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                    </label>
+                  </div>
+                )}
+              </>
             )}
 
             <div className="flex gap-2">
@@ -398,7 +488,8 @@ export default function CoursePage() {
             ) : (
               <div className="space-y-3">
                 {cls.assignments.map((a) => {
-                  const { done, total } = completion(a)
+                  const isJournal = a.type === 'journal'
+                  const { done, total } = isJournal ? journalCompletion(a) : completion(a)
                   const isOpen = expanded.has(a.id)
                   const hasControls = a.controls && Object.keys(a.controls).length > 0
                   return (
@@ -406,7 +497,9 @@ export default function CoursePage() {
                       <div className="flex items-start justify-between gap-2">
                         <button onClick={() => toggleExpanded(a.id)} className="text-left flex-1 min-w-0">
                           <div className="text-textTitle font-medium truncate">
-                            {a.title || `${a.lessonIds.length} lesson${a.lessonIds.length > 1 ? 's' : ''}`} <span className="text-textTitle/40">{isOpen ? '▾' : '▸'}</span>
+                            {a.title || (isJournal
+                              ? `Journal · ${a.journal?.questions.length ?? 0} question${(a.journal?.questions.length ?? 0) > 1 ? 's' : ''}`
+                              : `${a.lessonIds.length} lesson${a.lessonIds.length > 1 ? 's' : ''}`)} <span className="text-textTitle/40">{isOpen ? '▾' : '▸'}</span>
                           </div>
                           <div className="text-textTitle/50">
                             {a.scope === 'class' ? 'Whole class' : `${(a.studentUids ?? []).length} student${(a.studentUids ?? []).length > 1 ? 's' : ''}`}
@@ -421,12 +514,19 @@ export default function CoursePage() {
                         </div>
                       </div>
                       {isOpen && (
-                        <ul className="mt-2 pl-1 space-y-0.5 text-textTitle/60">
-                          {a.lessonIds.map((id) => {
-                            const p = parseLessonId(id)
-                            return <li key={id}>• {p ? (lessonName(p.unit, p.lesson) ?? `Unit ${p.unit} · Lesson ${p.lesson}`) : id}</li>
-                          })}
-                        </ul>
+                        isJournal ? (
+                          <ul className="mt-2 pl-1 space-y-0.5 text-textTitle/60">
+                            {(a.journal?.questions ?? []).map((q, i) => <li key={i}>• {q}</li>)}
+                            <li className="text-textTitle/40 mt-1">Responses are private to each student.</li>
+                          </ul>
+                        ) : (
+                          <ul className="mt-2 pl-1 space-y-0.5 text-textTitle/60">
+                            {a.lessonIds.map((id) => {
+                              const p = parseLessonId(id)
+                              return <li key={id}>• {p ? (lessonName(p.unit, p.lesson) ?? `Unit ${p.unit} · Lesson ${p.lesson}`) : id}</li>
+                            })}
+                          </ul>
+                        )
                       )}
                     </div>
                   )
