@@ -5,8 +5,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
+import { useAuth } from '../context/AuthContext'
+import { APP_STORE_URL } from '@/lib/links'
 
 const LINKS = [
   { label: 'About',    href: '/about' },
@@ -31,7 +34,21 @@ export default function Nav() {
   const cancelHide = () => { clearTimeout(leaveTimer.current) }
   const hideApp    = () => { leaveTimer.current = setTimeout(() => setAppHovered(false), 150) }
 
+  const { user } = useAuth()
+  const pathname = usePathname()
+
+  const navLinkStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '14px',
+    letterSpacing: '0.03em', color: 'rgba(26,46,26,0.7)', textDecoration: 'none',
+    transition: 'color 0.2s ease', minHeight: '44px', display: 'flex',
+    alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+  }
+
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
+
+  // Focus view: inside a lesson the marketing nav is hidden (the LessonPlayer draws
+  // its own logo + "Exit lesson" bar).
+  const inLesson = pathname === '/lesson' || (pathname?.startsWith('/learn') ?? false)
 
   useEffect(() => {
     if (menuOpen) {
@@ -41,6 +58,8 @@ export default function Nav() {
     }
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
+
+  if (inLesson) return null
 
   return (
     <>
@@ -175,8 +194,31 @@ export default function Nav() {
             )
           )}
 
+          {/* Auth-aware controls */}
+          {user ? (
+            <a
+              href="/dashboard"
+              style={navLinkStyle}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
+            >
+              Dashboard
+            </a>
+          ) : (
+            <a
+              href="/login"
+              style={navLinkStyle}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
+            >
+              Log in
+            </a>
+          )}
+
           <a
-            href="/"
+            href={APP_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 600,
@@ -194,7 +236,7 @@ export default function Nav() {
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Get Early Access
+            Download on the App Store
           </a>
         </div>
 
@@ -301,8 +343,29 @@ export default function Nav() {
               ))}
             </div>
 
+            {/* Auth-aware controls (mobile) */}
+            {user ? (
+              <a
+                href="/dashboard"
+                onClick={() => setMenuOpen(false)}
+                style={{ display: 'block', textAlign: 'center', paddingTop: '16px', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: '#1A2E1A', textDecoration: 'none' }}
+              >
+                Dashboard
+              </a>
+            ) : (
+              <a
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                style={{ display: 'block', textAlign: 'center', paddingTop: '16px', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: '#1A2E1A', textDecoration: 'none' }}
+              >
+                Log in
+              </a>
+            )}
+
             <a
-              href="/"
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
               style={{
                 display: 'flex',
@@ -323,7 +386,7 @@ export default function Nav() {
                 boxSizing: 'border-box',
               }}
             >
-              Get Early Access
+              Download on the App Store
             </a>
           </nav>
         </div>

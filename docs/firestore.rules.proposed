@@ -1,0 +1,81 @@
+rules_version = '2';
+// PROPOSED rules for project bread-head-4b6f9.
+// This is the LIVE rules file (breadhead/firestore.rules) with ADDITIONS for the
+// web accounts + teacher dashboard. Every original rule is preserved verbatim so the
+// iOS/Android app keeps working. New blocks are marked "// + WEB:".
+// Review the diff, then copy over breadhead/firestore.rules and `firebase deploy --only firestore:rules`.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
+    function isAnon() { return isSignedIn() && request.auth.token.firebase.sign_in_provider == 'anonymous'; }
+    function isOwner(userId) { return isSignedIn() && !isAnon() && request.auth.uid == userId; }
+
+    // + WEB: role comes from a custom claim set by the Admin SDK (see seed_demo.py / setRole route)
+    function hasRole(r) { return isSignedIn() && request.auth.token.role == r; }
+
+    // + WEB: all teachers on a class (owner + co-teachers). Tolerates the pre-
+    // co-teacher shape where only `teacherId` exists.
+    function classTeachers(c) {
+      return c.teacherIds != null ? c.teacherIds : (c.teacherId != null ? [c.teacherId] : []);
+    }
+    function isClassTeacher(c) { return isSignedIn() && request.auth.uid in classTeachers(c); }
+
+    // Deny by default
+    match /{document=**} { allow read, write: if false; }
+
+    // Public read-only
+    match /public/{docId} { allow read: if true; }
+    match /public/{collection}/{docId} { allow read: if true; }
+
+    // Optional guest area (only if you actually use it)
+    match /guestSessions/{guestId=**} {
+      allow read, write: if isAnon() && request.auth.uid == guestId;
+    }
+
+    // 🔐 Per-user sandbox: anything under /users/{uid}/** is private to that uid.
+    match /users/{userId}/{document=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // + WEB: a teacher may READ (never write) the TOP-LEVEL student doc — which holds
+    // lessonProgress + gamificationProgress maps — IFF the teacher's uid is listed in
+    // that student's profile.teacherIds. This grants NO access to subcollections
+    // (budget/categories/journal stay private). resource.data = the doc being read,
+    // so this needs no extra get() and is cheap.
+    match /users/{userId} {
+      allow read: if hasRole('teacher')
+                  && request.auth.uid in resource.data.profile.teacherIds;
+    }
+
+    // + WEB: classes owned or co-taught by a teacher.
+    // Rostered students may READ the class doc (for name / pacing / lessonControls);
+    // they can never write it. Only the owner (teacherId) may delete.
+    match /classes/{classId} {
+      allow read:   if isClassTeacher(resource.data)
+                    || exists(/databases/$(database)/documents/classes/$(classId)/roster/$(request.auth.uid));
+      allow create: if hasRole('teacher') && request.resource.data.teacherId == request.auth.uid;
+      allow update: if isClassTeacher(resource.data);
+      allow delete: if resource.data.teacherId == request.auth.uid;
+
+      // roster: any class teacher manages; a student may read their own row
+      match /roster/{studentUid} {
+        allow read:  if request.auth.uid == studentUid
+                     || isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
+        allow write: if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
+      }
+
+      // + WEB: assignments — any class teacher writes; rostered students may read theirs
+      match /assignments/{assignmentId} {
+        allow read:  if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data)
+                     || exists(/databases/$(database)/documents/classes/$(classId)/roster/$(request.auth.uid));
+        allow write: if isClassTeacher(get(/databases/$(database)/documents/classes/$(classId)).data);
+      }
+    }
+
+    // Leaderboards (client read-only; writes via Admin SDK)
+    match /leaderboards/{seasonId}/entries/{entryId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+  }
+}

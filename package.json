@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
+    "firebase": "^12.15.0",
+    "firebase-admin": "^14.1.0",
     "framer-motion": "^11.3.0",
     "gsap": "^3.12.5",
     "next": "14.2.5",

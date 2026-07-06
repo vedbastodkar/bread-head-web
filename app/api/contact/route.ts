@@ -114,17 +114,21 @@ export async function POST(req: NextRequest) {
   const { firstName, lastName, email, org, partnerType, reach, message } = data
 
   try {
-    await resend.emails.send({
-      from: 'Bread Head <onboarding@resend.dev>',
+    const { error } = await resend.emails.send({
+      from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: email,
       subject: `${SUBJECT_PREFIX[partnerType] ?? 'Inquiry'} — ${firstName} ${lastName}${org ? ` (${org})` : ''}`,
       html: contactHtml({ firstName, lastName, email, org, partnerType, reach, message }),
     })
+    if (error) {
+      console.error('Contact email error:', error)
+      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+    }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('Contact email error:', err)
+    console.error('Contact email exception:', err)
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

@@ -110,17 +110,21 @@ export async function POST(req: NextRequest) {
   const subjectLabel = SUBJECT_LABELS[subject] ?? 'Inquiry'
 
   try {
-    await resend.emails.send({
-      from: 'Bread Head <onboarding@resend.dev>',
+    const { error } = await resend.emails.send({
+      from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: email,
       subject: `[${subjectLabel}] — ${name}`,
       html: supportHtml({ name, email, subject, message }),
     })
+    if (error) {
+      console.error('Support email error:', error)
+      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+    }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('Support email error:', err)
+    console.error('Support email exception:', err)
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

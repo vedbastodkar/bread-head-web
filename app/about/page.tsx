@@ -608,6 +608,86 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── BASHIR ────────────────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ height: '1px', background: 'rgba(26,46,26,0.12)' }} />
+        </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '80px', paddingBottom: '80px', paddingLeft: '24px', paddingRight: '24px' }}>
+          <FadeUp delay={0}>
+            <div className="about-founder-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '64px', alignItems: 'center' }}>
+              <div style={{ borderRadius: '20px', overflow: 'hidden', alignSelf: 'center', aspectRatio: '1 / 1' }}>
+                <Image
+                  src="/assets/bashir_photo.png"
+                  alt="Bashir Abdullahi, Marketing Content Strategist & Coordinator at Bread Head"
+                  width={480}
+                  height={480}
+                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '34px', color: '#1A2E1A', marginBottom: '4px' }}>
+                  Bashir Abdullahi
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '16px', color: '#D1A945', marginBottom: '24px', lineHeight: 1 }}>
+                  Marketing Content Strategist &amp; Coordinator
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  At Bread Head, I help shape what our content actually says. That means coming up with ideas worth making, writing the scripts behind them, and helping run the filming so every piece comes together the way it should.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  I got interested because so much financial content online feels stiff or forgettable, and teens scroll right past it. I think the fix is not more information, it is better storytelling. A sharp script and a clear idea can turn a dry money concept into something people actually want to watch.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: 0 }}>
+                  My focus is on the details that make a piece land: how it opens, how it flows, and how it leaves you feeling like you learned something without being lectured. When the writing and the filming line up, the message sticks, and that is what makes the work worth doing.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ── AHAMDI ────────────────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ height: '1px', background: 'rgba(26,46,26,0.12)' }} />
+        </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '80px', paddingBottom: '80px', paddingLeft: '24px', paddingRight: '24px' }}>
+          <FadeUp delay={0}>
+            <div className="about-founder-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '64px', alignItems: 'center' }}>
+              <div style={{ borderRadius: '20px', overflow: 'hidden', alignSelf: 'center', aspectRatio: '1 / 1' }}>
+                <Image
+                  src="/assets/ahamdi_photo.png"
+                  alt="Ahamdi Nwachukwu, Social Media Growth & Engagement Coordinator at Bread Head"
+                  width={480}
+                  height={480}
+                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '34px', color: '#1A2E1A', marginBottom: '4px' }}>
+                  Ahamdi Nwachukwu
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '16px', color: '#D1A945', marginBottom: '24px', lineHeight: 1 }}>
+                  Social Media Growth &amp; Engagement Coordinator
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  I run the day to day engagement for Bread Head across social media. A lot of that is exactly what it sounds like. I am in the comments, replying to people, joining conversations, and keeping the page active where our audience already spends its time.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  People underrate how much this matters. A page that only posts and disappears feels like a billboard. A page that shows up, responds, and actually talks to people feels like something you want to follow. Engagement is how a brand goes from being seen to being remembered.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: 0 }}>
+                  I got into this because reaching teens is not about shouting the loudest, it is about being present. The more we show up in the small moments, the more Bread Head becomes part of the everyday scroll instead of another thing people ignore. That steady presence is what turns a follower into someone who actually cares about learning.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
       {/* ── STATS BAR ─────────────────────────────────────────────── */}
       <section style={{ background: '#1A2E1A' }}>
         <div
