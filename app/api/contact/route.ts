@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: 'Bread Head <onboarding@resend.dev>',
+      from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: email,
       subject: `${SUBJECT_PREFIX[partnerType] ?? 'Inquiry'} — ${firstName} ${lastName}${org ? ` (${org})` : ''}`,

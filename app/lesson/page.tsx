@@ -89,6 +89,17 @@ export default function LessonPage() {
     setDoc(doc(db, 'users', user.uid), { lessonSlide: { [lessonId]: i } }, { merge: true }).catch(() => {})
   }, [user, isTeacher, lessonId])
 
+  const handleReport = useCallback(async (info: { lessonId: string; slide: number; text: string }) => {
+    if (!user) throw new Error('Not signed in')
+    const token = await user.getIdToken()
+    const res = await fetch('/api/report', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(info),
+    })
+    if (!res.ok) throw new Error('Report failed')
+  }, [user])
+
   const handleComplete = useCallback(async () => {
     if (!user || isTeacher || !target) return
     try {
@@ -128,6 +139,7 @@ export default function LessonPage() {
       controls={controls}
       onSlideChange={saveSlide}
       onComplete={handleComplete}
+      onReport={handleReport}
       onNext={goNext}
       onExit={() => router.push('/dashboard')}
     />

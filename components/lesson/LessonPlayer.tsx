@@ -14,6 +14,7 @@ export function LessonPlayer({
   initialSlide = 0,
   onSlideChange,
   controls = DEFAULT_CONTROLS,
+  onReport,
 }: {
   lesson: Lesson
   onExit?: () => void
@@ -22,6 +23,7 @@ export function LessonPlayer({
   initialSlide?: number        // resume from a saved slide
   onSlideChange?: (index: number) => void
   controls?: LessonControls    // teacher-set enforcement (pacing lives upstream)
+  onReport?: (info: { lessonId: string; slide: number; text: string }) => Promise<void>
 }) {
   const total = lesson.slides.length
   const start = Math.min(Math.max(initialSlide, 0), total - 1)
@@ -164,7 +166,7 @@ export function LessonPlayer({
         </button>
       </div>
 
-      {reporting && <ReportModal lesson={lesson.id} slide={index + 1} onClose={() => setReporting(false)} />}
+      {reporting && <ReportModal lesson={lesson.id} slide={index + 1} onSubmit={onReport} onClose={() => setReporting(false)} />}
     </div>
   )
 }
@@ -177,10 +179,31 @@ function FlagIcon() {
   )
 }
 
-// Report-a-problem — sending is stubbed (see STUB.md).
-function ReportModal({ lesson, slide, onClose }: { lesson: string; slide: number; onClose: () => void }) {
+// Report-a-problem — Send posts to /api/report via the onSubmit handler.
+function ReportModal({ lesson, slide, onSubmit, onClose }: {
+  lesson: string
+  slide: number
+  onSubmit?: (info: { lessonId: string; slide: number; text: string }) => Promise<void>
+  onClose: () => void
+}) {
   const [text, setText] = useState('')
   const [sent, setSent] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  async function send() {
+    if (!text.trim()) return
+    setBusy(true); setError('')
+    try {
+      if (onSubmit) await onSubmit({ lessonId: lesson, slide, text: text.trim() })
+      setSent(true)
+    } catch {
+      setError('Could not send. Please try again.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
       <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
@@ -199,9 +222,10 @@ function ReportModal({ lesson, slide, onClose }: { lesson: string; slide: number
               placeholder="What looks wrong on this slide?"
               className="w-full h-28 px-4 py-3 rounded-xl border border-textTitle/15 text-sm outline-none focus:border-brandGreen"
             />
+            {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
             <div className="flex justify-end gap-2 mt-3">
               <button onClick={onClose} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70">Cancel</button>
-              <button onClick={() => setSent(true)} disabled={!text.trim()} className="px-5 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-50">Send</button>
+              <button onClick={send} disabled={!text.trim() || busy} className="px-5 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-50">{busy ? 'Sending…' : 'Send'}</button>
             </div>
           </>
         )}
