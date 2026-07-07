@@ -9,6 +9,7 @@ import {
   DEFAULT_CONTROLS,
   resolvePacingFrontier,
   resolveControls,
+  assignedLessonIdSet,
   type LessonControls,
   type ClassLite,
   type ClassPacing,
@@ -140,12 +141,13 @@ export function useStudent() {
   }, [loading, user, router, reloadKey])
 
   const pacingFrontier = resolvePacingFrontier(classes)
+  const assignedLessonIds = user ? assignedLessonIdSet(classes, user.uid) : new Set<string>()
   const controlsForLesson = (id: string): LessonControls =>
     user ? resolveControls(id, user.uid, classes) : { ...DEFAULT_CONTROLS }
 
   return {
     data, err, loading, user, signOut,
-    pacingFrontier, controlsForLesson,
+    pacingFrontier, controlsForLesson, assignedLessonIds,
     reload: () => setReloadKey((k) => k + 1),
   }
 }

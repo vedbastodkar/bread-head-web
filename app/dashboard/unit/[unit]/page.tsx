@@ -11,7 +11,7 @@ import { setLessonTarget } from '@/lib/lessonNav'
 export default function UnitPage() {
   const { unit: unitParam } = useParams<{ unit: string }>()
   const unit = Number(unitParam)
-  const { data, err, loading, user, signOut, pacingFrontier } = useStudent()
+  const { data, err, loading, user, signOut, pacingFrontier, assignedLessonIds } = useStudent()
   const router = useRouter()
   const [open, setOpen] = useState(true)
 
@@ -25,7 +25,7 @@ export default function UnitPage() {
   const ids = unitLessonIds(u.unit)
   const doneCount = ids.filter((id) => completed.has(id)).length
 
-  const firstOpen = ids.find((id) => lessonState(id, completed, pacingFrontier) === 'open')
+  const firstOpen = ids.find((id) => lessonState(id, completed, pacingFrontier, assignedLessonIds) === 'open')
   const contLesson = firstOpen ? Number(firstOpen.match(/lesson(\d+)$/)![1]) : 1
 
   function go(lesson: number) {
@@ -72,7 +72,7 @@ export default function UnitPage() {
         {open && (
           <div className="bg-bgSage/40 p-3 space-y-2">
             {ids.map((id, i) => {
-              const state = lessonState(id, completed, pacingFrontier)
+              const state = lessonState(id, completed, pacingFrontier, assignedLessonIds)
               const lessonNo = i + 1
               const name = lessonName(u.unit, lessonNo) ?? `Lesson ${lessonNo}`
               const locked = state === 'locked'
