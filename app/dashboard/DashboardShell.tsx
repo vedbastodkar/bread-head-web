@@ -93,8 +93,9 @@ export function DashboardShell({
 
             {current && (
               <>
-                <Group title="Course content" />
-                {navItem(`/dashboard/${current.id}/course`, 'Course', <IconBook />)}
+                <Group title="Content" />
+                {navItem(`/dashboard/${current.id}/course`, 'Lessons', <IconBook />)}
+                {navItem(`/dashboard/${current.id}/journal`, 'Journal', <IconPencil />)}
 
                 <Group title="Performance" />
                 {navItem(`/dashboard/${current.id}`, 'Progress', <IconChart />)}
@@ -149,6 +150,7 @@ const IconChart = () => <svg {...I({})}><path d="M3 3v18h18" /><path d="M7 15l4-
 const IconUsers = () => <svg {...I({})}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /></svg>
 const IconGear = () => <svg {...I({})}><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15H4a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 6 9.4a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 11 4.6V4a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 2.6 1.31 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 2z" /></svg>
 const IconMail = () => <svg {...I({})}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>
+const IconPencil = () => <svg {...I({})}><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
 
 // Minimal centered frame for one-off messages (e.g. "not found").
 export function DashboardLoading({ children }: { children: React.ReactNode }) {
