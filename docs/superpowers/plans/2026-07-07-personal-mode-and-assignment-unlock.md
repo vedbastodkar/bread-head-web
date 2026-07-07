@@ -546,30 +546,71 @@ git commit -m "feat(lessons): teacher can assign lessons (type:lesson authoring 
 
 ---
 
-## Task 7: Teacher lesson-assignment completion indicator
+## Task 7: Teacher lesson-assignment completion — submission-based (D6-strict)
+
+**Decision (user, D6-strict):** a lesson assignment is "done" for a student when they completed the assigned lesson(s) **while assigned** — i.e. from the submission record Task 5 writes — NOT from `completedLessons` (which counts prior completions). Apply this signal **consistently** so the course-page aggregate and the per-student view agree.
+
+**Multi-lesson correctness:** a lesson assignment can have several `lessonIds`. The submission must accumulate which lessons were completed-while-assigned; "done" = ALL of the assignment's `lessonIds` are covered.
 
 **Files:**
-- Modify: `app/api/dashboard/overview/route.ts` (include lesson-submission status per student)
-- Modify: `app/dashboard/[classId]/[studentUid]/page.tsx` (render lesson-assignment done/not-done)
+- Modify: `app/api/lesson/submit/route.ts` (accumulate `completedLessonIds` instead of a single overwritten `lessonId`)
+- Modify: `app/api/dashboard/overview/route.ts` (read submissions for lesson assignments too; expose `completedLessonIds`)
+- Modify: `app/dashboard/useDashboard.ts` (extend the `Assignment.submissions` type to carry lesson submissions)
+- Modify: `app/dashboard/[classId]/course/page.tsx` (switch the "done" count from `completedLessons` to submission-based)
+- Modify: `app/dashboard/[classId]/[studentUid]/page.tsx` (render lesson-assignment done/not-done from submissions)
 
-- [ ] **Step 1: Include lesson submissions in the overview**
+- [ ] **Step 1: Accumulate completed lessons in the submission**
 
-In `app/api/dashboard/overview/route.ts`, where journal submissions are read for each assignment, also surface lesson-assignment submissions. For a `type:'lesson'` assignment, a student is "complete" if `assignments/{id}/submissions/{studentUid}` exists with `status==='complete'`. Return that alongside the existing journal status.
+In `app/api/lesson/submit/route.ts`, change the write so it unions the lesson id rather than overwriting a single value:
 
-- [ ] **Step 2: Render the indicator**
+```typescript
+import { FieldValue } from 'firebase-admin/firestore'
+// ...
+  await adminDb
+    .collection('classes').doc(classId)
+    .collection('assignments').doc(assignmentId)
+    .collection('submissions').doc(u.uid)
+    .set(
+      { completedLessonIds: FieldValue.arrayUnion(lessonId), status: 'complete', submittedAt: FieldValue.serverTimestamp() },
+      { merge: true },
+    )
+```
 
-In `app/dashboard/[classId]/[studentUid]/page.tsx`, add a card for each `type:'lesson'` assignment mirroring the journal status card: title, due date, and "Complete / Not started" from the submission. Keep copy/style consistent with the journal card.
+Keep all the existing auth/join-gate/assignment-validation logic unchanged (it stays exactly as reviewed in Task 5). Only the `.set(...)` payload changes. `buildLessonSubmission` may still be imported for the validated `lessonId`, or inline `{ lessonId }` — do not remove the validation.
 
-- [ ] **Step 3: Build + visual gate**
+- [ ] **Step 2: Read lesson submissions in the overview**
 
-Run: `npm run build`; if UI changed, `npm run test:update`; then `npx playwright test`.
-Expected: all pass.
+In `app/api/dashboard/overview/route.ts`, the submission read is currently gated to journal assignments (`isJournal`). Read submissions for **lesson** assignments too. For a lesson assignment, expose per student `{ completedLessonIds: string[], status: string, submittedAt }`. Keep the journal shape (`wordCount/secondsSpent/status`) for journal assignments — the `submissions` value is a union of the two shapes.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 3: Extend the dashboard type**
+
+In `app/dashboard/useDashboard.ts`, widen `Assignment.submissions` so a lesson assignment's submission can carry `completedLessonIds?: string[]` alongside the existing journal fields (make the extra journal fields optional, or use a union keyed by `type`). Build must stay green.
+
+- [ ] **Step 4: Course-page done count → submission-based**
+
+In `app/dashboard/[classId]/course/page.tsx`, replace the `completedLessons`-based `done` computation (currently ~line 217, and the mirror at ~224–225) for **lesson** assignments with:
+
+```typescript
+const done = targetStudents.filter((s) =>
+  a.lessonIds.every((id) => (a.submissions?.[s.uid]?.completedLessonIds ?? []).includes(id)),
+).length
+```
+
+Do not change how journal assignments compute completion. Leave `s.completedLessons` usage that is NOT about assignment completion (e.g. overall progress displays) untouched.
+
+- [ ] **Step 5: Per-student page lesson-assignment cards**
+
+In `app/dashboard/[classId]/[studentUid]/page.tsx`, add a card per `type:'lesson'` assignment mirroring the existing journal status card: title, due date, and "Complete / Not started" where complete = `a.lessonIds.every((id) => (a.submissions?.[student.uid]?.completedLessonIds ?? []).includes(id))`. Match the journal card's copy/style.
+
+- [ ] **Step 6: Build + visual gate**
+
+Ensure no `npm run dev` server is running (avoids `.next` corruption). Run: `npm run build` (zero errors); if the teacher UI changed visibly and it is covered by snapshots, `npm run test:update`; then `npx playwright test` (all pass). The teacher dashboard is not in the current visual snapshots, so no snapshot change is expected — confirm.
+
+- [ ] **Step 7: Commit**
 
 ```bash
-git add app/api/dashboard/overview/route.ts "app/dashboard/[classId]/[studentUid]/page.tsx" tests/snapshots -A
-git commit -m "feat(lessons): teacher sees lesson-assignment completion status"
+git add app/api/lesson/submit/route.ts app/api/dashboard/overview/route.ts app/dashboard/useDashboard.ts "app/dashboard/[classId]/course/page.tsx" "app/dashboard/[classId]/[studentUid]/page.tsx"
+git commit -m "feat(lessons): teacher lesson-assignment completion is submission-based (D6)"
 ```
 
 ---
