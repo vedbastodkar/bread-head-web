@@ -119,6 +119,7 @@ export default function LessonPage() {
           : { completedLessons: arrayUnion(lessonId) },
         profile: { updatedAt: new Date() },
       }, { merge: true })
+      setCompletedSet((prev) => { const n = new Set(prev); n.add(lessonId); return n })
     } catch { /* noop */ }
   }, [user, isTeacher, target, lessonId, completedSet])
 
