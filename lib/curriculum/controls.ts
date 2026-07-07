@@ -92,6 +92,18 @@ export function nextLesson(completed: Set<string>): { unit: number; lesson: numb
   return m ? { unit: Number(m[1]), lesson: Number(m[2]) } : { unit: 1, lesson: 1 }
 }
 
+// True only when completing `lessonId` genuinely advances the student's own
+// linear frontier — i.e. it IS the first not-completed lesson. Replays of
+// already-done lessons (idx < frontier) and out-of-order/assigned lessons
+// (idx > frontier) both return false, so neither moves currentUnit/currentLesson
+// (the iOS-facing pointer). See design D3.
+export function advancesFrontier(lessonId: string, completed: Set<string>): boolean {
+  const idx = LESSON_ORDER.indexOf(lessonId)
+  if (idx < 0) return false
+  const frontier = LESSON_ORDER.findIndex((x) => !completed.has(x))
+  return idx === frontier
+}
+
 // All teachers on a class, tolerant of the pre-co-teacher shape (only teacherId).
 export function classTeacherIds(c: { teacherId?: string; teacherIds?: string[] }): string[] {
   if (c.teacherIds && c.teacherIds.length > 0) return c.teacherIds

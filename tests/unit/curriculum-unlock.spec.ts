@@ -3,6 +3,7 @@ import {
   lessonState,
   nextLesson,
   assignedLessonIdSet,
+  advancesFrontier,
   type ClassLite,
 } from '../../lib/curriculum/controls'
 
@@ -56,4 +57,34 @@ test('assignedLessonIdSet: unions applicable lesson assignments only', () => {
   }]
   const set = assignedLessonIdSet(classes, 'me')
   expect([...set].sort()).toEqual(['unit2lesson3', 'unit6lesson2'])
+})
+
+test('advancesFrontier: lesson AT the frontier advances', () => {
+  const done = new Set(['unit1lesson1', 'unit1lesson2'])
+  expect(advancesFrontier('unit1lesson3', done)).toBe(true)
+})
+
+test('advancesFrontier: replaying an already-completed lesson does NOT advance (regression)', () => {
+  const done = new Set(['unit1lesson1', 'unit1lesson2'])
+  expect(advancesFrontier('unit1lesson1', done)).toBe(false)
+})
+
+test('advancesFrontier: out-of-order/assigned lesson beyond the frontier does NOT advance', () => {
+  const done = new Set(['unit1lesson1'])
+  expect(advancesFrontier('unit6lesson2', done)).toBe(false)
+})
+
+test('advancesFrontier: unknown lesson id does NOT advance', () => {
+  const done = new Set(['unit1lesson1'])
+  expect(advancesFrontier('not-a-real-lesson', done)).toBe(false)
+})
+
+test('advancesFrontier: sequential completion keeps advancing (streak sanity)', () => {
+  const done = new Set(['unit1lesson1', 'unit1lesson2'])
+  // Completing the frontier lesson (unit1lesson3) advances...
+  expect(advancesFrontier('unit1lesson3', done)).toBe(true)
+  const next = new Set(done)
+  next.add('unit1lesson3')
+  // ...and the lesson immediately after is now the new frontier, so it advances too.
+  expect(advancesFrontier('unit1lesson4', next)).toBe(true)
 })

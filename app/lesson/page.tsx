@@ -11,6 +11,7 @@ import {
   resolvePacingFrontier,
   resolveControls,
   assignedLessonIdSet,
+  advancesFrontier,
   LESSON_ORDER,
   DEFAULT_CONTROLS,
   type LessonControls,
@@ -107,11 +108,10 @@ export default function LessonPage() {
   const handleComplete = useCallback(async () => {
     if (!user || isTeacher || !target) return
     // Only advance the personal frontier when this lesson is on the student's own
-    // linear track. An out-of-order assigned lesson must NOT move currentUnit/
-    // currentLesson — that pointer drives cross-app (iOS) unlock (design D3).
-    const idx = LESSON_ORDER.indexOf(lessonId)
-    const linearFrontier = LESSON_ORDER.findIndex((x) => !completedSet.has(x))
-    const onTrack = idx >= 0 && idx <= linearFrontier
+    // linear track. Replays of already-done lessons and out-of-order assigned
+    // lessons must NOT move currentUnit/currentLesson — that pointer drives
+    // cross-app (iOS) unlock (design D3).
+    const onTrack = advancesFrontier(lessonId, completedSet)
     try {
       await setDoc(doc(db, 'users', user.uid), {
         lessonProgress: onTrack
