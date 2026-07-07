@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '@/lib/firebase/client'
+import { signInWithGoogle, signInWithApple } from '@/lib/firebase/authProviders'
 
 type Pane = 'student' | 'teacher'
 
@@ -129,6 +130,28 @@ function StudentPane() {
     }
   }
 
+  async function google() {
+    setError(''); setBusy(true)
+    try { await signInWithGoogle(); router.push('/dashboard') }
+    catch (e: any) {
+      setError(e?.code === 'auth/account-exists-with-different-credential'
+        ? 'You already have an account with this email — sign in with your original method first, then link Google in settings.'
+        : 'Google sign-in failed.')
+      setBusy(false)
+    }
+  }
+
+  async function apple() {
+    setError(''); setBusy(true)
+    try { await signInWithApple(); router.push('/dashboard') }
+    catch (e: any) {
+      setError(e?.code === 'auth/account-exists-with-different-credential'
+        ? 'You already have an account with this email — sign in with your original method first, then link Apple in settings.'
+        : 'Apple sign-in failed.')
+      setBusy(false)
+    }
+  }
+
   return (
     <div className="bg-white rounded-2xl shadow-sm max-w-md mx-auto p-8">
       <h1 className="font-display text-2xl text-textTitle mb-1">Student</h1>
@@ -142,6 +165,28 @@ function StudentPane() {
           {busy ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Sign in'}
         </button>
       </form>
+
+      <div className="flex items-center gap-3 my-5">
+        <div className="h-px flex-1 bg-textTitle/10" />
+        <span className="text-xs text-textTitle/40 uppercase tracking-wide">or</span>
+        <div className="h-px flex-1 bg-textTitle/10" />
+      </div>
+
+      <div className="space-y-3">
+        <button
+          type="button" onClick={google} disabled={busy}
+          className="w-full py-3 rounded-xl border border-textTitle/15 text-textTitle font-medium hover:bg-textTitle/5 transition disabled:opacity-60 flex items-center justify-center gap-2"
+        >
+          Continue with Google
+        </button>
+        <button
+          type="button" onClick={apple} disabled={busy}
+          className="w-full py-3 rounded-xl border border-textTitle/15 text-textTitle font-medium hover:bg-textTitle/5 transition disabled:opacity-60 flex items-center justify-center gap-2"
+        >
+          Continue with Apple
+        </button>
+      </div>
+
       <button type="button" onClick={() => { setMode(mode === 'signup' ? 'signin' : 'signup'); setError('') }}
         className="mt-4 text-sm text-textTitle/60 hover:text-textTitle mx-auto block">
         {mode === 'signup' ? 'Have an account? Sign in' : 'New here? Create an account'}
