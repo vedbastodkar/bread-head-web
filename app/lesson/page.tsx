@@ -121,7 +121,24 @@ export default function LessonPage() {
       }, { merge: true })
       setCompletedSet((prev) => { const n = new Set(prev); n.add(lessonId); return n })
     } catch { /* noop */ }
-  }, [user, isTeacher, target, lessonId, completedSet])
+
+    // Notify any lesson assignment this lesson belongs to (assigned layer, D6).
+    // Best-effort: never blocks or throws out of handleComplete.
+    for (const c of classes) {
+      for (const a of c.assignments) {
+        if ((a.type ?? 'lesson') !== 'lesson') continue
+        if (!a.lessonIds?.includes(lessonId)) continue
+        if (!(a.scope === 'class' || a.studentUids?.includes(user.uid))) continue
+        try {
+          await fetch('/api/lesson/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await user.getIdToken()}` },
+            body: JSON.stringify({ classId: a.classId, assignmentId: a.id, lessonId }),
+          })
+        } catch { /* noop */ }
+      }
+    }
+  }, [user, isTeacher, target, lessonId, completedSet, classes])
 
   if (loading || !target) return <div className="min-h-screen bg-bgSage" />
 

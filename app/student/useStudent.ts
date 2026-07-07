@@ -63,6 +63,7 @@ export async function fetchStudentClasses(classIds: string[]): Promise<ClassLite
         const ad = a.data() as any
         assignments.push({
           id: a.id,
+          classId: cid,
           dueDate: ad.dueDate ?? null,
           lessonIds: ad.lessonIds ?? [],
           scope: ad.scope === 'students' ? 'students' : 'class',

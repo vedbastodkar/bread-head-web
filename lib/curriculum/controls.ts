@@ -30,6 +30,7 @@ export interface ClassPacing {
 // the resolvers but ride along so callers can surface assignment metadata.
 export interface AssignmentLite {
   id?: string
+  classId?: string
   dueDate?: string | null
   lessonIds: string[]
   scope: 'class' | 'students'
