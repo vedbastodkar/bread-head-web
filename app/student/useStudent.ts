@@ -153,25 +153,6 @@ export function useStudent() {
 // ---- linear progression (mirrors iOS: sequential unlock) ----
 export { LESSON_ORDER }
 
-export type LessonState = 'done' | 'open' | 'locked'
-
-// A lesson is locked if it's past the teacher's pacing frontier, OR past the
-// student's own sequential frontier (first not-yet-completed lesson).
-export function lessonState(
-  id: string,
-  completed: Set<string>,
-  pacingFrontier: number = Infinity,
-): LessonState {
-  if (completed.has(id)) return 'done'
-  const idx = LESSON_ORDER.indexOf(id)
-  if (idx > pacingFrontier) return 'locked'
-  const frontier = LESSON_ORDER.findIndex((x) => !completed.has(x)) // first not-completed
-  return idx <= frontier ? 'open' : 'locked'
-}
-
-// where to "continue" — first not-completed lesson
-export function nextLesson(completed: Set<string>): { unit: number; lesson: number } {
-  const frontier = LESSON_ORDER.find((x) => !completed.has(x)) ?? LESSON_ORDER[LESSON_ORDER.length - 1]
-  const m = frontier.match(/^unit(\d+)lesson(\d+)$/)
-  return m ? { unit: Number(m[1]), lesson: Number(m[2]) } : { unit: 1, lesson: 1 }
-}
+// Pure curriculum logic now lives in controls.ts (firebase-free → unit-testable).
+export { lessonState, nextLesson } from '@/lib/curriculum/controls'
+export type { LessonState } from '@/lib/curriculum/controls'

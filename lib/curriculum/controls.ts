@@ -52,6 +52,45 @@ export interface ClassLite {
 // Canonical lesson ordering — mirrors LessonLogic sequential unlock.
 export const LESSON_ORDER: string[] = CATALOG.flatMap((u) => unitLessonIds(u.unit))
 
+export type LessonState = 'done' | 'open' | 'locked'
+
+// Union of lessonIds from applicable lesson-type assignments across all classes.
+// These lessons are unlocked out-of-order and permanently (design D2/D9).
+export function assignedLessonIdSet(classes: ClassLite[], uid: string): Set<string> {
+  const out = new Set<string>()
+  for (const c of classes) {
+    for (const a of c.assignments) {
+      if ((a.type ?? 'lesson') !== 'lesson') continue
+      if (!assignmentApplies(a, uid)) continue
+      for (const id of a.lessonIds) out.add(id)
+    }
+  }
+  return out
+}
+
+// A lesson is playable if: already completed, OR explicitly assigned (any order,
+// overrides pacing), OR at/under the student's own linear+pacing frontier.
+export function lessonState(
+  id: string,
+  completed: Set<string>,
+  pacingFrontier: number = Infinity,
+  assigned: Set<string> = new Set(),
+): LessonState {
+  if (completed.has(id)) return 'done'
+  if (assigned.has(id)) return 'open'
+  const idx = LESSON_ORDER.indexOf(id)
+  if (idx > pacingFrontier) return 'locked'
+  const frontier = LESSON_ORDER.findIndex((x) => !completed.has(x)) // first not-completed
+  return idx <= frontier ? 'open' : 'locked'
+}
+
+export function nextLesson(completed: Set<string>): { unit: number; lesson: number } {
+  const frontier =
+    LESSON_ORDER.find((x) => !completed.has(x)) ?? LESSON_ORDER[LESSON_ORDER.length - 1]
+  const m = frontier.match(/^unit(\d+)lesson(\d+)$/)
+  return m ? { unit: Number(m[1]), lesson: Number(m[2]) } : { unit: 1, lesson: 1 }
+}
+
 // All teachers on a class, tolerant of the pre-co-teacher shape (only teacherId).
 export function classTeacherIds(c: { teacherId?: string; teacherIds?: string[] }): string[] {
   if (c.teacherIds && c.teacherIds.length > 0) return c.teacherIds
@@ -84,7 +123,7 @@ export function resolvePacingFrontier(classes: ClassLite[]): number {
 }
 
 // True when an assignment targets this student.
-function assignmentApplies(a: AssignmentLite, studentUid: string): boolean {
+export function assignmentApplies(a: AssignmentLite, studentUid: string): boolean {
   return a.scope === 'class' || a.studentUids.includes(studentUid)
 }
 
