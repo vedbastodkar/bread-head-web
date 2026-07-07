@@ -129,6 +129,18 @@ function JournalEditor({
   saveEntry: (e: JournalEntry) => Promise<void>
   user: { getIdToken: () => Promise<string> } | null
 }) {
+  // A prompt with questions gets one answer box per question (Google-Form style);
+  // a free-write gets a single box. Answers are combined into `body` on save so
+  // word count, previews, and teacher metadata stay unchanged.
+  const questions = entry.questions ?? []
+  const hasQuestions = questions.length > 0
+  const [answers, setAnswers] = useState<string[]>(() => {
+    if (!hasQuestions) return []
+    if (entry.answers && entry.answers.length === questions.length) return entry.answers
+    const blanks = questions.map(() => '')
+    if (entry.body) blanks[0] = entry.body // legacy: entries saved before per-question boxes
+    return blanks
+  })
   const [body, setBody] = useState(entry.body)
   const [seconds, setSeconds] = useState(entry.secondsSpent)
   const [busy, setBusy] = useState(false)
@@ -142,13 +154,20 @@ function JournalEditor({
     return () => { clearInterval(id); document.removeEventListener('visibilitychange', onVis) }
   }, [])
 
-  const words = countWords(body)
+  const combined = hasQuestions ? answers.join('\n\n') : body
+  const words = countWords(combined)
 
   async function save() {
     setBusy(true)
     setSaveErr('')
     try {
-      await saveEntry({ ...entry, body, wordCount: words, secondsSpent: seconds })
+      await saveEntry({
+        ...entry,
+        body: combined,
+        answers: hasQuestions ? answers : undefined,
+        wordCount: words,
+        secondsSpent: seconds,
+      })
       if (entry.teacherAssigned && entry.assignmentId && entry.classId && user) {
         try {
           const token = await user.getIdToken()
@@ -175,21 +194,30 @@ function JournalEditor({
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-6" onClick={(e) => e.stopPropagation()}>
-        {entry.questions && entry.questions.length > 0 && (
-          <div className="bg-bgSage rounded-2xl p-4 mb-4">
-            <div className="text-xs uppercase tracking-wider text-textTitle/40 mb-2">Prompt</div>
-            <ul className="space-y-1 text-sm text-textTitle/80">
-              {entry.questions.map((q, i) => <li key={i}>• {q}</li>)}
-            </ul>
+        {hasQuestions ? (
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+            {questions.map((q, i) => (
+              <div key={i}>
+                <label className="block text-sm font-medium text-textTitle/85 mb-1.5">{q}</label>
+                <textarea
+                  autoFocus={i === 0}
+                  value={answers[i] ?? ''}
+                  onChange={(e) => setAnswers((prev) => prev.map((a, j) => (j === i ? e.target.value : a)))}
+                  placeholder="Your answer…"
+                  className="w-full h-28 rounded-2xl border border-textTitle/15 p-3 text-sm text-textTitle outline-none focus:border-brandGreen resize-none"
+                />
+              </div>
+            ))}
           </div>
+        ) : (
+          <textarea
+            autoFocus
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="Write freely…"
+            className="w-full h-64 rounded-2xl border border-textTitle/15 p-4 text-sm text-textTitle outline-none focus:border-brandGreen resize-none"
+          />
         )}
-        <textarea
-          autoFocus
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          placeholder="Write freely…"
-          className="w-full h-64 rounded-2xl border border-textTitle/15 p-4 text-sm text-textTitle outline-none focus:border-brandGreen resize-none"
-        />
         <div className="flex items-center justify-between mt-3">
           <div className="text-xs text-textTitle/45">{words} words · {Math.floor(seconds / 60)}m {seconds % 60}s</div>
           <div className="flex gap-2">

@@ -11,6 +11,7 @@ export interface JournalEntry {
   assignmentId?: string
   classId?: string
   questions?: string[]
+  answers?: string[]   // per-question answers when the entry has multiple questions
   wordCount: number
   secondsSpent: number
   createdAt?: Date
@@ -44,6 +45,7 @@ export function useJournal() {
             assignmentId: x.assignmentId ?? undefined,
             classId: x.classId ?? undefined,
             questions: Array.isArray(x.questions) ? x.questions : undefined,
+            answers: Array.isArray(x.answers) ? x.answers : undefined,
             wordCount: x.wordCount ?? 0,
             secondsSpent: x.secondsSpent ?? 0,
             createdAt: x.createdAt?.toDate?.() ?? undefined,
@@ -69,6 +71,7 @@ export function useJournal() {
       ...(e.assignmentId ? { assignmentId: e.assignmentId } : {}),
       ...(e.classId ? { classId: e.classId } : {}),
       ...(e.questions ? { questions: e.questions } : {}),
+      ...(e.answers ? { answers: e.answers } : {}),
       wordCount: e.wordCount,
       secondsSpent: e.secondsSpent,
       createdAt: e.createdAt ?? serverTimestamp(),
