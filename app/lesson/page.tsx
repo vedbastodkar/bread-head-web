@@ -38,6 +38,10 @@ export default function LessonPage() {
   const [classes, setClasses] = useState<ClassLite[]>([])
   const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
   const [completedSet, setCompletedSet] = useState<Set<string>>(new Set())
+  const [saveError, setSaveError] = useState(false)
+
+  // Any stale "couldn't save" banner is scoped to the lesson it happened on.
+  useEffect(() => { setSaveError(false) }, [target])
 
   useEffect(() => {
     if (loading) return
@@ -120,10 +124,17 @@ export default function LessonPage() {
         profile: { updatedAt: new Date() },
       }, { merge: true })
       setCompletedSet((prev) => { const n = new Set(prev); n.add(lessonId); return n })
-    } catch { /* noop */ }
+      setSaveError(false)
+    } catch {
+      // Recording the completion failed (offline / permission / quota). Surface it and
+      // do NOT notify assignments — a submission must never be marked complete while the
+      // student's own progress wasn't saved. The user can Retry.
+      setSaveError(true)
+      return
+    }
 
-    // Notify any lesson assignment this lesson belongs to (assigned layer, D6).
-    // Best-effort: never blocks or throws out of handleComplete.
+    // Completion is persisted → notify any lesson assignment this lesson belongs to
+    // (assigned layer, D6). Best-effort + idempotent (arrayUnion); never throws out.
     for (const c of classes) {
       for (const a of c.assignments) {
         if ((a.type ?? 'lesson') !== 'lesson') continue
@@ -153,15 +164,18 @@ export default function LessonPage() {
   }
 
   const frontier = resolvePacingFrontier(classes)
+  const assigned = user ? assignedLessonIdSet(classes, user.uid) : new Set<string>()
   const next = nextAfter(target.unit, target.lesson)
   const nextAllowed = next
-    ? LESSON_ORDER.indexOf(`unit${next.unit}lesson${next.lesson}`) <= frontier
+    // Playable if within pacing OR individually assigned out-of-order (D2/D5) — not pacing alone.
+    ? lessonState(`unit${next.unit}lesson${next.lesson}`, completedSet, frontier, assigned) !== 'locked'
     : false
   const goNext = next && (isTeacher || nextAllowed)
     ? () => { setInitialSlide(0); setTarget(next) }
     : undefined
 
   return (
+    <>
     <LessonPlayer
       key={lessonId}
       lesson={lesson}
@@ -174,5 +188,20 @@ export default function LessonPage() {
       nextLabel={next ? `Unit ${next.unit} · Lesson ${next.lesson}` : undefined}
       onExit={() => router.push('/dashboard')}
     />
+    {saveError && (
+      <div
+        role="alert"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-xl bg-textTitle px-4 py-3 text-sm text-white shadow-lg"
+      >
+        <span>Couldn’t save your progress — check your connection.</span>
+        <button
+          onClick={() => handleComplete()}
+          className="rounded-lg bg-white/15 px-3 py-1 font-semibold hover:bg-white/25"
+        >
+          Retry
+        </button>
+      </div>
+    )}
+    </>
   )
 }
