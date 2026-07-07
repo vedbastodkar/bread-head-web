@@ -4,8 +4,19 @@ import {
   nextLesson,
   assignedLessonIdSet,
   advancesFrontier,
+  isKnownLessonId,
   type ClassLite,
 } from '../../lib/curriculum/controls'
+
+test('isKnownLessonId: a real catalog lesson id is known', () => {
+  expect(isKnownLessonId('unit1lesson1')).toBe(true)
+})
+
+test('isKnownLessonId: a bogus / out-of-range lesson id is not known', () => {
+  expect(isKnownLessonId('unit999lesson999')).toBe(false)
+  expect(isKnownLessonId('')).toBe(false)
+  expect(isKnownLessonId('garbage')).toBe(false)
+})
 
 test('lessonState: completed lesson is done', () => {
   expect(lessonState('unit1lesson1', new Set(['unit1lesson1']))).toBe('done')

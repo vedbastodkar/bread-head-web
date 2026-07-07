@@ -53,6 +53,13 @@ export interface ClassLite {
 // Canonical lesson ordering — mirrors LessonLogic sequential unlock.
 export const LESSON_ORDER: string[] = CATALOG.flatMap((u) => unitLessonIds(u.unit))
 
+// True iff `id` is a real lesson in the shipped curriculum. Used to reject
+// assignments that reference bogus/renamed lesson ids (which would otherwise be
+// stored and then render as permanently locked for the student).
+export function isKnownLessonId(id: string): boolean {
+  return LESSON_ORDER.includes(id)
+}
+
 export type LessonState = 'done' | 'open' | 'locked'
 
 // Union of lessonIds from applicable lesson-type assignments across all classes.

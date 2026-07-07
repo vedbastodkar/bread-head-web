@@ -3,6 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
 import { sanitizeJournalConfig } from '@/lib/journal/journal'
+import { isKnownLessonId } from '@/lib/curriculum/controls'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -12,6 +13,25 @@ async function ownsClass(uid: string, classId: string) {
   if (!doc.exists) return null
   const ids: string[] = doc.get('teacherIds') ?? (doc.get('teacherId') ? [doc.get('teacherId')] : [])
   return ids.includes(uid) ? doc : null
+}
+
+// Reject any studentUids that aren't on the class roster (typo'd/stale selections
+// would otherwise create assignments no one can ever see). Returns an error
+// message, or null when the selection is clean.
+async function invalidStudents(classId: string, studentUids: string[]): Promise<string | null> {
+  if (studentUids.length === 0) return null
+  const snap = await adminDb.collection('classes').doc(classId).collection('roster').get()
+  const roster = new Set(snap.docs.map((d) => d.get('studentUid') as string).filter(Boolean))
+  return studentUids.some((u) => !roster.has(u))
+    ? 'One or more selected students are not on this class roster'
+    : null
+}
+
+// Reject assignment lessonIds that aren't in the shipped curriculum. Returns an
+// error message naming the first offender, or null when all ids are known.
+function unknownLessonError(lessonIds: string[]): string | null {
+  const bad = lessonIds.find((id) => !isKnownLessonId(id))
+  return bad ? `Unknown lesson id: ${bad}` : null
 }
 
 // Keep only the known control fields, coerced to the right types. Returns
@@ -42,9 +62,12 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
     const journal = sanitizeJournalConfig(body.journal)
     if (!journal) return NextResponse.json({ error: 'Add at least one prompt question' }, { status: 400 })
     const scope = body.scope === 'students' ? 'students' : 'class'
-    const studentUids: string[] = scope === 'students' && Array.isArray(body.studentUids) ? body.studentUids : []
+    const studentUids: string[] = scope === 'students' && Array.isArray(body.studentUids)
+      ? body.studentUids.filter((x: unknown) => typeof x === 'string') : []
     if (scope === 'students' && studentUids.length === 0)
       return NextResponse.json({ error: 'Select at least one student' }, { status: 400 })
+    const badStudents = await invalidStudents(params.classId, studentUids)
+    if (badStudents) return NextResponse.json({ error: badStudents }, { status: 400 })
     const dueDate = typeof body.dueDate === 'string' && body.dueDate ? body.dueDate : null
     const title = typeof body.title === 'string' && body.title.trim() ? body.title.trim() : null
     const ref = await adminDb.collection('classes').doc(params.classId).collection('assignments').add({
@@ -56,10 +79,15 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
 
   const lessonIds: string[] = Array.isArray(body.lessonIds) ? body.lessonIds.filter((x: unknown) => typeof x === 'string') : []
   if (lessonIds.length === 0) return NextResponse.json({ error: 'Select at least one lesson' }, { status: 400 })
+  const unknownLesson = unknownLessonError(lessonIds)
+  if (unknownLesson) return NextResponse.json({ error: unknownLesson }, { status: 400 })
   const scope = body.scope === 'students' ? 'students' : 'class'
-  const studentUids: string[] = scope === 'students' && Array.isArray(body.studentUids) ? body.studentUids : []
+  const studentUids: string[] = scope === 'students' && Array.isArray(body.studentUids)
+    ? body.studentUids.filter((x: unknown) => typeof x === 'string') : []
   if (scope === 'students' && studentUids.length === 0)
     return NextResponse.json({ error: 'Select at least one student' }, { status: 400 })
+  const badStudents = await invalidStudents(params.classId, studentUids)
+  if (badStudents) return NextResponse.json({ error: badStudents }, { status: 400 })
   const dueDate = typeof body.dueDate === 'string' && body.dueDate ? body.dueDate : null
   const title = typeof body.title === 'string' && body.title.trim() ? body.title.trim() : null
   const controls = sanitizeControls(body.controls)
@@ -89,11 +117,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
   if (Array.isArray(body.lessonIds)) {
     const ids = body.lessonIds.filter((x: unknown) => typeof x === 'string')
     if (ids.length === 0) return NextResponse.json({ error: 'Select at least one lesson' }, { status: 400 })
+    const unknownLesson = unknownLessonError(ids)
+    if (unknownLesson) return NextResponse.json({ error: unknownLesson }, { status: 400 })
     updates.lessonIds = ids
   }
   if (body.scope === 'class' || body.scope === 'students') updates.scope = body.scope
-  if (Array.isArray(body.studentUids))
-    updates.studentUids = body.studentUids.filter((x: unknown) => typeof x === 'string')
+  if (Array.isArray(body.studentUids)) {
+    const uids = body.studentUids.filter((x: unknown) => typeof x === 'string')
+    const badStudents = await invalidStudents(params.classId, uids)
+    if (badStudents) return NextResponse.json({ error: badStudents }, { status: 400 })
+    updates.studentUids = uids
+  }
   if ('dueDate' in body)
     updates.dueDate = typeof body.dueDate === 'string' && body.dueDate ? body.dueDate : null
   if ('title' in body)
