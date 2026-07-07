@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useDashboard, apiCall, type Student, type Assignment } from '../../useDashboard'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
+import { PROMPT_CATEGORIES, PROMPT_TEMPLATES, type PromptTemplate } from '@/lib/journal/prompts'
 
 // Teacher journal authoring: add journal prompts and assign them to the class or
 // specific students. Teachers only ever see submission METADATA (counts/status) —
@@ -21,6 +22,8 @@ export default function TeacherJournalPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState(false)
+  const [showLibrary, setShowLibrary] = useState(false)
+  const [openCat, setOpenCat] = useState<string | null>(null)
 
   const cls = data?.find((c) => c.id === classId)
 
@@ -36,6 +39,22 @@ export default function TeacherJournalPage() {
   function resetComposer() {
     setTitle(''); setQuestions(['']); setMinWords(0); setMinSeconds(0)
     setScope('class'); setTargets(new Set()); setDue(''); setEditingId(null)
+    setShowLibrary(false); setOpenCat(null)
+  }
+
+  // Fill the whole form from a ready-made Bread Head prompt set (confirm if it would clobber work).
+  function applyTemplate(t: PromptTemplate) {
+    const hasContent = questions.some((q) => q.trim())
+    if (hasContent && !confirm(`Replace the current questions with the “${t.name}” template?`)) return
+    setQuestions(t.questions.slice())
+  }
+
+  // Insert one library prompt as a question row — reuse a trailing empty row if present.
+  function insertPrompt(text: string) {
+    setQuestions((qs) => {
+      const lastEmpty = qs.length > 0 && qs[qs.length - 1].trim() === ''
+      return lastEmpty ? [...qs.slice(0, -1), text] : [...qs, text]
+    })
   }
 
   const toggleTarget = (uid: string) =>
@@ -118,7 +137,17 @@ export default function TeacherJournalPage() {
           />
 
           <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2">
-            <div className="text-xs uppercase tracking-wider text-textTitle/40">Prompt questions</div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs uppercase tracking-wider text-textTitle/40">Prompt questions</div>
+              <select
+                value=""
+                onChange={(e) => { const t = PROMPT_TEMPLATES.find((x) => x.id === e.target.value); if (t) applyTemplate(t) }}
+                className="text-xs px-2 py-1 rounded-lg border border-textTitle/15 bg-white text-textTitle/70"
+              >
+                <option value="">Start from a template…</option>
+                {PROMPT_TEMPLATES.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+              </select>
+            </div>
             {questions.map((q, i) => (
               <div key={i} className="flex gap-2">
                 <input
@@ -133,7 +162,38 @@ export default function TeacherJournalPage() {
                 )}
               </div>
             ))}
-            <button onClick={() => setQuestions((qs) => [...qs, ''])} className="text-xs text-brandGreen hover:underline">+ Add question</button>
+            <div className="flex items-center gap-4">
+              <button onClick={() => setQuestions((qs) => [...qs, ''])} className="text-xs text-brandGreen hover:underline">+ Add question</button>
+              <button onClick={() => setShowLibrary((v) => !v)} className="text-xs text-brandGreen hover:underline">
+                {showLibrary ? 'Hide' : 'Browse'} Bread Head prompts
+              </button>
+            </div>
+
+            {showLibrary && (
+              <div className="rounded-lg bg-white border border-textTitle/10 p-2 max-h-56 overflow-y-auto space-y-0.5">
+                {PROMPT_CATEGORIES.map((cat) => (
+                  <div key={cat.id}>
+                    <button
+                      onClick={() => setOpenCat(openCat === cat.id ? null : cat.id)}
+                      className="w-full flex items-center justify-between text-left text-xs font-medium text-textTitle/80 px-2 py-1.5 rounded hover:bg-bgSage"
+                    >
+                      {cat.name} <span className="text-textTitle/40">{openCat === cat.id ? '▾' : '▸'}</span>
+                    </button>
+                    {openCat === cat.id && (
+                      <div className="pl-2 pb-1 space-y-1.5">
+                        {cat.prompts.map((p, i) => (
+                          <div key={i} className="flex items-start gap-2 text-xs text-textTitle/70">
+                            <button onClick={() => insertPrompt(p)} className="shrink-0 mt-0.5 text-brandGreen hover:underline">Insert</button>
+                            <span>{p}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="flex items-center justify-between gap-2 pt-1">
               <label className="flex items-center gap-2 text-sm text-textTitle/80">Min words
                 <input type="number" min={0} max={5000} value={minWords}
