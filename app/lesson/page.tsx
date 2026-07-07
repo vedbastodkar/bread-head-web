@@ -171,6 +171,7 @@ export default function LessonPage() {
       onComplete={handleComplete}
       onReport={handleReport}
       onNext={goNext}
+      nextLabel={next ? `Unit ${next.unit} · Lesson ${next.lesson}` : undefined}
       onExit={() => router.push('/dashboard')}
     />
   )

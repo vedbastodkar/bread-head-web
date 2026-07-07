@@ -12,6 +12,7 @@ export function LessonPlayer({
   onExit,
   onComplete,
   onNext,
+  nextLabel,
   initialSlide = 0,
   onSlideChange,
   controls = DEFAULT_CONTROLS,
@@ -21,6 +22,7 @@ export function LessonPlayer({
   onExit?: () => void
   onComplete?: () => void
   onNext?: () => void          // provided → "Next lesson" button on completion
+  nextLabel?: string           // e.g. "Unit 2 · Lesson 3" — shown under the button
   initialSlide?: number        // resume from a saved slide
   onSlideChange?: (index: number) => void
   controls?: LessonControls    // teacher-set enforcement (pacing lives upstream)
@@ -111,6 +113,14 @@ export function LessonPlayer({
           <button onClick={onExit} className="px-6 py-3 rounded-xl border border-textTitle/15 text-textTitle/80 hover:bg-white">Back to dashboard</button>
           {onNext && <button onClick={onNext} className="px-6 py-3 rounded-xl bg-brandGreen text-white">Next lesson →</button>}
         </motion.div>
+        {onNext && nextLabel && (
+          <motion.p
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.46 }}
+            className="text-textTitle/45 text-sm mt-4 relative z-10"
+          >
+            {nextLabel}
+          </motion.p>
+        )}
       </div>
     )
   }
