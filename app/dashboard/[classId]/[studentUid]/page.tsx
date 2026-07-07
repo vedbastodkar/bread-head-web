@@ -21,6 +21,9 @@ export default function StudentDetail() {
   const journalAssignments = cls.assignments.filter(
     (a) => a.type === 'journal' && (a.scope === 'class' || (a.studentUids ?? []).includes(s.uid)),
   )
+  const lessonAssignments = cls.assignments.filter(
+    (a) => (a.type ?? 'lesson') === 'lesson' && (a.scope === 'class' || (a.studentUids ?? []).includes(s.uid)),
+  )
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
@@ -32,6 +35,38 @@ export default function StudentDetail() {
         {' '}last active {d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}
         <span className="text-textTitle/30"> · {s.xp.toLocaleString()} XP · L{s.level}</span>
       </p>
+
+      {lessonAssignments.length > 0 && (
+        <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="font-medium text-textTitle">Lessons assigned</div>
+            <div className="text-[11px] text-textTitle/40">Completion counts only lessons finished while assigned</div>
+          </div>
+          <div className="space-y-2">
+            {lessonAssignments.map((a) => {
+              const completedIds = a.submissions?.[s.uid]?.completedLessonIds ?? []
+              const doneCount = a.lessonIds.filter((id) => completedIds.includes(id)).length
+              const total = a.lessonIds.length
+              const done = total > 0 && doneCount === total
+              const inProgress = !done && doneCount > 0
+              return (
+                <div key={a.id} className="flex items-center justify-between text-sm border-b border-textTitle/5 pb-2 last:border-0">
+                  <div className="min-w-0">
+                    <div className="text-textTitle truncate">{a.title || `${total} lesson${total > 1 ? 's' : ''}`}</div>
+                    {a.dueDate && <div className="text-xs text-textTitle/45">Due {a.dueDate}</div>}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className={`text-xs font-medium ${done ? 'text-brandGreen' : inProgress ? 'text-accentGold' : 'text-textTitle/40'}`}>
+                      {done ? 'Complete' : inProgress ? 'In progress' : 'Not started'}
+                    </div>
+                    {total > 1 && <div className="text-[11px] text-textTitle/45">{doneCount}/{total} lessons</div>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {journalAssignments.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
@@ -53,7 +88,7 @@ export default function StudentDetail() {
                     <div className={`text-xs font-medium ${done ? 'text-brandGreen' : sub ? 'text-accentGold' : 'text-textTitle/40'}`}>
                       {done ? 'Complete' : sub ? 'In progress' : 'Not started'}
                     </div>
-                    {sub && <div className="text-[11px] text-textTitle/45">{sub.wordCount} words · {Math.floor(sub.secondsSpent / 60)}m</div>}
+                    {sub && <div className="text-[11px] text-textTitle/45">{sub.wordCount ?? 0} words · {Math.floor((sub.secondsSpent ?? 0) / 60)}m</div>}
                   </div>
                 </div>
               )

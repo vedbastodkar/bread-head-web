@@ -214,7 +214,9 @@ export default function CoursePage() {
     const roster = cls!.students
     const targetStudents = a.scope === 'class' ? roster : roster.filter((s) => (a.studentUids ?? []).includes(s.uid))
     const total = a.scope === 'class' ? roster.length : (a.studentUids ?? []).length
-    const done = targetStudents.filter((s) => a.lessonIds.every((id) => s.completedLessons.includes(id))).length
+    const done = targetStudents.filter((s) =>
+      a.lessonIds.every((id) => (a.submissions?.[s.uid]?.completedLessonIds ?? []).includes(id)),
+    ).length
     return { done, total }
   }
 

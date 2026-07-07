@@ -38,23 +38,34 @@ export async function GET(req: NextRequest) {
       const assignments = await Promise.all(assignSnap.docs.map(async (a) => {
         const ua = a.get('updatedAt')
         const isJournal = (a.get('type') ?? 'lesson') === 'journal'
-        let submissions: Record<string, { wordCount: number; secondsSpent: number; status: string; submittedAt: string | null }> | undefined
-        if (isJournal) {
-          try {
-            const subSnap = await a.ref.collection('submissions').get()
-            submissions = {}
-            subSnap.forEach((s) => {
-              const sa = s.get('submittedAt')
-              submissions![s.id] = {
-                wordCount: s.get('wordCount') ?? 0,
-                secondsSpent: s.get('secondsSpent') ?? 0,
-                status: s.get('status') ?? 'in_progress',
-                submittedAt: sa && typeof sa.toDate === 'function' ? sa.toDate().toISOString() : null,
-              }
-            })
-          } catch {
-            submissions = {}
-          }
+        let submissions:
+          | Record<
+              string,
+              | { wordCount: number; secondsSpent: number; status: string; submittedAt: string | null }
+              | { completedLessonIds: string[]; status: string; submittedAt: string | null }
+            >
+          | undefined
+        try {
+          const subSnap = await a.ref.collection('submissions').get()
+          submissions = {}
+          subSnap.forEach((s) => {
+            const sa = s.get('submittedAt')
+            const submittedAt = sa && typeof sa.toDate === 'function' ? sa.toDate().toISOString() : null
+            submissions![s.id] = isJournal
+              ? {
+                  wordCount: s.get('wordCount') ?? 0,
+                  secondsSpent: s.get('secondsSpent') ?? 0,
+                  status: s.get('status') ?? 'in_progress',
+                  submittedAt,
+                }
+              : {
+                  completedLessonIds: (s.get('completedLessonIds') ?? []) as string[],
+                  status: s.get('status') ?? 'in_progress',
+                  submittedAt,
+                }
+          })
+        } catch {
+          submissions = {}
         }
         return {
           id: a.id,

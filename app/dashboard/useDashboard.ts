@@ -25,7 +25,18 @@ export interface Assignment {
   controls?: Partial<LessonControls>
   type?: 'lesson' | 'journal'
   journal?: { questions: string[]; minWords: number; minSeconds: number }
-  submissions?: Record<string, { wordCount: number; secondsSpent: number; status: 'complete' | 'in_progress'; submittedAt: string | null }>
+  submissions?: Record<
+    string,
+    {
+      status: 'complete' | 'in_progress'
+      submittedAt: string | null
+      // Journal submissions carry word/time metrics; lesson submissions carry the
+      // set of lesson ids completed while this assignment was active.
+      wordCount?: number
+      secondsSpent?: number
+      completedLessonIds?: string[]
+    }
+  >
 }
 export interface ClassData {
   id: string

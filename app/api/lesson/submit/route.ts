@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
-import { buildLessonSubmission } from '@/lib/curriculum/lessonSubmission'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -31,12 +30,14 @@ export async function POST(req: NextRequest) {
   if (!lessonIds.includes(lessonId))
     return NextResponse.json({ ok: false, error: 'Lesson not in assignment' }, { status: 400 })
 
-  const meta = buildLessonSubmission({ lessonId })
   await adminDb
     .collection('classes').doc(classId)
     .collection('assignments').doc(assignmentId)
     .collection('submissions').doc(u.uid)
-    .set({ ...meta, submittedAt: FieldValue.serverTimestamp() }, { merge: true })
+    .set(
+      { completedLessonIds: FieldValue.arrayUnion(lessonId), status: 'complete', submittedAt: FieldValue.serverTimestamp() },
+      { merge: true },
+    )
 
   return NextResponse.json({ ok: true })
 }
