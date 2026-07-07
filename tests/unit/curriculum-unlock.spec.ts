@@ -39,6 +39,14 @@ test('lessonState: completed takes priority over assigned', () => {
   expect(lessonState('unit6lesson2', done, Infinity, assigned)).toBe('done')
 })
 
+test('lessonState: unknown lesson id is locked, never open (input validation)', () => {
+  // A lessonId not in LESSON_ORDER must never be treated as playable, even under
+  // no pacing. Regression: indexOf → -1 previously satisfied `-1 <= frontier` → 'open'.
+  expect(lessonState('not-a-real-lesson', new Set())).toBe('locked')
+  expect(lessonState('bogus', new Set(['unit1lesson1']), 0)).toBe('locked')
+  expect(lessonState('', new Set())).toBe('locked')
+})
+
 test('nextLesson: returns first not-completed, ignores out-of-order completions', () => {
   // Completing an out-of-order assigned lesson must NOT advance the personal frontier.
   const done = new Set(['unit1lesson1', 'unit6lesson2'])

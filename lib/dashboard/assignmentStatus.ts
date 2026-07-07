@@ -7,7 +7,7 @@ export type Flag = { type: 'overdue'; label: string }
 
 // Lessons a student still owes on assignments whose due date has passed.
 export function overdueMissing(s: Student, assignments: Assignment[]): string[] {
-  const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD, local-ish
+  const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD in the viewer's local tz
   const missing = new Set<string>()
   for (const a of assignments) {
     if (!a.dueDate || a.dueDate >= today) continue                 // no deadline, or not past yet

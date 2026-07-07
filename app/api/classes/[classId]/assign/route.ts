@@ -123,6 +123,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { classId: 
 
   const id = req.nextUrl.searchParams.get('id')
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
-  await adminDb.collection('classes').doc(params.classId).collection('assignments').doc(id).delete()
+  const ref = adminDb.collection('classes').doc(params.classId).collection('assignments').doc(id)
+  if (!(await ref.get()).exists) return NextResponse.json({ error: 'Assignment not found' }, { status: 404 })
+  await ref.delete()
   return NextResponse.json({ ok: true })
 }

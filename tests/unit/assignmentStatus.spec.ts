@@ -74,6 +74,26 @@ test('overdueMissing: assignment with future dueDate is never overdue', () => {
   expect(overdueMissing(student, [assignment])).toEqual([])
 })
 
+test('overdueMissing: "today" is evaluated in local time, not UTC', () => {
+  // Regression: used new Date().toISOString() (UTC) so Americas users after ~5-8pm
+  // local saw due-today assignments flagged overdue a day early. Must use local date.
+  const localYMD = (d: Date) => d.toLocaleDateString('en-CA') // YYYY-MM-DD, local tz
+  const today = localYMD(new Date())
+  const y = new Date(); y.setDate(y.getDate() - 1)
+  const yesterday = localYMD(y)
+  const student = {
+    uid: 'u1', name: 'Alice', completedLessons: [],
+    currentUnit: 1, currentLesson: 1, xp: 0, level: 1, lastActive: null,
+  } as any
+  const mk = (dueDate: string) => ({
+    id: 'a1', lessonIds: ['unit1lesson1'], scope: 'class', studentUids: [], dueDate,
+    submissions: {},
+  } as any)
+
+  expect(overdueMissing(student, [mk(today)])).toEqual([])                    // due today → not overdue
+  expect(overdueMissing(student, [mk(yesterday)])).toEqual(['unit1lesson1'])  // due yesterday → overdue
+})
+
 test('overdueMissing: scope "students" assignment not applicable to student is ignored', () => {
   const student = {
     uid: 'u1',

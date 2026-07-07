@@ -80,6 +80,7 @@ export function lessonState(
   if (completed.has(id)) return 'done'
   if (assigned.has(id)) return 'open'
   const idx = LESSON_ORDER.indexOf(id)
+  if (idx < 0) return 'locked' // unknown/bogus lesson id is never playable
   if (idx > pacingFrontier) return 'locked'
   const frontier = LESSON_ORDER.findIndex((x) => !completed.has(x)) // first not-completed
   return idx <= frontier ? 'open' : 'locked'
