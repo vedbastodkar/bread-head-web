@@ -6,6 +6,7 @@ import { StudentShell, StudentSkeleton, StudentError } from '@/app/student/Stude
 import { CATALOG, TOTAL_LESSONS, unitLessonIds, unitName } from '@/lib/curriculum/catalog'
 import { lessonName, getLesson } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
+import { getLibraryChallenge } from '@/lib/challenges/library'
 
 export function StudentHome() {
   const { data, err, loading, user, signOut } = useStudent()
@@ -18,12 +19,25 @@ export function StudentHome() {
   const started = completed.size > 0
   const today = new Date().toISOString().slice(0, 10)
 
+  // Lesson deep-links only apply to lesson assignments (type undefined ⇒ legacy
+  // lesson assignment). Journal/challenge assignments carry no lessonIds, but we
+  // guard explicitly so the regex-based lesson parsing below never sees them.
   const assignedTodo = data!.assignments
+    .filter((a) => a.type === 'lesson' || a.type === undefined)
     .flatMap((a) => a.lessonIds
       .filter((id) => !completed.has(id))
       .map((id) => ({ id, dueDate: a.dueDate, overdue: !!a.dueDate && a.dueDate < today })))
   const seen = new Set<string>()
   const assigned = assignedTodo.filter((x) => (seen.has(x.id) ? false : (seen.add(x.id), true)))
+
+  const challengeTodo = data!.assignments
+    .filter((a) => a.type === 'challenge')
+    .map((a) => ({
+      id: a.id,
+      dueDate: a.dueDate,
+      overdue: !!a.dueDate && a.dueDate < today,
+      title: (a.challengeId && getLibraryChallenge(a.challengeId)?.title) || a.title || 'Budget Challenge',
+    }))
 
   const u = CATALOG.find((c) => c.unit === cont.unit)!
   const unitIds = unitLessonIds(u.unit)
@@ -50,9 +64,9 @@ export function StudentHome() {
       {/* Currently assigned */}
       <section className="mb-6">
         <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">
-          Currently assigned to me {assigned.length > 0 && <span className="text-red-600">· {assigned.length}</span>}
+          Currently assigned to me {(assigned.length + challengeTodo.length) > 0 && <span className="text-red-600">· {assigned.length + challengeTodo.length}</span>}
         </h2>
-        {assigned.length === 0 ? (
+        {assigned.length === 0 && challengeTodo.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/50">Nothing assigned right now. You’re all caught up.</div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -67,6 +81,15 @@ export function StudentHome() {
                 </Link>
               )
             })}
+            {challengeTodo.map((c) => (
+              <Link key={c.id} href={`/challenge/${c.id}`}
+                className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${c.overdue ? 'border-red-500' : 'border-brandGreen'}`}>
+                <div className="inline-block text-[10px] font-semibold tracking-wider uppercase text-brandGreen bg-brandGreen/10 rounded-full px-2 py-0.5 mb-1.5">Budget Challenge</div>
+                <div className="text-sm font-medium text-textTitle truncate">{c.title}</div>
+                {c.dueDate && <div className={`text-xs mt-1 ${c.overdue ? 'text-red-600' : 'text-textTitle/50'}`}>{c.overdue ? 'Overdue' : 'Due'} {c.dueDate}</div>}
+                <div className="text-xs text-brandGreen font-medium mt-2">Solve challenge →</div>
+              </Link>
+            ))}
           </div>
         )}
       </section>
