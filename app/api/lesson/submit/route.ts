@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
+import { assignmentAppliesTo } from '@/lib/challenges/challenge'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -29,6 +30,11 @@ export async function POST(req: NextRequest) {
   const lessonIds: string[] = aDoc.get('lessonIds') ?? []
   if (!lessonIds.includes(lessonId))
     return NextResponse.json({ ok: false, error: 'Lesson not in assignment' }, { status: 400 })
+
+  // Scope gate: an individual-scoped lesson may only be submitted by a listed target.
+  // Being rostered on the class is necessary but not sufficient (mirrors challenge/submit).
+  if (!assignmentAppliesTo({ scope: aDoc.get('scope'), studentUids: aDoc.get('studentUids') }, u.uid))
+    return NextResponse.json({ ok: false, error: 'Not assigned to you' }, { status: 403 })
 
   await adminDb
     .collection('classes').doc(classId)

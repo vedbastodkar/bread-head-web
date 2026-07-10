@@ -4,7 +4,10 @@ import type { Assignment, Student } from '@/app/dashboard/useDashboard'
 export function lessonCompletion(a: Assignment, students: Student[]): { done: number; total: number } {
   const roster = students
   const targetStudents = a.scope === 'class' ? roster : roster.filter((s) => (a.studentUids ?? []).includes(s.uid))
-  const total = a.scope === 'class' ? roster.length : (a.studentUids ?? []).length
+  // total must count only currently-rostered targets — a student moved off the class
+  // is dropped from `students` but may linger in studentUids, which would otherwise
+  // inflate the denominator and strand the count (e.g. a permanent "2/3 done").
+  const total = a.scope === 'class' ? roster.length : targetStudents.length
   const done = targetStudents.filter((s) =>
     a.lessonIds.every((id) => (a.submissions?.[s.uid]?.completedLessonIds ?? []).includes(id)),
   ).length
@@ -14,8 +17,9 @@ export function lessonCompletion(a: Assignment, students: Student[]): { done: nu
 // Status completion (journal + challenge): target students whose submission status is 'complete'.
 export function statusCompletion(a: Assignment, students: Student[]): { done: number; total: number } {
   const roster = students
-  const total = a.scope === 'class' ? roster.length : (a.studentUids ?? []).length
   const targetStudents = a.scope === 'class' ? roster : roster.filter((s) => (a.studentUids ?? []).includes(s.uid))
+  // total counts only currently-rostered targets (see lessonCompletion).
+  const total = a.scope === 'class' ? roster.length : targetStudents.length
   const done = targetStudents.filter((s) => a.submissions?.[s.uid]?.status === 'complete').length
   return { done, total }
 }

@@ -3,6 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
 import { buildSubmission } from '@/lib/journal/journal'
+import { assignmentAppliesTo } from '@/lib/challenges/challenge'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -30,6 +31,12 @@ export async function POST(req: NextRequest) {
   const aDoc = await adminDb.collection('classes').doc(classId).collection('assignments').doc(assignmentId).get()
   if (!aDoc.exists || aDoc.get('type') !== 'journal')
     return NextResponse.json({ ok: false, error: 'Assignment not found' }, { status: 404 })
+
+  // Scope gate: an individual-scoped journal may only be submitted by a listed target
+  // (mirrors challenge/submit) — roster membership alone is not enough.
+  if (!assignmentAppliesTo({ scope: aDoc.get('scope'), studentUids: aDoc.get('studentUids') }, u.uid))
+    return NextResponse.json({ ok: false, error: 'Not assigned to you' }, { status: 403 })
+
   const cfg = (aDoc.get('journal') ?? {}) as { minWords?: number; minSeconds?: number }
 
   const meta = buildSubmission(

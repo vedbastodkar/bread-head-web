@@ -32,6 +32,10 @@ export async function POST(req: NextRequest) {
 
   const fromRoster = fromDoc.ref.collection('roster').doc(studentUid)
   const rosterSnap = await fromRoster.get()
+  // Guard: only move a student who is actually in the source class. Without this,
+  // an arbitrary uid would be *added* to the destination (with a placeholder name)
+  // rather than moved — an unvetted enrollment masquerading as a move.
+  if (!rosterSnap.exists) return NextResponse.json({ error: 'Student not in source class' }, { status: 404 })
   const displayName = rosterSnap.get('displayName') ?? 'Student'
 
   const batch = adminDb.batch()

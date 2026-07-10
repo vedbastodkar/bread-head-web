@@ -175,7 +175,19 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
   }
 
   const ref = adminDb.collection('classes').doc(params.classId).collection('assignments').doc(id)
-  if (!(await ref.get()).exists) return NextResponse.json({ error: 'Assignment not found' }, { status: 404 })
+  const snap = await ref.get()
+  if (!snap.exists) return NextResponse.json({ error: 'Assignment not found' }, { status: 404 })
+
+  // Guard: never leave the assignment scope='students' with an empty target list.
+  // Fields update independently here, so compute the EFFECTIVE post-update values
+  // (incoming update ?? stored) and reject an empty individual scope — mirroring the
+  // POST checks. Otherwise the assignment would be visible to nobody (assignmentAppliesTo
+  // → always false) and report 0/0 completion.
+  const effScope = (updates.scope ?? snap.get('scope')) as string | undefined
+  const effUids = ('studentUids' in updates ? updates.studentUids : snap.get('studentUids')) as string[] | undefined
+  if (effScope === 'students' && (!Array.isArray(effUids) || effUids.length === 0))
+    return NextResponse.json({ error: 'Select at least one student' }, { status: 400 })
+
   await ref.update(updates)
   return NextResponse.json({ ok: true })
 }

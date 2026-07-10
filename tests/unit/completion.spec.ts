@@ -18,3 +18,15 @@ test('completionFor: journal completion by status complete over targeted student
     submissions: { s1: { status: 'complete', submittedAt: null } } } as Assignment
   expect(completionFor(a, [student('s1'), student('s2')])).toEqual({ done: 1, total: 1 })
 })
+
+test('completionFor: total counts only targeted students still on the roster (moved-away student excluded)', () => {
+  // scope students [s1,s2,s3], but s2 was moved off the class → roster is [s1,s3].
+  // total must reflect the current roster-targeted set (2), not the raw studentUids length (3),
+  // so a fully-done assignment reads 2/2 not a permanently stuck 2/3.
+  const a = { id: 'a', type: 'lesson', lessonIds: ['u1l1'], scope: 'students', studentUids: ['s1', 's2', 's3'], dueDate: null,
+    submissions: {
+      s1: { status: 'in_progress', submittedAt: null, completedLessonIds: ['u1l1'] },
+      s3: { status: 'in_progress', submittedAt: null, completedLessonIds: ['u1l1'] },
+    } } as Assignment
+  expect(completionFor(a, [student('s1'), student('s3')])).toEqual({ done: 2, total: 2 })
+})
