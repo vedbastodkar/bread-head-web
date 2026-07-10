@@ -69,8 +69,9 @@ export async function GET(req: NextRequest) {
         }
         return {
           id: a.id,
-          type: (a.get('type') ?? 'lesson') as 'lesson' | 'journal',
+          type: (a.get('type') ?? 'lesson') as 'lesson' | 'journal' | 'challenge',
           journal: (a.get('journal') ?? undefined) as { questions: string[]; minWords: number; minSeconds: number } | undefined,
+          challengeId: (a.get('challengeId') ?? undefined) as string | undefined,
           lessonIds: (a.get('lessonIds') ?? []) as string[],
           scope: (a.get('scope') ?? 'class') as 'class' | 'students',
           studentUids: (a.get('studentUids') ?? []) as string[],
