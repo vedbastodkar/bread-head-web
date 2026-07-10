@@ -8,6 +8,7 @@ import { CATALOG, unitLessonIds, unitName, parseLessonId } from '@/lib/curriculu
 import { isLessonMigrated, lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
 import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
+import { LIBRARY, getLibraryChallenge } from '@/lib/challenges/library'
 
 export default function CoursePage() {
   const { classId } = useParams<{ classId: string }>()
@@ -18,10 +19,11 @@ export default function CoursePage() {
   const [targets, setTargets] = useState<Set<string>>(new Set())
   const [due, setDue] = useState('')
   const [title, setTitle] = useState('')
-  const [assignType, setAssignType] = useState<'lesson' | 'journal'>('lesson')
+  const [assignType, setAssignType] = useState<'lesson' | 'journal' | 'challenge'>('lesson')
   const [questions, setQuestions] = useState<string[]>([''])
   const [minWords, setMinWords] = useState(0)
   const [minSeconds, setMinSeconds] = useState(0)
+  const [challengeId, setChallengeId] = useState<string>(LIBRARY[0]?.id ?? '')
   const [overrideControls, setOverrideControls] = useState(false)
   const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -125,6 +127,7 @@ export default function CoursePage() {
     setSelected(new Set()); setTargets(new Set()); setDue(''); setTitle('')
     setScope('class'); setOverrideControls(false); setControls(DEFAULT_CONTROLS); setEditingId(null)
     setAssignType('lesson'); setQuestions(['']); setMinWords(0); setMinSeconds(0)
+    setChallengeId(LIBRARY[0]?.id ?? '')
   }
 
   function startEdit(a: Assignment) {
@@ -137,7 +140,7 @@ export default function CoursePage() {
     const hasControls = a.controls && Object.keys(a.controls).length > 0
     setOverrideControls(!!hasControls)
     setControls({ ...DEFAULT_CONTROLS, ...(a.controls ?? {}) })
-    setAssignType(a.type === 'journal' ? 'journal' : 'lesson')
+    setAssignType(a.type === 'journal' ? 'journal' : a.type === 'challenge' ? 'challenge' : 'lesson')
     if (a.type === 'journal' && a.journal) {
       setQuestions(a.journal.questions.length ? a.journal.questions : [''])
       setMinWords(a.journal.minWords ?? 0)
@@ -145,11 +148,31 @@ export default function CoursePage() {
     } else {
       setQuestions(['']); setMinWords(0); setMinSeconds(0)
     }
+    setChallengeId(a.type === 'challenge' && a.challengeId ? a.challengeId : (LIBRARY[0]?.id ?? ''))
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function submit() {
     if (!user) return
+    if (assignType === 'challenge') {
+      if (!challengeId) { alert('Pick a Budget Challenge.'); return }
+      if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
+      const payload = {
+        type: 'challenge',
+        challengeId,
+        scope,
+        studentUids: scope === 'students' ? Array.from(targets) : [],
+        dueDate: due || null,
+        title: title.trim() || null,
+      }
+      setBusy(true)
+      try {
+        if (editingId) await apiCall(user, `/api/classes/${classId}/assign?id=${editingId}`, 'PATCH', payload)
+        else await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
+        resetComposer(); reload()
+      } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+      return
+    }
     if (assignType === 'journal') {
       const qs = questions.map((q) => q.trim()).filter(Boolean)
       if (qs.length === 0) { alert('Add at least one prompt question.'); return }
@@ -176,7 +199,7 @@ export default function CoursePage() {
     // Duplicate guard (create only): warn on an identical lessons+scope+targets assignment.
     if (!editingId) {
       const dup = (cls?.assignments ?? []).some((a) =>
-        a.type !== 'journal' &&
+        (!a.type || a.type === 'lesson') &&
         a.scope === scope &&
         sameSet(a.lessonIds, selected) &&
         (scope === 'class' || sameSet(a.studentUids ?? [], targets)),
@@ -370,10 +393,10 @@ export default function CoursePage() {
             </div>
 
             <div className="flex gap-2 mb-3">
-              {(['lesson', 'journal'] as const).map((t) => (
+              {(['lesson', 'journal', 'challenge'] as const).map((t) => (
                 <button key={t} onClick={() => setAssignType(t)} disabled={!!editingId}
                   className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${assignType === t ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'} ${editingId ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                  {t === 'lesson' ? 'Lesson' : 'Journal'}
+                  {t === 'lesson' ? 'Lesson' : t === 'journal' ? 'Journal' : 'Budget Challenge'}
                 </button>
               ))}
             </div>
@@ -383,6 +406,24 @@ export default function CoursePage() {
               placeholder="Title (optional)"
               className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3 mt-2"
             />
+
+            {assignType === 'challenge' && (
+              <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2">
+                <div className="text-xs uppercase tracking-wider text-textTitle/40">Budget Challenge</div>
+                <select
+                  value={challengeId}
+                  onChange={(e) => setChallengeId(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-textTitle/15 text-sm"
+                >
+                  {LIBRARY.map((c) => (
+                    <option key={c.id} value={c.id}>{c.title}</option>
+                  ))}
+                </select>
+                {getLibraryChallenge(challengeId) && (
+                  <p className="text-xs text-textTitle/60">{getLibraryChallenge(challengeId)!.prompt}</p>
+                )}
+              </div>
+            )}
 
             {assignType === 'journal' && (
               <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2">
@@ -491,9 +532,11 @@ export default function CoursePage() {
               <div className="space-y-3">
                 {cls.assignments.map((a) => {
                   const isJournal = a.type === 'journal'
-                  const { done, total } = isJournal ? journalCompletion(a) : completion(a)
+                  const isChallenge = a.type === 'challenge'
+                  const { done, total } = isJournal || isChallenge ? journalCompletion(a) : completion(a)
                   const isOpen = expanded.has(a.id)
                   const hasControls = a.controls && Object.keys(a.controls).length > 0
+                  const challenge = isChallenge && a.challengeId ? getLibraryChallenge(a.challengeId) : null
                   return (
                     <div key={a.id} className="text-xs border-b border-textTitle/5 pb-3 last:border-0">
                       <div className="flex items-start justify-between gap-2">
@@ -501,6 +544,8 @@ export default function CoursePage() {
                           <div className="text-textTitle font-medium truncate">
                             {a.title || (isJournal
                               ? `Journal · ${a.journal?.questions.length ?? 0} question${(a.journal?.questions.length ?? 0) > 1 ? 's' : ''}`
+                              : isChallenge
+                              ? `Budget Challenge · ${challenge?.title ?? a.challengeId ?? ''}`
                               : `${a.lessonIds.length} lesson${a.lessonIds.length > 1 ? 's' : ''}`)} <span className="text-textTitle/40">{isOpen ? '▾' : '▸'}</span>
                           </div>
                           <div className="text-textTitle/50">
@@ -521,6 +566,10 @@ export default function CoursePage() {
                             {(a.journal?.questions ?? []).map((q, i) => <li key={i}>• {q}</li>)}
                             <li className="text-textTitle/40 mt-1">Responses are private to each student.</li>
                           </ul>
+                        ) : isChallenge ? (
+                          <p className="mt-2 pl-1 text-textTitle/60">
+                            {challenge?.prompt ?? 'Challenge details unavailable.'}
+                          </p>
                         ) : (
                           <ul className="mt-2 pl-1 space-y-0.5 text-textTitle/60">
                             {a.lessonIds.map((id) => {

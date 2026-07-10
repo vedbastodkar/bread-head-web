@@ -25,8 +25,9 @@ export interface StudentAssignment {
   studentUids: string[]
   controls?: Partial<LessonControls>
   title?: string | null
-  type?: 'lesson' | 'journal'
+  type?: 'lesson' | 'journal' | 'challenge'
   journal?: { questions: string[]; minWords: number; minSeconds: number }
+  challengeId?: string
 }
 export interface Gamification {
   xp: number

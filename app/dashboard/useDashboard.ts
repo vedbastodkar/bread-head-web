@@ -23,18 +23,22 @@ export interface Assignment {
   dueDate: string | null
   title?: string | null
   controls?: Partial<LessonControls>
-  type?: 'lesson' | 'journal'
+  type?: 'lesson' | 'journal' | 'challenge'
   journal?: { questions: string[]; minWords: number; minSeconds: number }
+  challengeId?: string
   submissions?: Record<
     string,
     {
       status: 'complete' | 'in_progress'
       submittedAt: string | null
       // Journal submissions carry word/time metrics; lesson submissions carry the
-      // set of lesson ids completed while this assignment was active.
+      // set of lesson ids completed while this assignment was active. Challenge
+      // submissions carry the score and whether all criteria passed.
       wordCount?: number
       secondsSpent?: number
       completedLessonIds?: string[]
+      score?: number
+      allPassed?: boolean
     }
   >
 }

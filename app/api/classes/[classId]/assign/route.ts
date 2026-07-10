@@ -4,6 +4,8 @@ import { adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
 import { sanitizeJournalConfig } from '@/lib/journal/journal'
 import { isKnownLessonId } from '@/lib/curriculum/controls'
+import { getLibraryChallenge } from '@/lib/challenges/library'
+import { validateChallenge } from '@/lib/challenges/challenge'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -56,7 +58,29 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await req.json().catch(() => ({}))
-  const type = body.type === 'journal' ? 'journal' : 'lesson'
+  const type = body.type === 'journal' ? 'journal' : body.type === 'challenge' ? 'challenge' : 'lesson'
+
+  if (type === 'challenge') {
+    const challengeId = typeof body.challengeId === 'string' ? body.challengeId : ''
+    const ch = challengeId.startsWith('lib:') ? getLibraryChallenge(challengeId) : null
+    if (!ch) return NextResponse.json({ error: 'Unknown or unsupported challengeId' }, { status: 400 })
+    const v = validateChallenge(ch)
+    if (!v.ok) return NextResponse.json({ error: `Challenge is not solvable: ${v.error}` }, { status: 400 })
+    const scope = body.scope === 'students' ? 'students' : 'class'
+    const studentUids: string[] = scope === 'students' && Array.isArray(body.studentUids)
+      ? body.studentUids.filter((x: unknown) => typeof x === 'string') : []
+    if (scope === 'students' && studentUids.length === 0)
+      return NextResponse.json({ error: 'Select at least one student' }, { status: 400 })
+    const badStudents = await invalidStudents(params.classId, studentUids)
+    if (badStudents) return NextResponse.json({ error: badStudents }, { status: 400 })
+    const dueDate = typeof body.dueDate === 'string' && body.dueDate ? body.dueDate : null
+    const title = typeof body.title === 'string' && body.title.trim() ? body.title.trim() : null
+    const ref = await adminDb.collection('classes').doc(params.classId).collection('assignments').add({
+      type: 'challenge', challengeId, lessonIds: [], scope, studentUids, dueDate, title: title ?? ch.title,
+      createdAt: FieldValue.serverTimestamp(),
+    })
+    return NextResponse.json({ id: ref.id, type: 'challenge', challengeId, scope, studentUids, dueDate, title: title ?? ch.title })
+  }
 
   if (type === 'journal') {
     const journal = sanitizeJournalConfig(body.journal)
@@ -135,6 +159,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
   if ('controls' in body) {
     const c = sanitizeControls(body.controls)
     updates.controls = c ?? FieldValue.delete()
+  }
+  if ('challengeId' in body) {
+    const challengeId = typeof body.challengeId === 'string' ? body.challengeId : ''
+    const ch = challengeId.startsWith('lib:') ? getLibraryChallenge(challengeId) : null
+    if (!ch) return NextResponse.json({ error: 'Unknown or unsupported challengeId' }, { status: 400 })
+    const v = validateChallenge(ch)
+    if (!v.ok) return NextResponse.json({ error: `Challenge is not solvable: ${v.error}` }, { status: 400 })
+    updates.challengeId = challengeId
   }
   if ('journal' in body) {
     const journal = sanitizeJournalConfig(body.journal)
