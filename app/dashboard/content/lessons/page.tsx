@@ -6,7 +6,7 @@ import { DashboardShell, DashboardSkeleton, DashboardError } from '../../Dashboa
 import { AssignedGroups } from '../AssignedGroups'
 import { groupAssignments, type AssignedTarget } from '@/lib/dashboard/contentGrouping'
 import { CATALOG, unitLessonIds, unitName, parseLessonId } from '@/lib/curriculum/catalog'
-import { isLessonMigrated, lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
+import { lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
 import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
 import { ClassTargetPicker } from '../ClassTargetPicker'
@@ -445,28 +445,13 @@ export default function LessonsContentPage() {
               )}
             </div>
 
-            {isLessonMigrated(preview.unit, preview.lesson) ? (
-              <Link
-                href="/lesson"
-                onClick={() => setLessonTarget(preview.unit, preview.lesson)}
-                className="block w-full text-center px-4 py-3 rounded-xl bg-brandGreen text-white text-sm mb-2"
-              >
-                ▶ Walk through the lesson
-              </Link>
-            ) : (
-              <>
-                <button
-                  disabled
-                  className="w-full px-4 py-3 rounded-xl bg-brandGreen/40 text-white text-sm cursor-not-allowed mb-2"
-                  title="Not migrated yet"
-                >
-                  ▶ Walk through the lesson (coming soon)
-                </button>
-                <p className="text-[11px] text-textTitle/40 text-center mb-4">
-                  This lesson isn’t migrated to the web yet.
-                </p>
-              </>
-            )}
+            <Link
+              href="/lesson"
+              onClick={() => setLessonTarget(preview.unit, preview.lesson)}
+              className="block w-full text-center px-4 py-3 rounded-xl bg-brandGreen text-white text-sm mb-2"
+            >
+              ▶ Walk through the lesson
+            </Link>
 
             <button onClick={() => setPreview(null)} className="w-full px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70 hover:bg-bgSage">
               Close
