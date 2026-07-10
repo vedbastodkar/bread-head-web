@@ -9,6 +9,8 @@ import { CATALOG, unitLessonIds, unitName, parseLessonId } from '@/lib/curriculu
 import { isLessonMigrated, lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
 import { setLessonTarget } from '@/lib/lessonNav'
 import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
+import { ClassTargetPicker } from '../ClassTargetPicker'
+import { fanoutAssign, type ClassTarget } from '@/lib/dashboard/assignFanout'
 
 // General, class-agnostic Lessons page. Replaces the per-class course page's
 // assign flow: browse the curriculum once, then assign lesson sets to any
@@ -17,9 +19,7 @@ export default function LessonsContentPage() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
   const [openUnits, setOpenUnits] = useState<Set<number>>(new Set([1]))
   const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [scope, setScope] = useState<'class' | 'students'>('class')
-  const [targets, setTargets] = useState<Set<string>>(new Set())
-  const [due, setDue] = useState('')
+  const [targets, setTargets] = useState<ClassTarget[]>([])
   const [title, setTitle] = useState('')
   const [overrideControls, setOverrideControls] = useState(false)
   const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
@@ -118,27 +118,26 @@ export default function LessonsContentPage() {
       return n
     })
   }
-  const toggleTarget = (uid: string) =>
-    setTargets((prev) => { const n = new Set(prev); n.has(uid) ? n.delete(uid) : n.add(uid); return n })
-
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
 
-  const sameSet = (a: string[], b: Set<string>) => a.length === b.size && a.every((x) => b.has(x))
+  const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((x) => b.includes(x))
 
   function resetComposer() {
-    setSelected(new Set()); setTargets(new Set()); setDue(''); setTitle('')
-    setScope('class'); setOverrideControls(false); setControls(DEFAULT_CONTROLS); setEditing(null)
+    setSelected(new Set()); setTargets([]); setTitle('')
+    setOverrideControls(false); setControls(DEFAULT_CONTROLS); setEditing(null)
   }
 
   function startEditFromTarget(t: AssignedTarget) {
     const a = t.assignment
     setEditing(t)
-    setClassId(t.classId)
     setSelected(new Set(a.lessonIds))
-    setScope(a.scope)
-    setTargets(new Set(a.studentUids ?? []))
-    setDue(a.dueDate ?? '')
+    setTargets([{
+      classId: t.classId,
+      className: t.className,
+      dueDate: a.dueDate ?? null,
+      studentUids: a.scope === 'students' ? (a.studentUids ?? []) : null,
+    }])
     setTitle(a.title ?? '')
     const hasControls = a.controls && Object.keys(a.controls).length > 0
     setOverrideControls(!!hasControls)
@@ -147,36 +146,59 @@ export default function LessonsContentPage() {
   }
 
   async function submit() {
-    if (!user || !classId) return
+    if (!user) return
     if (selected.size === 0) { alert('Select at least one lesson.'); return }
-    if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
-
-    if (!editing) {
-      if (due && due < today && !confirm('That due date is in the past — assign anyway?')) return
-      const dup = (cls?.assignments ?? []).some((a) =>
-        (!a.type || a.type === 'lesson') &&
-        a.scope === scope &&
-        sameSet(a.lessonIds, selected) &&
-        (scope === 'class' || sameSet(a.studentUids ?? [], targets)),
-      )
-      if (dup && !confirm('An identical assignment already exists. Add another anyway?')) return
+    if (targets.length === 0) { alert('Pick at least one class.'); return }
+    const emptyStudentsTarget = targets.find((t) => Array.isArray(t.studentUids) && t.studentUids.length === 0)
+    if (emptyStudentsTarget) {
+      alert(`Pick at least one student for ${emptyStudentsTarget.className}, or turn off "Choose specific students".`)
+      return
     }
 
-    const payload = {
+    const basePayload = {
       type: 'lesson',
       lessonIds: Array.from(selected),
-      scope,
-      studentUids: scope === 'students' ? Array.from(targets) : [],
-      dueDate: due || null,
       title: title.trim() || null,
       controls: overrideControls ? controls : null,
     }
+
     setBusy(true)
     try {
-      if (editing) await apiCall(user, `/api/classes/${classId}/assign?id=${editing.assignment.id}`, 'PATCH', payload)
-      else await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
-      resetComposer()
-      reload()
+      if (editing) {
+        const t = targets[0]
+        const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
+        const payload = {
+          ...basePayload,
+          scope: useStudents ? 'students' : 'class',
+          studentUids: useStudents ? t.studentUids : [],
+          dueDate: t.dueDate,
+        }
+        await apiCall(user, `/api/classes/${t.classId}/assign?id=${editing.assignment.id}`, 'PATCH', payload)
+        resetComposer()
+        reload()
+      } else {
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !confirm('One or more due dates are in the past — assign anyway?')) return
+        const dup = targets.some((t) => {
+          const targetCls = activeClasses.find((c) => c.id === t.classId)
+          const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
+          return (targetCls?.assignments ?? []).some((a) =>
+            (!a.type || a.type === 'lesson') &&
+            a.scope === (useStudents ? 'students' : 'class') &&
+            sameSet(a.lessonIds, Array.from(selected)) &&
+            (!useStudents || sameSet(a.studentUids ?? [], t.studentUids ?? [])),
+          )
+        })
+        if (dup && !confirm('An identical assignment already exists in at least one selected class. Add anyway?')) return
+
+        const results = await fanoutAssign((cid, body) => apiCall(user, `/api/classes/${cid}/assign`, 'POST', body), basePayload, targets)
+        const failed = results.filter((r) => !r.ok)
+        if (failed.length === 0) {
+          resetComposer()
+        } else {
+          alert(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '))
+        }
+        reload()
+      }
     } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
   }
 
@@ -215,17 +237,27 @@ export default function LessonsContentPage() {
         <AssignedGroups groups={groups} emptyLabel="Nothing assigned yet." onEdit={startEditFromTarget} onRemove={removeFromTarget} />
       </div>
 
-      {/* Pacing & controls — scoped to the class selected in the composer below */}
+      {/* Pacing & controls — per-class settings, independent of the assign composer */}
       <div className="bg-white rounded-2xl shadow-sm p-5 mb-6">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <div className="text-sm font-medium text-textTitle mb-1">Pacing &amp; controls {cls && <span className="text-textTitle/40 font-normal">· {cls.name}</span>}</div>
-            <p className="text-xs text-textTitle/50 max-w-md">Release the curriculum gradually and set default in-lesson rules for this class. Assignments can override these per lesson or per student.</p>
+            <div className="text-sm font-medium text-textTitle mb-1">Pacing &amp; controls</div>
+            <p className="text-xs text-textTitle/50 max-w-md">Release the curriculum gradually and set default in-lesson rules for a class. Assignments can override these per lesson or per student.</p>
           </div>
-          <button onClick={saveSettings} disabled={savingSettings || !classId}
-            className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
-            {savingSettings ? 'Saving…' : 'Save settings'}
-          </button>
+          <div className="flex items-center gap-2">
+            <select
+              value={classId}
+              onChange={(e) => setClassId(e.target.value)}
+              className="px-3 py-2 rounded-xl border border-textTitle/15 text-sm"
+            >
+              {activeClasses.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              {activeClasses.length === 0 && <option value="">No active classes</option>}
+            </select>
+            <button onClick={saveSettings} disabled={savingSettings || !classId}
+              className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
+              {savingSettings ? 'Saving…' : 'Save settings'}
+            </button>
+          </div>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 mt-4">
@@ -333,45 +365,19 @@ export default function LessonsContentPage() {
               {editing ? 'Edit assignment' : 'Assign'} {selected.size > 0 && <span className="text-textTitle/50">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}
             </div>
 
-            <label className="block text-sm text-textTitle/70 mb-1 mt-3">Class</label>
-            <select
-              value={classId}
-              onChange={(e) => setClassId(e.target.value)}
-              disabled={!!editing}
-              className={`w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3 ${editing ? 'opacity-60 cursor-not-allowed' : ''}`}
-            >
-              {activeClasses.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-              {activeClasses.length === 0 && <option value="">No active classes</option>}
-            </select>
-
             <input
               type="text" value={title} onChange={(e) => setTitle(e.target.value)}
               placeholder="Title (optional)"
               className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3"
             />
 
-            <div className="flex gap-2 mb-3">
-              {(['class', 'students'] as const).map((s) => (
-                <button key={s} onClick={() => setScope(s)}
-                  className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${scope === s ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'}`}>
-                  {s === 'class' ? 'Whole class' : 'Individuals'}
-                </button>
-              ))}
+            <div className="mb-3">
+              <ClassTargetPicker
+                classes={editing ? activeClasses.filter((c) => c.id === targets[0]?.classId) : activeClasses}
+                value={targets}
+                onChange={setTargets}
+              />
             </div>
-            {scope === 'students' && cls && (
-              <div className="max-h-40 overflow-y-auto mb-3 space-y-1">
-                {cls.students.map((s) => (
-                  <label key={s.uid} className="flex items-center gap-2 text-sm text-textTitle/80">
-                    <input type="checkbox" checked={targets.has(s.uid)} onChange={() => toggleTarget(s.uid)} />
-                    {s.name}
-                  </label>
-                ))}
-                {cls.students.length === 0 && <p className="text-xs text-textTitle/40">No students in this class yet.</p>}
-              </div>
-            )}
-            <label className="block text-sm text-textTitle/70 mb-1">Due date (optional)</label>
-            <input type="date" value={due} min={today} onChange={(e) => setDue(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3" />
 
             <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
               <input type="checkbox" checked={overrideControls} onChange={(e) => setOverrideControls(e.target.checked)} />
@@ -399,7 +405,7 @@ export default function LessonsContentPage() {
             )}
 
             <div className="flex gap-2">
-              <button onClick={submit} disabled={busy || !classId}
+              <button onClick={submit} disabled={busy || targets.length === 0}
                 className="flex-1 px-3 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
                 {busy ? 'Saving…' : editing ? 'Save changes' : 'Assign'}
               </button>

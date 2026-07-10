@@ -1,10 +1,12 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDashboard, apiCall, type Assignment } from '../../useDashboard'
 import { DashboardShell, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { AssignedGroups } from '../AssignedGroups'
 import { groupAssignments, type AssignedTarget } from '@/lib/dashboard/contentGrouping'
 import { PROMPT_CATEGORIES, PROMPT_TEMPLATES, type PromptTemplate } from '@/lib/journal/prompts'
+import { ClassTargetPicker } from '../ClassTargetPicker'
+import { fanoutAssign, type ClassTarget } from '@/lib/dashboard/assignFanout'
 
 // General, class-agnostic Journal page. Teachers only ever see submission
 // METADATA (counts/status) — never entry content — so this page composes
@@ -16,29 +18,21 @@ export default function JournalContentPage() {
   const [questions, setQuestions] = useState<string[]>([''])
   const [minWords, setMinWords] = useState(0)
   const [minSeconds, setMinSeconds] = useState(0)
-  const [scope, setScope] = useState<'class' | 'students'>('class')
-  const [targets, setTargets] = useState<Set<string>>(new Set())
-  const [due, setDue] = useState('')
+  const [targets, setTargets] = useState<ClassTarget[]>([])
   const [editing, setEditing] = useState<AssignedTarget | null>(null)
   const [busy, setBusy] = useState(false)
   const [showLibrary, setShowLibrary] = useState(false)
   const [openCat, setOpenCat] = useState<string | null>(null)
-  const [classId, setClassId] = useState<string>('')
 
   const today = new Date().toISOString().slice(0, 10)
   const activeClasses = useMemo(() => (data ?? []).filter((c) => !c.archived), [data])
-  const cls = activeClasses.find((c) => c.id === classId)
-
-  useEffect(() => {
-    if (!classId && activeClasses.length > 0) setClassId(activeClasses[0].id)
-  }, [activeClasses, classId])
 
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
 
   function resetComposer() {
     setTitle(''); setQuestions(['']); setMinWords(0); setMinSeconds(0)
-    setScope('class'); setTargets(new Set()); setDue(''); setEditing(null)
+    setTargets([]); setEditing(null)
     setShowLibrary(false); setOpenCat(null)
   }
 
@@ -57,45 +51,65 @@ export default function JournalContentPage() {
     })
   }
 
-  const toggleTarget = (uid: string) =>
-    setTargets((prev) => { const n = new Set(prev); n.has(uid) ? n.delete(uid) : n.add(uid); return n })
-
   function startEditFromTarget(t: AssignedTarget) {
     const a = t.assignment
     setEditing(t)
-    setClassId(t.classId)
     setTitle(a.title ?? '')
     setQuestions(a.journal?.questions?.length ? a.journal.questions : [''])
     setMinWords(a.journal?.minWords ?? 0)
     setMinSeconds(a.journal?.minSeconds ?? 0)
-    setScope(a.scope)
-    setTargets(new Set(a.studentUids ?? []))
-    setDue(a.dueDate ?? '')
+    setTargets([{
+      classId: t.classId,
+      className: t.className,
+      dueDate: a.dueDate ?? null,
+      studentUids: a.scope === 'students' ? (a.studentUids ?? []) : null,
+    }])
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function submit() {
-    if (!user || !classId) return
+    if (!user) return
     const qs = questions.map((q) => q.trim()).filter(Boolean)
     if (qs.length === 0) { alert('Add at least one prompt question.'); return }
-    if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
+    if (targets.length === 0) { alert('Pick at least one class.'); return }
+    const emptyStudentsTarget = targets.find((t) => Array.isArray(t.studentUids) && t.studentUids.length === 0)
+    if (emptyStudentsTarget) {
+      alert(`Pick at least one student for ${emptyStudentsTarget.className}, or turn off "Choose specific students".`)
+      return
+    }
 
-    if (!editing && due && due < today && !confirm('That due date is in the past — assign anyway?')) return
-
-    const payload = {
+    const basePayload = {
       type: 'journal',
       journal: { questions: qs, minWords, minSeconds },
-      scope,
-      studentUids: scope === 'students' ? Array.from(targets) : [],
-      dueDate: due || null,
       title: title.trim() || null,
     }
+
     setBusy(true)
     try {
-      if (editing) await apiCall(user, `/api/classes/${classId}/assign?id=${editing.assignment.id}`, 'PATCH', payload)
-      else await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
-      resetComposer()
-      reload()
+      if (editing) {
+        const t = targets[0]
+        const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
+        const payload = {
+          ...basePayload,
+          scope: useStudents ? 'students' : 'class',
+          studentUids: useStudents ? t.studentUids : [],
+          dueDate: t.dueDate,
+        }
+        await apiCall(user, `/api/classes/${t.classId}/assign?id=${editing.assignment.id}`, 'PATCH', payload)
+        resetComposer()
+        reload()
+      } else {
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !confirm('One or more due dates are in the past — assign anyway?')) return
+
+        const results = await fanoutAssign((cid, body) => apiCall(user, `/api/classes/${cid}/assign`, 'POST', body), basePayload, targets)
+        const failed = results.filter((r) => !r.ok)
+        if (failed.length === 0) {
+          resetComposer()
+        } else {
+          alert(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '))
+        }
+        reload()
+      }
     } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
   }
 
@@ -131,17 +145,6 @@ export default function JournalContentPage() {
         <div className="text-sm font-medium text-textTitle mb-3">
           {editing ? 'Edit prompt' : 'New journal prompt'}
         </div>
-
-        <label className="block text-sm text-textTitle/70 mb-1">Class</label>
-        <select
-          value={classId}
-          onChange={(e) => setClassId(e.target.value)}
-          disabled={!!editing}
-          className={`w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3 ${editing ? 'opacity-60 cursor-not-allowed' : ''}`}
-        >
-          {activeClasses.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-          {activeClasses.length === 0 && <option value="">No active classes</option>}
-        </select>
 
         <input
           type="text" value={title} onChange={(e) => setTitle(e.target.value)}
@@ -221,32 +224,16 @@ export default function JournalContentPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 mb-3">
-          {(['class', 'students'] as const).map((s) => (
-            <button key={s} onClick={() => setScope(s)}
-              className={`flex-1 px-3 py-1.5 rounded-lg text-sm ${scope === s ? 'bg-brandGreen text-white' : 'bg-bgSage text-textTitle/70'}`}>
-              {s === 'class' ? 'Whole class' : 'Individuals'}
-            </button>
-          ))}
+        <div className="mb-4">
+          <ClassTargetPicker
+            classes={editing ? activeClasses.filter((c) => c.id === targets[0]?.classId) : activeClasses}
+            value={targets}
+            onChange={setTargets}
+          />
         </div>
-        {scope === 'students' && cls && (
-          <div className="max-h-40 overflow-y-auto mb-3 space-y-1">
-            {cls.students.map((s) => (
-              <label key={s.uid} className="flex items-center gap-2 text-sm text-textTitle/80">
-                <input type="checkbox" checked={targets.has(s.uid)} onChange={() => toggleTarget(s.uid)} />
-                {s.name}
-              </label>
-            ))}
-            {cls.students.length === 0 && <p className="text-xs text-textTitle/40">No students in this class yet.</p>}
-          </div>
-        )}
-
-        <label className="block text-sm text-textTitle/70 mb-1">Due date (optional)</label>
-        <input type="date" value={due} min={today} onChange={(e) => setDue(e.target.value)}
-          className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-4" />
 
         <div className="flex gap-2">
-          <button onClick={submit} disabled={busy || !classId}
+          <button onClick={submit} disabled={busy || targets.length === 0}
             className="flex-1 px-3 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
             {busy ? 'Saving…' : editing ? 'Save changes' : 'Assign prompt'}
           </button>
