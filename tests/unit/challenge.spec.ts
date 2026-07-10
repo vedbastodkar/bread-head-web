@@ -4,6 +4,7 @@ import {
   seedBoxes, referenceSolution,
   type Challenge, type Allocation, type AllocationBox,
 } from '../../lib/challenges/challenge'
+import { LIBRARY, getLibraryChallenge } from '../../lib/challenges/library'
 
 const CH: Challenge = {
   id: 'lib:starter',
@@ -77,4 +78,19 @@ test('validateChallenge rejects unsolvable params', () => {
   expect(validateChallenge(CH).ok).toBe(true)
   const bad = { ...CH, monthly: { income: 1000, mandatory: [{ id:'rent', name:'Rent', amount: 1200 }] } }
   expect(validateChallenge(bad as Challenge).ok).toBe(false)
+})
+
+test('every library challenge is valid, id-namespaced, and solvable', () => {
+  expect(LIBRARY.length).toBeGreaterThanOrEqual(4)
+  for (const ch of LIBRARY) {
+    expect(ch.id.startsWith('lib:')).toBe(true)
+    expect(ch.source).toBe('library')
+    expect(validateChallenge(ch).ok).toBe(true)
+    expect(evaluateChallenge(ch, referenceSolution(ch)).allPassed).toBe(true)
+  }
+})
+
+test('getLibraryChallenge resolves by slug and returns null otherwise', () => {
+  expect(getLibraryChallenge('lib:first-paycheck')?.title).toBeTruthy()
+  expect(getLibraryChallenge('lib:nope')).toBeNull()
 })
