@@ -60,10 +60,10 @@ export default function NotFound() {
           <img
             src="/assets/icon_clear.png"
             alt=""
-            width={96}
-            height={96}
+            width={192}
+            height={192}
             draggable={false}
-            className="w-[96px] h-[96px] select-none pointer-events-none drop-shadow-sm"
+            className="w-[192px] h-[192px] select-none pointer-events-none drop-shadow-sm"
           />
         </div>
       </div>
