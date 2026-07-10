@@ -30,6 +30,11 @@ export default function JournalContentPage() {
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
 
+  const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((x) => b.includes(x))
+  // Mirrors contentIdentity's normalization: trimmed, joined questions.
+  const sameQuestions = (a: string[], b: string[]) =>
+    a.map((q) => q.trim()).join('␟') === b.map((q) => q.trim()).join('␟')
+
   function resetComposer() {
     setTitle(''); setQuestions(['']); setMinWords(0); setMinSeconds(0)
     setTargets([]); setEditing(null)
@@ -100,12 +105,25 @@ export default function JournalContentPage() {
         reload()
       } else {
         if (targets.some((t) => t.dueDate && t.dueDate < today) && !confirm('One or more due dates are in the past — assign anyway?')) return
+        const dup = targets.some((t) => {
+          const targetCls = activeClasses.find((c) => c.id === t.classId)
+          const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
+          return (targetCls?.assignments ?? []).some((a) =>
+            a.type === 'journal' &&
+            a.scope === (useStudents ? 'students' : 'class') &&
+            sameQuestions(a.journal?.questions ?? [], qs) &&
+            (!useStudents || sameSet(a.studentUids ?? [], t.studentUids ?? [])),
+          )
+        })
+        if (dup && !confirm('An identical journal is already assigned in at least one selected class. Assign anyway?')) return
 
         const results = await fanoutAssign((cid, body) => apiCall(user, `/api/classes/${cid}/assign`, 'POST', body), basePayload, targets)
         const failed = results.filter((r) => !r.ok)
         if (failed.length === 0) {
           resetComposer()
         } else {
+          // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
+          setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
           alert(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '))
         }
         reload()

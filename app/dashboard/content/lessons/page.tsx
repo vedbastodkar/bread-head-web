@@ -195,6 +195,8 @@ export default function LessonsContentPage() {
         if (failed.length === 0) {
           resetComposer()
         } else {
+          // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
+          setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
           alert(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '))
         }
         reload()
