@@ -71,7 +71,12 @@ export function DashboardShell({
               <div className="text-sm text-textTitle font-medium truncate">{user?.email}</div>
             </div>
 
-            <Group title="Class sections" />
+            <Group title="Content" />
+            {navItem('/dashboard/content/lessons', 'Lessons', <IconBook />)}
+            {navItem('/dashboard/content/journal', 'Journal', <IconPencil />)}
+            {navItem('/dashboard/content/challenges', 'Challenges', <IconTarget />)}
+
+            <Group title="Classes" />
             <div className="space-y-0.5">
               {active.map((c) => {
                 const on = c.id === activeClassId
@@ -93,11 +98,6 @@ export function DashboardShell({
 
             {current && (
               <>
-                <Group title="Content" />
-                {navItem(`/dashboard/${current.id}/course`, 'Lessons', <IconBook />)}
-                {navItem(`/dashboard/${current.id}/journal`, 'Journal', <IconPencil />)}
-                {navItem(`/dashboard/${current.id}/challenges`, 'Challenges', <IconTarget />)}
-
                 <Group title="Performance" />
                 {navItem(`/dashboard/${current.id}`, 'Progress', <IconChart />)}
                 {needs > 0 && (
