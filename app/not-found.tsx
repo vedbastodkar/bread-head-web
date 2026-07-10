@@ -17,8 +17,8 @@ export default function NotFound() {
     // start a bit in from the top-left, moving diagonally
     let x = 48
     let y = 48
-    let vx = 1.7
-    let vy = 1.35
+    let vx = 2.9
+    let vy = 2.3
     let raf = 0
     // recolor the logo on every wall hit, like the classic bouncing logo
     const tints = ['none', 'hue-rotate(55deg)', 'hue-rotate(-60deg)', 'hue-rotate(120deg)', 'hue-rotate(200deg)']
@@ -58,12 +58,12 @@ export default function NotFound() {
         <div ref={logoRef} className="absolute left-0 top-0 will-change-transform">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/icon_green.png"
+            src="/assets/icon_clear.png"
             alt=""
-            width={76}
-            height={76}
+            width={96}
+            height={96}
             draggable={false}
-            className="w-[76px] h-[76px] select-none pointer-events-none drop-shadow-sm"
+            className="w-[96px] h-[96px] select-none pointer-events-none drop-shadow-sm"
           />
         </div>
       </div>
