@@ -118,3 +118,32 @@ export function validateChallenge(ch: Challenge): { ok: boolean; error?: string 
   if (need > m.income + EPS) return { ok: false, error: 'Mandatory bills plus required savings exceed income.' }
   return { ok: true }
 }
+
+export interface ChallengeSubmissionMeta {
+  allocation: Allocation
+  score: number
+  allPassed: boolean
+  perCriterion: CriterionResult[]
+  status: 'complete' | 'in_progress'
+  reflection?: string
+}
+
+// Build the teacher-readable challenge submission. Score/allPassed are ALWAYS
+// recomputed here from the allocation — any client-provided score is ignored.
+export function buildChallengeSubmission(
+  input: { allocation: Allocation; reflection?: unknown },
+  ch: Challenge,
+): ChallengeSubmissionMeta {
+  const boxes = Array.isArray(input.allocation?.boxes) ? input.allocation.boxes : []
+  const allocation: Allocation = { boxes }
+  const result = evaluateChallenge(ch, allocation)
+  const reflection = typeof input.reflection === 'string' ? input.reflection.slice(0, 2000) : undefined
+  return {
+    allocation,
+    score: result.score,
+    allPassed: result.allPassed,
+    perCriterion: result.perCriterion,
+    status: result.allPassed ? 'complete' : 'in_progress',
+    reflection,
+  }
+}

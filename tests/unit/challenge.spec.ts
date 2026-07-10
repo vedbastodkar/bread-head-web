@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import {
   resolveBoxDollars, allocatedDollars, evaluateChallenge, validateChallenge,
-  seedBoxes, referenceSolution,
+  seedBoxes, referenceSolution, buildChallengeSubmission,
   type Challenge, type Allocation, type AllocationBox,
 } from '../../lib/challenges/challenge'
 import { LIBRARY, getLibraryChallenge } from '../../lib/challenges/library'
@@ -93,4 +93,21 @@ test('every library challenge is valid, id-namespaced, and solvable', () => {
 test('getLibraryChallenge resolves by slug and returns null otherwise', () => {
   expect(getLibraryChallenge('lib:first-paycheck')?.title).toBeTruthy()
   expect(getLibraryChallenge('lib:nope')).toBeNull()
+})
+
+test('buildChallengeSubmission recomputes score server-side and ignores client score', () => {
+  const alloc = referenceSolution(CH)
+  // Attacker sends a bogus score; builder must ignore it and recompute.
+  const meta = buildChallengeSubmission({ allocation: alloc, reflection: 'ok', score: 0.1 } as any, CH)
+  expect(meta.allPassed).toBe(true)
+  expect(meta.score).toBe(1)
+  expect(meta.status).toBe('complete')
+  expect(meta.allocation.boxes.length).toBe(alloc.boxes.length)
+  expect(meta.reflection).toBe('ok')
+})
+
+test('buildChallengeSubmission marks incomplete when criteria fail', () => {
+  const meta = buildChallengeSubmission({ allocation: { boxes: [] } }, CH)
+  expect(meta.status).toBe('in_progress')
+  expect(meta.allPassed).toBe(false)
 })
