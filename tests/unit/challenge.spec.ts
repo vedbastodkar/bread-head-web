@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import {
   resolveBoxDollars, allocatedDollars, evaluateChallenge, validateChallenge,
   seedBoxes, referenceSolution, buildChallengeSubmission,
+  assignmentAppliesTo, clampAmount,
   type Challenge, type Allocation, type AllocationBox,
 } from '../../lib/challenges/challenge'
 import { LIBRARY, getLibraryChallenge } from '../../lib/challenges/library'
@@ -110,4 +111,23 @@ test('buildChallengeSubmission marks incomplete when criteria fail', () => {
   const meta = buildChallengeSubmission({ allocation: { boxes: [] } }, CH)
   expect(meta.status).toBe('in_progress')
   expect(meta.allPassed).toBe(false)
+})
+
+test('assignmentAppliesTo: class scope applies to everyone; students scope only to listed uids', () => {
+  // class-wide (explicit and legacy/undefined) applies to any user
+  expect(assignmentAppliesTo({ scope: 'class', studentUids: [] }, 'ben')).toBe(true)
+  expect(assignmentAppliesTo({ scope: undefined, studentUids: undefined }, 'ben')).toBe(true)
+  // individual scope: only the listed target — the IDOR guard
+  expect(assignmentAppliesTo({ scope: 'students', studentUids: ['chloe'] }, 'chloe')).toBe(true)
+  expect(assignmentAppliesTo({ scope: 'students', studentUids: ['chloe'] }, 'ben')).toBe(false)
+  expect(assignmentAppliesTo({ scope: 'students', studentUids: null }, 'ben')).toBe(false)
+})
+
+test('clampAmount: no negatives, percent capped at 100, fixed capped at income', () => {
+  expect(clampAmount(-500, 'fixed', 2000)).toBe(0)
+  expect(clampAmount(NaN, 'fixed', 2000)).toBe(0)
+  expect(clampAmount(999999999, 'fixed', 2000)).toBe(2000)   // no single box beyond income
+  expect(clampAmount(650, 'fixed', 2000)).toBe(650)          // legit value untouched
+  expect(clampAmount(500, 'percent', 2000)).toBe(100)        // >100% capped
+  expect(clampAmount(15, 'percent', 2000)).toBe(15)          // legit percent untouched
 })

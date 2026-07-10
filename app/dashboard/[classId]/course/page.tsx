@@ -39,6 +39,7 @@ export default function CoursePage() {
   const [savingSettings, setSavingSettings] = useState(false)
 
   const cls = data?.find((c) => c.id === classId)
+  const today = new Date().toISOString().slice(0, 10)
 
   useEffect(() => {
     if (!cls) return
@@ -157,6 +158,17 @@ export default function CoursePage() {
     if (assignType === 'challenge') {
       if (!challengeId) { alert('Pick a Budget Challenge.'); return }
       if (scope === 'students' && targets.size === 0) { alert('Pick at least one student.'); return }
+      if (!editingId) {
+        if (due && due < today && !confirm('That due date is in the past — assign anyway?')) return
+        // Duplicate guard: warn on an identical challenge+scope+targets assignment.
+        const dup = (cls?.assignments ?? []).some((a) =>
+          a.type === 'challenge' &&
+          a.challengeId === challengeId &&
+          a.scope === scope &&
+          (scope === 'class' || sameSet(a.studentUids ?? [], targets)),
+        )
+        if (dup && !confirm('An identical Budget Challenge is already assigned. Add another anyway?')) return
+      }
       const payload = {
         type: 'challenge',
         challengeId,
@@ -477,7 +489,7 @@ export default function CoursePage() {
               </div>
             )}
             <label className="block text-sm text-textTitle/70 mb-1">Due date (optional)</label>
-            <input type="date" value={due} onChange={(e) => setDue(e.target.value)}
+            <input type="date" value={due} min={today} onChange={(e) => setDue(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm mb-3" />
 
             {/* Per-assignment control override (lesson assignments only) */}

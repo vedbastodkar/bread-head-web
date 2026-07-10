@@ -41,6 +41,26 @@ export interface ChallengeResult { perCriterion: CriterionResult[]; allPassed: b
 
 const EPS = 0.01
 
+// Does this assignment apply to the given user? Class-wide assignments apply to
+// every rostered student; individual-scoped ones only to their listed uids.
+// Server-authoritative gate for /api/challenge/submit — the roster join-gate
+// alone would let a classmate submit to an assignment scoped to someone else.
+export function assignmentAppliesTo(
+  a: { scope?: 'class' | 'students' | string | null; studentUids?: string[] | null },
+  uid: string,
+): boolean {
+  if (a.scope === 'students') return (a.studentUids ?? []).includes(uid)
+  return true
+}
+
+// Clamp a user-entered allocation amount to a sane range: never negative, a
+// percent can't exceed 100, and a single fixed box can't exceed monthly income.
+// Kills absurd inputs (e.g. $999,999,999 → "50000000%") at the source.
+export function clampAmount(raw: number, mode: 'fixed' | 'percent', income: number): number {
+  const v = Number.isFinite(raw) ? Math.max(0, raw) : 0
+  return mode === 'percent' ? Math.min(100, v) : Math.min(income, v)
+}
+
 export function resolveBoxDollars(box: AllocationBox, income: number): number {
   return box.targetMode === 'fixed' ? box.targetValue : income * (box.targetValue / 100)
 }

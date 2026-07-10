@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase/client'
 import { useAuth } from '@/app/context/AuthContext'
+import { assignmentAppliesTo } from '@/lib/challenges/challenge'
 import {
   LESSON_ORDER,
   DEFAULT_CONTROLS,
@@ -109,7 +110,7 @@ export function useStudent() {
         const assignments: StudentAssignment[] = []
         classIds.forEach((cid, i) => {
           classesLite[i].assignments.forEach((a, j) => {
-            const applies = a.scope === 'class' || a.studentUids.includes(user.uid)
+            const applies = assignmentAppliesTo(a, user.uid)
             if (applies) assignments.push({
               id: a.id ?? `${cid}:${j}`,
               classId: cid,

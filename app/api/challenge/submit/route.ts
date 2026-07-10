@@ -3,7 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
 import { getLibraryChallenge } from '@/lib/challenges/library'
-import { buildChallengeSubmission, type Allocation, type AllocationBox, type BoxRole } from '@/lib/challenges/challenge'
+import { assignmentAppliesTo, buildChallengeSubmission, type Allocation, type AllocationBox, type BoxRole } from '@/lib/challenges/challenge'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -62,6 +62,11 @@ export async function POST(req: NextRequest) {
   const aDoc = await adminDb.collection('classes').doc(classId).collection('assignments').doc(assignmentId).get()
   if (!aDoc.exists || aDoc.get('type') !== 'challenge')
     return NextResponse.json({ ok: false, error: 'Not a challenge assignment' }, { status: 400 })
+
+  // Scope gate: an individual-scoped challenge may only be submitted by a listed
+  // target. Being rostered on the class is necessary but not sufficient.
+  if (!assignmentAppliesTo({ scope: aDoc.get('scope'), studentUids: aDoc.get('studentUids') }, u.uid))
+    return NextResponse.json({ ok: false, error: 'Not assigned to you' }, { status: 403 })
 
   const challengeId = String(aDoc.get('challengeId') ?? '')
   const ch = challengeId.startsWith('lib:') ? getLibraryChallenge(challengeId) : null // custom: challenges are Phase 2

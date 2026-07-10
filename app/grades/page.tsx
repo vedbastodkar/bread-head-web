@@ -31,7 +31,7 @@ interface GradeRow {
 // assignment itself carries none.
 function titleFor(a: StudentAssignment): string {
   if (a.type === 'challenge') {
-    return (a.challengeId && getLibraryChallenge(a.challengeId)?.title) || a.title || 'Budget Challenge'
+    return a.title || (a.challengeId && getLibraryChallenge(a.challengeId)?.title) || 'Budget Challenge'
   }
   if (a.type === 'journal') return a.title || 'Journal'
   if (a.type === 'lesson' || a.type === undefined) {

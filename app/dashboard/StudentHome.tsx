@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '@/lib/firebase/client'
 import { useStudent, nextLesson } from '@/app/student/useStudent'
 import { StudentShell, StudentSkeleton, StudentError } from '@/app/student/StudentShell'
 import { CATALOG, TOTAL_LESSONS, unitLessonIds, unitName } from '@/lib/curriculum/catalog'
@@ -10,6 +12,25 @@ import { getLibraryChallenge } from '@/lib/challenges/library'
 
 export function StudentHome() {
   const { data, err, loading, user, signOut } = useStudent()
+
+  // Per-challenge submission status, so completed challenges don't keep showing
+  // as unsolved "Solve challenge →" cards. Best-effort (owner-readable doc).
+  const [challengeStatus, setChallengeStatus] = useState<Record<string, 'complete' | 'in_progress'>>({})
+  useEffect(() => {
+    if (!data || !user) return
+    let cancelled = false
+    ;(async () => {
+      const out: Record<string, 'complete' | 'in_progress'> = {}
+      for (const a of data.assignments.filter((x) => x.type === 'challenge')) {
+        try {
+          const snap = await getDoc(doc(db, 'classes', a.classId, 'assignments', a.id, 'submissions', user.uid))
+          if (snap.exists()) out[a.id] = (snap.data() as { status?: string }).status === 'complete' ? 'complete' : 'in_progress'
+        } catch { /* no submission / blocked read → treat as not started */ }
+      }
+      if (!cancelled) setChallengeStatus(out)
+    })()
+    return () => { cancelled = true }
+  }, [data, user])
 
   if (loading || (!data && !err)) return <StudentSkeleton />
   if (err) return <StudentError message={err} />
@@ -32,12 +53,21 @@ export function StudentHome() {
 
   const challengeTodo = data!.assignments
     .filter((a) => a.type === 'challenge')
-    .map((a) => ({
-      id: a.id,
-      dueDate: a.dueDate,
-      overdue: !!a.dueDate && a.dueDate < today,
-      title: (a.challengeId && getLibraryChallenge(a.challengeId)?.title) || a.title || 'Budget Challenge',
-    }))
+    .map((a) => {
+      const status = challengeStatus[a.id]
+      return {
+        id: a.id,
+        dueDate: a.dueDate,
+        // A completed challenge is never "overdue".
+        overdue: status !== 'complete' && !!a.dueDate && a.dueDate < today,
+        status,
+        // Teacher's custom title wins; fall back to the library challenge name.
+        title: a.title || (a.challengeId && getLibraryChallenge(a.challengeId)?.title) || 'Budget Challenge',
+      }
+    })
+  // Completed challenges stay visible (review/resubmit) but don't count toward
+  // the "needs attention" tally.
+  const openChallengeCount = challengeTodo.filter((c) => c.status !== 'complete').length
 
   const u = CATALOG.find((c) => c.unit === cont.unit)!
   const unitIds = unitLessonIds(u.unit)
@@ -64,7 +94,7 @@ export function StudentHome() {
       {/* Currently assigned */}
       <section className="mb-6">
         <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">
-          Currently assigned to me {(assigned.length + challengeTodo.length) > 0 && <span className="text-red-600">· {assigned.length + challengeTodo.length}</span>}
+          Currently assigned to me {(assigned.length + openChallengeCount) > 0 && <span className="text-red-600">· {assigned.length + openChallengeCount}</span>}
         </h2>
         {assigned.length === 0 && challengeTodo.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/50">Nothing assigned right now. You’re all caught up.</div>
@@ -81,15 +111,23 @@ export function StudentHome() {
                 </Link>
               )
             })}
-            {challengeTodo.map((c) => (
-              <Link key={c.id} href={`/challenge/${c.id}`}
-                className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${c.overdue ? 'border-red-500' : 'border-brandGreen'}`}>
-                <div className="inline-block text-[10px] font-semibold tracking-wider uppercase text-brandGreen bg-brandGreen/10 rounded-full px-2 py-0.5 mb-1.5">Budget Challenge</div>
-                <div className="text-sm font-medium text-textTitle truncate">{c.title}</div>
-                {c.dueDate && <div className={`text-xs mt-1 ${c.overdue ? 'text-red-600' : 'text-textTitle/50'}`}>{c.overdue ? 'Overdue' : 'Due'} {c.dueDate}</div>}
-                <div className="text-xs text-brandGreen font-medium mt-2">Solve challenge →</div>
-              </Link>
-            ))}
+            {challengeTodo.map((c) => {
+              const done = c.status === 'complete'
+              const inProgress = c.status === 'in_progress'
+              return (
+                <Link key={c.id} href={`/challenge/${c.id}`}
+                  className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${done ? 'border-brandGreen' : c.overdue ? 'border-red-500' : 'border-brandGreen'}`}>
+                  <div className="inline-block text-[10px] font-semibold tracking-wider uppercase text-brandGreen bg-brandGreen/10 rounded-full px-2 py-0.5 mb-1.5">Budget Challenge</div>
+                  <div className="text-sm font-medium text-textTitle truncate">{c.title}</div>
+                  {done ? (
+                    <div className="text-xs mt-1 text-brandGreen">Completed</div>
+                  ) : (
+                    c.dueDate && <div className={`text-xs mt-1 ${c.overdue ? 'text-red-600' : 'text-textTitle/50'}`}>{c.overdue ? 'Overdue' : 'Due'} {c.dueDate}</div>
+                  )}
+                  <div className="text-xs text-brandGreen font-medium mt-2">{done ? '✓ Completed — review' : inProgress ? 'Continue →' : 'Solve challenge →'}</div>
+                </Link>
+              )
+            })}
           </div>
         )}
       </section>

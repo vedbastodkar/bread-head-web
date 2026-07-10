@@ -10,13 +10,16 @@ import {
   evaluateChallenge,
   allocatedDollars,
   resolveBoxDollars,
+  clampAmount,
   type AllocationBox,
   type BoxRole,
   type Challenge,
 } from '@/lib/challenges/challenge'
 
-const money = (n: number) =>
-  '$' + (Math.round(n * 100) / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })
+const money = (n: number) => {
+  const v = Math.round(n * 100) / 100
+  return (v < 0 ? '-$' : '$') + Math.abs(v).toLocaleString(undefined, { maximumFractionDigits: 2 })
+}
 
 const roleEmoji: Record<BoxRole, string> = { need: '🏠', want: '🎮', save: '💰' }
 const roleLabel: Record<BoxRole, string> = { need: 'Need', want: 'Want', save: 'Save' }
@@ -89,7 +92,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
 
   // ---- box actions (own boxes only; seeded boxes carry mandatoryId → locked) ----
   const addBox = (name: string, role: BoxRole, targetMode: 'fixed' | 'percent', targetValue: number) => {
-    setBoxes((b) => [...b, { id: newId(), name: name.trim() || 'New box', role, targetMode, targetValue }])
+    setBoxes((b) => [...b, { id: newId(), name: name.trim() || 'New box', role, targetMode, targetValue: clampAmount(targetValue, targetMode, income) }])
     setServer(null)
   }
   const updateBox = (id: string, patch: Partial<AllocationBox>) => {
@@ -299,14 +302,14 @@ function BoxRow({ box, income, onChange, onDelete }: {
         <div className="flex items-center gap-2">
           <div className="inline-flex bg-[#DCE5C9] rounded-lg p-0.5" role="group" aria-label="Amount mode">
             {(['fixed', 'percent'] as const).map((m) => (
-              <button key={m} type="button" onClick={() => onChange({ targetMode: m })} aria-pressed={box.targetMode === m}
+              <button key={m} type="button" onClick={() => onChange({ targetMode: m, targetValue: clampAmount(box.targetValue, m, income) })} aria-pressed={box.targetMode === m}
                 className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${box.targetMode === m ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/60'}`}>
                 {m === 'fixed' ? '$ fixed' : '% of income'}
               </button>
             ))}
           </div>
           <input value={box.targetValue} inputMode="decimal" aria-label="Amount value"
-            onChange={(e) => onChange({ targetValue: Math.max(0, parseFloat(e.target.value) || 0) })}
+            onChange={(e) => onChange({ targetValue: clampAmount(parseFloat(e.target.value) || 0, box.targetMode, income) })}
             className="w-16 border border-textTitle/15 rounded-lg px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40" />
         </div>
       </div>
