@@ -36,8 +36,9 @@ export interface AssignmentLite {
   scope: 'class' | 'students'
   studentUids: string[]
   controls?: Partial<LessonControls>
-  type?: 'lesson' | 'journal'
+  type?: 'lesson' | 'journal' | 'challenge'
   journal?: { questions: string[]; minWords: number; minSeconds: number }
+  challengeId?: string
   title?: string | null
 }
 

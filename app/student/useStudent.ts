@@ -71,8 +71,9 @@ export async function fetchStudentClasses(classIds: string[]): Promise<ClassLite
           studentUids: ad.studentUids ?? [],
           controls: ad.controls ?? undefined,
           title: ad.title ?? null,
-          type: ad.type === 'journal' ? 'journal' : 'lesson',
+          type: ad.type === 'journal' ? 'journal' : ad.type === 'challenge' ? 'challenge' : 'lesson',
           journal: ad.journal ?? undefined,
+          challengeId: ad.challengeId ?? undefined,
         })
       })
     } catch { /* rules may block assignment reads until deployed */ }
@@ -120,6 +121,7 @@ export function useStudent() {
               title: a.title,
               type: a.type ?? 'lesson',
               journal: a.journal,
+              challengeId: a.challengeId,
             })
           })
         })
