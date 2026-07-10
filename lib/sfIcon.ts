@@ -52,7 +52,7 @@ const RULES: [RegExp, string][] = [
   [/target|scope|binoculars/, '🎯'],
   [/drop|water/, '💧'],
   [/leaf|tree|seedling/, '🌱'],
-  [/fork\.knife|cup|takeout/, '🍽️'],
+  [/fork\.knife|cup|takeout/, '🍴'],
   [/backpack/, '🎒'],
   [/hammer|wrench|gearshape|gear/, '🛠️'],
   [/arrow\.up\.arrow\.down|arrow\.left\.arrow\.right|arrow\.2|squarepath|circlepath/, '🔄'],
