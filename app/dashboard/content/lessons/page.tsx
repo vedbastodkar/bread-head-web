@@ -239,76 +239,6 @@ export default function LessonsContentPage() {
         <AssignedGroups groups={groups} emptyLabel="Nothing assigned yet." onEdit={startEditFromTarget} onRemove={removeFromTarget} />
       </div>
 
-      {/* Pacing & controls — per-class settings, independent of the assign composer */}
-      <div className="bg-white rounded-2xl shadow-sm p-5 mb-6">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <div className="text-sm font-medium text-textTitle mb-1">Pacing &amp; controls</div>
-            <p className="text-xs text-textTitle/50 max-w-md">Release the curriculum gradually and set default in-lesson rules for a class. Assignments can override these per lesson or per student.</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <select
-              value={classId}
-              onChange={(e) => setClassId(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-textTitle/15 text-sm"
-            >
-              {activeClasses.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-              {activeClasses.length === 0 && <option value="">No active classes</option>}
-            </select>
-            <button onClick={saveSettings} disabled={savingSettings || !classId}
-              className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
-              {savingSettings ? 'Saving…' : 'Save settings'}
-            </button>
-          </div>
-        </div>
-
-        <div className="grid sm:grid-cols-2 gap-6 mt-4">
-          {/* Release frontier */}
-          <div>
-            <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
-              <input type="checkbox" checked={pacingEnabled} onChange={(e) => setPacingEnabled(e.target.checked)} />
-              Enable pacing (lock lessons past a point)
-            </label>
-            {pacingEnabled && (
-              <div className="flex items-center gap-2 text-sm text-textTitle/70">
-                <span>Unlock through</span>
-                <select value={throughUnit}
-                  onChange={(e) => { const u = Number(e.target.value); setThroughUnit(u); setThroughLesson(1) }}
-                  className="px-2 py-1 rounded-lg border border-textTitle/15">
-                  {CATALOG.map((u) => <option key={u.unit} value={u.unit}>U{u.unit}</option>)}
-                </select>
-                <span>·</span>
-                <select value={throughLesson} onChange={(e) => setThroughLesson(Number(e.target.value))}
-                  className="px-2 py-1 rounded-lg border border-textTitle/15">
-                  {Array.from({ length: throughUnitLessonCount }, (_, i) => i + 1).map((l) => <option key={l} value={l}>L{l}</option>)}
-                </select>
-              </div>
-            )}
-          </div>
-
-          {/* Default in-lesson controls */}
-          <div className="space-y-2 text-sm text-textTitle/80">
-            <div className="text-xs uppercase tracking-wider text-textTitle/40">Default lesson controls</div>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" checked={classControls.lockUntilCorrect}
-                onChange={(e) => setClassControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
-              Lock until correct answer
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" checked={classControls.noSkipAhead}
-                onChange={(e) => setClassControls((c) => ({ ...c, noSkipAhead: e.target.checked }))} />
-              No skipping ahead
-            </label>
-            <label className="flex items-center justify-between gap-2 max-w-[220px]">
-              <span>Min seconds / slide</span>
-              <input type="number" min={0} max={600} value={classControls.minSecondsPerSlide}
-                onChange={(e) => setClassControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
-                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
-            </label>
-          </div>
-        </div>
-      </div>
-
       <div className="grid lg:grid-cols-3 gap-6">
         {/* curriculum browser */}
         <div className="lg:col-span-2 space-y-2">
@@ -401,7 +331,7 @@ export default function LessonsContentPage() {
                   <span>Min seconds / slide</span>
                   <input type="number" min={0} max={600} value={controls.minSecondsPerSlide}
                     onChange={(e) => setControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
-                    className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                    className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-center" />
                 </label>
               </div>
             )}
@@ -417,6 +347,76 @@ export default function LessonsContentPage() {
                 </button>
               )}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Pacing & controls — per-class settings, independent of the assign composer (kept at the bottom) */}
+      <div className="bg-white rounded-2xl shadow-sm p-5 mt-6">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <div className="text-sm font-medium text-textTitle mb-1">Pacing &amp; controls</div>
+            <p className="text-xs text-textTitle/50 max-w-md">Release the curriculum gradually and set default in-lesson rules for a class. Assignments can override these per lesson or per student.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              value={classId}
+              onChange={(e) => setClassId(e.target.value)}
+              className="px-3 py-2 rounded-xl border border-textTitle/15 text-sm"
+            >
+              {activeClasses.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              {activeClasses.length === 0 && <option value="">No active classes</option>}
+            </select>
+            <button onClick={saveSettings} disabled={savingSettings || !classId}
+              className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
+              {savingSettings ? 'Saving…' : 'Save settings'}
+            </button>
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-6 mt-4">
+          {/* Release frontier */}
+          <div>
+            <label className="flex items-center gap-2 text-sm text-textTitle/80 mb-2">
+              <input type="checkbox" checked={pacingEnabled} onChange={(e) => setPacingEnabled(e.target.checked)} />
+              Enable pacing (lock lessons past a point)
+            </label>
+            {pacingEnabled && (
+              <div className="flex items-center gap-2 text-sm text-textTitle/70">
+                <span>Unlock through</span>
+                <select value={throughUnit}
+                  onChange={(e) => { const u = Number(e.target.value); setThroughUnit(u); setThroughLesson(1) }}
+                  className="px-2 py-1 rounded-lg border border-textTitle/15">
+                  {CATALOG.map((u) => <option key={u.unit} value={u.unit}>U{u.unit}</option>)}
+                </select>
+                <span>·</span>
+                <select value={throughLesson} onChange={(e) => setThroughLesson(Number(e.target.value))}
+                  className="px-2 py-1 rounded-lg border border-textTitle/15">
+                  {Array.from({ length: throughUnitLessonCount }, (_, i) => i + 1).map((l) => <option key={l} value={l}>L{l}</option>)}
+                </select>
+              </div>
+            )}
+          </div>
+
+          {/* Default in-lesson controls */}
+          <div className="space-y-2 text-sm text-textTitle/80">
+            <div className="text-xs uppercase tracking-wider text-textTitle/40">Default lesson controls</div>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={classControls.lockUntilCorrect}
+                onChange={(e) => setClassControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
+              Lock until correct answer
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={classControls.noSkipAhead}
+                onChange={(e) => setClassControls((c) => ({ ...c, noSkipAhead: e.target.checked }))} />
+              No skipping ahead
+            </label>
+            <label className="flex items-center justify-between gap-2 max-w-[220px]">
+              <span>Min seconds / slide</span>
+              <input type="number" min={0} max={600} value={classControls.minSecondsPerSlide}
+                onChange={(e) => setClassControls((c) => ({ ...c, minSecondsPerSlide: Math.max(0, Number(e.target.value) || 0) }))}
+                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-center" />
+            </label>
           </div>
         </div>
       </div>

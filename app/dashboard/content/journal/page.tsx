@@ -232,12 +232,12 @@ export default function JournalContentPage() {
             <label className="flex items-center gap-2 text-sm text-textTitle/80">Min words
               <input type="number" min={0} max={5000} value={minWords}
                 onChange={(e) => setMinWords(Math.max(0, Number(e.target.value) || 0))}
-                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-center" />
             </label>
             <label className="flex items-center gap-2 text-sm text-textTitle/80">Min seconds
               <input type="number" min={0} max={7200} value={minSeconds}
                 onChange={(e) => setMinSeconds(Math.max(0, Number(e.target.value) || 0))}
-                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-right" />
+                className="w-20 px-2 py-1 rounded-lg border border-textTitle/15 text-center" />
             </label>
           </div>
         </div>
