@@ -55,6 +55,7 @@ export function StudentShell({
               {navItem('/dashboard/course', 'Course')}
               {navItem('/dashboard/journal', 'Journal')}
               {navItem('/mybudget', 'My Budget')}
+              {navItem('/grades', 'Grades')}
               {navItem('/account', 'Account')}
             </nav>
 
