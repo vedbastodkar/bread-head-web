@@ -8,6 +8,7 @@ import {
 import { JoinInfo } from '../parts'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../DashboardShell'
 import { CATALOG, TOTAL_LESSONS, unitName, completedByUnit } from '@/lib/curriculum/catalog'
+import { LIBRARY, getLibraryChallenge } from '@/lib/challenges/library'
 
 type SortKey = 'name' | 'done' | 'active'
 
@@ -64,6 +65,9 @@ export default function ClassDetail() {
           >↓ CSV</button>
         </div>
       </div>
+
+      {/* Quick assign */}
+      <QuickAssign classId={cls.id} user={user} reload={reload} />
 
       {/* Needs attention */}
       <section className="mb-8">
@@ -195,6 +199,142 @@ function Heatmap({ students, classId, units }: { students: Student[]; classId: s
         <span>Complete</span>
       </div>
     </div>
+  )
+}
+
+type QuickType = 'lesson' | 'journal' | 'challenge'
+
+// Compact, single-class shortcut to assign without leaving the class page.
+// Lesson selection is heavy, so it links out to the general Lessons page;
+// Journal authoring is minimal here (title + one-question-per-line), with a
+// link to the general Journal page for a fully authored prompt. Challenge is
+// a straight library pick, since the library is small and finite.
+function QuickAssign({
+  classId, user, reload,
+}: {
+  classId: string
+  user: { getIdToken: () => Promise<string> } | null
+  reload: () => void
+}) {
+  const today = new Date().toISOString().slice(0, 10)
+  const [type, setType] = useState<QuickType>('challenge')
+  const [challengeId, setChallengeId] = useState<string>(LIBRARY[0]?.id ?? '')
+  const [journalTitle, setJournalTitle] = useState('')
+  const [journalQuestions, setJournalQuestions] = useState('')
+  const [title, setTitle] = useState('')
+  const [dueDate, setDueDate] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  function resetForm() {
+    setChallengeId(LIBRARY[0]?.id ?? '')
+    setJournalTitle(''); setJournalQuestions('')
+    setTitle(''); setDueDate('')
+  }
+
+  async function assign() {
+    if (!user) return
+    if (dueDate && dueDate < today && !confirm('This due date is in the past — assign anyway?')) return
+
+    let payload: Record<string, unknown>
+    if (type === 'challenge') {
+      if (!challengeId) { alert('Pick a Budget Challenge.'); return }
+      payload = { type: 'challenge', challengeId, title: title.trim() || null }
+    } else {
+      const questions = journalQuestions.split('\n').map((q) => q.trim()).filter(Boolean)
+      if (questions.length === 0) { alert('Add at least one question (one per line).'); return }
+      payload = { type: 'journal', journal: { questions, minWords: 0, minSeconds: 0 }, title: journalTitle.trim() || null }
+    }
+    payload.scope = 'class'
+    payload.studentUids = []
+    payload.dueDate = dueDate || null
+
+    setBusy(true)
+    try {
+      await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
+      resetForm()
+      reload()
+    } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+  }
+
+  return (
+    <section className="mb-8">
+      <h2 className="font-medium text-textTitle/80 mb-3">Quick assign</h2>
+      <div className="bg-white rounded-2xl shadow-sm p-4">
+        <div className="flex items-center gap-2 mb-3">
+          {(['challenge', 'journal', 'lesson'] as QuickType[]).map((t) => (
+            <button key={t} onClick={() => setType(t)}
+              className={`px-2.5 py-1 rounded-lg text-sm capitalize ${type === t ? 'bg-brandGreen text-white' : 'text-textTitle/60 hover:bg-bgSage/60'}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+
+        {type === 'challenge' && (
+          <div className="space-y-2 mb-3">
+            <select
+              value={challengeId}
+              onChange={(e) => setChallengeId(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border border-textTitle/15 text-sm"
+            >
+              {LIBRARY.map((c) => (<option key={c.id} value={c.id}>{c.title}</option>))}
+            </select>
+            {getLibraryChallenge(challengeId) && (
+              <p className="text-xs text-textTitle/60">{getLibraryChallenge(challengeId)!.prompt}</p>
+            )}
+            <input
+              type="text" value={title} onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title (optional)"
+              className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm"
+            />
+          </div>
+        )}
+
+        {type === 'journal' && (
+          <div className="space-y-2 mb-3">
+            <input
+              type="text" value={journalTitle} onChange={(e) => setJournalTitle(e.target.value)}
+              placeholder="Title (optional)"
+              className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm"
+            />
+            <textarea
+              value={journalQuestions} onChange={(e) => setJournalQuestions(e.target.value)}
+              placeholder="One question per line"
+              rows={3}
+              className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm"
+            />
+            <Link href="/dashboard/content/journal" className="text-xs text-brandGreen hover:underline inline-block">
+              Author a detailed prompt →
+            </Link>
+          </div>
+        )}
+
+        {type === 'lesson' && (
+          <div className="mb-3">
+            <p className="text-sm text-textTitle/60 mb-2">Lesson selection lives on the general Lessons page.</p>
+            <Link href="/dashboard/content/lessons" className="text-xs text-brandGreen hover:underline inline-block">
+              Assign lessons →
+            </Link>
+          </div>
+        )}
+
+        {type !== 'lesson' && (
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <label className="flex items-center gap-2 text-sm text-textTitle/70">
+              Due
+              <input
+                type="date" min={today} value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="px-2 py-1 rounded-lg border border-textTitle/15 text-sm"
+              />
+            </label>
+            <button onClick={assign} disabled={busy}
+              className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
+              {busy ? 'Assigning…' : 'Assign to this class'}
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 
