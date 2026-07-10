@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import {
   resolveBoxDollars, allocatedDollars, evaluateChallenge, validateChallenge,
-  seedBoxes, referenceSolution, buildChallengeSubmission,
+  referenceSolution, buildChallengeSubmission,
   assignmentAppliesTo, clampAmount,
   type Challenge, type Allocation, type AllocationBox,
 } from '../../lib/challenges/challenge'
@@ -18,7 +18,7 @@ const CH: Challenge = {
     { id: 'phone', name: 'Phone', amount: 50 },
   ] },
   criteria: [
-    { kind: 'fund_mandatory' },
+    { kind: 'min_needs', value: 1050 },
     { kind: 'min_savings_rate', value: 15 },
     { kind: 'zero_unallocated' },
   ],
@@ -30,16 +30,10 @@ test('resolveBoxDollars handles fixed and percent', () => {
   expect(resolveBoxDollars({ id:'b', name:'B', role:'save', targetMode:'percent', targetValue:15 }, 2000)).toBe(300)
 })
 
-test('seedBoxes produces one locked box per mandatory bill', () => {
-  const seeded = seedBoxes(CH)
-  expect(seeded).toHaveLength(2)
-  expect(seeded[0]).toMatchObject({ mandatoryId: 'rent', role: 'need', targetMode: 'fixed', targetValue: 1000 })
-})
-
 test('evaluateChallenge: a correct allocation passes every criterion', () => {
   const alloc: Allocation = { boxes: [
-    { id:'1', name:'Rent', role:'need', mandatoryId:'rent', targetMode:'fixed', targetValue:1000 },
-    { id:'2', name:'Phone', role:'need', mandatoryId:'phone', targetMode:'fixed', targetValue:50 },
+    { id:'1', name:'Rent', role:'need', targetMode:'fixed', targetValue:1000 },
+    { id:'2', name:'Phone', role:'need', targetMode:'fixed', targetValue:50 },
     { id:'3', name:'Savings', role:'save', targetMode:'fixed', targetValue:300 },
     { id:'4', name:'Spending', role:'want', targetMode:'fixed', targetValue:650 },
   ] }
@@ -50,8 +44,8 @@ test('evaluateChallenge: a correct allocation passes every criterion', () => {
 
 test('evaluateChallenge: under-saving fails only min_savings_rate', () => {
   const alloc: Allocation = { boxes: [
-    { id:'1', name:'Rent', role:'need', mandatoryId:'rent', targetMode:'fixed', targetValue:1000 },
-    { id:'2', name:'Phone', role:'need', mandatoryId:'phone', targetMode:'fixed', targetValue:50 },
+    { id:'1', name:'Rent', role:'need', targetMode:'fixed', targetValue:1000 },
+    { id:'2', name:'Phone', role:'need', targetMode:'fixed', targetValue:50 },
     { id:'3', name:'Savings', role:'save', targetMode:'fixed', targetValue:100 },
     { id:'4', name:'Spending', role:'want', targetMode:'fixed', targetValue:850 },
   ] }
@@ -63,12 +57,39 @@ test('evaluateChallenge: under-saving fails only min_savings_rate', () => {
 
 test('evaluateChallenge: leftover money fails zero_unallocated', () => {
   const alloc: Allocation = { boxes: [
-    { id:'1', name:'Rent', role:'need', mandatoryId:'rent', targetMode:'fixed', targetValue:1000 },
-    { id:'2', name:'Phone', role:'need', mandatoryId:'phone', targetMode:'fixed', targetValue:50 },
+    { id:'1', name:'Rent', role:'need', targetMode:'fixed', targetValue:1000 },
+    { id:'2', name:'Phone', role:'need', targetMode:'fixed', targetValue:50 },
     { id:'3', name:'Savings', role:'save', targetMode:'fixed', targetValue:300 },
   ] }
   const r = evaluateChallenge(CH, alloc)
   expect(r.perCriterion.find(c => c.kind === 'zero_unallocated')!.passed).toBe(false)
+})
+
+test('min_needs passes when need-role boxes cover the essentials floor', () => {
+  const alloc = { boxes: [
+    { id: '1', name: 'Rent', role: 'need', targetMode: 'fixed', targetValue: 1050 },
+    { id: '2', name: 'Save', role: 'save', targetMode: 'fixed', targetValue: 500 },
+    { id: '3', name: 'Fun', role: 'want', targetMode: 'fixed', targetValue: 450 },
+  ] } as Allocation
+  const r = evaluateChallenge(CH, alloc).perCriterion.find((c) => c.kind === 'min_needs')!
+  expect(r.passed).toBe(true)
+})
+
+test('min_needs fails when need-role total is below the floor', () => {
+  const alloc = { boxes: [
+    { id: '1', name: 'Rent', role: 'need', targetMode: 'fixed', targetValue: 900 },
+  ] } as Allocation
+  const r = evaluateChallenge(CH, alloc).perCriterion.find((c) => c.kind === 'min_needs')!
+  expect(r.passed).toBe(false)
+})
+
+test('min_needs counts a percent-mode need box by its dollar value', () => {
+  // CH income 2000; 55% = $1100 ≥ 1050 floor
+  const alloc = { boxes: [
+    { id: '1', name: 'Rent', role: 'need', targetMode: 'percent', targetValue: 55 },
+  ] } as Allocation
+  const r = evaluateChallenge(CH, alloc).perCriterion.find((c) => c.kind === 'min_needs')!
+  expect(r.passed).toBe(true)
 })
 
 test('referenceSolution always passes its own challenge', () => {

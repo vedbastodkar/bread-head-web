@@ -7,8 +7,8 @@ export type ChallengeKind = 'monthly' | 'longterm'
 export interface MandatoryBill { id: string; name: string; amount: number }
 
 export interface Criterion {
-  kind: 'zero_unallocated' | 'fund_mandatory' | 'min_savings_rate'
-  value?: number // percent, for min_savings_rate
+  kind: 'zero_unallocated' | 'min_needs' | 'min_savings_rate'
+  value?: number // percent for min_savings_rate; dollar floor for min_needs
 }
 
 export interface MonthlyParams { income: number; mandatory: MandatoryBill[] }
@@ -69,24 +69,29 @@ export function allocatedDollars(alloc: Allocation, income: number): number {
   return alloc.boxes.reduce((s, b) => s + resolveBoxDollars(b, income), 0)
 }
 
+// Essentials floor = sum of the scenario's mandatory costs (prompt prose + needs floor).
+export function essentialsFloor(ch: Challenge): number {
+  return (ch.monthly?.mandatory ?? []).reduce((s, b) => s + b.amount, 0)
+}
+
 function evalCriterion(c: Criterion, ch: Challenge, alloc: Allocation): CriterionResult {
   const income = ch.monthly?.income ?? 0
   if (c.kind === 'zero_unallocated') {
     const left = income - allocatedDollars(alloc, income)
     return { kind: c.kind, passed: Math.abs(left) <= EPS, detail: `$${left.toFixed(2)} unallocated` }
   }
-  if (c.kind === 'fund_mandatory') {
-    const bills = ch.monthly?.mandatory ?? []
-    const unfunded = bills.filter((bill) => {
-      const funded = alloc.boxes
-        .filter((b) => b.mandatoryId === bill.id)
-        .reduce((s, b) => s + resolveBoxDollars(b, income), 0)
-      return funded + EPS < bill.amount
-    })
+  if (c.kind === 'min_needs') {
+    const floor = c.value ?? essentialsFloor(ch)
+    const needs = alloc.boxes
+      .filter((b) => b.role === 'need')
+      .reduce((s, b) => s + resolveBoxDollars(b, income), 0)
+    const passed = needs + EPS >= floor
     return {
       kind: c.kind,
-      passed: unfunded.length === 0,
-      detail: unfunded.length ? `Underfunded: ${unfunded.map((b) => b.name).join(', ')}` : 'All bills funded',
+      passed,
+      detail: passed
+        ? `Essentials $${needs.toFixed(0)} of $${floor.toFixed(0)}`
+        : `Essentials underfunded — $${needs.toFixed(0)} of $${floor.toFixed(0)}`,
     }
   }
   // min_savings_rate
@@ -103,26 +108,16 @@ export function evaluateChallenge(ch: Challenge, alloc: Allocation): ChallengeRe
   return { perCriterion, allPassed, score }
 }
 
-// One locked box per mandatory bill (student cannot delete/reduce these in the UI).
-export function seedBoxes(ch: Challenge): AllocationBox[] {
-  return (ch.monthly?.mandatory ?? []).map((m, i) => ({
-    id: `seed-${m.id}`,
-    name: m.name,
-    role: 'need' as BoxRole,
-    mandatoryId: m.id,
-    targetMode: 'fixed' as const,
-    targetValue: m.amount,
-  }))
-}
-
-// A known-passing allocation: mandatory boxes + exact savings + flex box absorbing the remainder.
+// A known-passing allocation: essentials box + exact savings + flex box absorbing the remainder.
 export function referenceSolution(ch: Challenge): Allocation {
   const income = ch.monthly?.income ?? 0
-  const boxes = seedBoxes(ch)
+  const floor = essentialsFloor(ch)
   const sr = ch.criteria.find((c) => c.kind === 'min_savings_rate')?.value ?? 0
   const savings = income * (sr / 100)
+  const remainder = income - floor - savings
+  const boxes: AllocationBox[] = []
+  if (floor > 0) boxes.push({ id: 'ref-needs', name: 'Essentials', role: 'need', targetMode: 'fixed', targetValue: floor })
   if (savings > 0) boxes.push({ id: 'ref-save', name: 'Savings', role: 'save', targetMode: 'fixed', targetValue: savings })
-  const remainder = income - boxes.reduce((s, b) => s + b.targetValue, 0)
   if (remainder > EPS) boxes.push({ id: 'ref-flex', name: 'Spending', role: 'want', targetMode: 'fixed', targetValue: remainder })
   return { boxes }
 }
