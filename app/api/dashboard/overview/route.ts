@@ -38,11 +38,13 @@ export async function GET(req: NextRequest) {
       const assignments = await Promise.all(assignSnap.docs.map(async (a) => {
         const ua = a.get('updatedAt')
         const isJournal = (a.get('type') ?? 'lesson') === 'journal'
+        const isChallenge = (a.get('type') ?? 'lesson') === 'challenge'
         let submissions:
           | Record<
               string,
               | { wordCount: number; secondsSpent: number; status: string; submittedAt: string | null }
               | { completedLessonIds: string[]; status: string; submittedAt: string | null }
+              | { score?: number; allPassed?: boolean; status: string; submittedAt: string | null }
             >
           | undefined
         try {
@@ -55,6 +57,13 @@ export async function GET(req: NextRequest) {
               ? {
                   wordCount: s.get('wordCount') ?? 0,
                   secondsSpent: s.get('secondsSpent') ?? 0,
+                  status: s.get('status') ?? 'in_progress',
+                  submittedAt,
+                }
+              : isChallenge
+              ? {
+                  score: s.get('score'),
+                  allPassed: s.get('allPassed'),
                   status: s.get('status') ?? 'in_progress',
                   submittedAt,
                 }
