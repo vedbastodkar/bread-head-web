@@ -6,3 +6,6 @@ node_modules/
 .DS_Store
 .claude/
 test-results/
+
+# TypeScript incremental build cache (regenerated every build)
+tsconfig.tsbuildinfo
