@@ -4,8 +4,11 @@ import { FieldValue } from 'firebase-admin/firestore'
 
 // Server-only: sets the `role: 'teacher'` custom claim, which only the Admin SDK can do.
 // Called by the login page (Task 8) right after a brand-new Firebase account is created,
-// to self-register that account as a teacher. Guarded so an account that already has a
-// role (teacher/admin/student) can never be re-flipped through this route.
+// to self-register that account as a teacher. Guarded (doc-and-claim based) so an account
+// that already has a role (teacher/admin/student) — whether recorded as a custom claim or
+// only as `profile.role` on the Firestore user doc — can never be re-flipped through this
+// route. Students in particular never get a custom claim, only a Firestore doc field, so
+// the claim alone is not sufficient to block them.
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
@@ -21,12 +24,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'Invalid token' }, { status: 401 })
   }
 
-  // Guard: only a brand-new account with no existing role may self-register as teacher.
-  if (decoded.role === 'teacher' || decoded.role === 'admin' || decoded.role === 'student') {
+  const uid = decoded.uid
+
+  // Guard: only a brand-new account with no existing role (claim or doc) may self-register
+  // as teacher. Reads the existing user doc because students only ever get `profile.role`
+  // on their Firestore doc, never a custom claim.
+  const existing = await adminDb.doc(`users/${uid}`).get()
+  const existingRole = existing.exists ? (existing.get('profile.role') as string | undefined) : undefined
+  if (
+    decoded.role === 'teacher' || decoded.role === 'admin' || decoded.role === 'student' ||
+    existingRole === 'teacher' || existingRole === 'admin' || existingRole === 'student'
+  ) {
     return NextResponse.json({ ok: false, error: 'Account already has a role.' }, { status: 409 })
   }
 
-  const uid = decoded.uid
   let body: any = {}
   try {
     body = await req.json()
