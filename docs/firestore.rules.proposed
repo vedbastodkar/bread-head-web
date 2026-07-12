@@ -10,7 +10,7 @@ service cloud.firestore {
     function isAnon() { return isSignedIn() && request.auth.token.firebase.sign_in_provider == 'anonymous'; }
     function isOwner(userId) { return isSignedIn() && !isAnon() && request.auth.uid == userId; }
 
-    // + WEB: role comes from a custom claim set by the Admin SDK (see seed_demo.py / setRole route)
+    // + WEB: role comes from a custom claim set by the Admin SDK (see /api/auth/register-teacher)
     function hasRole(r) { return isSignedIn() && request.auth.token.role == r; }
 
     // + WEB: all teachers on a class (owner + co-teachers). Tolerates the pre-
