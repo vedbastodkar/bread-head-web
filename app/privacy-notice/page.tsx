@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyNoticePage() {
-  const lastUpdated = 'April 9, 2026'
+  const lastUpdated = 'July 12, 2026'
 
   return (
     <main
@@ -77,8 +77,10 @@ export default function PrivacyNoticePage() {
             </li>
             <li>
               <strong>Usage data</strong> — in-app activity such as lessons
-              completed, journal entries, and budgeting inputs. This data is
-              stored locally on your device and is not shared with third parties.
+              completed, journal entries, and budgeting inputs. Your account,
+              lesson progress, journal entries, and budget data are stored
+              securely in Google Firebase (Firestore), our cloud data provider.
+              We don't sell your data or share it with advertisers.
             </li>
             <li>
               <strong>Device information</strong> — operating system version and
@@ -118,8 +120,15 @@ export default function PrivacyNoticePage() {
 
         <Section title="4. Cookies and Tracking">
           <p>
-            The Bread Head website uses no third-party analytics or advertising
-            cookies. We do not track you across other websites.
+            We use Google Firebase to securely store your data and analyze how
+            you use Bread Head. This helps us improve the app and ensure it
+            works smoothly. We do not use advertising cookies or track you
+            across other websites.
+          </p>
+          <p>
+            If you're in a class, your teacher can see your lesson and
+            challenge progress and whether you've completed journal entries —
+            but never the contents of your journal.
           </p>
         </Section>
 
