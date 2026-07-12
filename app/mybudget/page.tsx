@@ -57,12 +57,15 @@ export default function MyBudgetPage() {
 
   const [hot, setHot] = useState<string | null>(null) // box being hovered during drag/select
   const [saveErr, setSaveErr] = useState('')
+  const [loadError, setLoadError] = useState(false)
+  const [reloadKey, setReloadKey] = useState(0)
   const boxRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
   useEffect(() => {
     if (loading) return
     if (!user) { router.replace('/login'); return }
     ;(async () => {
+      setLoadError(false)
       try {
         const b = await loadBudget(user.uid)
         setIncomeState(b.income)
@@ -70,11 +73,11 @@ export default function MyBudgetPage() {
         setTransactions(b.transactions)
         setHasOnboarded(b.hasCompletedOnboarding)
       } catch (e) {
-        setSaveErr('Could not load your budget. Refresh to try again.')
+        setLoadError(true)
       }
       setReady(true)
     })()
-  }, [loading, user, router])
+  }, [loading, user, router, reloadKey])
 
   const spent = spentByCategory(transactions)
 
@@ -215,6 +218,23 @@ export default function MyBudgetPage() {
   }
 
   if (loading || !ready) return <main className="min-h-screen bg-bgSage pt-28" />
+
+  if (loadError) {
+    return (
+      <main className="min-h-screen bg-bgSage pt-28 pb-20 px-4">
+        <div className="max-w-md mx-auto text-center bg-white rounded-2xl shadow-sm p-8">
+          <h1 className="font-display text-2xl text-textTitle mb-2">Couldn&rsquo;t load your budget</h1>
+          <p className="text-textTitle/60 text-sm mb-6">Something went wrong reaching your data. Please try again.</p>
+          <button
+            onClick={() => { setReady(false); setReloadKey((k) => k + 1) }}
+            className="px-6 py-3 rounded-xl bg-brandGreen text-white font-medium"
+          >
+            Try again
+          </button>
+        </div>
+      </main>
+    )
+  }
 
   if (!hasOnboarded) {
     return (
