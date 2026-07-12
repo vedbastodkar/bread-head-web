@@ -363,12 +363,7 @@ function StudentRow({
                 </div>
               )}
 
-              {detail.teacherFeedback && (
-                <div className="mb-1 bg-brandGreen/10 rounded-xl p-3 text-[13px] text-textTitle/80">
-                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-brandGreen mb-1">Teacher feedback</p>
-                  {detail.teacherFeedback}
-                </div>
-              )}
+              {/* Feedback editor deferred (see 2026-07-12 ship spec C3); hiding read-only feedback until an authoring UI exists. */}
             </>
           )}
         </div>
