@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com",
+  // gstatic/google needed by Firebase Auth: gapi (apis.google.com), reCAPTCHA (www.google.com/www.gstatic.com)
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://www.gstatic.com https://www.google.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://*.firebaseapp.com",
-  "frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://appleid.apple.com",
+  // Google/Apple sign-in popups + reCAPTCHA challenge iframe (www.google.com) + gapi iframe (apis.google.com)
+  "frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://apis.google.com https://www.google.com https://appleid.apple.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
