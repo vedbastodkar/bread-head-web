@@ -216,6 +216,6 @@ export async function setIncome(uid: string, amount: number): Promise<void> {
     const updated = snaps.map((s, i) => (i === idx ? { ...s, income: value, userPredictedIncome: value } : s))
     await setDoc(budgetDoc(uid), { snapshots: updated }, { merge: true })
   } else {
-    await setDoc(budgetDoc(uid), { settings: { primaryIncomeAmount: value, hasCompletedOnboarding: true } }, { merge: true })
+    await setDoc(budgetDoc(uid), { settings: { primaryIncomeAmount: value } }, { merge: true })
   }
 }
