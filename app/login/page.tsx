@@ -87,13 +87,6 @@ function TeacherPane() {
           {busy ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-      <button
-        type="button"
-        onClick={() => { setEmail('demo.teacher@bread-head.org'); setPassword('DemoPass123!') }}
-        className="mt-4 text-xs text-textTitle/50 hover:text-textTitle underline mx-auto block"
-      >
-        Fill demo teacher account
-      </button>
     </div>
   )
 }
@@ -196,12 +189,6 @@ function StudentPane() {
         className="mt-4 text-sm text-textTitle/60 hover:text-textTitle mx-auto block">
         {mode === 'signup' ? 'Have an account? Sign in' : 'New here? Create an account'}
       </button>
-      {mode === 'signin' && (
-        <button type="button" onClick={() => { setEmail('demo.student2@bread-head.org'); setPassword('DemoPass123!') }}
-          className="mt-2 text-xs text-textTitle/50 hover:text-textTitle underline mx-auto block">
-          Fill demo student account
-        </button>
-      )}
     </div>
   )
 }
