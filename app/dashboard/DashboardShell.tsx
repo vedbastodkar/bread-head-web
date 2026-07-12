@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { apiCall, attentionFlags, type ClassData } from './useDashboard'
+import { attentionFlags, type ClassData } from './useDashboard'
+import { CreateClassModal } from './CreateClassModal'
 
 interface ShellUser { getIdToken: () => Promise<string>; email?: string | null }
 
@@ -20,7 +21,7 @@ export function DashboardShell({
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const [creating, setCreating] = useState(false)
+  const [showCreate, setShowCreate] = useState(false)
 
   const active = data.filter((c) => !c.archived)
   const current = activeClassId ? data.find((c) => c.id === activeClassId) : undefined
@@ -28,15 +29,10 @@ export function DashboardShell({
     ? current.students.filter((s) => attentionFlags(s, current.assignments).length > 0).length
     : 0
 
-  async function newClass() {
-    const name = window.prompt('Class name (e.g. "Period 3 — Personal Finance")')
-    if (!name?.trim() || !user) return
-    setCreating(true)
-    try {
-      const c = await apiCall(user, '/api/classes', 'POST', { name: name.trim() })
-      reload()
-      router.push(`/dashboard/${c.id}`)
-    } catch (e: any) { alert(e?.message) } finally { setCreating(false) }
+  function onClassCreated(classId: string) {
+    setShowCreate(false)
+    reload()
+    router.push(`/dashboard/${classId}`)
   }
 
   const navItem = (href: string, label: string, icon: React.ReactNode) => {
@@ -131,14 +127,18 @@ export function DashboardShell({
                 <span className={pathname === '/dashboard/courses' ? 'text-white' : 'text-textTitle/40'}><IconGrid /></span>
                 All classes
               </Link>
-              <button onClick={newClass} disabled={creating}
-                className="w-full px-3 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">+ New class</button>
+              <button onClick={() => setShowCreate(true)}
+                className="w-full px-3 py-2 rounded-xl bg-brandGreen text-white text-sm">+ New class</button>
               <button onClick={async () => { await signOut(); router.replace('/login') }}
                 className="w-full px-3 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70 hover:bg-bgSage">Sign out</button>
             </div>
           </div>
         </aside>
       </div>
+
+      {showCreate && (
+        <CreateClassModal user={user} onClose={() => setShowCreate(false)} onCreated={onClassCreated} />
+      )}
     </main>
   )
 }
