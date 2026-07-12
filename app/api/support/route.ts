@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { rateLimit, clientIp } from '@/lib/rateLimit'
 
 const TO = ['breadhead.org@gmail.com']
 
@@ -99,23 +100,40 @@ function supportHtml(fields: {
 }
 
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY)
-  const data = await req.json()
-  const { name, email, subject, message } = data
-
-  if (!name || !email || !subject) {
-    return NextResponse.json({ ok: false, error: 'Missing required fields' }, { status: 400 })
+  const rl = rateLimit(`support:${clientIp(req)}`)
+  if (!rl.ok) {
+    return NextResponse.json({ ok: false, error: 'Too many requests. Try again shortly.' }, { status: 429 })
   }
 
+  let data: any
+  try {
+    data = await req.json()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'Invalid request.' }, { status: 400 })
+  }
+  const { name, email, subject, message } = data ?? {}
+
+  const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!name || !emailOk || !subject) {
+    return NextResponse.json({ ok: false, error: 'Please provide your name, a valid email, and a subject.' }, { status: 400 })
+  }
+
+  const clip = (s: unknown, n: number) => (typeof s === 'string' ? s.slice(0, n) : '')
+  const clippedName = clip(name, 100)
+  const clippedMessage = clip(message, 5000)
+  const clippedEmail = clip(email, 200)
+
   const subjectLabel = SUBJECT_LABELS[subject] ?? 'Inquiry'
+
+  const resend = new Resend(process.env.RESEND_API_KEY)
 
   try {
     const { error } = await resend.emails.send({
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
-      replyTo: email,
-      subject: `[${subjectLabel}] — ${name}`,
-      html: supportHtml({ name, email, subject, message }),
+      replyTo: clippedEmail,
+      subject: `[${subjectLabel}] — ${clippedName}`,
+      html: supportHtml({ name: clippedName, email: clippedEmail, subject, message: clippedMessage }),
     })
     if (error) {
       console.error('Support email error:', error)
