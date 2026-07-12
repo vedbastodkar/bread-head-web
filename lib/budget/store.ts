@@ -20,6 +20,19 @@ export interface LoadedBudget {
   categories: BudgetCategory[]
   income: number
   transactions: BudgetTransaction[]
+  hasCompletedOnboarding: boolean
+}
+
+// Fields the web onboarding writes into the settings map. All optional so callers
+// patch only what they set; names/types match iOS BudgetSettings.toFirestoreData.
+export interface BudgetSettingsPatch {
+  autoSweepUnallocatedToSavings?: boolean
+  weeklyCheckInWeekday?: number // 0–6 (Sun–Sat)
+  skimRate?: number // 0.0–1.0
+  nwsNeedPct?: number
+  nwsWantPct?: number
+  nwsSavePct?: number
+  hasCompletedOnboarding?: boolean
 }
 
 // ---- Timestamp normalisation (Firestore Timestamp | Date | ms | seconds) ----
@@ -148,7 +161,20 @@ export async function loadBudget(uid: string): Promise<LoadedBudget> {
     .map((d) => parseCategory(d.id, (d.data() ?? {}) as Record<string, unknown>))
     .sort((a, b) => a.sortOrder - b.sortOrder)
   const bData = (bDoc.data() ?? {}) as Record<string, unknown>
-  return { categories, income: resolveIncome(bData), transactions: parseTransactions(bData.transactions) }
+  const settings = (bData.settings ?? {}) as Record<string, unknown>
+  return {
+    categories,
+    income: resolveIncome(bData),
+    transactions: parseTransactions(bData.transactions),
+    hasCompletedOnboarding: settings.hasCompletedOnboarding === true,
+  }
+}
+
+// Patch the settings map (budget onboarding: automation prefs + completion flag).
+// merge:true deep-merges the nested `settings` map, so iOS-only sibling settings
+// are preserved — same safety guarantee as setIncome's settings write.
+export async function saveBudgetSettings(uid: string, patch: BudgetSettingsPatch): Promise<void> {
+  await setDoc(budgetDoc(uid), { settings: patch }, { merge: true })
 }
 
 export async function saveCategory(uid: string, cat: BudgetCategory): Promise<void> {

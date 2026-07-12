@@ -18,7 +18,9 @@ import {
   type BudgetTransaction,
   type NwsLevel,
 } from '@/lib/budget/budget'
-import { loadBudget, saveCategory, addTransaction, setIncome as persistIncome } from '@/lib/budget/store'
+import { loadBudget, saveCategory, addTransaction, setIncome as persistIncome, saveBudgetSettings } from '@/lib/budget/store'
+import { templateToCategories } from '@/lib/budget/templates'
+import BudgetOnboarding, { type OnboardingResult } from './onboarding/BudgetOnboarding'
 
 const money = (n: number) =>
   '$' + (Math.round(n * 100) / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -41,6 +43,7 @@ export default function MyBudgetPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
   const [ready, setReady] = useState(false)
+  const [hasOnboarded, setHasOnboarded] = useState(true) // default true → never flashes onboarding before load
   const [income, setIncomeState] = useState(0)
   const [categories, setCategories] = useState<BudgetCategory[]>([])
   const [transactions, setTransactions] = useState<BudgetTransaction[]>([])
@@ -65,6 +68,7 @@ export default function MyBudgetPage() {
         setIncomeState(b.income)
         setCategories(b.categories.filter((c) => c.isActive))
         setTransactions(b.transactions)
+        setHasOnboarded(b.hasCompletedOnboarding)
       } catch (e) {
         setSaveErr('Could not load your budget. Refresh to try again.')
       }
@@ -123,6 +127,25 @@ export default function MyBudgetPage() {
     setIncomeState(v)
     if (user) { try { await persistIncome(user.uid, v) } catch { setSaveErr('Income didn’t save.') } }
   }
+
+  // First-run onboarding finished: persist income, create the template's boxes, then
+  // write settings + the completion flag LAST (so a mid-way failure re-shows the flow).
+  const finishOnboarding = useCallback(async (r: OnboardingResult) => {
+    if (!user) return
+    const cats = templateToCategories(r.template)
+    await persistIncome(user.uid, r.income)
+    for (const c of cats) await saveCategory(user.uid, c)
+    await saveBudgetSettings(user.uid, {
+      autoSweepUnallocatedToSavings: r.autoSweepUnallocatedToSavings,
+      weeklyCheckInWeekday: r.weeklyCheckInWeekday,
+      skimRate: r.skimRate,
+      ...(r.template.nws ? { nwsNeedPct: r.template.nws.need, nwsWantPct: r.template.nws.want, nwsSavePct: r.template.nws.save } : {}),
+      hasCompletedOnboarding: true,
+    })
+    setIncomeState(r.income)
+    setCategories(cats)
+    setHasOnboarded(true)
+  }, [user])
 
   // ---- pointer drag ----
   // Uses pointer capture so events keep flowing to the receipt even if the
@@ -192,6 +215,16 @@ export default function MyBudgetPage() {
   }
 
   if (loading || !ready) return <main className="min-h-screen bg-bgSage pt-28" />
+
+  if (!hasOnboarded) {
+    return (
+      <main className="min-h-screen bg-bgSage pt-28 pb-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <BudgetOnboarding onComplete={finishOnboarding} />
+        </div>
+      </main>
+    )
+  }
 
   const spentTotal = totalSpent(transactions)
   const warns = budgetWarnings({ income, categories, transactions })
