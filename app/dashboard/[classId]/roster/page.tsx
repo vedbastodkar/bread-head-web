@@ -1,29 +1,23 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useDashboard, apiCall, daysSince, type Student } from '../../useDashboard'
+import { useDashboard, daysSince, type Student } from '../../useDashboard'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { JoinInfo } from '../../parts'
+import { MoveStudentModal } from '../../MoveStudentModal'
 
 export default function RosterPage() {
   const { classId } = useParams<{ classId: string }>()
   const { data, err, loading, user, signOut, reload } = useDashboard()
+  const [movingStudent, setMovingStudent] = useState<Student | null>(null)
 
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
   const cls = data!.find((c) => c.id === classId)
   if (!cls) return <DashboardLoading><p className="text-textTitle/60">Class not found.</p></DashboardLoading>
 
-  async function move(s: Student) {
-    if (!user) return
-    const others = data!.filter((c) => c.id !== cls!.id && !c.archived)
-    if (others.length === 0) { alert('No other class to move to.'); return }
-    const choice = window.prompt(`Move ${s.name} to:\n` + others.map((c, i) => `${i + 1}. ${c.name}`).join('\n'))
-    const idx = Number(choice) - 1
-    if (Number.isNaN(idx) || idx < 0 || idx >= others.length) return
-    try { await apiCall(user, '/api/classes/move-student', 'POST', { studentUid: s.uid, fromClassId: cls!.id, toClassId: others[idx].id }); reload() }
-    catch (e: any) { alert(e?.message) }
-  }
+  const otherClasses = data!.filter((c) => c.id !== cls.id && !c.archived)
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
@@ -61,7 +55,7 @@ export default function RosterPage() {
                   <td className="py-3 px-4 text-textTitle/70">{s.completedLessons.length}</td>
                   <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
                   <td className="py-3 px-4 text-right">
-                    <button onClick={() => move(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
+                    <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
                   </td>
                 </tr>
               )
@@ -72,6 +66,17 @@ export default function RosterPage() {
       <p className="text-xs text-textTitle/50 mt-3">
         Students join with the class code above. Use <span className="font-medium">Print handout</span> for a page you can hand out or project.
       </p>
+
+      {movingStudent && (
+        <MoveStudentModal
+          student={movingStudent}
+          fromClassId={cls.id}
+          destinations={otherClasses.map((c) => ({ id: c.id, name: c.name }))}
+          user={user}
+          onClose={() => setMovingStudent(null)}
+          onMoved={reload}
+        />
+      )}
     </DashboardShell>
   )
 }

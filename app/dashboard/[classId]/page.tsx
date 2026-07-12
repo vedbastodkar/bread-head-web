@@ -9,6 +9,7 @@ import { JoinInfo } from '../parts'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../DashboardShell'
 import { CATALOG, TOTAL_LESSONS, unitName, completedByUnit } from '@/lib/curriculum/catalog'
 import { LIBRARY, getLibraryChallenge } from '@/lib/challenges/library'
+import { MoveStudentModal } from '../MoveStudentModal'
 
 type SortKey = 'name' | 'done' | 'active'
 
@@ -17,6 +18,7 @@ export default function ClassDetail() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
   const [sort, setSort] = useState<SortKey>('done')
   const [unitFilter, setUnitFilter] = useState<number | 'all'>('all')
+  const [movingStudent, setMovingStudent] = useState<Student | null>(null)
 
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
@@ -35,23 +37,7 @@ export default function ClassDetail() {
   })
 
   const units = unitFilter === 'all' ? CATALOG : CATALOG.filter((u) => u.unit === unitFilter)
-
-  async function moveStudent(s: Student) {
-    if (!user) return
-    const others = data!.filter((c) => c.id !== cls!.id && !c.archived)
-    if (others.length === 0) { alert('No other class to move to. Create one first.'); return }
-    const choice = window.prompt(
-      `Move ${s.name} to which class?\n` + others.map((c, i) => `${i + 1}. ${c.name}`).join('\n'),
-    )
-    const idx = Number(choice) - 1
-    if (Number.isNaN(idx) || idx < 0 || idx >= others.length) return
-    try {
-      await apiCall(user, '/api/classes/move-student', 'POST', {
-        studentUid: s.uid, fromClassId: cls!.id, toClassId: others[idx].id,
-      })
-      reload()
-    } catch (e: any) { alert(e?.message) }
-  }
+  const otherClasses = data!.filter((c) => c.id !== cls.id && !c.archived)
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
@@ -139,7 +125,7 @@ export default function ClassDetail() {
                     <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
                     <td className="py-3 px-4 text-right text-textTitle/30">{s.xp.toLocaleString()}</td>
                     <td className="py-3 px-4 text-right">
-                      <button onClick={() => moveStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
+                      <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
                     </td>
                   </tr>
                 )
@@ -160,6 +146,17 @@ export default function ClassDetail() {
         </div>
         <Heatmap students={sorted} classId={cls.id} units={units} />
       </section>
+
+      {movingStudent && (
+        <MoveStudentModal
+          student={movingStudent}
+          fromClassId={cls.id}
+          destinations={otherClasses.map((c) => ({ id: c.id, name: c.name }))}
+          user={user}
+          onClose={() => setMovingStudent(null)}
+          onMoved={reload}
+        />
+      )}
     </DashboardShell>
   )
 }
