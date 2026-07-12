@@ -53,7 +53,7 @@ export function StudentShell({
             <nav className="space-y-0.5 mb-5">
               {navItem('/dashboard', 'Dashboard')}
               {navItem('/dashboard/course', 'Course')}
-              {navItem('/dashboard/journal', 'Journal')}
+              {navItem('/myjournal', 'Journal')}
               {navItem('/mybudget', 'My Budget')}
               {navItem('/grades', 'Grades')}
               {navItem('/account', 'Account')}
