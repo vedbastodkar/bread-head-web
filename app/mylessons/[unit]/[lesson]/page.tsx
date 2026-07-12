@@ -186,7 +186,7 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
       onReport={handleReport}
       onNext={goNext}
       nextLabel={next ? `Unit ${next.unit} · Lesson ${next.lesson}` : undefined}
-      onExit={() => router.push(`/mylessons/${unit}`)}
+      onExit={() => router.push(target ? `/mylessons/${target.unit}` : '/mylessons')}
     />
     {saveError && (
       <div
