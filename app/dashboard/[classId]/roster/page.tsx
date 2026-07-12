@@ -6,6 +6,7 @@ import { useDashboard, daysSince, type Student } from '../../useDashboard'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { JoinInfo } from '../../parts'
 import { MoveStudentModal } from '../../MoveStudentModal'
+import { RemoveStudentButton } from '../../RemoveStudentButton'
 
 export default function RosterPage() {
   const { classId } = useParams<{ classId: string }>()
@@ -55,7 +56,10 @@ export default function RosterPage() {
                   <td className="py-3 px-4 text-textTitle/70">{s.completedLessons.length}</td>
                   <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
                   <td className="py-3 px-4 text-right">
-                    <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
+                    <div className="flex items-center justify-end gap-3">
+                      <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
+                      <RemoveStudentButton classId={cls.id} student={s} user={user} onRemoved={reload} />
+                    </div>
                   </td>
                 </tr>
               )

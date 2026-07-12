@@ -10,6 +10,7 @@ import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } f
 import { CATALOG, TOTAL_LESSONS, unitName, completedByUnit } from '@/lib/curriculum/catalog'
 import { LIBRARY, getLibraryChallenge } from '@/lib/challenges/library'
 import { MoveStudentModal } from '../MoveStudentModal'
+import { RemoveStudentButton } from '../RemoveStudentButton'
 
 type SortKey = 'name' | 'done' | 'active'
 
@@ -125,7 +126,10 @@ export default function ClassDetail() {
                     <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
                     <td className="py-3 px-4 text-right text-textTitle/30">{s.xp.toLocaleString()}</td>
                     <td className="py-3 px-4 text-right">
-                      <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
+                      <div className="flex items-center justify-end gap-3">
+                        <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/40 hover:text-textTitle underline">Move</button>
+                        <RemoveStudentButton classId={cls.id} student={s} user={user} onRemoved={reload} />
+                      </div>
                     </td>
                   </tr>
                 )
