@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
+import { enforce } from '@/lib/rateLimit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -24,6 +25,11 @@ async function ownsClass(uid: string, classId: string) {
 export async function PATCH(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'class-update', uid: teacher.uid, limit: 100, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   if (!(await memberClass(teacher.uid, params.classId)))
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
@@ -67,6 +73,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
 export async function DELETE(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const limited = enforce(req, { prefix: 'class-delete', uid: teacher.uid, limit: 30, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   const cls = await ownsClass(teacher.uid, params.classId)
   if (!cls) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 

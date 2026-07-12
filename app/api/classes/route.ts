@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher, makeJoinCode } from '@/lib/firebase/verifyTeacher'
+import { enforce } from '@/lib/rateLimit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -10,6 +11,10 @@ export const dynamic = 'force-dynamic'
 export async function POST(req: NextRequest) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'class-create', uid: teacher.uid, limit: 30, windowMs: 15 * 60_000 })
+  if (limited) return limited
 
   const body = await req.json().catch(() => ({}))
   const name = (body.name ?? '').toString().trim()

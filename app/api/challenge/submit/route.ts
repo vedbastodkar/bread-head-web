@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
+import { enforce } from '@/lib/rateLimit'
 import { getLibraryChallenge } from '@/lib/challenges/library'
 import { assignmentAppliesTo, buildChallengeSubmission, type Allocation, type AllocationBox, type BoxRole } from '@/lib/challenges/challenge'
 
@@ -42,6 +43,10 @@ function sanitizeBox(raw: unknown): AllocationBox | null {
 export async function POST(req: NextRequest) {
   const u = await verifyUser(req)
   if (!u) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'challenge-submit', uid: u.uid, limit: 60, windowMs: 15 * 60_000 })
+  if (limited) return limited
 
   const body = await req.json().catch(() => ({}))
   const classId = String(body.classId ?? '')

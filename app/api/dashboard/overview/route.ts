@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb } from '@/lib/firebase/admin'
+import { enforce } from '@/lib/rateLimit'
 
 // Server-only: uses the Admin SDK, so it reads student docs directly (bypasses client rules).
 // Security is enforced here: verify the caller's Firebase ID token + require a teacher/admin role
@@ -21,6 +22,10 @@ export async function GET(req: NextRequest) {
   if (decoded.role !== 'teacher' && decoded.role !== 'admin') {
     return NextResponse.json({ error: 'Not a teacher account' }, { status: 403 })
   }
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'overview', uid: decoded.uid, limit: 300, windowMs: 15 * 60_000 })
+  if (limited) return limited
 
   // Owner (teacherId) OR co-teacher (teacherIds array). Two queries, deduped —
   // back-compatible with classes that predate the teacherIds field.

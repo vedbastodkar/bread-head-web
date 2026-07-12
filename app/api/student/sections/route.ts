@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
+import { enforce } from '@/lib/rateLimit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -9,6 +10,10 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   const u = await verifyUser(req)
   if (!u) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'sections', uid: u.uid, limit: 300, windowMs: 15 * 60_000 })
+  if (limited) return limited
 
   const userDoc = await adminDb.collection('users').doc(u.uid).get()
   const classIds: string[] = (userDoc.get('profile.classIds') as string[]) ?? []

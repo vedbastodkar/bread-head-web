@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
+import { enforce } from '@/lib/rateLimit'
 import { sanitizeJournalConfig } from '@/lib/journal/journal'
 import { isKnownLessonId } from '@/lib/curriculum/controls'
 import { getLibraryChallenge } from '@/lib/challenges/library'
@@ -54,6 +55,11 @@ function sanitizeControls(raw: unknown): Record<string, boolean | number> | unde
 export async function POST(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'assign', uid: teacher.uid, limit: 100, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   if (!(await ownsClass(teacher.uid, params.classId)))
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
@@ -129,6 +135,10 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
 export async function PATCH(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const limited = enforce(req, { prefix: 'assign-edit', uid: teacher.uid, limit: 100, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   if (!(await ownsClass(teacher.uid, params.classId)))
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 

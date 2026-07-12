@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { adminAuth, adminDb } from '@/lib/firebase/admin'
 import { verifyTeacher } from '@/lib/firebase/verifyTeacher'
+import { enforce } from '@/lib/rateLimit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -32,6 +33,11 @@ async function teacherList(ids: string[], ownerId: string) {
 export async function GET(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit (see lib/rateLimit.ts).
+  const limited = enforce(req, { prefix: 'coteacher-list', uid: teacher.uid, limit: 300, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   const doc = await adminDb.collection('classes').doc(params.classId).get()
   if (!doc.exists) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   const ownerId = doc.get('teacherId') as string
@@ -44,6 +50,10 @@ export async function GET(req: NextRequest, { params }: { params: { classId: str
 export async function POST(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const limited = enforce(req, { prefix: 'coteacher-add', uid: teacher.uid, limit: 30, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   const cls = await ownerClass(teacher.uid, params.classId)
   if (!cls) return NextResponse.json({ error: 'Only the class owner can manage co-teachers' }, { status: 403 })
 
@@ -72,6 +82,10 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
 export async function DELETE(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const limited = enforce(req, { prefix: 'coteacher-remove', uid: teacher.uid, limit: 30, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   const cls = await ownerClass(teacher.uid, params.classId)
   if (!cls) return NextResponse.json({ error: 'Only the class owner can manage co-teachers' }, { status: 403 })
 
