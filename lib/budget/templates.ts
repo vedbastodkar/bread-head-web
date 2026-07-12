@@ -3,7 +3,7 @@
 // "Choose Your Budget Style" step. Picking one creates its categories as real boxes
 // (percent targets), and — where the template defines a Need/Want/Save split — those
 // pcts are written to settings so iOS honours the same split.
-import { newBudgetId, type BudgetCategory } from './budget'
+import type { BudgetCategory } from './budget'
 
 export interface TemplateCategory {
   name: string
@@ -80,11 +80,23 @@ export const BUDGET_TEMPLATES: BudgetTemplate[] = [
 // look of the existing web board (dark green, teal, purple, gold, coral, gold…).
 const TEMPLATE_COLORS = ['#3B4A2F', '#4FB3A6', '#B07FD4', '#E0A93F', '#E0685F', '#C79A2E', '#4A6C8A', '#B0567A']
 
+// Lowercase + collapse any run of non-alphanumeric chars into a single underscore,
+// trimming leading/trailing underscores. Used to build deterministic category ids.
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+}
+
 // Turn a chosen template into fresh BudgetCategory docs (percent targets), ready to
 // persist via store.saveCategory. Colours cycle through TEMPLATE_COLORS by index.
+// Ids are deterministic (derived from template id + category name) so re-running
+// onboarding after a partial failure upserts the same docs instead of duplicating
+// them — saveCategory keys its write on cat.id with merge:false.
 export function templateToCategories(template: BudgetTemplate): BudgetCategory[] {
   return template.categories.map((c, i) => ({
-    id: newBudgetId(),
+    id: `tpl_${slugify(template.id)}_${slugify(c.name)}`,
     name: c.name,
     iconKey: c.iconKey,
     color: TEMPLATE_COLORS[i % TEMPLATE_COLORS.length],
