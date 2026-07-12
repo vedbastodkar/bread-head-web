@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { verifyUser } from '@/lib/firebase/verifyTeacher'
 import { adminAuth } from '@/lib/firebase/admin'
+import { enforce } from '@/lib/rateLimit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -60,6 +61,9 @@ function reportHtml(fields: { lessonId: string; slide: number; text: string; rep
 export async function POST(req: NextRequest) {
   const u = await verifyUser(req)
   if (!u) return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
+  // Per-user rate limit — this route sends email via Resend, so cap report spam.
+  const limited = enforce(req, { prefix: 'report', uid: u.uid, limit: 10, windowMs: 15 * 60_000 })
+  if (limited) return limited
 
   const body = await req.json().catch(() => ({}))
   const lessonId = String(body.lessonId ?? '').slice(0, 64) || 'unknown'
