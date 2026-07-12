@@ -52,7 +52,7 @@ export function StudentShell({
             <div className="text-[11px] font-semibold tracking-wider text-textTitle/40 uppercase mb-1">Menu</div>
             <nav className="space-y-0.5 mb-5">
               {navItem('/dashboard', 'Dashboard')}
-              {navItem('/dashboard/course', 'Course')}
+              {navItem('/mylessons', 'Lessons')}
               {navItem('/myjournal', 'Journal')}
               {navItem('/mybudget', 'My Budget')}
               {navItem('/grades', 'Grades')}

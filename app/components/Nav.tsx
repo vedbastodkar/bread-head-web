@@ -48,7 +48,7 @@ export default function Nav() {
 
   // Focus view: inside a lesson the marketing nav is hidden (the LessonPlayer draws
   // its own logo + "Exit lesson" bar).
-  const inLesson = pathname === '/lesson' || (pathname?.startsWith('/learn') ?? false)
+  const inLesson = /^\/mylessons\/\d+\/\d+/.test(pathname ?? '') || (pathname?.startsWith('/learn') ?? false)
 
   useEffect(() => {
     if (menuOpen) {

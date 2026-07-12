@@ -39,7 +39,7 @@ export default function CourseOverview() {
                     ) : null
                   })()}
                 </div>
-                <Link href={`/dashboard/unit/${u.unit}`} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/80 hover:bg-bgSage shrink-0">Go to Unit</Link>
+                <Link href={`/mylessons/${u.unit}`} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/80 hover:bg-bgSage shrink-0">Go to Unit</Link>
               </div>
               <div className="flex items-center gap-3 mt-4">
                 <div className="flex-1 h-2 rounded-full bg-bgSage overflow-hidden max-w-xs">

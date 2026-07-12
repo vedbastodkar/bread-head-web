@@ -7,7 +7,6 @@ import { useStudent, nextLesson } from '@/app/student/useStudent'
 import { StudentShell, StudentSkeleton, StudentError } from '@/app/student/StudentShell'
 import { CATALOG, TOTAL_LESSONS, unitLessonIds, unitName } from '@/lib/curriculum/catalog'
 import { lessonName, getLesson } from '@/lib/curriculum/lessons'
-import { setLessonTarget } from '@/lib/lessonNav'
 import { getLibraryChallenge } from '@/lib/challenges/library'
 
 export function StudentHome() {
@@ -103,7 +102,7 @@ export function StudentHome() {
             {assigned.map((a) => {
               const p = parseId(a.id)
               return (
-                <Link key={a.id} href="/lesson" onClick={() => setLessonTarget(p.unit, p.lesson)}
+                <Link key={a.id} href={`/mylessons/${p.unit}/${p.lesson}`}
                   className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${a.overdue ? 'border-red-500' : 'border-accentGold'}`}>
                   <div className="text-sm font-medium text-textTitle truncate">{lessonName(p.unit, p.lesson) ?? `Lesson ${p.lesson}`}</div>
                   <div className="text-xs text-textTitle/50">{unitName(p.unit)}</div>
@@ -139,7 +138,7 @@ export function StudentHome() {
             <div className="font-display text-2xl">Personal Finance</div>
             <div className="text-white/80 text-sm">Know your dough — the full course</div>
           </div>
-          <Link href="/dashboard/course" className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-sm">View course</Link>
+          <Link href="/mylessons" className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-sm">View course</Link>
         </div>
         <div className="px-6 py-3 flex items-center gap-3">
           <div className="flex-1 h-2 rounded-full bg-bgSage overflow-hidden">
@@ -161,7 +160,7 @@ export function StudentHome() {
             </div>
             <span className="text-xs text-textTitle/50">{unitDone}/{u.lessonCount}</span>
           </div>
-          <Link href={`/dashboard/unit/${u.unit}`} className="mt-auto self-start px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/80 hover:bg-bgSage">Go to Unit</Link>
+          <Link href={`/mylessons/${u.unit}`} className="mt-auto self-start px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/80 hover:bg-bgSage">Go to Unit</Link>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col">
@@ -170,7 +169,7 @@ export function StudentHome() {
           <p className="text-textTitle/60 text-sm mb-4">
             {unitName(cont.unit)} · {slideCount} slide{slideCount !== 1 ? 's' : ''}. {started ? 'Pick up where you left off.' : 'Your first lesson — let’s go.'}
           </p>
-          <Link href="/lesson" onClick={() => setLessonTarget(cont.unit, cont.lesson)} className="mt-auto self-start px-6 py-2.5 rounded-xl bg-brandGreen text-white text-sm">
+          <Link href={`/mylessons/${cont.unit}/${cont.lesson}`} className="mt-auto self-start px-6 py-2.5 rounded-xl bg-brandGreen text-white text-sm">
             {started ? 'Continue' : 'Start'}
           </Link>
         </div>

@@ -28,7 +28,9 @@ function nextAfter(unit: number, lesson: number): Target | null {
   return null
 }
 
-export default function LessonPage() {
+export default function LessonPlayerPage({ params }: { params: { unit: string; lesson: string } }) {
+  const unit = Number(params.unit)
+  const lessonNo = Number(params.lesson)
   const { user, role, loading } = useAuth()
   const router = useRouter()
   const isTeacher = role === 'teacher' || role === 'admin'
@@ -60,12 +62,10 @@ export default function LessonPage() {
       const assigned = user ? assignedLessonIdSet(classesLite, user.uid) : new Set<string>()
       setCompletedSet(done) // for handleComplete (Task 3)
 
-      let t: Target | null = null
-      try {
-        const raw = sessionStorage.getItem('bh_lesson')
-        if (raw) t = JSON.parse(raw)
-        sessionStorage.removeItem('bh_lesson')
-      } catch { /* noop */ }
+      // Target comes from the route params (/mylessons/[unit]/[lesson]). Invalid /
+      // non-numeric params fall back to the student's next lesson; a target that
+      // resolves to no real lesson renders the "isn't available" fallback below.
+      let t: Target | null = Number.isFinite(unit) && Number.isFinite(lessonNo) ? { unit, lesson: lessonNo } : null
       if (!t) t = nextLesson(done)
 
       if (!isTeacher && t) {
@@ -83,7 +83,7 @@ export default function LessonPage() {
       setInitialSlide(done.has(id) ? 0 : (slideMap[id] ?? 0)) // resume unless already completed
       setTarget(t)
     })()
-  }, [loading, user, isTeacher, router])
+  }, [loading, user, isTeacher, router, unit, lessonNo])
 
   const lessonId = target ? `unit${target.unit}lesson${target.lesson}` : ''
 
@@ -171,7 +171,7 @@ export default function LessonPage() {
     ? lessonState(`unit${next.unit}lesson${next.lesson}`, completedSet, frontier, assigned) !== 'locked'
     : false
   const goNext = next && (isTeacher || nextAllowed)
-    ? () => { setInitialSlide(0); setTarget(next) }
+    ? () => router.push(`/mylessons/${next.unit}/${next.lesson}`)
     : undefined
 
   return (
@@ -186,7 +186,7 @@ export default function LessonPage() {
       onReport={handleReport}
       onNext={goNext}
       nextLabel={next ? `Unit ${next.unit} · Lesson ${next.lesson}` : undefined}
-      onExit={() => router.push('/dashboard')}
+      onExit={() => router.push(`/mylessons/${unit}`)}
     />
     {saveError && (
       <div

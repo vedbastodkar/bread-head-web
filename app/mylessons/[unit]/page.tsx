@@ -6,7 +6,6 @@ import { useStudent, lessonState } from '@/app/student/useStudent'
 import { StudentShell, StudentLoading, StudentSkeleton, StudentError } from '@/app/student/StudentShell'
 import { CATALOG, unitLessonIds } from '@/lib/curriculum/catalog'
 import { lessonName, lessonSummary, unitObjectives } from '@/lib/curriculum/lessons'
-import { setLessonTarget } from '@/lib/lessonNav'
 
 export default function UnitPage() {
   const { unit: unitParam } = useParams<{ unit: string }>()
@@ -29,13 +28,12 @@ export default function UnitPage() {
   const contLesson = firstOpen ? Number(firstOpen.match(/lesson(\d+)$/)![1]) : 1
 
   function go(lesson: number) {
-    setLessonTarget(u!.unit, lesson)
-    router.push('/lesson')
+    router.push(`/mylessons/${u!.unit}/${lesson}`)
   }
 
   return (
     <StudentShell data={data!} user={user} signOut={signOut}>
-      <Link href="/dashboard/course" className="text-sm text-textTitle/50 hover:text-textTitle">← Personal Finance</Link>
+      <Link href="/mylessons" className="text-sm text-textTitle/50 hover:text-textTitle">← Personal Finance</Link>
       <h1 className="font-display text-3xl text-textTitle mt-1 mb-2">Unit {u.unit} — {u.name}</h1>
       <p className="text-textTitle/60 mb-5 max-w-2xl">{u.description}</p>
 
