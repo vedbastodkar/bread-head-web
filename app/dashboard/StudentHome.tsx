@@ -115,7 +115,7 @@ export function StudentHome() {
               const done = c.status === 'complete'
               const inProgress = c.status === 'in_progress'
               return (
-                <Link key={c.id} href={`/challenge/${c.id}`}
+                <Link key={c.id} href={`/budgetchallenge/${c.id}`}
                   className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${done ? 'border-brandGreen' : c.overdue ? 'border-red-500' : 'border-brandGreen'}`}>
                   <div className="inline-block text-[10px] font-semibold tracking-wider uppercase text-brandGreen bg-brandGreen/10 rounded-full px-2 py-0.5 mb-1.5">Budget Challenge</div>
                   <div className="text-sm font-medium text-textTitle truncate">{c.title}</div>
