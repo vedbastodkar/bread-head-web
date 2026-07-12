@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb } from '@/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
+import { rateLimit, clientIp } from '@/lib/rateLimit'
 
 // Server-only: sets the `role: 'teacher'` custom claim, which only the Admin SDK can do.
 // Called by the login page (Task 8) right after a brand-new Firebase account is created,
@@ -13,6 +14,18 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
+  // Rate limit account promotion by IP — this endpoint grants a teacher role claim,
+  // so it's an abuse target (mass teacher-account creation). 5/15min per IP; raise if
+  // legitimate teachers sign up en masse from one school NAT. In-memory (per-instance,
+  // resets on cold start) — use a shared store (Redis/Upstash) for multi-instance.
+  const rl = rateLimit(`register-teacher:${clientIp(req)}`, { limit: 5, windowMs: 15 * 60_000 })
+  if (!rl.ok) {
+    return NextResponse.json(
+      { ok: false, error: 'Too many requests. Try again shortly.', retryAfter: rl.retryAfterSec },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfterSec) } },
+    )
+  }
+
   const authz = req.headers.get('authorization') ?? ''
   const token = authz.startsWith('Bearer ') ? authz.slice(7) : ''
   if (!token) return NextResponse.json({ ok: false, error: 'Unauthenticated' }, { status: 401 })

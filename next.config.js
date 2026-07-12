@@ -37,6 +37,11 @@ const nextConfig = {
             value: 'strict-origin-when-cross-origin',
           },
           {
+            // Deny access to powerful features the app never uses.
+            key: 'Permissions-Policy',
+            value: 'geolocation=(), microphone=(), camera=(), payment=(), usb=()',
+          },
+          {
             key: 'Content-Security-Policy',
             value: csp,
           },
