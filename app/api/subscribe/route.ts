@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { rateLimit, clientIp } from '@/lib/rateLimit'
 
 const TO = ['breadhead.org@gmail.com']
 
@@ -63,16 +64,35 @@ function subscribeHtml(email: string) {
 }
 
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`subscribe:${clientIp(req)}`)
+  if (!rl.ok) {
+    return NextResponse.json({ ok: false, error: 'Too many requests. Try again shortly.' }, { status: 429 })
+  }
+
+  let data: any
+  try {
+    data = await req.json()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'Invalid request.' }, { status: 400 })
+  }
+  const { email } = data ?? {}
+
+  const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!emailOk) {
+    return NextResponse.json({ ok: false, error: 'Please provide a valid email.' }, { status: 400 })
+  }
+  const clip = (s: unknown, n: number) => (typeof s === 'string' ? s.slice(0, n) : '')
+  const clippedEmail = clip(email, 200)
+
   const resend = new Resend(process.env.RESEND_API_KEY)
-  const { email } = await req.json()
 
   try {
     const { error } = await resend.emails.send({
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
-      replyTo: email,
-      subject: `Early access signup — ${email}`,
-      html: subscribeHtml(email),
+      replyTo: clippedEmail,
+      subject: `Early access signup — ${clippedEmail}`,
+      html: subscribeHtml(clippedEmail),
     })
     if (error) {
       console.error('Subscribe email error:', error)
