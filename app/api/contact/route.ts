@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { rateLimit, clientIp } from '@/lib/rateLimit'
 
 const TO = ['breadhead.org@gmail.com']
 
@@ -109,17 +110,48 @@ function contactHtml(fields: {
 }
 
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`contact:${clientIp(req)}`)
+  if (!rl.ok) {
+    return NextResponse.json({ ok: false, error: 'Too many requests. Try again shortly.' }, { status: 429 })
+  }
+
+  let data: any
+  try {
+    data = await req.json()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'Invalid request.' }, { status: 400 })
+  }
+  const { firstName, lastName, email, org, partnerType, reach, message } = data ?? {}
+
+  const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!firstName || !lastName || !emailOk) {
+    return NextResponse.json({ ok: false, error: 'Please provide your name and a valid email.' }, { status: 400 })
+  }
+  const clip = (s: unknown, n: number) => (typeof s === 'string' ? s.slice(0, n) : '')
+
+  const clippedFirstName = clip(firstName, 100)
+  const clippedLastName = clip(lastName, 100)
+  const clippedOrg = clip(org, 150)
+  const clippedMessage = clip(message, 5000)
+  const clippedReach = clip(reach, 100)
+
   const resend = new Resend(process.env.RESEND_API_KEY)
-  const data = await req.json()
-  const { firstName, lastName, email, org, partnerType, reach, message } = data
 
   try {
     const { error } = await resend.emails.send({
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: email,
-      subject: `${SUBJECT_PREFIX[partnerType] ?? 'Inquiry'} — ${firstName} ${lastName}${org ? ` (${org})` : ''}`,
-      html: contactHtml({ firstName, lastName, email, org, partnerType, reach, message }),
+      subject: `${SUBJECT_PREFIX[partnerType] ?? 'Inquiry'} — ${clippedFirstName} ${clippedLastName}${clippedOrg ? ` (${clippedOrg})` : ''}`,
+      html: contactHtml({
+        firstName: clippedFirstName,
+        lastName: clippedLastName,
+        email,
+        org: clippedOrg,
+        partnerType,
+        reach: clippedReach,
+        message: clippedMessage,
+      }),
     })
     if (error) {
       console.error('Contact email error:', error)
