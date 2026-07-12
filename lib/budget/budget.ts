@@ -122,7 +122,7 @@ export function unallocated(income: number, categories: BudgetCategory[]): numbe
   return income - allocatedTotal(categories, income)
 }
 
-// ---- warnings (mirror the three-tier system on /budgeting) ----
+// ---- warnings (mirror the three-tier system on /budget) ----
 
 export interface BudgetWarnings {
   t1: boolean // advisory: a box is 80–100% used

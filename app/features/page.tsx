@@ -23,7 +23,7 @@ const FEATURES = [
     verb: 'Track',
     name: 'Budgeting',
     description: 'Set your income, build spending categories, and log purchases as you make them. Not a simulation — a real record of where your money actually goes.',
-    href: '/budgeting',
+    href: '/budget',
     stat: 'Real-time tracking',
   },
   {

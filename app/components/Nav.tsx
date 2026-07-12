@@ -19,7 +19,7 @@ const LINKS = [
 
 const APP_SUB_LINKS = [
   { label: 'Lessons',   href: '/lessons' },
-  { label: 'Budgeting', href: '/budgeting' },
+  { label: 'Budgeting', href: '/budget' },
   { label: 'Journal',   href: '/journal' },
 ]
 
