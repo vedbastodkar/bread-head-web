@@ -48,6 +48,8 @@ export default function LoginPage() {
 
 function TeacherPane() {
   const router = useRouter()
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -57,6 +59,25 @@ function TeacherPane() {
     e.preventDefault()
     setError(''); setBusy(true)
     try {
+      if (mode === 'signup') {
+        const cred = await createUserWithEmailAndPassword(auth, email, password)
+        try { await updateProfile(cred.user, { displayName: name.trim() }) } catch { /* noop */ }
+        const idToken = await cred.user.getIdToken()
+        const res = await fetch('/api/auth/register-teacher', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ name: name.trim() }),
+        })
+        if (!res.ok) {
+          setError('Could not create teacher account.')
+          setBusy(false)
+          return
+        }
+        await cred.user.getIdToken(true) // force-refresh so the teacher claim is live
+        router.push('/dashboard')
+        return
+      }
+
       const cred = await signInWithEmailAndPassword(auth, email, password)
       const res = await cred.user.getIdTokenResult()
       const role = res.claims.role
@@ -66,8 +87,8 @@ function TeacherPane() {
         return
       }
       router.push('/dashboard')
-    } catch {
-      setError('Wrong email or password.')
+    } catch (e: any) {
+      setError(mode === 'signup' ? (e?.message || 'Could not create teacher account.') : 'Wrong email or password.')
       setBusy(false)
     }
   }
@@ -75,8 +96,9 @@ function TeacherPane() {
   return (
     <div className="bg-white rounded-2xl shadow-sm max-w-md mx-auto p-8">
       <h1 className="font-display text-2xl text-textTitle mb-1">Teacher / Admin</h1>
-      <p className="text-textTitle/60 text-sm mb-6">See your class progress dashboard.</p>
+      <p className="text-textTitle/60 text-sm mb-6">{mode === 'signup' ? 'Create your teacher account to set up classes.' : 'See your class progress dashboard.'}</p>
       <form onSubmit={submit} className="space-y-4">
+        {mode === 'signup' && <Field label="Name" type="text" value={name} onChange={setName} />}
         <Field label="Email" type="email" value={email} onChange={setEmail} />
         <Field label="Password" type="password" value={password} onChange={setPassword} />
         {error && <p className="text-sm text-red-600">{error}</p>}
@@ -84,9 +106,14 @@ function TeacherPane() {
           type="submit" disabled={busy}
           className="w-full py-3 rounded-xl bg-brandGreen text-white font-medium disabled:opacity-60"
         >
-          {busy ? 'Signing in…' : 'Sign in'}
+          {busy ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Sign in'}
         </button>
       </form>
+
+      <button type="button" onClick={() => { setMode(mode === 'signup' ? 'signin' : 'signup'); setError('') }}
+        className="mt-4 text-sm text-textTitle/60 hover:text-textTitle mx-auto block">
+        {mode === 'signup' ? 'Have an account? Sign in' : 'New teacher? Create an account'}
+      </button>
     </div>
   )
 }
