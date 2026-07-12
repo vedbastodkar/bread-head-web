@@ -616,13 +616,15 @@ export default function AboutPage() {
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '80px', paddingBottom: '80px', paddingLeft: '24px', paddingRight: '24px' }}>
           <FadeUp delay={0}>
             <div className="about-founder-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '64px', alignItems: 'center' }}>
-              <div style={{ borderRadius: '20px', overflow: 'hidden', alignSelf: 'center', aspectRatio: '1 / 1' }}>
+              {/* Same rendered height as the Dorian/Mason photo box (which renders square),
+                  but the full portrait shown proportionally (no crop) and centered in the column. */}
+              <div style={{ alignSelf: 'center', aspectRatio: '1 / 1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
                   src="/assets/bashir_photo.png"
                   alt="Bashir Abdullahi, Marketing Content Strategist & Coordinator at Bread Head"
-                  width={480}
-                  height={480}
-                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  width={941}
+                  height={1672}
+                  style={{ height: '100%', width: 'auto', display: 'block', borderRadius: '20px' }}
                   sizes="(max-width: 768px) 100vw, 40vw"
                 />
               </div>
@@ -656,13 +658,15 @@ export default function AboutPage() {
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '80px', paddingBottom: '80px', paddingLeft: '24px', paddingRight: '24px' }}>
           <FadeUp delay={0}>
             <div className="about-founder-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '64px', alignItems: 'center' }}>
-              <div style={{ borderRadius: '20px', overflow: 'hidden', alignSelf: 'center', aspectRatio: '1 / 1' }}>
+              {/* Same rendered height as the Dorian/Mason photo box (which renders square),
+                  but the full portrait shown proportionally (no crop) and centered in the column. */}
+              <div style={{ alignSelf: 'center', aspectRatio: '1 / 1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
                   src="/assets/ahamdi_photo.png"
                   alt="Ahamdi Nwachukwu, Social Media Growth & Engagement Coordinator at Bread Head"
-                  width={480}
-                  height={480}
-                  style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center top' }}
+                  width={939}
+                  height={1675}
+                  style={{ height: '100%', width: 'auto', display: 'block', borderRadius: '20px' }}
                   sizes="(max-width: 768px) 100vw, 40vw"
                 />
               </div>
