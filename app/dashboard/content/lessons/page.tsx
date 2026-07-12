@@ -1,16 +1,15 @@
 'use client'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import { useDashboard, apiCall, type Assignment } from '../../useDashboard'
 import { DashboardShell, DashboardSkeleton, DashboardError } from '../../DashboardShell'
 import { AssignedGroups } from '../AssignedGroups'
 import { groupAssignments, type AssignedTarget } from '@/lib/dashboard/contentGrouping'
-import { CATALOG, unitLessonIds, unitName, parseLessonId } from '@/lib/curriculum/catalog'
-import { lessonName, lessonSummary, lessonObjectives } from '@/lib/curriculum/lessons'
-import { setLessonTarget } from '@/lib/lessonNav'
+import { CATALOG, unitLessonIds, parseLessonId } from '@/lib/curriculum/catalog'
+import { lessonName, lessonSummary, getLesson } from '@/lib/curriculum/lessons'
 import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
 import { ClassTargetPicker } from '../ClassTargetPicker'
 import { fanoutAssign, type ClassTarget } from '@/lib/dashboard/assignFanout'
+import { LessonPlayer } from '@/components/lesson/LessonPlayer'
 
 // General, class-agnostic Lessons page. Replaces the per-class course page's
 // assign flow: browse the curriculum once, then assign lesson sets to any
@@ -421,44 +420,35 @@ export default function LessonsContentPage() {
         </div>
       </div>
 
-      {/* Lesson preview — STUB (real slide player pending content migration) */}
-      {preview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setPreview(null)}>
-          <div className="bg-white rounded-3xl shadow-xl max-w-lg w-full p-8" onClick={(e) => e.stopPropagation()}>
-            <div className="text-xs text-textTitle/50 mb-1">{unitName(preview.unit)}</div>
-            <h2 className="font-display text-2xl text-textTitle mb-4">Unit {preview.unit} · Lesson {preview.lesson}</h2>
-
-            <div className="bg-bgSage rounded-2xl p-5 mb-5">
-              <div className="text-xs uppercase tracking-wider text-textTitle/40 mb-1">Overview</div>
-              <p className="text-sm text-textTitle/70">
-                {lessonSummary(preview.unit, preview.lesson) ?? 'No summary available.'}
-              </p>
-              {lessonObjectives(preview.unit, preview.lesson).length > 0 && (
-                <>
-                  <div className="text-xs uppercase tracking-wider text-textTitle/40 mt-4 mb-1">Objectives</div>
-                  <ul className="space-y-1">
-                    {lessonObjectives(preview.unit, preview.lesson).map((o, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-textTitle/70"><span className="text-brandGreen mt-0.5">◆</span>{o}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-
-            <Link
-              href="/lesson"
-              onClick={() => setLessonTarget(preview.unit, preview.lesson)}
-              className="block w-full text-center px-4 py-3 rounded-xl bg-brandGreen text-white text-sm mb-2"
-            >
-              ▶ Walk through the lesson
-            </Link>
-
-            <button onClick={() => setPreview(null)} className="w-full px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70 hover:bg-bgSage">
-              Close
-            </button>
+      {/* Lesson preview — real, read-only slide player. No callbacks are passed to
+          LessonPlayer beyond onExit, so it never writes progress or submits anything. */}
+      {preview && (() => {
+        const lesson = getLesson(preview.unit, preview.lesson)
+        return (
+          <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setPreview(null)}>
+            {lesson ? (
+              // Give the player near-full-viewport room (it brings its own fixed
+              // top/bottom chrome + Exit button) — `transform` makes this box the
+              // containing block for those fixed children so they stay inside it.
+              <div
+                className="absolute inset-4 md:inset-10 rounded-3xl overflow-hidden bg-bgSage shadow-2xl transform"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <LessonPlayer lesson={lesson} onExit={() => setPreview(null)} />
+              </div>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center p-4">
+                <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-8 text-center" onClick={(e) => e.stopPropagation()}>
+                  <p className="text-sm text-textTitle/60 mb-4">Lesson content unavailable.</p>
+                  <button onClick={() => setPreview(null)} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70 hover:bg-bgSage">
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        )
+      })()}
     </DashboardShell>
   )
 }
