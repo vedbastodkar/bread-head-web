@@ -9,3 +9,6 @@ test-results/
 
 # TypeScript incremental build cache (regenerated every build)
 tsconfig.tsbuildinfo
+
+# internal planning/spec docs — local-only, not shipped
+docs/superpowers/
