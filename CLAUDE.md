@@ -164,7 +164,7 @@ Mobile and tablet overrides live in `app/globals.css` using explicit class names
 
 - API key in `.env.local` as `RESEND_API_KEY` (must also be set in Vercel env vars)
 - Resend client is initialized **inside the POST handler** — never at module level (causes build errors when key is undefined)
-- All emails send to: `breadhead.org@gmail.com` (forwards to vedbastodkar@gmail.com)
+- All emails send to: `ved@bread-head.org`
 - `/api/contact` — partner form, subject prefixed by partner type
 - `/api/subscribe` — early access signup
 

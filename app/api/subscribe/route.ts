@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { rateLimit, clientIp } from '@/lib/rateLimit'
 
-const TO = ['breadhead.org@gmail.com']
+const TO = ['ved@bread-head.org']
 
 // Escape the signup email before interpolating it into the notification HTML.
 function escHtml(s: string): string {

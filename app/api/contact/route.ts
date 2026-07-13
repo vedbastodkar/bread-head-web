@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { rateLimit, clientIp } from '@/lib/rateLimit'
 
-const TO = ['breadhead.org@gmail.com']
+const TO = ['ved@bread-head.org']
 
 const PARTNER_TYPE_LABELS: Record<string, string> = {
   question: 'General Question',

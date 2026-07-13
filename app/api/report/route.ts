@@ -7,7 +7,7 @@ import { enforce } from '@/lib/rateLimit'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-const TO = ['breadhead.org@gmail.com']
+const TO = ['ved@bread-head.org']
 
 function escHtml(s: string): string {
   return s
