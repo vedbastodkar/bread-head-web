@@ -11,7 +11,7 @@
 // serialization is kept obvious; correctness is verified by the round-trip check
 // (web write → iOS read) rather than unit tests, as it needs the live SDK.
 import {
-  doc, getDoc, setDoc, deleteDoc, collection, getDocs, Timestamp,
+  doc, getDoc, setDoc, deleteDoc, collection, getDocs, runTransaction, Timestamp,
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/client'
 import type { BudgetCategory, BudgetTransaction, FixedPayment } from './budget'
@@ -186,18 +186,27 @@ export async function removeCategory(uid: string, id: string): Promise<void> {
   await deleteDoc(doc(categoriesCol(uid), id))
 }
 
-// Append one transaction. Read-before-write so we never drop existing entries;
-// merge so we never disturb settings/snapshots/other iOS-only fields.
+// Append one transaction. The read-modify-write of the transactions array runs
+// inside a Firestore transaction so two concurrent web writes (double-tap, a
+// second tab) can't read the same array and clobber each other — the loser
+// retries against the winner's committed array. merge:true so we never disturb
+// settings/snapshots/other iOS-only fields.
 export async function addTransaction(uid: string, tx: BudgetTransaction): Promise<void> {
-  const snap = await getDoc(budgetDoc(uid))
-  const existing = Array.isArray(snap.data()?.transactions) ? (snap.data()!.transactions as unknown[]) : []
-  await setDoc(budgetDoc(uid), { transactions: [...existing, transactionToFirestore(tx)] }, { merge: true })
+  const ref = budgetDoc(uid)
+  await runTransaction(db, async (t) => {
+    const snap = await t.get(ref)
+    const existing = Array.isArray(snap.data()?.transactions) ? (snap.data()!.transactions as unknown[]) : []
+    t.set(ref, { transactions: [...existing, transactionToFirestore(tx)] }, { merge: true })
+  })
 }
 
 export async function deleteTransaction(uid: string, txId: string): Promise<void> {
-  const snap = await getDoc(budgetDoc(uid))
-  const existing = Array.isArray(snap.data()?.transactions) ? (snap.data()!.transactions as Record<string, unknown>[]) : []
-  await setDoc(budgetDoc(uid), { transactions: existing.filter((t) => t.id !== txId) }, { merge: true })
+  const ref = budgetDoc(uid)
+  await runTransaction(db, async (t) => {
+    const snap = await t.get(ref)
+    const existing = Array.isArray(snap.data()?.transactions) ? (snap.data()!.transactions as Record<string, unknown>[]) : []
+    t.set(ref, { transactions: existing.filter((x) => x.id !== txId) }, { merge: true })
+  })
 }
 
 // Set the student's monthly income. If a current month snapshot exists, mirror
@@ -206,16 +215,21 @@ export async function deleteTransaction(uid: string, txId: string): Promise<void
 // clobber sibling fields.
 export async function setIncome(uid: string, amount: number): Promise<void> {
   const value = Math.max(0, Number(amount) || 0)
-  const snap = await getDoc(budgetDoc(uid))
-  const data = (snap.data() ?? {}) as Record<string, unknown>
-  const snaps = Array.isArray(data.snapshots) ? (data.snapshots as Record<string, unknown>[]) : []
-  const currentId = data.currentSnapshotId as string | undefined
-  const idx = currentId ? snaps.findIndex((s) => s.id === currentId) : -1
+  const ref = budgetDoc(uid)
+  // Transaction: the snapshot-mirror path is a read-modify-write on the snapshots
+  // array, so guard it against a concurrent write the same way as transactions.
+  await runTransaction(db, async (t) => {
+    const snap = await t.get(ref)
+    const data = (snap.data() ?? {}) as Record<string, unknown>
+    const snaps = Array.isArray(data.snapshots) ? (data.snapshots as Record<string, unknown>[]) : []
+    const currentId = data.currentSnapshotId as string | undefined
+    const idx = currentId ? snaps.findIndex((s) => s.id === currentId) : -1
 
-  if (idx >= 0) {
-    const updated = snaps.map((s, i) => (i === idx ? { ...s, income: value, userPredictedIncome: value } : s))
-    await setDoc(budgetDoc(uid), { snapshots: updated }, { merge: true })
-  } else {
-    await setDoc(budgetDoc(uid), { settings: { primaryIncomeAmount: value } }, { merge: true })
-  }
+    if (idx >= 0) {
+      const updated = snaps.map((s, i) => (i === idx ? { ...s, income: value, userPredictedIncome: value } : s))
+      t.set(ref, { snapshots: updated }, { merge: true })
+    } else {
+      t.set(ref, { settings: { primaryIncomeAmount: value } }, { merge: true })
+    }
+  })
 }

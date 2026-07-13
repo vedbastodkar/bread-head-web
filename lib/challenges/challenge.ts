@@ -74,6 +74,16 @@ export function essentialsFloor(ch: Challenge): number {
   return (ch.monthly?.mandatory ?? []).reduce((s, b) => s + b.amount, 0)
 }
 
+// The dollars a passing allocation must actually put in need-role boxes: the
+// larger of the mandatory-bill total and any explicit min_needs criterion value.
+// evalCriterion's min_needs uses `c.value ?? essentialsFloor`; a challenge whose
+// explicit value EXCEEDS its mandatory sum must have the reference solution and
+// solvability check honour that higher floor, not just the mandatory sum.
+export function needsFloor(ch: Challenge): number {
+  const explicit = ch.criteria.find((c) => c.kind === 'min_needs')?.value
+  return Math.max(essentialsFloor(ch), explicit ?? 0)
+}
+
 function evalCriterion(c: Criterion, ch: Challenge, alloc: Allocation): CriterionResult {
   const income = ch.monthly?.income ?? 0
   if (c.kind === 'zero_unallocated') {
@@ -114,7 +124,7 @@ export function evaluateChallenge(ch: Challenge, alloc: Allocation): ChallengeRe
 // A known-passing allocation: essentials box + exact savings + flex box absorbing the remainder.
 export function referenceSolution(ch: Challenge): Allocation {
   const income = ch.monthly?.income ?? 0
-  const floor = essentialsFloor(ch)
+  const floor = needsFloor(ch) // honour an explicit min_needs value above the mandatory sum
   const sr = ch.criteria.find((c) => c.kind === 'min_savings_rate')?.value ?? 0
   const savings = income * (sr / 100)
   const remainder = income - floor - savings
@@ -130,9 +140,11 @@ export function validateChallenge(ch: Challenge): { ok: boolean; error?: string 
   if (ch.kind !== 'monthly') return { ok: false, error: 'Only monthly challenges are supported in v1.' }
   const m = ch.monthly
   if (!m || !(m.income > 0)) return { ok: false, error: 'Income must be greater than 0.' }
-  const mandatory = (m.mandatory ?? []).reduce((s, b) => s + b.amount, 0)
   const sr = ch.criteria.find((c) => c.kind === 'min_savings_rate')?.value ?? 0
-  const need = mandatory + m.income * (sr / 100)
+  // Use the effective needs floor (max of mandatory sum and an explicit min_needs
+  // value) so a challenge that demands more needs than its bills is judged solvable
+  // against the real requirement, matching referenceSolution.
+  const need = needsFloor(ch) + m.income * (sr / 100)
   if (need > m.income + EPS) return { ok: false, error: 'Mandatory bills plus required savings exceed income.' }
   return { ok: true }
 }

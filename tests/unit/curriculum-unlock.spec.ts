@@ -5,6 +5,12 @@ import {
   assignedLessonIdSet,
   advancesFrontier,
   isKnownLessonId,
+  pacingFrontierIndex,
+  resolvePacingFrontier,
+  mergeControls,
+  resolveControls,
+  DEFAULT_CONTROLS,
+  LESSON_ORDER,
   type ClassLite,
 } from '../../lib/curriculum/controls'
 
@@ -106,4 +112,83 @@ test('advancesFrontier: sequential completion keeps advancing (streak sanity)', 
   next.add('unit1lesson3')
   // ...and the lesson immediately after is now the new frontier, so it advances too.
   expect(advancesFrontier('unit1lesson4', next)).toBe(true)
+})
+
+// ---- pacing frontier resolvers ----
+
+test('pacingFrontierIndex: absent or disabled pacing is fully unlocked (Infinity)', () => {
+  expect(pacingFrontierIndex(null)).toBe(Infinity)
+  expect(pacingFrontierIndex(undefined)).toBe(Infinity)
+  expect(pacingFrontierIndex({ enabled: false, throughUnit: 1, throughLesson: 1 })).toBe(Infinity)
+})
+
+test('pacingFrontierIndex: an enabled, valid frontier resolves to its LESSON_ORDER index', () => {
+  expect(pacingFrontierIndex({ enabled: true, throughUnit: 1, throughLesson: 1 }))
+    .toBe(LESSON_ORDER.indexOf('unit1lesson1'))
+})
+
+test('pacingFrontierIndex: an enabled frontier pointing at a bogus lesson fails OPEN (Infinity, not lockout)', () => {
+  // Documented intent: fail-closed on a config typo would lock EVERY student out,
+  // which is worse than briefly over-unlocking. Keep this fail-open behaviour.
+  expect(pacingFrontierIndex({ enabled: true, throughUnit: 99, throughLesson: 99 })).toBe(Infinity)
+})
+
+test('resolvePacingFrontier: no classes is fully unlocked', () => {
+  expect(resolvePacingFrontier([])).toBe(Infinity)
+})
+
+test('resolvePacingFrontier: takes the MOST PERMISSIVE frontier across classes', () => {
+  const paced = (u: number, l: number): ClassLite => ({
+    pacing: { enabled: true, throughUnit: u, throughLesson: l }, assignments: [],
+  })
+  // one class capped at unit1lesson1, another at unit1lesson2 → the higher index wins
+  const expected = Math.max(LESSON_ORDER.indexOf('unit1lesson1'), LESSON_ORDER.indexOf('unit1lesson2'))
+  expect(resolvePacingFrontier([paced(1, 1), paced(1, 2)])).toBe(expected)
+  // any disabled/absent-pacing class opens everything (Infinity dominates)
+  expect(resolvePacingFrontier([paced(1, 1), { pacing: null, assignments: [] }])).toBe(Infinity)
+})
+
+// ---- control merging ----
+
+test('mergeControls: keeps the MOST RESTRICTIVE of each field', () => {
+  const merged = mergeControls(
+    { lockUntilCorrect: false, minSecondsPerSlide: 5, noSkipAhead: true },
+    { lockUntilCorrect: true, minSecondsPerSlide: 10, noSkipAhead: false },
+  )
+  expect(merged).toEqual({ lockUntilCorrect: true, minSecondsPerSlide: 10, noSkipAhead: true })
+})
+
+test('mergeControls: a partial override missing a field leaves the base value', () => {
+  expect(mergeControls({ lockUntilCorrect: true, minSecondsPerSlide: 8, noSkipAhead: false }, {}))
+    .toEqual({ lockUntilCorrect: true, minSecondsPerSlide: 8, noSkipAhead: false })
+})
+
+test('resolveControls: no classes yields the defaults', () => {
+  expect(resolveControls('unit1lesson1', 'u1', [])).toEqual(DEFAULT_CONTROLS)
+})
+
+test('resolveControls: class default is tightened by an applicable assignment override', () => {
+  const classes: ClassLite[] = [{
+    lessonControls: { lockUntilCorrect: true, minSecondsPerSlide: 0, noSkipAhead: false },
+    assignments: [{
+      lessonIds: ['unit1lesson1'], scope: 'class', studentUids: [], type: 'lesson',
+      controls: { minSecondsPerSlide: 20 },
+    }],
+  }]
+  expect(resolveControls('unit1lesson1', 'u1', classes))
+    .toEqual({ lockUntilCorrect: true, minSecondsPerSlide: 20, noSkipAhead: false })
+})
+
+test('resolveControls: an override for a different lesson or a non-targeted student is ignored', () => {
+  const base = { lockUntilCorrect: false, minSecondsPerSlide: 0, noSkipAhead: false }
+  const classes: ClassLite[] = [{
+    lessonControls: base,
+    assignments: [
+      // targets a DIFFERENT lesson
+      { lessonIds: ['unit1lesson2'], scope: 'class', studentUids: [], type: 'lesson', controls: { noSkipAhead: true } },
+      // targets a DIFFERENT student (individual scope)
+      { lessonIds: ['unit1lesson1'], scope: 'students', studentUids: ['someone-else'], type: 'lesson', controls: { lockUntilCorrect: true } },
+    ],
+  }]
+  expect(resolveControls('unit1lesson1', 'u1', classes)).toEqual(base)
 })

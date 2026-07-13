@@ -60,20 +60,49 @@ function TeacherPane() {
     setError(''); setBusy(true)
     try {
       if (mode === 'signup') {
-        const cred = await createUserWithEmailAndPassword(auth, email, password)
-        try { await updateProfile(cred.user, { displayName: name.trim() }) } catch { /* noop */ }
-        const idToken = await cred.user.getIdToken()
+        // Create the account — or recover one left roleless by a prior attempt that
+        // created the Firebase user but failed before the teacher role was assigned.
+        let user
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password)
+          try { await updateProfile(cred.user, { displayName: name.trim() }) } catch { /* noop */ }
+          user = cred.user
+        } catch (e: any) {
+          if (e?.code !== 'auth/email-already-in-use') throw e
+          // The email exists. Sign in to prove ownership, then finish/verify the role.
+          let cred
+          try {
+            cred = await signInWithEmailAndPassword(auth, email, password)
+          } catch {
+            setError('That email is already registered. Try signing in instead.')
+            setBusy(false)
+            return
+          }
+          const claims = (await cred.user.getIdTokenResult()).claims
+          if (claims.role === 'teacher' || claims.role === 'admin') {
+            router.push('/dashboard') // already a teacher — nothing to finish
+            return
+          }
+          if (claims.role === 'student') {
+            setError('That email is already registered to a student account.')
+            setBusy(false)
+            return
+          }
+          user = cred.user // roleless leftover — fall through and complete registration
+        }
+
+        const idToken = await user.getIdToken()
         const res = await fetch('/api/auth/register-teacher', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
           body: JSON.stringify({ name: name.trim() }),
         })
         if (!res.ok) {
-          setError('Could not create teacher account.')
+          setError('Could not create teacher account. Please try again.')
           setBusy(false)
           return
         }
-        await cred.user.getIdToken(true) // force-refresh so the teacher claim is live
+        await user.getIdToken(true) // force-refresh so the teacher claim is live
         router.push('/dashboard')
         return
       }

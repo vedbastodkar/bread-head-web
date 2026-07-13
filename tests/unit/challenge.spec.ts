@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import {
   resolveBoxDollars, allocatedDollars, evaluateChallenge, validateChallenge,
-  referenceSolution, buildChallengeSubmission,
+  referenceSolution, buildChallengeSubmission, needsFloor,
   assignmentAppliesTo, clampAmount,
   type Challenge, type Allocation, type AllocationBox,
 } from '../../lib/challenges/challenge'
@@ -151,4 +151,43 @@ test('clampAmount: no negatives, percent capped at 100, fixed capped at income',
   expect(clampAmount(650, 'fixed', 2000)).toBe(650)          // legit value untouched
   expect(clampAmount(500, 'percent', 2000)).toBe(100)        // >100% capped
   expect(clampAmount(15, 'percent', 2000)).toBe(15)          // legit percent untouched
+})
+
+// ---- min_needs value ABOVE the mandatory sum: reference + solvability must honour it ----
+
+const CH_HIGH_NEEDS: Challenge = {
+  id: 'lib:high-needs',
+  kind: 'monthly',
+  title: 'High needs',
+  prompt: 'Needs floor is higher than the listed bills.',
+  tags: { focus: ['saving'], context: ['x'], difficulty: 1 },
+  monthly: { income: 2000, mandatory: [{ id: 'rent', name: 'Rent', amount: 1000 }] },
+  criteria: [
+    { kind: 'min_needs', value: 1400 }, // exceeds the $1000 mandatory sum
+    { kind: 'min_savings_rate', value: 15 },
+    { kind: 'zero_unallocated' },
+  ],
+  source: 'library',
+}
+
+test('needsFloor uses an explicit min_needs value above the mandatory sum', () => {
+  expect(needsFloor(CH_HIGH_NEEDS)).toBe(1400)
+  expect(needsFloor(CH)).toBe(1050) // explicit value equals the mandatory sum here
+})
+
+test('referenceSolution passes a challenge whose min_needs exceeds its mandatory bills', () => {
+  // Regression: previously funded needs = mandatory sum ($1000) and failed its own min_needs.
+  expect(evaluateChallenge(CH_HIGH_NEEDS, referenceSolution(CH_HIGH_NEEDS)).allPassed).toBe(true)
+})
+
+test('validateChallenge counts an explicit min_needs value toward solvability', () => {
+  // needs 1400 + 15% savings (300) = 1700 <= 2000 → solvable
+  expect(validateChallenge(CH_HIGH_NEEDS).ok).toBe(true)
+  // needs 1900 + 300 = 2200 > 2000 income → unsolvable (mandatory sum alone would've hidden this)
+  const tight = { ...CH_HIGH_NEEDS, criteria: [
+    { kind: 'min_needs', value: 1900 },
+    { kind: 'min_savings_rate', value: 15 },
+    { kind: 'zero_unallocated' },
+  ] } as Challenge
+  expect(validateChallenge(tight).ok).toBe(false)
 })

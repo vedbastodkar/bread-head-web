@@ -59,23 +59,34 @@ export async function POST(req: NextRequest) {
   }
   const name = typeof body?.name === 'string' ? body.name.slice(0, 100).trim() : ''
 
-  await adminAuth.setCustomUserClaims(uid, { role: 'teacher' })
-  await adminDb.doc(`users/${uid}`).set(
-    {
-      profile: {
-        uid,
-        email: decoded.email ?? '',
-        name: name || decoded.email || 'Teacher',
-        role: 'teacher',
-        isTeacher: true,
-        provider: 'email',
-        createdAt: FieldValue.serverTimestamp(),
-        updatedAt: FieldValue.serverTimestamp(),
-        classIds: [],
+  // Two writes that aren't a single atomic unit (Auth claim + Firestore doc). Set
+  // the claim first, then the doc; if the doc write fails, roll the claim back so a
+  // partial failure leaves a CLEAN roleless account the user can retry — never a
+  // teacher-claim-without-profile-doc limbo. (The whole call is also safely
+  // re-runnable: the guard above only blocks accounts that already have a role.)
+  try {
+    await adminAuth.setCustomUserClaims(uid, { role: 'teacher' })
+    await adminDb.doc(`users/${uid}`).set(
+      {
+        profile: {
+          uid,
+          email: decoded.email ?? '',
+          name: name || decoded.email || 'Teacher',
+          role: 'teacher',
+          isTeacher: true,
+          provider: 'email',
+          createdAt: FieldValue.serverTimestamp(),
+          updatedAt: FieldValue.serverTimestamp(),
+          classIds: [],
+        },
       },
-    },
-    { merge: true }
-  )
+      { merge: true }
+    )
+  } catch (err) {
+    console.error('register-teacher write failed, rolling back claim:', err)
+    try { await adminAuth.setCustomUserClaims(uid, null) } catch { /* best-effort rollback */ }
+    return NextResponse.json({ ok: false, error: 'Could not complete registration. Please try again.' }, { status: 500 })
+  }
 
   return NextResponse.json({ ok: true })
 }
