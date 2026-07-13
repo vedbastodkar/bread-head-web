@@ -12,3 +12,6 @@ tsconfig.tsbuildinfo
 
 # internal planning/spec docs — local-only, not shipped
 docs/superpowers/
+docs/STUB.md
+docs/TEACHER_DASHBOARD_RESEARCH.md
+docs/WEB_APP_BUILD_PLAN.md
