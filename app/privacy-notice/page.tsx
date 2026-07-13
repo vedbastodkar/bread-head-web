@@ -109,12 +109,12 @@ export default function PrivacyNoticePage() {
         <Section title="3. Data Retention">
           <p>
             Account information is retained for as long as your account is
-            active. You may request deletion of your data at any time by
-            emailing{' '}
+            active. You may request deletion of your data, or a copy of the
+            data we hold about you (a data export), at any time by emailing{' '}
             <a href="mailto:breadhead.org@gmail.com" style={{ color: '#4A5D4A' }}>
               breadhead.org@gmail.com
             </a>
-            . We will process deletion requests within 30 days.
+            . We will process deletion and export requests within 30 days.
           </p>
         </Section>
 
@@ -141,7 +141,24 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="6. Security">
+        <Section title="6. Schools and Student Records (FERPA)">
+          <p>
+            When a school or teacher uses Bread Head with their students, we act
+            as a "school official" with a legitimate educational interest under
+            the Family Educational Rights and Privacy Act (FERPA). We use student
+            information only to provide and support the service for that school —
+            we never sell it, use it for advertising, or build advertising
+            profiles. Student data stays under the school's control: schools may
+            request access, correction, deletion, or export of their students'
+            records at any time by emailing{' '}
+            <a href="mailto:breadhead.org@gmail.com" style={{ color: '#4A5D4A' }}>
+              breadhead.org@gmail.com
+            </a>
+            .
+          </p>
+        </Section>
+
+        <Section title="7. Security">
           <p>
             We use industry-standard practices to protect your data, including
             encrypted transmission (HTTPS) and access controls. No method of
@@ -169,7 +186,7 @@ export default function PrivacyNoticePage() {
           Terms of Use
         </h2>
 
-        <Section title="7. Acceptance">
+        <Section title="8. Acceptance">
           <p>
             By accessing bread-head.org or using the Bread Head app, you agree
             to these Terms of Use. If you do not agree, please do not use our
@@ -177,7 +194,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="8. Use of Service">
+        <Section title="9. Use of Service">
           <p>
             Bread Head is provided for personal, educational, and
             non-commercial use only. You agree not to:
@@ -192,7 +209,7 @@ export default function PrivacyNoticePage() {
           </ul>
         </Section>
 
-        <Section title="9. Educational Content Disclaimer">
+        <Section title="10. Educational Content Disclaimer">
           <p>
             Content provided by Bread Head is for general financial education
             only. It does not constitute financial, legal, or tax advice. Always
@@ -201,7 +218,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="10. Intellectual Property">
+        <Section title="11. Intellectual Property">
           <p>
             All content, design, and code on bread-head.org and within the
             Bread Head app is owned by Bread Head and protected by applicable
@@ -209,7 +226,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="11. Limitation of Liability">
+        <Section title="12. Limitation of Liability">
           <p>
             Bread Head is provided "as is" without warranties of any kind. To
             the fullest extent permitted by law, Bread Head and its creators
@@ -218,7 +235,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="12. Changes to These Terms">
+        <Section title="13. Changes to These Terms">
           <p>
             We may update this Privacy Notice and Terms of Use periodically.
             When we do, we will revise the "Last updated" date at the top of
