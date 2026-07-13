@@ -22,6 +22,17 @@ const SUBJECT_PREFIX: Record<string, string> = {
   other: 'Inquiry',
 }
 
+// Escape user-supplied values before interpolating them into the notification
+// email HTML — otherwise a submitter can inject markup/links into the inbox.
+function escHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 function contactHtml(fields: {
   firstName: string
   lastName: string
@@ -31,8 +42,14 @@ function contactHtml(fields: {
   reach: string
   message: string
 }) {
-  const { firstName, lastName, email, org, partnerType, reach, message } = fields
-  const typeLabel = PARTNER_TYPE_LABELS[partnerType] ?? partnerType
+  const raw = fields
+  const firstName = escHtml(raw.firstName)
+  const lastName = escHtml(raw.lastName)
+  const email = escHtml(raw.email)
+  const org = escHtml(raw.org)
+  const reach = escHtml(raw.reach)
+  const message = escHtml(raw.message)
+  const typeLabel = escHtml(PARTNER_TYPE_LABELS[raw.partnerType] ?? raw.partnerType)
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -155,7 +172,7 @@ export async function POST(req: NextRequest) {
     })
     if (error) {
       console.error('Contact email error:', error)
-      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+      return NextResponse.json({ ok: false, error: 'Could not send your message. Please try again shortly.' }, { status: 502 })
     }
 
     return NextResponse.json({ ok: true })

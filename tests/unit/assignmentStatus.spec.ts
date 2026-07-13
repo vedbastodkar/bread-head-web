@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { overdueMissing, overdueJournals, attentionFlags } from '../../lib/dashboard/assignmentStatus'
+import { overdueMissing, overdueJournals, overdueChallenges, attentionFlags } from '../../lib/dashboard/assignmentStatus'
 
 const student = () => ({
   uid: 'u1', name: 'Alice', completedLessons: [],
@@ -110,6 +110,53 @@ test('overdueJournals: future-due journal is never overdue', () => {
 test('overdueJournals: journal scoped to other students is ignored', () => {
   const a = journalAssignment({ scope: 'students', studentUids: ['u2'] })
   expect(overdueJournals(student(), [a])).toEqual([])
+})
+
+// ---- Challenge-assignment overdue parity (mirrors journals) ----
+
+const challengeAssignment = (over: Record<string, unknown> = {}) => ({
+  id: 'c1', type: 'challenge', lessonIds: [], scope: 'class', studentUids: [],
+  dueDate: '2020-01-01', // well past
+  challengeId: 'lib:starter',
+  submissions: {},
+  ...over,
+}) as any
+
+test('overdueChallenges: past-due challenge with no submission is overdue', () => {
+  expect(overdueChallenges(student(), [challengeAssignment()])).toEqual(['c1'])
+})
+
+test('overdueChallenges: challenge with a complete submission is not overdue', () => {
+  const a = challengeAssignment({ submissions: { u1: { status: 'complete', submittedAt: '2020-01-02' } } })
+  expect(overdueChallenges(student(), [a])).toEqual([])
+})
+
+test('overdueChallenges: in_progress submission past due is still overdue', () => {
+  const a = challengeAssignment({ submissions: { u1: { status: 'in_progress', submittedAt: null } } })
+  expect(overdueChallenges(student(), [a])).toEqual(['c1'])
+})
+
+test('overdueChallenges: future-due challenge is never overdue', () => {
+  expect(overdueChallenges(student(), [challengeAssignment({ dueDate: '2099-01-01' })])).toEqual([])
+})
+
+test('overdueChallenges: challenge scoped to other students is ignored', () => {
+  const a = challengeAssignment({ scope: 'students', studentUids: ['u2'] })
+  expect(overdueChallenges(student(), [a])).toEqual([])
+})
+
+test('attentionFlags: overdue challenges count toward needs-attention alongside lessons and journals', () => {
+  const lesson = {
+    id: 'a1', type: 'lesson', lessonIds: ['unit1lesson1'], scope: 'class', studentUids: [],
+    dueDate: '2020-01-01', submissions: { u1: { status: 'in_progress', submittedAt: null, completedLessonIds: [] } },
+  } as any
+  // one overdue lesson + one overdue journal + one overdue challenge → "3 overdue"
+  expect(attentionFlags(student(), [lesson, journalAssignment(), challengeAssignment()]))
+    .toEqual([{ type: 'overdue', label: '3 overdue' }])
+})
+
+test('attentionFlags: a lone overdue challenge raises a flag (previously ignored)', () => {
+  expect(attentionFlags(student(), [challengeAssignment()])).toEqual([{ type: 'overdue', label: '1 overdue' }])
 })
 
 test('attentionFlags: overdue journals count toward needs-attention alongside overdue lessons', () => {

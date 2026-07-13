@@ -86,19 +86,22 @@ function evalCriterion(c: Criterion, ch: Challenge, alloc: Allocation): Criterio
       .filter((b) => b.role === 'need')
       .reduce((s, b) => s + resolveBoxDollars(b, income), 0)
     const passed = needs + EPS >= floor
+    // Floor the achieved amount so a near-miss (e.g. $1049.60 vs a $1050 floor)
+    // never rounds UP to read as if it met the target on a failing criterion.
     return {
       kind: c.kind,
       passed,
       detail: passed
-        ? `Essentials $${needs.toFixed(0)} of $${floor.toFixed(0)}`
-        : `Essentials underfunded — $${needs.toFixed(0)} of $${floor.toFixed(0)}`,
+        ? `Essentials $${Math.floor(needs)} of $${floor.toFixed(0)}`
+        : `Essentials underfunded — $${Math.floor(needs)} of $${floor.toFixed(0)}`,
     }
   }
   // min_savings_rate
   const v = c.value ?? 0
   const saved = alloc.boxes.filter((b) => b.role === 'save').reduce((s, b) => s + resolveBoxDollars(b, income), 0)
   const rate = income > 0 ? (saved / income) * 100 : 0
-  return { kind: c.kind, passed: rate + EPS >= v, detail: `Savings ${rate.toFixed(0)}% (need ${v}%)` }
+  // Floor the achieved rate for the same reason (14.65% must not display as "15%").
+  return { kind: c.kind, passed: rate + EPS >= v, detail: `Savings ${Math.floor(rate)}% (need ${v}%)` }
 }
 
 export function evaluateChallenge(ch: Challenge, alloc: Allocation): ChallengeResult {

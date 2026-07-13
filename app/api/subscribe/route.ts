@@ -4,7 +4,18 @@ import { rateLimit, clientIp } from '@/lib/rateLimit'
 
 const TO = ['breadhead.org@gmail.com']
 
-function subscribeHtml(email: string) {
+// Escape the signup email before interpolating it into the notification HTML.
+function escHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function subscribeHtml(rawEmail: string) {
+  const email = escHtml(rawEmail)
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +107,7 @@ export async function POST(req: NextRequest) {
     })
     if (error) {
       console.error('Subscribe email error:', error)
-      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+      return NextResponse.json({ ok: false, error: 'Could not complete signup. Please try again shortly.' }, { status: 502 })
     }
 
     return NextResponse.json({ ok: true })

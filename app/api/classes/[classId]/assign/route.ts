@@ -206,6 +206,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { classId: s
 export async function DELETE(req: NextRequest, { params }: { params: { classId: string } }) {
   const teacher = await verifyTeacher(req)
   if (!teacher) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Per-user rate limit — mirror POST/PATCH so every authed handler is throttled.
+  const limited = enforce(req, { prefix: 'assign', uid: teacher.uid, limit: 100, windowMs: 15 * 60_000 })
+  if (limited) return limited
+
   if (!(await ownsClass(teacher.uid, params.classId)))
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
 

@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
     })
     if (error) {
       console.error('Report email error:', error)
-      return NextResponse.json({ ok: false, error: error.message }, { status: 502 })
+      return NextResponse.json({ ok: false, error: 'Could not send the report. Please try again shortly.' }, { status: 502 })
     }
     return NextResponse.json({ ok: true })
   } catch (err) {
