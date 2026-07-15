@@ -42,19 +42,20 @@ export async function POST(req: NextRequest) {
   // rather than moved — an unvetted enrollment masquerading as a move.
   if (!rosterSnap.exists) return NextResponse.json({ error: 'Student not in source class' }, { status: 404 })
   const displayName = rosterSnap.get('displayName') ?? 'Student'
+  const toRoster = toDoc.ref.collection('roster').doc(studentUid)
+  const userRef = adminDb.collection('users').doc(studentUid)
 
-  const batch = adminDb.batch()
-  batch.delete(fromRoster)
-  batch.set(toDoc.ref.collection('roster').doc(studentUid), {
-    studentUid, displayName, joinedAt: FieldValue.serverTimestamp(), status: 'active',
-  })
-  batch.update(adminDb.collection('users').doc(studentUid), {
-    'profile.classIds': FieldValue.arrayRemove(fromClassId),
-  })
-  await batch.commit()
-  // arrayUnion in a second step (can't remove+add same field key in one update)
-  await adminDb.collection('users').doc(studentUid).update({
-    'profile.classIds': FieldValue.arrayUnion(toClassId),
+  // Atomic move: roster delete + roster add + classIds update all commit together
+  // or not at all. classIds can't use arrayRemove+arrayUnion in one write (two
+  // transforms on the same field conflict), so we read the current array inside
+  // the transaction and write the computed result — no partial-move inconsistency.
+  await adminDb.runTransaction(async (tx) => {
+    const userSnap = await tx.get(userRef)
+    const current: string[] = userSnap.get('profile.classIds') ?? []
+    const nextIds = Array.from(new Set(current.filter((c) => c !== fromClassId).concat(toClassId)))
+    tx.delete(fromRoster)
+    tx.set(toRoster, { studentUid, displayName, joinedAt: FieldValue.serverTimestamp(), status: 'active' })
+    tx.update(userRef, { 'profile.classIds': nextIds })
   })
   return NextResponse.json({ ok: true })
 }

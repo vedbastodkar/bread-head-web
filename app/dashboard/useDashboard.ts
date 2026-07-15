@@ -99,7 +99,14 @@ export async function apiCall(
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined,
   })
-  if (!res.ok) throw new Error((await res.text()) || `Request failed (${res.status})`)
+  if (!res.ok) {
+    // Surface the API's clean `error` field, not the raw JSON body (which used to
+    // reach teachers verbatim via alert(e.message)).
+    const text = await res.text()
+    let msg = text
+    try { const j = JSON.parse(text); if (j?.error) msg = String(j.error) } catch { /* not json */ }
+    throw new Error(msg || `Request failed (${res.status})`)
+  }
   return res.json()
 }
 

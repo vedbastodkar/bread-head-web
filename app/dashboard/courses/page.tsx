@@ -2,10 +2,12 @@
 import Link from 'next/link'
 import { useDashboard, apiCall, pctComplete, attentionFlags, type ClassData } from '../useDashboard'
 import { DashboardShell, DashboardSkeleton, DashboardError } from '../DashboardShell'
+import { useToast } from '../ToastProvider'
 
 // Canvas-style "All Courses" — every class, current and past/archived, in one list.
 export default function AllCourses() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
+  const { notify } = useToast()
 
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
@@ -15,8 +17,8 @@ export default function AllCourses() {
 
   async function setArchived(id: string, archived: boolean) {
     if (!user) return
-    try { await apiCall(user, `/api/classes/${id}`, 'PATCH', { archived }); reload() }
-    catch (e: any) { alert(e?.message) }
+    try { await apiCall(user, `/api/classes/${id}`, 'PATCH', { archived }); reload(); notify(archived ? 'Class archived.' : 'Class unarchived.', 'success') }
+    catch { notify('Could not update the class — please try again.', 'error') }
   }
 
   return (

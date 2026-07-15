@@ -7,12 +7,14 @@ import { groupAssignments, type AssignedTarget } from '@/lib/dashboard/contentGr
 import { PROMPT_CATEGORIES, PROMPT_TEMPLATES, type PromptTemplate } from '@/lib/journal/prompts'
 import { ClassTargetPicker } from '../ClassTargetPicker'
 import { fanoutAssign, type ClassTarget } from '@/lib/dashboard/assignFanout'
+import { useToast } from '../../ToastProvider'
 
 // General, class-agnostic Journal page. Teachers only ever see submission
 // METADATA (counts/status) — never entry content — so this page composes
 // prompts and lists completion, nothing more.
 export default function JournalContentPage() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
+  const { notify, confirm } = useToast()
 
   const [title, setTitle] = useState('')
   const [questions, setQuestions] = useState<string[]>([''])
@@ -42,9 +44,9 @@ export default function JournalContentPage() {
   }
 
   // Fill the whole form from a ready-made Bread Head prompt set (confirm if it would clobber work).
-  function applyTemplate(t: PromptTemplate) {
+  async function applyTemplate(t: PromptTemplate) {
     const hasContent = questions.some((q) => q.trim())
-    if (hasContent && !confirm(`Replace the current questions with the “${t.name}” template?`)) return
+    if (hasContent && !(await confirm({ message: `Replace the current questions with the “${t.name}” template?` }))) return
     setQuestions(t.questions.slice())
   }
 
@@ -75,11 +77,11 @@ export default function JournalContentPage() {
   async function submit() {
     if (!user) return
     const qs = questions.map((q) => q.trim()).filter(Boolean)
-    if (qs.length === 0) { alert('Add at least one prompt question.'); return }
-    if (targets.length === 0) { alert('Pick at least one class.'); return }
+    if (qs.length === 0) { notify('Add at least one prompt question.', 'error'); return }
+    if (targets.length === 0) { notify('Pick at least one class.', 'error'); return }
     const emptyStudentsTarget = targets.find((t) => Array.isArray(t.studentUids) && t.studentUids.length === 0)
     if (emptyStudentsTarget) {
-      alert(`Pick at least one student for ${emptyStudentsTarget.className}, or turn off "Choose specific students".`)
+      notify(`Pick at least one student for ${emptyStudentsTarget.className}, or turn off "Choose specific students".`, 'error')
       return
     }
 
@@ -103,8 +105,9 @@ export default function JournalContentPage() {
         await apiCall(user, `/api/classes/${t.classId}/assign?id=${editing.assignment.id}`, 'PATCH', payload)
         resetComposer()
         reload()
+        notify('Journal updated.', 'success')
       } else {
-        if (targets.some((t) => t.dueDate && t.dueDate < today) && !confirm('One or more due dates are in the past — assign anyway?')) return
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past — assign anyway?' }))) return
         const dup = targets.some((t) => {
           const targetCls = activeClasses.find((c) => c.id === t.classId)
           const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
@@ -115,30 +118,32 @@ export default function JournalContentPage() {
             (!useStudents || sameSet(a.studentUids ?? [], t.studentUids ?? [])),
           )
         })
-        if (dup && !confirm('An identical journal is already assigned in at least one selected class. Assign anyway?')) return
+        if (dup && !(await confirm({ message: 'An identical journal is already assigned in at least one selected class. Assign anyway?' }))) return
 
         const results = await fanoutAssign((cid, body) => apiCall(user, `/api/classes/${cid}/assign`, 'POST', body), basePayload, targets)
         const failed = results.filter((r) => !r.ok)
         if (failed.length === 0) {
           resetComposer()
+          notify(`Assigned to ${results.length} ${results.length === 1 ? 'class' : 'classes'}.`, 'success')
         } else {
           // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
           setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
-          alert(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '))
+          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
         }
         reload()
       }
-    } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
   }
 
   async function removeFromTarget(t: AssignedTarget) {
     if (!user) return
-    if (!confirm('Remove this journal prompt?')) return
+    if (!(await confirm({ message: 'Remove this journal prompt?', confirmLabel: 'Remove', destructive: true }))) return
     try {
       await apiCall(user, `/api/classes/${t.classId}/assign?id=${t.assignment.id}`, 'DELETE')
       if (editing?.assignment.id === t.assignment.id) resetComposer()
       reload()
-    } catch (e: any) { alert(e?.message) }
+      notify('Journal removed.', 'success')
+    } catch { notify('Could not remove the journal — please try again.', 'error') }
   }
 
   const groups = groupAssignments(

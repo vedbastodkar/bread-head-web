@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ClassData } from '../useDashboard'
 import type { ClassTarget } from '@/lib/dashboard/assignFanout'
 
@@ -18,6 +18,15 @@ export function ClassTargetPicker({
 }) {
   const [chooseStudents, setChooseStudents] = useState(false)
   const today = new Date().toISOString().slice(0, 10)
+
+  // Reveal specific-student mode whenever the incoming targets are already
+  // student-scoped (a non-null studentUids array) — e.g. when editing an
+  // assignment that was scoped to specific students. Without this the toggle
+  // starts OFF, the assignment looks whole-class, and the student set is hidden
+  // (and would be wiped the moment the teacher ticked the box to inspect it).
+  useEffect(() => {
+    if (value.some((t) => Array.isArray(t.studentUids))) setChooseStudents(true)
+  }, [value])
 
   const targetFor = (classId: string) => value.find((t) => t.classId === classId)
 

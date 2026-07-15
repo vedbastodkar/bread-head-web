@@ -10,12 +10,14 @@ import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls
 import { ClassTargetPicker } from '../ClassTargetPicker'
 import { fanoutAssign, type ClassTarget } from '@/lib/dashboard/assignFanout'
 import { LessonPlayer } from '@/components/lesson/LessonPlayer'
+import { useToast } from '../../ToastProvider'
 
 // General, class-agnostic Lessons page. Replaces the per-class course page's
 // assign flow: browse the curriculum once, then assign lesson sets to any
 // one class at a time (Phase 1 — multi-class fan-out is a later task).
 export default function LessonsContentPage() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
+  const { notify, confirm } = useToast()
   const [openUnits, setOpenUnits] = useState<Set<number>>(new Set([1]))
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [targets, setTargets] = useState<ClassTarget[]>([])
@@ -146,11 +148,11 @@ export default function LessonsContentPage() {
 
   async function submit() {
     if (!user) return
-    if (selected.size === 0) { alert('Select at least one lesson.'); return }
-    if (targets.length === 0) { alert('Pick at least one class.'); return }
+    if (selected.size === 0) { notify('Select at least one lesson.', 'error'); return }
+    if (targets.length === 0) { notify('Pick at least one class.', 'error'); return }
     const emptyStudentsTarget = targets.find((t) => Array.isArray(t.studentUids) && t.studentUids.length === 0)
     if (emptyStudentsTarget) {
-      alert(`Pick at least one student for ${emptyStudentsTarget.className}, or turn off "Choose specific students".`)
+      notify(`Pick at least one student for ${emptyStudentsTarget.className}, or turn off "Choose specific students".`, 'error')
       return
     }
 
@@ -175,8 +177,9 @@ export default function LessonsContentPage() {
         await apiCall(user, `/api/classes/${t.classId}/assign?id=${editing.assignment.id}`, 'PATCH', payload)
         resetComposer()
         reload()
+        notify('Assignment updated.', 'success')
       } else {
-        if (targets.some((t) => t.dueDate && t.dueDate < today) && !confirm('One or more due dates are in the past — assign anyway?')) return
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past — assign anyway?' }))) return
         const dup = targets.some((t) => {
           const targetCls = activeClasses.find((c) => c.id === t.classId)
           const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
@@ -187,30 +190,32 @@ export default function LessonsContentPage() {
             (!useStudents || sameSet(a.studentUids ?? [], t.studentUids ?? [])),
           )
         })
-        if (dup && !confirm('An identical assignment already exists in at least one selected class. Add anyway?')) return
+        if (dup && !(await confirm({ message: 'An identical assignment already exists in at least one selected class. Add anyway?' }))) return
 
         const results = await fanoutAssign((cid, body) => apiCall(user, `/api/classes/${cid}/assign`, 'POST', body), basePayload, targets)
         const failed = results.filter((r) => !r.ok)
         if (failed.length === 0) {
           resetComposer()
+          notify(`Assigned to ${results.length} ${results.length === 1 ? 'class' : 'classes'}.`, 'success')
         } else {
           // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
           setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
-          alert(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '))
+          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
         }
         reload()
       }
-    } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
   }
 
   async function removeFromTarget(t: AssignedTarget) {
     if (!user) return
-    if (!confirm('Remove this assignment?')) return
+    if (!(await confirm({ message: 'Remove this assignment?', confirmLabel: 'Remove', destructive: true }))) return
     try {
       await apiCall(user, `/api/classes/${t.classId}/assign?id=${t.assignment.id}`, 'DELETE')
       if (editing?.assignment.id === t.assignment.id) resetComposer()
       reload()
-    } catch (e: any) { alert(e?.message) }
+      notify('Assignment removed.', 'success')
+    } catch { notify('Could not remove the assignment — please try again.', 'error') }
   }
 
   async function saveSettings() {
@@ -222,7 +227,8 @@ export default function LessonsContentPage() {
         lessonControls: classControls,
       })
       reload()
-    } catch (e: any) { alert(e?.message) } finally { setSavingSettings(false) }
+      notify('Settings saved.', 'success')
+    } catch { notify('Could not save settings — please try again.', 'error') } finally { setSavingSettings(false) }
   }
 
   const throughUnitLessonCount = CATALOG.find((u) => u.unit === throughUnit)?.lessonCount ?? 1

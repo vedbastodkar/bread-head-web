@@ -4,12 +4,14 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useDashboard, apiCall } from '../../useDashboard'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../../DashboardShell'
+import { useToast } from '../../ToastProvider'
 
 const GRADES = [6, 7, 8, 9, 10, 11, 12]
 
 export default function ClassSettings() {
   const { classId } = useParams<{ classId: string }>()
   const { data, err, loading, user, signOut, reload } = useDashboard()
+  const { notify, confirm } = useToast()
   const router = useRouter()
   const [name, setName] = useState('')
   const [grade, setGrade] = useState<number[]>([])
@@ -43,20 +45,20 @@ export default function ClassSettings() {
   const save = async () => {
     if (!user) return
     setBusy(true)
-    try { await apiCall(user, `/api/classes/${classId}`, 'PATCH', { name, grade }); reload(); router.push(`/dashboard/${classId}`) }
-    catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+    try { await apiCall(user, `/api/classes/${classId}`, 'PATCH', { name, grade }); reload(); notify('Class saved.', 'success'); router.push(`/dashboard/${classId}`) }
+    catch { notify('Could not save the class — please try again.', 'error') } finally { setBusy(false) }
   }
   const toggleArchive = async () => {
     if (!user) return
     setBusy(true)
-    try { await apiCall(user, `/api/classes/${classId}`, 'PATCH', { archived: !cls.archived }); reload(); router.push('/dashboard') }
-    catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+    try { await apiCall(user, `/api/classes/${classId}`, 'PATCH', { archived: !cls.archived }); reload(); notify(cls.archived ? 'Class unarchived.' : 'Class archived.', 'success'); router.push('/dashboard') }
+    catch { notify('Could not update the class — please try again.', 'error') } finally { setBusy(false) }
   }
   const del = async () => {
-    if (!user || !window.confirm('Delete this class? Student accounts are not deleted, only the class + roster.')) return
+    if (!user || !(await confirm({ title: 'Delete class', message: 'Delete this class? Student accounts are not deleted, only the class + roster.', confirmLabel: 'Delete', destructive: true }))) return
     setBusy(true)
-    try { await apiCall(user, `/api/classes/${classId}`, 'DELETE'); reload(); router.push('/dashboard') }
-    catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+    try { await apiCall(user, `/api/classes/${classId}`, 'DELETE'); reload(); notify('Class deleted.', 'success'); router.push('/dashboard') }
+    catch { notify('Could not delete the class — please try again.', 'error') } finally { setBusy(false) }
   }
   const addCoTeacher = async () => {
     if (!user || !coEmail.trim()) return
@@ -64,16 +66,16 @@ export default function ClassSettings() {
     try {
       const res = await apiCall(user, `/api/classes/${classId}/co-teachers`, 'POST', { email: coEmail.trim() })
       setTeachers((prev) => [...prev, res.teacher])
-      setCoEmail(''); reload()
-    } catch (e: any) { alert(e?.message) } finally { setCoBusy(false) }
+      setCoEmail(''); reload(); notify('Co-teacher added.', 'success')
+    } catch (e: any) { notify(e?.message || 'Could not add co-teacher — check the email.', 'error') } finally { setCoBusy(false) }
   }
   const removeCoTeacher = async (uid: string) => {
-    if (!user || !window.confirm('Remove this co-teacher?')) return
+    if (!user || !(await confirm({ message: 'Remove this co-teacher?', confirmLabel: 'Remove', destructive: true }))) return
     setCoBusy(true)
     try {
       await apiCall(user, `/api/classes/${classId}/co-teachers?uid=${uid}`, 'DELETE')
-      setTeachers((prev) => prev.filter((t) => t.uid !== uid)); reload()
-    } catch (e: any) { alert(e?.message) } finally { setCoBusy(false) }
+      setTeachers((prev) => prev.filter((t) => t.uid !== uid)); reload(); notify('Co-teacher removed.', 'success')
+    } catch { notify('Could not remove the co-teacher — please try again.', 'error') } finally { setCoBusy(false) }
   }
 
   return (

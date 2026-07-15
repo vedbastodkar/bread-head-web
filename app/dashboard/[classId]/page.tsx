@@ -7,6 +7,7 @@ import {
 } from '../useDashboard'
 import { JoinInfo } from '../parts'
 import { DashboardShell, DashboardLoading, DashboardSkeleton, DashboardError } from '../DashboardShell'
+import { useToast } from '../ToastProvider'
 import { CATALOG, TOTAL_LESSONS, unitName, completedByUnit } from '@/lib/curriculum/catalog'
 import { LIBRARY, getLibraryChallenge } from '@/lib/challenges/library'
 import { MoveStudentModal } from '../MoveStudentModal'
@@ -217,6 +218,7 @@ function QuickAssign({
   user: { getIdToken: () => Promise<string> } | null
   reload: () => void
 }) {
+  const { notify, confirm } = useToast()
   const today = new Date().toISOString().slice(0, 10)
   const [type, setType] = useState<QuickType>('challenge')
   const [challengeId, setChallengeId] = useState<string>(LIBRARY[0]?.id ?? '')
@@ -234,15 +236,15 @@ function QuickAssign({
 
   async function assign() {
     if (!user) return
-    if (dueDate && dueDate < today && !confirm('This due date is in the past — assign anyway?')) return
+    if (dueDate && dueDate < today && !(await confirm({ message: 'This due date is in the past — assign anyway?' }))) return
 
     let payload: Record<string, unknown>
     if (type === 'challenge') {
-      if (!challengeId) { alert('Pick a Budget Challenge.'); return }
+      if (!challengeId) { notify('Pick a Budget Challenge.', 'error'); return }
       payload = { type: 'challenge', challengeId, title: title.trim() || null }
     } else {
       const questions = journalQuestions.split('\n').map((q) => q.trim()).filter(Boolean)
-      if (questions.length === 0) { alert('Add at least one question (one per line).'); return }
+      if (questions.length === 0) { notify('Add at least one question (one per line).', 'error'); return }
       payload = { type: 'journal', journal: { questions, minWords: 0, minSeconds: 0 }, title: journalTitle.trim() || null }
     }
     payload.scope = 'class'
@@ -254,7 +256,8 @@ function QuickAssign({
       await apiCall(user, `/api/classes/${classId}/assign`, 'POST', payload)
       resetForm()
       reload()
-    } catch (e: any) { alert(e?.message) } finally { setBusy(false) }
+      notify(type === 'challenge' ? 'Budget Challenge assigned.' : 'Journal assigned.', 'success')
+    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
   }
 
   return (

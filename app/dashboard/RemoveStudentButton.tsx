@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { apiCall } from './useDashboard'
+import { useToast } from './ToastProvider'
 
-// Small text/danger-styled action, mirroring the Move button. Confirms via
-// window.confirm (destructive-but-reversible: unlinks from the class only,
+// Small text/danger-styled action, mirroring the Move button. Confirms via the
+// in-app confirm modal (destructive-but-reversible: unlinks from the class only,
 // the student's account and progress are untouched), posts to the
-// remove-student route, and shows inline error text (no alert()) on failure.
+// remove-student route, and shows inline error text on failure.
 export function RemoveStudentButton({
   classId, student, user, onRemoved,
 }: {
@@ -14,12 +15,13 @@ export function RemoveStudentButton({
   user: { getIdToken: () => Promise<string> } | null
   onRemoved: () => void
 }) {
+  const { confirm } = useToast()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
   async function remove() {
     if (!user) return
-    if (!window.confirm(`Remove ${student.name} from this class? Their account and progress are kept — they just leave this class.`)) return
+    if (!(await confirm({ message: `Remove ${student.name} from this class? Their account and progress are kept — they just leave this class.`, confirmLabel: 'Remove', destructive: true }))) return
     setBusy(true)
     setError('')
     try {
