@@ -224,7 +224,7 @@ export default function MyBudgetPage() {
       <main className="min-h-screen bg-bgSage pt-28 pb-20 px-4">
         <div className="max-w-md mx-auto text-center bg-white rounded-2xl shadow-sm p-8">
           <h1 className="font-display text-2xl text-textTitle mb-2">Couldn&rsquo;t load your budget</h1>
-          <p className="text-textTitle/65 text-sm mb-6">Something went wrong reaching your data. Please try again.</p>
+          <p className="text-textTitle/70 text-sm mb-6">Something went wrong reaching your data. Please try again.</p>
           <button
             onClick={() => { setReady(false); setReloadKey((k) => k + 1) }}
             className="px-6 py-3 rounded-xl bg-brandGreen text-white font-medium"
@@ -268,7 +268,7 @@ export default function MyBudgetPage() {
           </div>
         </div>
 
-        <Link href="/dashboard" className="text-sm text-textTitle/65 hover:text-textTitle">← Back to dashboard</Link>
+        <Link href="/dashboard" className="text-sm text-textTitle/70 hover:text-textTitle">← Back to dashboard</Link>
 
         {saveErr && (
           <div className="mt-4 rounded-xl bg-[#D94F4F]/10 border border-[#D94F4F]/30 text-[#B23838] text-sm px-4 py-3">{saveErr}</div>
@@ -281,25 +281,25 @@ export default function MyBudgetPage() {
         <section className="mt-6 rounded-3xl border border-textTitle/10 p-5" style={{ background: 'linear-gradient(180deg,#EEF2E4,#E1E9D0)' }}>
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">The workbench</p>
-            <p className="text-[12.5px] text-textTitle/65">Make a receipt, then <b className="text-textTitle">drag it into a box</b> — or tap the receipt, then tap a box.</p>
+            <p className="text-[12.5px] text-textTitle/70">Make a receipt, then <b className="text-textTitle">drag it into a box</b> — or tap the receipt, then tap a box.</p>
           </div>
 
           {/* printer */}
           <div className="bg-white border border-textTitle/10 rounded-2xl p-4 flex items-end gap-4 flex-wrap">
             <label className="flex flex-col gap-1.5">
-              <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Amount</span>
+              <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Amount</span>
               <span className="font-display italic text-textTitle text-2xl">$<input value={amt} onChange={(e) => setAmt(e.target.value)} inputMode="decimal" className="w-24 border-b-2 border-textTitle/15 focus:border-brandGreen outline-none font-display italic text-3xl bg-transparent" /></span>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">What for</span>
+              <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">What for</span>
               <input value={what} onChange={(e) => setWhat(e.target.value)} placeholder="Chipotle" className="w-44 border border-textTitle/15 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40" />
             </label>
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Need / Want / Save</span>
+              <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Need / Want / Save</span>
               <div className="inline-flex bg-[#DCE5C9] rounded-lg p-0.5">
                 {(['need', 'want', 'save'] as NwsLevel[]).map((l) => (
                   <button key={l} onClick={() => setNws(l)} aria-pressed={nws === l}
-                    className={`text-xs font-semibold px-3 py-1.5 rounded-md capitalize ${nws === l ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/65'}`}>{l}</button>
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-md capitalize ${nws === l ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/70'}`}>{l}</button>
                 ))}
               </div>
             </div>
@@ -309,7 +309,7 @@ export default function MyBudgetPage() {
           {/* tray */}
           <div className="min-h-[140px] flex gap-3.5 flex-wrap pt-4">
             {receipts.length === 0 && (
-              <p className="font-display italic text-sm text-textTitle/65 py-6">Your printed receipts land here. Drag one down into a box to file it.</p>
+              <p className="font-display italic text-sm text-textTitle/70 py-6">Your printed receipts land here. Drag one down into a box to file it.</p>
             )}
             {receipts.map((r) => (
               <ReceiptCard key={r.id} r={r} selected={selected === r.id}
@@ -320,10 +320,10 @@ export default function MyBudgetPage() {
           {/* boxes */}
           <div className="flex items-baseline justify-between mt-6 mb-1">
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">Your boxes</p>
-            <p className="text-[12.5px] text-textTitle/65">Each box is a category.</p>
+            <p className="text-[12.5px] text-textTitle/70">Each box is a category.</p>
           </div>
           {categories.length === 0 ? (
-            <p className="text-sm text-textTitle/65 py-4">No boxes yet — add one below to start filing receipts.</p>
+            <p className="text-sm text-textTitle/70 py-4">No boxes yet — add one below to start filing receipts.</p>
           ) : (
             <div className="grid gap-4 pt-2" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', perspective: '1400px' }}>
               {categories.map((c) => {
@@ -347,12 +347,12 @@ export default function MyBudgetPage() {
         <section className="mt-8 bg-white rounded-3xl border border-textTitle/10 p-6 md:p-8">
           <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">Your stats</p>
           <h2 className="font-display italic text-3xl text-textTitle mt-1 mb-1">Every dollar, accounted for.</h2>
-          <p className="text-textTitle/65 text-sm mb-7 max-w-[60ch]">The same numbers the iOS app tracks — recomputed live as you file receipts.</p>
+          <p className="text-textTitle/70 text-sm mb-7 max-w-[60ch]">The same numbers the iOS app tracks — recomputed live as you file receipts.</p>
 
           <div className="grid md:grid-cols-2 gap-5">
             <div className="border border-textTitle/10 rounded-2xl p-5">
-              <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-textTitle/65 mb-4">Spent vs. budget by box</h3>
-              {categories.length === 0 && <p className="text-sm text-textTitle/65">Add a box to see stats.</p>}
+              <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-textTitle/70 mb-4">Spent vs. budget by box</h3>
+              {categories.length === 0 && <p className="text-sm text-textTitle/70">Add a box to see stats.</p>}
               {categories.map((c) => {
                 const a = resolveAllocated(c, income)
                 const s = spent.get(c.id) ?? 0
@@ -367,7 +367,7 @@ export default function MyBudgetPage() {
                         <div className="h-full rounded-full" style={{ width: `${pct}%`, background: over ? '#D94F4F' : c.color }} />
                       </div>
                     </div>
-                    <span className="font-mono text-xs text-textTitle/65 tabular-nums whitespace-nowrap">{money(s)} / {money(a)}</span>
+                    <span className="font-mono text-xs text-textTitle/70 tabular-nums whitespace-nowrap">{money(s)} / {money(a)}</span>
                   </div>
                 )
               })}
@@ -375,12 +375,12 @@ export default function MyBudgetPage() {
 
             <div className="flex flex-col gap-5">
               <div className="border border-textTitle/10 rounded-2xl p-5">
-                <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-textTitle/65 mb-3">Allocated vs. unallocated</h3>
+                <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-textTitle/70 mb-3">Allocated vs. unallocated</h3>
                 <div className="h-8 rounded-lg overflow-hidden flex bg-[#DCE5C9]">
                   <span className="flex items-center justify-center font-mono text-[11px] text-white font-semibold" style={{ background: '#4A5D4A', width: `${allocPct}%` }}>{allocPct > 12 ? money(alloc) : ''}</span>
                   <span className="flex items-center justify-center font-mono text-[11px] font-semibold text-[#5c4a12]" style={{ background: '#D1A945', width: `${100 - allocPct}%` }}>{unalloc > 0 && 100 - allocPct > 8 ? money(unalloc) : ''}</span>
                 </div>
-                <div className="flex gap-4 text-xs text-textTitle/65 mt-2.5">
+                <div className="flex gap-4 text-xs text-textTitle/70 mt-2.5">
                   <span><i className="inline-block w-2.5 h-2.5 rounded-sm mr-1.5 align-middle" style={{ background: '#4A5D4A' }} />Given a job</span>
                   <span><i className="inline-block w-2.5 h-2.5 rounded-sm mr-1.5 align-middle" style={{ background: '#D1A945' }} />Unallocated</span>
                 </div>
@@ -392,13 +392,13 @@ export default function MyBudgetPage() {
                   <div className="absolute w-[70px] h-[70px] rounded-full bg-white" />
                   <b className="absolute font-display italic text-xl tabular-nums">{sRate}%</b>
                 </div>
-                <p className="text-sm text-textTitle/65 m-0">Savings rate — money you filed into <b>Save</b>, as a share of income. Target <b>20%</b>.</p>
+                <p className="text-sm text-textTitle/70 m-0">Savings rate — money you filed into <b>Save</b>, as a share of income. Target <b>20%</b>.</p>
               </div>
             </div>
           </div>
 
           <div className="border border-textTitle/10 rounded-2xl p-5 mt-5">
-            <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-textTitle/65 mb-3">Financial pulse</h3>
+            <h3 className="text-xs font-bold tracking-[0.1em] uppercase text-textTitle/70 mb-3">Financial pulse</h3>
             <div className="flex flex-col gap-2.5">
               <WarnRow live={warns.t1} tier="T1 · ADVISORY" cls="t1" text="You've used more than 80% of a box's budget." />
               <WarnRow live={warns.t2} tier="T2 · SIGNIFICANT" cls="t2" text="Over 60% of your spending is going to Wants." />
@@ -424,8 +424,8 @@ function ReceiptCard({ r, selected, onPointerDown }: { r: Receipt; selected: boo
       className={`w-[172px] p-3.5 pb-5 font-mono cursor-grab select-none rounded-t bg-[#FBF8EF] shadow-[0_6px_16px_rgba(26,46,26,0.14)] ${selected ? 'outline outline-2 outline-dashed outline-brandGreen outline-offset-2' : ''}`}
       style={{ touchAction: 'none' }}>
       <div className="font-sans font-bold text-[13px] text-textTitle border-b border-dashed border-textTitle/25 pb-1.5 mb-2 truncate">{r.name}</div>
-      <div className="flex justify-between text-[11px] text-textTitle/65"><span>ITEM</span><span>{money(r.amount)}</span></div>
-      <div className="flex justify-between text-[11px] text-textTitle/65"><span>TAX</span><span>$0.00</span></div>
+      <div className="flex justify-between text-[11px] text-textTitle/70"><span>ITEM</span><span>{money(r.amount)}</span></div>
+      <div className="flex justify-between text-[11px] text-textTitle/70"><span>TAX</span><span>$0.00</span></div>
       <div className="flex justify-between text-[15px] font-bold text-textTitle mt-2 pt-2 border-t border-dashed border-textTitle/25"><span>TOTAL</span><span>{money(r.amount)}</span></div>
       <span className={`inline-block text-[9.5px] font-sans font-bold tracking-wide uppercase px-2 py-0.5 rounded-full mt-2 ${nwsColor[r.nws]}`}>{r.nws}</span>
     </div>
@@ -481,7 +481,7 @@ function IncomeCard({ income, onSave }: { income: number; onSave: (v: number) =>
   return (
     <div className="mt-5 bg-white border border-textTitle/10 rounded-2xl p-4 flex items-end gap-3 flex-wrap">
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Your monthly income</span>
+        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Your monthly income</span>
         <span className="font-display italic text-2xl">$<input value={val} onChange={(e) => setVal(e.target.value)} inputMode="decimal" placeholder="600" className="w-28 border-b-2 border-textTitle/15 focus:border-brandGreen outline-none font-display italic text-2xl bg-transparent" /></span>
       </label>
       <button onClick={() => { const v = parseFloat(val); if (v >= 0) onSave(v) }} className="bg-brandGreen text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-[#3d4e3d]">Save</button>
@@ -503,11 +503,11 @@ function AddBoxForm({ onAdd, disabledColors }: { onAdd: (name: string, key: stri
   return (
     <div className="mt-5 bg-white border border-textTitle/10 rounded-2xl p-4 flex items-end gap-4 flex-wrap">
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Box name</span>
+        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Box name</span>
         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Food" className="w-40 border border-textTitle/15 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40" />
       </label>
       <div className="flex flex-col gap-1.5">
-        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Icon</span>
+        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Icon</span>
         <div className="flex gap-1.5 flex-wrap max-w-[220px]">
           {BOX_PRESETS.map((p) => (
             <button key={p.key} onClick={() => setPreset(p)} aria-pressed={preset.key === p.key}
@@ -517,12 +517,12 @@ function AddBoxForm({ onAdd, disabledColors }: { onAdd: (name: string, key: stri
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
-        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Budget</span>
+        <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Budget</span>
         <div className="flex items-center gap-2">
           <div className="inline-flex bg-[#DCE5C9] rounded-lg p-0.5">
             {(['percent', 'fixed'] as const).map((m) => (
               <button key={m} onClick={() => setMode(m)} aria-pressed={mode === m}
-                className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${mode === m ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/65'}`}>{m === 'percent' ? '% of income' : '$ fixed'}</button>
+                className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${mode === m ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/70'}`}>{m === 'percent' ? '% of income' : '$ fixed'}</button>
             ))}
           </div>
           <input value={value} onChange={(e) => setValue(e.target.value)} inputMode="decimal" className="w-16 border border-textTitle/15 rounded-lg px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40" />
@@ -530,7 +530,7 @@ function AddBoxForm({ onAdd, disabledColors }: { onAdd: (name: string, key: stri
       </div>
       <button onClick={() => { const v = parseFloat(value) || 0; onAdd(name, preset.key, preset.color, mode, v); setName(''); setOpen(false) }}
         className="bg-brandGreen text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-[#3d4e3d]">Add box</button>
-      <button onClick={() => setOpen(false)} className="text-sm text-textTitle/65 py-2.5">Cancel</button>
+      <button onClick={() => setOpen(false)} className="text-sm text-textTitle/70 py-2.5">Cancel</button>
     </div>
   )
 }
@@ -545,7 +545,7 @@ function WarnRow({ live, tier, cls, text }: { live: boolean; tier: string; cls: 
   return (
     <div className="flex gap-3 items-start rounded-xl px-3.5 py-3 text-[13px] transition-opacity" style={{ background: styles[cls].bg, opacity: live ? 1 : 0.5 }}>
       <span className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full whitespace-nowrap shrink-0" style={{ background: styles[cls].pill, color: pillText[cls] }}>{tier}</span>
-      <p className="m-0 text-textTitle/65">{text}</p>
+      <p className="m-0 text-textTitle/70">{text}</p>
     </div>
   )
 }

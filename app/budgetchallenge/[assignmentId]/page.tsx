@@ -67,7 +67,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">Bread Head · Budget Challenge</p>
           <h1 className="font-display italic text-textTitle text-4xl mt-2 mb-3">Challenge not found</h1>
-          <p className="text-textTitle/65 text-sm mb-6 max-w-[46ch] mx-auto">
+          <p className="text-textTitle/70 text-sm mb-6 max-w-[46ch] mx-auto">
             We couldn’t find this Budget Challenge for your account. It may have been unassigned, or the link is out of date.
           </p>
           <Link href="/dashboard" className="inline-block bg-brandGreen text-white font-bold text-sm px-5 py-3 rounded-xl hover:bg-[#3d4e3d]">
@@ -149,7 +149,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
           </div>
         </div>
         <p className="text-textTitle/70 text-[15px] leading-relaxed mt-3 max-w-[62ch]">{ch.prompt}</p>
-        <Link href="/dashboard" className="inline-block mt-3 text-sm text-textTitle/65 hover:text-textTitle">← Back to dashboard</Link>
+        <Link href="/dashboard" className="inline-block mt-3 text-sm text-textTitle/70 hover:text-textTitle">← Back to dashboard</Link>
 
         {/* ===== sticky live budget summary ===== */}
         <div className="sticky top-[76px] z-10 mt-6 bg-white/95 backdrop-blur border border-textTitle/10 rounded-2xl px-4 py-3 shadow-sm">
@@ -171,7 +171,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
           </div>
 
           {boxes.length === 0 ? (
-            <p className="text-textTitle/65 text-sm py-4 text-center">Add your first bucket — give every dollar a job.</p>
+            <p className="text-textTitle/70 text-sm py-4 text-center">Add your first bucket — give every dollar a job.</p>
           ) : (
             <ul className="flex flex-col gap-2.5">
               {boxes.map((box) => (
@@ -197,13 +197,13 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
         <section className="mt-6 bg-white rounded-3xl border border-textTitle/10 p-5">
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">Live checklist</p>
-            <span className="text-[11px] text-textTitle/65">Preview — your grade is set when you submit</span>
+            <span className="text-[11px] text-textTitle/70">Preview — your grade is set when you submit</span>
           </div>
           <ul className="flex flex-col gap-2">
             {result.perCriterion.map((c, i) => (
               <li key={i} className="flex items-center gap-2.5 text-[14px]">
                 <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
-                <span className={c.passed ? 'text-textTitle' : 'text-textTitle/65'}>{c.detail}</span>
+                <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
                 <span className="sr-only">{c.passed ? 'passing' : 'not yet passing'}</span>
               </li>
             ))}
@@ -245,7 +245,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
                 <h2 className="font-display italic text-2xl text-textTitle m-0">
                   {server.allPassed ? 'All criteria passed!' : 'Submitted — some criteria still open'}
                 </h2>
-                <p className="text-[13px] text-textTitle/65 m-0">
+                <p className="text-[13px] text-textTitle/70 m-0">
                   Score {Math.round(server.score * 100)}% · Status: {server.status === 'complete' ? 'Complete' : 'In progress'}
                 </p>
               </div>
@@ -254,7 +254,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
               {server.perCriterion.map((c, i) => (
                 <li key={i} className="flex items-center gap-2.5 text-[14px]">
                   <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
-                  <span className={c.passed ? 'text-textTitle' : 'text-textTitle/65'}>{c.detail}</span>
+                  <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
                 </li>
               ))}
             </ul>
@@ -274,7 +274,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
               className="bg-brandGreen text-white font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-[#3d4e3d] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accentGold">
               {pending ? 'Submitting…' : submittedSnapshot !== null ? 'Resubmit' : 'Submit challenge →'}
             </button>
-            <p className="text-[12px] text-textTitle/65 mt-2">Your grade is scored on the server — the checklist above is just a preview.</p>
+            <p className="text-[12px] text-textTitle/70 mt-2">Your grade is scored on the server — the checklist above is just a preview.</p>
           </div>
         )}
       </div>
@@ -294,18 +294,18 @@ function BoxRow({ box, income, autoFocus, onChange, onDelete }: {
   return (
     <div className="flex items-end gap-3 flex-wrap">
       <label className="flex flex-col gap-1">
-        <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Bucket name</span>
+        <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Bucket name</span>
         <input value={box.name} onChange={(e) => onChange({ name: e.target.value })}
           placeholder="What's this for? e.g. Rent, Groceries, Savings" autoFocus={autoFocus}
           className="w-56 border border-textTitle/15 rounded-lg px-2.5 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40" />
       </label>
 
       <div className="flex flex-col gap-1">
-        <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Type</span>
+        <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Type</span>
         <div className="inline-flex bg-[#DCE5C9] rounded-lg p-0.5" role="group" aria-label="Bucket type">
           {(['need', 'want', 'save'] as BoxRole[]).map((r) => (
             <button key={r} type="button" onClick={() => onChange({ role: r })} aria-pressed={box.role === r}
-              className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${box.role === r ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/65'}`}>
+              className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${box.role === r ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/70'}`}>
               {roleLabel[r]}
             </button>
           ))}
@@ -313,12 +313,12 @@ function BoxRow({ box, income, autoFocus, onChange, onDelete }: {
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Amount</span>
+        <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Amount</span>
         <div className="flex items-center gap-2">
           <div className="inline-flex bg-[#DCE5C9] rounded-lg p-0.5" role="group" aria-label="Amount mode">
             {(['fixed', 'percent'] as const).map((m) => (
               <button key={m} type="button" onClick={() => onChange({ targetMode: m, targetValue: clampAmount(box.targetValue, m, income) })} aria-pressed={box.targetMode === m}
-                className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${box.targetMode === m ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/65'}`}>
+                className={`text-xs font-semibold px-2.5 py-1.5 rounded-md ${box.targetMode === m ? 'bg-white text-textTitle shadow-sm' : 'text-textTitle/70'}`}>
                 {m === 'fixed' ? '$ fixed' : '% of income'}
               </button>
             ))}
@@ -327,7 +327,7 @@ function BoxRow({ box, income, autoFocus, onChange, onDelete }: {
             onChange={(e) => onChange({ targetValue: clampAmount(parseFloat(e.target.value) || 0, box.targetMode, income) })}
             className="w-16 border border-textTitle/15 rounded-lg px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40" />
           {box.targetMode === 'percent' && (
-            <span className="text-[12px] text-textTitle/65 tabular-nums whitespace-nowrap">= {money(dollars)}</span>
+            <span className="text-[12px] text-textTitle/70 tabular-nums whitespace-nowrap">= {money(dollars)}</span>
           )}
         </div>
       </div>

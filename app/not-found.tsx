@@ -72,7 +72,7 @@ export default function NotFound() {
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center text-center px-6 pointer-events-none">
         <div className="text-[11px] font-semibold uppercase tracking-[0.13em] text-brandGreen mb-3">Error 404</div>
         <h1 className="font-display text-4xl md:text-5xl text-textTitle mb-3">Couldn&rsquo;t find this page</h1>
-        <p className="text-textTitle/65 text-sm mb-7 max-w-md">
+        <p className="text-textTitle/70 text-sm mb-7 max-w-md">
           The page you&rsquo;re looking for moved, expired, or never existed. Meanwhile, enjoy the bread.
         </p>
         <Link

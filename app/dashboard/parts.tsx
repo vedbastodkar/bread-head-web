@@ -32,7 +32,7 @@ export function JoinInfo({ joinCode }: { joinCode: string | null }) {
   }
   return (
     <div className="flex items-center gap-2 text-xs">
-      <span className="text-textTitle/65">Join code</span>
+      <span className="text-textTitle/70">Join code</span>
       <button
         onClick={() => copy('code', joinCode)}
         className="font-medium text-textTitle bg-bgSage px-2 py-1 rounded-lg hover:bg-bgSage/70"
@@ -42,7 +42,7 @@ export function JoinInfo({ joinCode }: { joinCode: string | null }) {
       </button>
       <button
         onClick={() => copy('link', link)}
-        className="text-textTitle/65 underline hover:text-textTitle"
+        className="text-textTitle/70 underline hover:text-textTitle"
         title={link}
       >
         {copied === 'link' ? 'Copied!' : 'Copy link'}

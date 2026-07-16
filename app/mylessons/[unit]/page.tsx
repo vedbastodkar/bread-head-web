@@ -18,7 +18,7 @@ export default function UnitPage() {
   if (err) return <StudentError message={err} />
 
   const u = CATALOG.find((c) => c.unit === unit)
-  if (!u) return <StudentLoading><p className="text-textTitle/65">Unit not found.</p></StudentLoading>
+  if (!u) return <StudentLoading><p className="text-textTitle/70">Unit not found.</p></StudentLoading>
 
   const completed = new Set(data!.completedLessons)
   const ids = unitLessonIds(u.unit)
@@ -33,15 +33,15 @@ export default function UnitPage() {
 
   return (
     <StudentShell data={data!} user={user} signOut={signOut}>
-      <Link href="/mylessons" className="text-sm text-textTitle/65 hover:text-textTitle">← Personal Finance</Link>
+      <Link href="/mylessons" className="text-sm text-textTitle/70 hover:text-textTitle">← Personal Finance</Link>
       <h1 className="font-display text-3xl text-textTitle mt-1 mb-2">Unit {u.unit} — {u.name}</h1>
-      <p className="text-textTitle/65 mb-5 max-w-2xl">{u.description}</p>
+      <p className="text-textTitle/70 mb-5 max-w-2xl">{u.description}</p>
 
       <div className="flex items-center gap-3 mb-8">
         <button onClick={() => go(contLesson)} className="px-5 py-2.5 rounded-xl bg-brandGreen text-white text-sm">
           {doneCount === 0 ? 'Start' : doneCount === ids.length ? 'Review' : 'Continue'}
         </button>
-        <span className="text-sm text-textTitle/65">{doneCount}/{u.lessonCount} lessons complete</span>
+        <span className="text-sm text-textTitle/70">{doneCount}/{u.lessonCount} lessons complete</span>
       </div>
 
       {/* What you'll learn — aggregated unit objectives (from the Swift curriculum) */}
@@ -50,7 +50,7 @@ export default function UnitPage() {
         if (objs.length === 0) return null
         return (
           <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
-            <div className="text-xs uppercase tracking-wider text-textTitle/65 mb-3">What you’ll learn</div>
+            <div className="text-xs uppercase tracking-wider text-textTitle/70 mb-3">What you’ll learn</div>
             <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
               {objs.map((o, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-textTitle/80">
@@ -80,14 +80,14 @@ export default function UnitPage() {
                   <div className="flex-1 min-w-0">
                     <div className="text-textTitle font-medium">Lesson {lessonNo}: {name}</div>
                     {lessonSummary(u.unit, lessonNo) && (
-                      <div className="text-xs text-textTitle/65 mt-0.5">{lessonSummary(u.unit, lessonNo)}</div>
+                      <div className="text-xs text-textTitle/70 mt-0.5">{lessonSummary(u.unit, lessonNo)}</div>
                     )}
-                    <div className="text-[11px] text-textTitle/65 mt-0.5">
+                    <div className="text-[11px] text-textTitle/70 mt-0.5">
                       {state === 'done' ? 'Completed' : state === 'open' ? (doneCount === 0 && i === 0 ? 'Start here' : 'Ready') : 'Locked'}
                     </div>
                   </div>
                   {!locked && <span className="text-sm text-brandGreen shrink-0">{state === 'done' ? 'Review' : 'Open'} →</span>}
-                  {locked && <span className="text-textTitle/65 shrink-0"><LockIcon /></span>}
+                  {locked && <span className="text-textTitle/70 shrink-0"><LockIcon /></span>}
                 </div>
               )
               return locked
@@ -104,7 +104,7 @@ export default function UnitPage() {
 function StateBadge({ state, n }: { state: 'done' | 'open' | 'locked'; n: number }) {
   if (state === 'done') return <span className="w-8 h-8 rounded-full bg-brandGreen text-white flex items-center justify-center text-sm shrink-0">✓</span>
   if (state === 'open') return <span className="w-8 h-8 rounded-full bg-white ring-2 ring-brandGreen text-textTitle flex items-center justify-center text-sm shrink-0">{n}</span>
-  return <span className="w-8 h-8 rounded-full bg-bgSage text-textTitle/65 flex items-center justify-center shrink-0"><LockIcon /></span>
+  return <span className="w-8 h-8 rounded-full bg-bgSage text-textTitle/70 flex items-center justify-center shrink-0"><LockIcon /></span>
 }
 function LockIcon() {
   return (

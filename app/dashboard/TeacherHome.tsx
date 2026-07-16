@@ -30,7 +30,7 @@ export function TeacherHome() {
   return (
     <DashboardShell data={data!} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">All Classes</h1>
-      <p className="text-textTitle/65 text-sm mb-6">Everything across your classes at a glance.</p>
+      <p className="text-textTitle/70 text-sm mb-6">Everything across your classes at a glance.</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         <AggStat label="Classes" value={String(active.length)} />
@@ -47,7 +47,7 @@ export function TeacherHome() {
               <Link key={`${cls.id}-${s.uid}`} href={`/dashboard/${cls.id}/${s.uid}`}
                 className="bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition">
                 <div className="font-medium text-textTitle">{s.name}</div>
-                <div className="text-xs text-textTitle/65 mb-2">{cls.name}</div>
+                <div className="text-xs text-textTitle/70 mb-2">{cls.name}</div>
                 <div className="flex flex-wrap gap-1.5">
                   {flags.map((f) => (
                     <span key={f.type} className="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">{f.label}</span>
@@ -64,7 +64,7 @@ export function TeacherHome() {
           const on = (k === 'archived') === showArchived
           return (
             <button key={k} onClick={() => setShowArchived(k === 'archived')}
-              className={`px-3 py-1 rounded-lg ${on ? 'bg-brandGreen text-white' : 'text-textTitle/65 hover:bg-white'}`}>
+              className={`px-3 py-1 rounded-lg ${on ? 'bg-brandGreen text-white' : 'text-textTitle/70 hover:bg-white'}`}>
               {k === 'active' ? 'Teaching' : 'Archived'}
             </button>
           )
@@ -72,7 +72,7 @@ export function TeacherHome() {
       </div>
 
       {cards.length === 0 && (
-        <p className="text-textTitle/65">{showArchived ? 'No archived classes.' : 'No classes yet — use “New class”.'}</p>
+        <p className="text-textTitle/70">{showArchived ? 'No archived classes.' : 'No classes yet — use “New class”.'}</p>
       )}
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -104,7 +104,7 @@ function AggStat({ label, value, highlight }: { label: string; value: string; hi
   return (
     <div className="bg-white rounded-2xl shadow-sm p-4">
       <div className={`font-display text-3xl ${highlight ? 'text-red-600' : 'text-textTitle'}`}>{value}</div>
-      <div className="text-textTitle/65 text-xs mt-1">{label}</div>
+      <div className="text-textTitle/70 text-xs mt-1">{label}</div>
     </div>
   )
 }
@@ -112,7 +112,7 @@ function Stat({ label, value, highlight }: { label: string; value: string; highl
   return (
     <div>
       <div className={`font-display text-2xl ${highlight ? 'text-red-600' : 'text-textTitle'}`}>{value}</div>
-      <div className="text-textTitle/65 text-xs">{label}</div>
+      <div className="text-textTitle/70 text-xs">{label}</div>
     </div>
   )
 }

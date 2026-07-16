@@ -99,9 +99,9 @@ export default function GradesPage() {
       <h1 className="font-display text-3xl text-textTitle mb-6">Grades</h1>
 
       {rows === null ? (
-        <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/65 animate-pulse">Loading your grades…</div>
+        <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/70 animate-pulse">Loading your grades…</div>
       ) : rows.length === 0 ? (
-        <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/65">No graded work yet.</div>
+        <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/70">No graded work yet.</div>
       ) : (
         <div className="flex flex-col gap-4">
           {rows.map((r) => <GradeCard key={r.key} row={r} />)}
@@ -122,14 +122,14 @@ function GradeCard({ row }: { row: GradeRow }) {
   const statusStyle =
     status === 'Complete' ? 'bg-brandGreen/15 text-brandGreen'
       : status === 'In progress' ? 'bg-accentGold/20 text-[#9c7d1f]'
-      : 'bg-textTitle/10 text-textTitle/65'
+      : 'bg-textTitle/10 text-textTitle/70'
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-5">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="min-w-0">
           <h2 className="font-display italic text-xl text-textTitle truncate">{row.title}</h2>
-          <p className="text-xs text-textTitle/65 mt-0.5 capitalize">{row.type}</p>
+          <p className="text-xs text-textTitle/70 mt-0.5 capitalize">{row.type}</p>
         </div>
         <span className={`text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full shrink-0 ${statusStyle}`}>
           {status}
@@ -143,7 +143,7 @@ function GradeCard({ row }: { row: GradeRow }) {
             {perCriterion.map((c, i) => (
               <li key={i} className="flex items-center gap-2 text-[13.5px]">
                 <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
-                <span className={c.passed ? 'text-textTitle' : 'text-textTitle/65'}>{c.detail}</span>
+                <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
               </li>
             ))}
           </ul>
@@ -156,9 +156,9 @@ function GradeCard({ row }: { row: GradeRow }) {
         </div>
       )}
 
-      {submitted && <p className="text-xs text-textTitle/65 mt-3">Submitted {submitted}</p>}
+      {submitted && <p className="text-xs text-textTitle/70 mt-3">Submitted {submitted}</p>}
       {!submitted && row.dueDate && status !== 'Complete' && (
-        <p className="text-xs text-textTitle/65 mt-3">Due {row.dueDate}</p>
+        <p className="text-xs text-textTitle/70 mt-3">Due {row.dueDate}</p>
       )}
     </div>
   )

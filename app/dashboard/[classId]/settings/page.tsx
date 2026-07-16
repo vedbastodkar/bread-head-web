@@ -40,7 +40,7 @@ export default function ClassSettings() {
 
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
-  if (!cls) return <DashboardLoading><p className="text-textTitle/65">Class not found.</p></DashboardLoading>
+  if (!cls) return <DashboardLoading><p className="text-textTitle/70">Class not found.</p></DashboardLoading>
 
   const save = async () => {
     if (!user) return
@@ -80,7 +80,7 @@ export default function ClassSettings() {
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
-      <Link href={`/dashboard/${classId}`} className="text-sm text-textTitle/65 hover:text-textTitle">← {cls.name}</Link>
+      <Link href={`/dashboard/${classId}`} className="text-sm text-textTitle/70 hover:text-textTitle">← {cls.name}</Link>
       <h1 className="font-display text-3xl text-textTitle mt-1 mb-6">Class settings</h1>
 
       <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6 max-w-xl">
@@ -118,7 +118,7 @@ export default function ClassSettings() {
       {/* Co-teachers */}
       <div className="bg-white rounded-2xl shadow-sm p-6 mt-6 max-w-xl">
         <div className="text-sm font-medium text-textTitle mb-1">Co-teachers</div>
-        <p className="text-xs text-textTitle/65 mb-4">
+        <p className="text-xs text-textTitle/70 mb-4">
           {isOwner ? 'Add another teacher by email so they can view and manage this class.' : 'Only the class owner can add or remove co-teachers.'}
         </p>
 
@@ -127,15 +127,15 @@ export default function ClassSettings() {
             <div key={t.uid} className="flex items-center justify-between gap-2 text-sm">
               <div className="min-w-0">
                 <span className="text-textTitle">{t.name}</span>
-                {t.email && <span className="text-textTitle/65"> · {t.email}</span>}
-                {t.isOwner && <span className="ml-2 inline-block px-1.5 py-0.5 rounded bg-bgSage text-[10px] text-textTitle/65">Owner</span>}
+                {t.email && <span className="text-textTitle/70"> · {t.email}</span>}
+                {t.isOwner && <span className="ml-2 inline-block px-1.5 py-0.5 rounded bg-bgSage text-[10px] text-textTitle/70">Owner</span>}
               </div>
               {isOwner && !t.isOwner && (
                 <button onClick={() => removeCoTeacher(t.uid)} disabled={coBusy} className="text-xs text-red-600 hover:underline shrink-0">Remove</button>
               )}
             </div>
           ))}
-          {teachers.length === 0 && <p className="text-xs text-textTitle/65">No teachers listed yet.</p>}
+          {teachers.length === 0 && <p className="text-xs text-textTitle/70">No teachers listed yet.</p>}
         </div>
 
         {isOwner && (
@@ -156,7 +156,7 @@ export default function ClassSettings() {
       <div className="bg-white rounded-2xl shadow-sm p-6 mt-6 max-w-xl flex items-center justify-between">
         <div>
           <div className="text-sm text-textTitle">{cls.archived ? 'Unarchive class' : 'Archive class'}</div>
-          <div className="text-xs text-textTitle/65">Archived classes are hidden from the Teaching list.</div>
+          <div className="text-xs text-textTitle/70">Archived classes are hidden from the Teaching list.</div>
         </div>
         <button onClick={toggleArchive} disabled={busy} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/80 hover:bg-bgSage">
           {cls.archived ? 'Unarchive' : 'Archive'}

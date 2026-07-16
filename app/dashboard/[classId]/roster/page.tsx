@@ -16,7 +16,7 @@ export default function RosterPage() {
   if (loading || (!data && !err)) return <DashboardSkeleton />
   if (err) return <DashboardError message={err} />
   const cls = data!.find((c) => c.id === classId)
-  if (!cls) return <DashboardLoading><p className="text-textTitle/65">Class not found.</p></DashboardLoading>
+  if (!cls) return <DashboardLoading><p className="text-textTitle/70">Class not found.</p></DashboardLoading>
 
   const otherClasses = data!.filter((c) => c.id !== cls.id && !c.archived)
 
@@ -38,7 +38,7 @@ export default function RosterPage() {
       <div className="bg-white rounded-2xl shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-textTitle/65 border-b border-textTitle/10">
+            <tr className="text-left text-textTitle/70 border-b border-textTitle/10">
               <th className="py-3 px-4 font-medium">Student</th>
               <th className="py-3 px-4 font-medium">Lessons done</th>
               <th className="py-3 px-4 font-medium">Last active</th>
@@ -57,7 +57,7 @@ export default function RosterPage() {
                   <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
                   <td className="py-3 px-4 text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/65 hover:text-textTitle underline">Move</button>
+                      <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/70 hover:text-textTitle underline">Move</button>
                       <RemoveStudentButton classId={cls.id} student={s} user={user} onRemoved={reload} />
                     </div>
                   </td>
@@ -67,7 +67,7 @@ export default function RosterPage() {
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-textTitle/65 mt-3">
+      <p className="text-xs text-textTitle/70 mt-3">
         Students join with the class code above. Use <span className="font-medium">Print handout</span> for a page you can hand out or project.
       </p>
 

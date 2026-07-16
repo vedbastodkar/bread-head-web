@@ -38,7 +38,7 @@ export function CreateClassModal({
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
         <h3 className="font-display text-xl text-textTitle mb-1">New class</h3>
-        <p className="text-sm text-textTitle/65 mb-4">Give your class a name and pick the grade(s) it serves.</p>
+        <p className="text-sm text-textTitle/70 mb-4">Give your class a name and pick the grade(s) it serves.</p>
 
         <label className="block mb-4">
           <span className="block text-sm text-textTitle/70 mb-1">Class name</span>

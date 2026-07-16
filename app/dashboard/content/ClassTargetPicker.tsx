@@ -83,7 +83,7 @@ export function ClassTargetPicker({
               {checked && (
                 <div className="mt-2 pl-6 space-y-2">
                   <div>
-                    <label className="block text-xs text-textTitle/65 mb-1">Due date (optional)</label>
+                    <label className="block text-xs text-textTitle/70 mb-1">Due date (optional)</label>
                     <input
                       type="date"
                       value={target?.dueDate ?? ''}
@@ -106,7 +106,7 @@ export function ClassTargetPicker({
                         </label>
                       ))}
                       {c.students.length === 0 && (
-                        <p className="text-xs text-textTitle/65">No students in this class yet.</p>
+                        <p className="text-xs text-textTitle/70">No students in this class yet.</p>
                       )}
                     </div>
                   )}
@@ -115,7 +115,7 @@ export function ClassTargetPicker({
             </div>
           )
         })}
-        {classes.length === 0 && <p className="text-xs text-textTitle/65">No active classes.</p>}
+        {classes.length === 0 && <p className="text-xs text-textTitle/70">No active classes.</p>}
       </div>
     </div>
   )

@@ -44,13 +44,13 @@ export function DashboardShell({
           on ? 'bg-brandGreen text-white' : 'text-textTitle/75 hover:bg-bgSage'
         }`}
       >
-        <span className={on ? 'text-white' : 'text-textTitle/65'}>{icon}</span>
+        <span className={on ? 'text-white' : 'text-textTitle/70'}>{icon}</span>
         {label}
       </Link>
     )
   }
   const Group = ({ title }: { title: string }) => (
-    <div className="text-[11px] font-semibold tracking-wider text-textTitle/65 uppercase px-3 mt-4 mb-1">{title}</div>
+    <div className="text-[11px] font-semibold tracking-wider text-textTitle/70 uppercase px-3 mt-4 mb-1">{title}</div>
   )
 
   return (
@@ -63,7 +63,7 @@ export function DashboardShell({
         <aside className="w-full lg:w-72 shrink-0 order-1">
           <div className="lg:sticky lg:top-28 bg-white rounded-3xl shadow-sm p-4">
             <div className="px-2 pb-2">
-              <div className="text-xs text-textTitle/65">Signed in</div>
+              <div className="text-xs text-textTitle/70">Signed in</div>
               <div className="text-sm text-textTitle font-medium truncate">{user?.email}</div>
             </div>
 
@@ -89,7 +89,7 @@ export function DashboardShell({
                   </Link>
                 )
               })}
-              {active.length === 0 && <p className="px-3 py-2 text-xs text-textTitle/65">No active classes</p>}
+              {active.length === 0 && <p className="px-3 py-2 text-xs text-textTitle/70">No active classes</p>}
             </div>
 
             {current && (
@@ -117,14 +117,14 @@ export function DashboardShell({
                 className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition ${
                   pathname === '/account' ? 'bg-brandGreen text-white' : 'text-textTitle/75 hover:bg-bgSage'
                 }`}>
-                <span className={pathname === '/account' ? 'text-white' : 'text-textTitle/65'}><IconGear /></span>
+                <span className={pathname === '/account' ? 'text-white' : 'text-textTitle/70'}><IconGear /></span>
                 Account
               </Link>
               <Link href="/dashboard/courses"
                 className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition ${
                   pathname === '/dashboard/courses' ? 'bg-brandGreen text-white' : 'text-textTitle/75 hover:bg-bgSage'
                 }`}>
-                <span className={pathname === '/dashboard/courses' ? 'text-white' : 'text-textTitle/65'}><IconGrid /></span>
+                <span className={pathname === '/dashboard/courses' ? 'text-white' : 'text-textTitle/70'}><IconGrid /></span>
                 All classes
               </Link>
               <button onClick={() => setShowCreate(true)}
@@ -196,7 +196,7 @@ export function DashboardError({ message, onRetry }: { message?: string; onRetry
       <div className="max-w-md mx-auto bg-white rounded-3xl shadow-sm p-8 text-center mt-10">
         <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 text-xl">!</div>
         <h1 className="font-display text-xl text-textTitle mb-1">Couldn&apos;t load this</h1>
-        <p className="text-sm text-textTitle/65 mb-5 break-words">{message || 'Something went wrong. Please try again.'}</p>
+        <p className="text-sm text-textTitle/70 mb-5 break-words">{message || 'Something went wrong. Please try again.'}</p>
         <button
           onClick={() => (onRetry ? onRetry() : window.location.reload())}
           className="px-5 py-2.5 rounded-xl bg-brandGreen text-white text-sm"

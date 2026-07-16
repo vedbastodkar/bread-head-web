@@ -26,7 +26,7 @@ export default function ClassDetail() {
   if (err) return <DashboardError message={err} />
 
   const cls = data!.find((c) => c.id === classId)
-  if (!cls) return <DashboardLoading><p className="text-textTitle/65">Class not found.</p></DashboardLoading>
+  if (!cls) return <DashboardLoading><p className="text-textTitle/70">Class not found.</p></DashboardLoading>
 
   const needAttention = cls.students
     .map((s) => ({ s, flags: attentionFlags(s, cls.assignments) }))
@@ -63,7 +63,7 @@ export default function ClassDetail() {
           Needs attention {needAttention.length > 0 && <span className="text-red-600">· {needAttention.length}</span>}
         </h2>
         {needAttention.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/65">Everyone's on track — no students flagged.</div>
+          <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/70">Everyone's on track — no students flagged.</div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {needAttention.map(({ s, flags }) => (
@@ -83,10 +83,10 @@ export default function ClassDetail() {
       {/* Roster table */}
       <section className="mb-10">
         <div className="flex items-center gap-2 mb-3 text-sm">
-          <span className="text-textTitle/65">Sort</span>
+          <span className="text-textTitle/70">Sort</span>
           {(['done', 'name', 'active'] as SortKey[]).map((k) => (
             <button key={k} onClick={() => setSort(k)}
-              className={`px-2.5 py-1 rounded-lg ${sort === k ? 'bg-brandGreen text-white' : 'text-textTitle/65 hover:bg-white'}`}>
+              className={`px-2.5 py-1 rounded-lg ${sort === k ? 'bg-brandGreen text-white' : 'text-textTitle/70 hover:bg-white'}`}>
               {k === 'done' ? 'Progress' : k === 'name' ? 'Name' : 'Last active'}
             </button>
           ))}
@@ -94,13 +94,13 @@ export default function ClassDetail() {
         <div className="overflow-x-auto bg-white rounded-2xl shadow-sm">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-textTitle/65 border-b border-textTitle/10">
+              <tr className="text-left text-textTitle/70 border-b border-textTitle/10">
                 <th className="py-3 px-4 font-medium">Student</th>
                 <th className="py-3 px-4 font-medium">Lessons</th>
                 <th className="py-3 px-4 font-medium">Progress</th>
                 <th className="py-3 px-4 font-medium">Currently on</th>
                 <th className="py-3 px-4 font-medium">Last active</th>
-                <th className="py-3 px-4 font-medium text-right text-textTitle/65">XP</th>
+                <th className="py-3 px-4 font-medium text-right text-textTitle/70">XP</th>
                 <th className="py-3 px-4"></th>
               </tr>
             </thead>
@@ -120,15 +120,15 @@ export default function ClassDetail() {
                         <div className="flex-1 h-2 rounded-full bg-bgSage overflow-hidden">
                           <div className="h-full bg-brandGreen" style={{ width: `${pct}%` }} />
                         </div>
-                        <span className="text-textTitle/65 text-xs w-9 text-right">{pct}%</span>
+                        <span className="text-textTitle/70 text-xs w-9 text-right">{pct}%</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-textTitle/70">U{s.currentUnit}·L{s.currentLesson}<span className="text-textTitle/65"> — {unitName(s.currentUnit)}</span></td>
+                    <td className="py-3 px-4 text-textTitle/70">U{s.currentUnit}·L{s.currentLesson}<span className="text-textTitle/70"> — {unitName(s.currentUnit)}</span></td>
                     <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
-                    <td className="py-3 px-4 text-right text-textTitle/65">{s.xp.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right text-textTitle/70">{s.xp.toLocaleString()}</td>
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-3">
-                        <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/65 hover:text-textTitle underline">Move</button>
+                        <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/70 hover:text-textTitle underline">Move</button>
                         <RemoveStudentButton classId={cls.id} student={s} user={user} onRemoved={reload} />
                       </div>
                     </td>
@@ -173,7 +173,7 @@ function Heatmap({ students, classId, units }: { students: Student[]; classId: s
         <thead>
           <tr>
             <th></th>
-            {units.map((u) => (<th key={u.unit} className="text-textTitle/65 font-normal w-7" title={u.name}>U{u.unit}</th>))}
+            {units.map((u) => (<th key={u.unit} className="text-textTitle/70 font-normal w-7" title={u.name}>U{u.unit}</th>))}
           </tr>
         </thead>
         <tbody>
@@ -195,7 +195,7 @@ function Heatmap({ students, classId, units }: { students: Student[]; classId: s
           })}
         </tbody>
       </table>
-      <div className="flex items-center gap-3 mt-4 text-xs text-textTitle/65">
+      <div className="flex items-center gap-3 mt-4 text-xs text-textTitle/70">
         <span>Not started</span>
         {['#E6EDD9', '#B9C9A8', '#7C9070', '#4A5D4A'].map((c) => (<span key={c} className="w-4 h-4 rounded" style={{ background: c }} />))}
         <span>Complete</span>
@@ -267,7 +267,7 @@ function QuickAssign({
         <div className="flex items-center gap-2 mb-3">
           {(['challenge', 'journal', 'lesson'] as QuickType[]).map((t) => (
             <button key={t} onClick={() => setType(t)}
-              className={`px-2.5 py-1 rounded-lg text-sm capitalize ${type === t ? 'bg-brandGreen text-white' : 'text-textTitle/65 hover:bg-bgSage/60'}`}>
+              className={`px-2.5 py-1 rounded-lg text-sm capitalize ${type === t ? 'bg-brandGreen text-white' : 'text-textTitle/70 hover:bg-bgSage/60'}`}>
               {t}
             </button>
           ))}
@@ -283,7 +283,7 @@ function QuickAssign({
               {LIBRARY.map((c) => (<option key={c.id} value={c.id}>{c.title}</option>))}
             </select>
             {getLibraryChallenge(challengeId) && (
-              <p className="text-xs text-textTitle/65">{getLibraryChallenge(challengeId)!.prompt}</p>
+              <p className="text-xs text-textTitle/70">{getLibraryChallenge(challengeId)!.prompt}</p>
             )}
             <input
               type="text" value={title} onChange={(e) => setTitle(e.target.value)}
@@ -314,7 +314,7 @@ function QuickAssign({
 
         {type === 'lesson' && (
           <div className="mb-3">
-            <p className="text-sm text-textTitle/65 mb-2">Lesson selection lives on the general Lessons page.</p>
+            <p className="text-sm text-textTitle/70 mb-2">Lesson selection lives on the general Lessons page.</p>
             <Link href="/dashboard/content/lessons" className="text-xs text-brandGreen hover:underline inline-block">
               Assign lessons →
             </Link>

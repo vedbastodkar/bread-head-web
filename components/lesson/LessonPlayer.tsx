@@ -104,7 +104,7 @@ export function LessonPlayer({
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}
-          className="text-textTitle/65 mb-8 max-w-md relative z-10"
+          className="text-textTitle/70 mb-8 max-w-md relative z-10"
         >
           {lesson.name}
         </motion.p>
@@ -118,7 +118,7 @@ export function LessonPlayer({
         {onNext && nextLabel && (
           <motion.p
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.46 }}
-            className="text-textTitle/65 text-sm mt-4 relative z-10"
+            className="text-textTitle/70 text-sm mt-4 relative z-10"
           >
             {nextLabel}
           </motion.p>
@@ -148,13 +148,13 @@ export function LessonPlayer({
             onClick={() => setReporting(true)}
             aria-label="Report a problem"
             title="Report a problem"
-            className="w-9 h-9 flex items-center justify-center rounded-full text-textTitle/65 hover:text-textTitle hover:bg-white/60 transition"
+            className="w-9 h-9 flex items-center justify-center rounded-full text-textTitle/70 hover:text-textTitle hover:bg-white/60 transition"
           >
             <FlagIcon />
           </button>
           <button
             onClick={onExit}
-            className="flex items-center gap-2 text-sm text-textTitle/65 hover:text-textTitle px-3 py-1.5 rounded-full hover:bg-white/60 transition"
+            className="flex items-center gap-2 text-sm text-textTitle/70 hover:text-textTitle px-3 py-1.5 rounded-full hover:bg-white/60 transition"
           >
             <span aria-hidden className="text-base leading-none">✕</span> Exit
           </button>
@@ -299,7 +299,7 @@ function ReportModal({ lesson, slide, onSubmit, onClose }: {
         ) : (
           <>
             <h2 className="font-display text-xl text-textTitle mb-1">Report a problem</h2>
-            <p className="text-xs text-textTitle/65 mb-4">Lesson {lesson} · slide {slide}</p>
+            <p className="text-xs text-textTitle/70 mb-4">Lesson {lesson} · slide {slide}</p>
             <textarea
               value={text} onChange={(e) => setText(e.target.value)}
               placeholder="What looks wrong on this slide?"
@@ -333,7 +333,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
           <SlideImage src={slide.image} />
           <h1 className="font-display text-5xl md:text-6xl text-textTitle mb-6 leading-tight">{slide.title}</h1>
           {slide.subtitle && <p className="text-textTitle/70 text-xl md:text-2xl mb-3 leading-relaxed">{slide.subtitle}</p>}
-          {slide.detailText && <p className="text-textTitle/65 text-lg md:text-xl">{slide.detailText}</p>}
+          {slide.detailText && <p className="text-textTitle/70 text-lg md:text-xl">{slide.detailText}</p>}
         </div>
       )
     case 'objectives':
@@ -341,7 +341,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
         <div>
           <SlideImage src={slide.image} />
           <h2 className="font-display text-3xl md:text-4xl text-textTitle mb-2">{slide.headerTitle}</h2>
-          {slide.subheader && <p className="text-textTitle/65 text-lg mb-6">{slide.subheader}</p>}
+          {slide.subheader && <p className="text-textTitle/70 text-lg mb-6">{slide.subheader}</p>}
           <ul className="space-y-3">
             {slide.objectives.map((o, i) => (
               <li key={i} className="flex items-start gap-3 bg-white rounded-2xl p-5 shadow-sm">
@@ -368,7 +368,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'reflectPrompt':
       return (
         <div className="text-center">
-          <div className="text-sm uppercase tracking-wider text-textTitle/65 mb-3">{slide.mainTitle ?? 'Reflect & Think'}</div>
+          <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-3">{slide.mainTitle ?? 'Reflect & Think'}</div>
           <p className="font-display text-2xl md:text-3xl text-textTitle leading-relaxed">{slide.prompt}</p>
         </div>
       )
@@ -376,7 +376,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
       return (
         <div className="text-center">
           <SlideImage src={slide.image} />
-          {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/65 mb-2">{slide.eyebrow}</div>}
+          {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-2">{slide.eyebrow}</div>}
           {slide.title && <h2 className="font-display text-2xl md:text-3xl text-textTitle mb-4">{slide.title}</h2>}
           <div className="space-y-3">
             {slide.takeaways.map((t, i) => (
@@ -416,7 +416,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
                 <span className="text-2xl mt-0.5 leading-none w-8 text-center shrink-0">{sfEmoji(it.icon)}</span>
                 <div>
                   <div className="text-textTitle font-medium text-lg">{it.title}</div>
-                  {it.description && <div className="text-textTitle/65">{it.description}</div>}
+                  {it.description && <div className="text-textTitle/70">{it.description}</div>}
                 </div>
               </div>
             ))}
@@ -426,9 +426,9 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'stepByStep':
       return (
         <div>
-          {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/65 mb-1 text-center">{slide.eyebrow}</div>}
+          {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-1 text-center">{slide.eyebrow}</div>}
           <h2 className="font-display text-2xl md:text-3xl text-textTitle mb-1 text-center">{slide.title}</h2>
-          {slide.subtitle && <p className="text-textTitle/65 text-lg mb-6 text-center">{slide.subtitle}</p>}
+          {slide.subtitle && <p className="text-textTitle/70 text-lg mb-6 text-center">{slide.subtitle}</p>}
           <ol className="space-y-3">
             {slide.steps.map((s, i) => (
               <li key={i} className="flex items-start gap-3 bg-white rounded-2xl p-5 shadow-sm">
@@ -449,7 +449,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
               {slide.pros.map((p, i) => (
                 <div key={i} className="bg-white rounded-2xl p-4 shadow-sm mb-2">
                   <div className="text-textTitle font-medium">{p.title}</div>
-                  {p.description && <div className="text-textTitle/65 text-sm">{p.description}</div>}
+                  {p.description && <div className="text-textTitle/70 text-sm">{p.description}</div>}
                 </div>
               ))}
             </div>
@@ -458,7 +458,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
               {slide.cons.map((c, i) => (
                 <div key={i} className="bg-white rounded-2xl p-4 shadow-sm mb-2">
                   <div className="text-textTitle font-medium">{c.title}</div>
-                  {c.description && <div className="text-textTitle/65 text-sm">{c.description}</div>}
+                  {c.description && <div className="text-textTitle/70 text-sm">{c.description}</div>}
                 </div>
               ))}
             </div>
@@ -468,7 +468,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'contextualComparison':
       return (
         <div>
-          {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/65 mb-1 text-center">{slide.eyebrow}</div>}
+          {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-1 text-center">{slide.eyebrow}</div>}
           <h2 className="font-display text-2xl text-textTitle mb-6 text-center">{slide.title}</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[{ t: slide.leftTitle, b: slide.leftBody }, { t: slide.rightTitle, b: slide.rightBody }].map((c, i) => (
@@ -478,20 +478,20 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
               </div>
             ))}
           </div>
-          {slide.footer && <p className="text-center text-textTitle/65 text-sm mt-4">{slide.footer}</p>}
+          {slide.footer && <p className="text-center text-textTitle/70 text-sm mt-4">{slide.footer}</p>}
         </div>
       )
     case 'visualAnalogy':
       return (
         <div className="text-center">
           {slide.title && <h2 className="font-display text-2xl text-textTitle mb-1">{slide.title}</h2>}
-          {slide.subtitle && <p className="text-textTitle/65 mb-6">{slide.subtitle}</p>}
+          {slide.subtitle && <p className="text-textTitle/70 mb-6">{slide.subtitle}</p>}
           <div className="grid gap-3">
             {slide.contexts.map((c, i) => (
               <div key={i} className="bg-white rounded-2xl p-4 shadow-sm">
                 {c.emoji && <div className="text-2xl mb-1">{c.emoji}</div>}
                 {c.label && <div className="text-textTitle font-medium">{c.label}</div>}
-                {c.text && <div className="text-textTitle/65 text-sm">{c.text}</div>}
+                {c.text && <div className="text-textTitle/70 text-sm">{c.text}</div>}
               </div>
             ))}
           </div>
@@ -502,7 +502,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
         <div className="text-center">
           <SlideImage src={slide.image} />
           <h2 className="font-display text-2xl text-textTitle mb-2">{slide.title}</h2>
-          {slide.caption && <p className="text-textTitle/65">{slide.caption}</p>}
+          {slide.caption && <p className="text-textTitle/70">{slide.caption}</p>}
         </div>
       )
     case 'interactiveGrowthVisual':
@@ -511,7 +511,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
       return (
         <div className="text-center">
           <p className="font-display text-2xl italic text-textTitle">“{slide.quote}”</p>
-          {slide.author && <p className="text-textTitle/65 mt-3">— {slide.author}</p>}
+          {slide.author && <p className="text-textTitle/70 mt-3">— {slide.author}</p>}
         </div>
       )
     case 'callToAction':
@@ -541,7 +541,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
           {slide.title && <h2 className="font-display text-2xl text-textTitle mb-6 text-center">{slide.title}</h2>}
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-textTitle/20">
-              <div className="text-xs uppercase tracking-wider text-textTitle/65 mb-2">Before</div>
+              <div className="text-xs uppercase tracking-wider text-textTitle/70 mb-2">Before</div>
               <p className="text-textTitle/80">{slide.beforeText}</p>
             </div>
             <div className="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-brandGreen">
@@ -593,7 +593,7 @@ function TrueFalse({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide
   const correct = picked !== null && picked === slide.correctAnswer
   return (
     <div className="text-center">
-      <div className="text-sm uppercase tracking-wider text-textTitle/65 mb-3">True or False</div>
+      <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-3">True or False</div>
       <h2 className="font-display text-2xl md:text-3xl text-textTitle mb-6">{slide.question}</h2>
       <div className="flex gap-3 justify-center mb-5">
         {[true, false].map((v) => (
@@ -628,7 +628,7 @@ function MultipleChoice({ slide, onAnswered, requireCorrect }: { slide: Extract<
   const alreadyCorrect = picked !== null && correctSet.has(picked)
   return (
     <div>
-      {slide.title && <div className="text-sm uppercase tracking-wider text-textTitle/65 mb-2">{slide.title}</div>}
+      {slide.title && <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-2">{slide.title}</div>}
       <h2 className="font-display text-2xl md:text-3xl text-textTitle mb-6">{slide.question}</h2>
       <div className="space-y-3">
         {slide.options.map((o, i) => {
@@ -788,7 +788,7 @@ function MatchConcept({ slide, onAnswered }: { slide: Extract<Slide, { type: 'ma
             return (
               <button key={c} onClick={() => !done && setPickedConcept(active ? null : c)} disabled={done}
                 className={`w-full text-left px-4 py-3 rounded-2xl shadow-sm text-sm transition ${
-                  done ? 'bg-brandGreen/15 text-textTitle/65' : active ? 'bg-brandGreen text-white' : 'bg-white text-textTitle hover:bg-white/70'
+                  done ? 'bg-brandGreen/15 text-textTitle/70' : active ? 'bg-brandGreen text-white' : 'bg-white text-textTitle hover:bg-white/70'
                 }`}>
                 {c}
               </button>
@@ -802,7 +802,7 @@ function MatchConcept({ slide, onAnswered }: { slide: Extract<Slide, { type: 'ma
             return (
               <button key={d} onClick={() => chooseDef(d)} disabled={done || !pickedConcept}
                 className={`w-full text-left px-4 py-3 rounded-2xl shadow-sm text-sm transition ${
-                  done ? 'bg-brandGreen/15 text-textTitle/65' : isWrong ? 'bg-red-500 text-white' : 'bg-white text-textTitle hover:bg-white/70 disabled:opacity-60'
+                  done ? 'bg-brandGreen/15 text-textTitle/70' : isWrong ? 'bg-red-500 text-white' : 'bg-white text-textTitle hover:bg-white/70 disabled:opacity-60'
                 }`}>
                 {d}
               </button>
@@ -810,7 +810,7 @@ function MatchConcept({ slide, onAnswered }: { slide: Extract<Slide, { type: 'ma
           })}
         </div>
       </div>
-      <p className="text-center text-xs text-textTitle/65 mt-4">
+      <p className="text-center text-xs text-textTitle/70 mt-4">
         {Object.keys(matched).length === slide.concepts.length ? 'All matched!' : pickedConcept ? 'Now pick its match →' : 'Pick a term, then its match.'}
       </p>
     </div>
@@ -860,7 +860,7 @@ function InteractiveGrowthVisual({ slide, onAnswered }: { slide: Extract<Slide, 
   return (
     <div className="flex flex-col items-center gap-5">
       <h2 className="font-display text-2xl md:text-3xl text-textTitle text-center">{slide.title}</h2>
-      {slide.subtitle && <p className="text-sm text-textTitle/65 text-center">{slide.subtitle}</p>}
+      {slide.subtitle && <p className="text-sm text-textTitle/70 text-center">{slide.subtitle}</p>}
 
       <div className="w-full max-w-md flex flex-col gap-4">
         <label className="flex flex-col gap-1">
@@ -871,7 +871,7 @@ function InteractiveGrowthVisual({ slide, onAnswered }: { slide: Extract<Slide, 
           <div className="flex justify-between text-sm"><span className="font-medium text-textTitle">Annual return</span><span className="font-bold text-brandGreen">{ratePct.toFixed(1)}%</span></div>
           <input type="range" min={1} max={15} step={0.5} value={ratePct} onChange={(e) => { setRatePct(Number(e.target.value)); touch() }} className="accent-brandGreen" />
         </label>
-        <div className="text-xs text-textTitle/65 text-center">plus ${monthly}/mo, compounded monthly over {years} years</div>
+        <div className="text-xs text-textTitle/70 text-center">plus ${monthly}/mo, compounded monthly over {years} years</div>
       </div>
 
       <div className="w-full max-w-md rounded-2xl bg-white shadow-sm p-4">
@@ -882,7 +882,7 @@ function InteractiveGrowthVisual({ slide, onAnswered }: { slide: Extract<Slide, 
               <text x={W - 2} y={g.y - 2} textAnchor="end" className="fill-textTitle/40" fontSize={9}>{fmt(g.v)}</text>
             </g>
           ))}
-          <path d={path(late)} fill="none" className="text-textTitle/65" stroke="currentColor" strokeWidth={2.5} />
+          <path d={path(late)} fill="none" className="text-textTitle/70" stroke="currentColor" strokeWidth={2.5} />
           <path d={path(early)} fill="none" className="text-brandGreen" stroke="currentColor" strokeWidth={3} />
         </svg>
         <div className="flex items-center justify-center gap-5 text-xs mt-1">
@@ -893,7 +893,7 @@ function InteractiveGrowthVisual({ slide, onAnswered }: { slide: Extract<Slide, 
 
       <div className="text-center">
         <div className="font-display text-2xl text-brandGreen">Starting early = {fmt(delta)} more</div>
-        <div className="text-sm text-textTitle/65">{slide.summaryMessage}</div>
+        <div className="text-sm text-textTitle/70">{slide.summaryMessage}</div>
       </div>
     </div>
   )
