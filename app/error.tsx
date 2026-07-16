@@ -18,7 +18,7 @@ export default function Error({
         <h1 className="font-display text-4xl text-textTitle mb-3">
           Something went wrong
         </h1>
-        <p className="text-textTitle/60 text-sm mb-7">
+        <p className="text-textTitle/65 text-sm mb-7">
           An unexpected error occurred. Try refreshing the page or go back home.
         </p>
 
@@ -38,7 +38,7 @@ export default function Error({
         </div>
 
         {process.env.NODE_ENV === 'development' && error.message && (
-          <p className="mt-6 text-xs text-textTitle/40 pt-6 border-t border-bgSage">
+          <p className="mt-6 text-xs text-textTitle/65 pt-6 border-t border-bgSage">
             {error.message}
           </p>
         )}

@@ -41,10 +41,10 @@ export function MoveStudentModal({
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
         <h3 className="font-display text-xl text-textTitle mb-1">Move student</h3>
-        <p className="text-sm text-textTitle/60 mb-4">Move <span className="font-medium text-textTitle">{student.name}</span> to another class.</p>
+        <p className="text-sm text-textTitle/65 mb-4">Move <span className="font-medium text-textTitle">{student.name}</span> to another class.</p>
 
         {destinations.length === 0 ? (
-          <p className="text-sm text-textTitle/60 mb-4">No other class to move to. Create one first.</p>
+          <p className="text-sm text-textTitle/65 mb-4">No other class to move to. Create one first.</p>
         ) : (
           <select
             value={toClassId}

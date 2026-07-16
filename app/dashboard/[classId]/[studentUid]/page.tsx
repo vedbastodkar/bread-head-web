@@ -14,7 +14,7 @@ export default function StudentDetail() {
 
   const cls = data!.find((c) => c.id === classId)
   const s = cls?.students.find((x) => x.uid === studentUid)
-  if (!cls || !s) return <DashboardLoading><p className="text-textTitle/60">Student not found.</p></DashboardLoading>
+  if (!cls || !s) return <DashboardLoading><p className="text-textTitle/65">Student not found.</p></DashboardLoading>
 
   const doneSet = new Set(s.completedLessons)
   const d = daysSince(s.lastActive)
@@ -27,20 +27,20 @@ export default function StudentDetail() {
 
   return (
     <DashboardShell data={data!} activeClassId={cls.id} user={user} signOut={signOut} reload={reload}>
-      <Link href={`/dashboard/${cls.id}`} className="text-sm text-textTitle/50 hover:text-textTitle">← {cls.name}</Link>
+      <Link href={`/dashboard/${cls.id}`} className="text-sm text-textTitle/65 hover:text-textTitle">← {cls.name}</Link>
       <h1 className="font-display text-3xl text-textTitle mt-1 mb-1">{s.name}</h1>
-      <p className="text-textTitle/60 text-sm mb-6">
+      <p className="text-textTitle/65 text-sm mb-6">
         {s.completedLessons.length} / {TOTAL_LESSONS} lessons · {pctComplete(s)}% ·
         {' '}currently on U{s.currentUnit}·L{s.currentLesson} — {unitName(s.currentUnit)} ·
         {' '}last active {d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}
-        <span className="text-textTitle/30"> · {s.xp.toLocaleString()} XP · L{s.level}</span>
+        <span className="text-textTitle/65"> · {s.xp.toLocaleString()} XP · L{s.level}</span>
       </p>
 
       {lessonAssignments.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
           <div className="flex items-center justify-between mb-3">
             <div className="font-medium text-textTitle">Lessons assigned</div>
-            <div className="text-[11px] text-textTitle/40">Completion counts only lessons finished while assigned</div>
+            <div className="text-[11px] text-textTitle/65">Completion counts only lessons finished while assigned</div>
           </div>
           <div className="space-y-2">
             {lessonAssignments.map((a) => {
@@ -53,13 +53,13 @@ export default function StudentDetail() {
                 <div key={a.id} className="flex items-center justify-between text-sm border-b border-textTitle/5 pb-2 last:border-0">
                   <div className="min-w-0">
                     <div className="text-textTitle truncate">{a.title || `${total} lesson${total > 1 ? 's' : ''}`}</div>
-                    {a.dueDate && <div className="text-xs text-textTitle/45">Due {a.dueDate}</div>}
+                    {a.dueDate && <div className="text-xs text-textTitle/65">Due {a.dueDate}</div>}
                   </div>
                   <div className="text-right shrink-0">
-                    <div className={`text-xs font-medium ${done ? 'text-brandGreen' : inProgress ? 'text-accentGold' : 'text-textTitle/40'}`}>
+                    <div className={`text-xs font-medium ${done ? 'text-brandGreen' : inProgress ? 'text-accentGold' : 'text-textTitle/65'}`}>
                       {done ? 'Complete' : inProgress ? 'In progress' : 'Not started'}
                     </div>
-                    {total > 1 && <div className="text-[11px] text-textTitle/45">{doneCount}/{total} lessons</div>}
+                    {total > 1 && <div className="text-[11px] text-textTitle/65">{doneCount}/{total} lessons</div>}
                   </div>
                 </div>
               )
@@ -72,7 +72,7 @@ export default function StudentDetail() {
         <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
           <div className="flex items-center justify-between mb-3">
             <div className="font-medium text-textTitle">Journal</div>
-            <div className="text-[11px] text-textTitle/40">Responses are private — counts only</div>
+            <div className="text-[11px] text-textTitle/65">Responses are private — counts only</div>
           </div>
           <div className="space-y-2">
             {journalAssignments.map((a) => {
@@ -82,13 +82,13 @@ export default function StudentDetail() {
                 <div key={a.id} className="flex items-center justify-between text-sm border-b border-textTitle/5 pb-2 last:border-0">
                   <div className="min-w-0">
                     <div className="text-textTitle truncate">{a.title || `Journal · ${a.journal?.questions.length ?? 0} question${(a.journal?.questions.length ?? 0) > 1 ? 's' : ''}`}</div>
-                    {a.dueDate && <div className="text-xs text-textTitle/45">Due {a.dueDate}</div>}
+                    {a.dueDate && <div className="text-xs text-textTitle/65">Due {a.dueDate}</div>}
                   </div>
                   <div className="text-right shrink-0">
-                    <div className={`text-xs font-medium ${done ? 'text-brandGreen' : sub ? 'text-accentGold' : 'text-textTitle/40'}`}>
+                    <div className={`text-xs font-medium ${done ? 'text-brandGreen' : sub ? 'text-accentGold' : 'text-textTitle/65'}`}>
                       {done ? 'Complete' : sub ? 'In progress' : 'Not started'}
                     </div>
-                    {sub && <div className="text-[11px] text-textTitle/45">{sub.wordCount ?? 0} words · {Math.floor((sub.secondsSpent ?? 0) / 60)}m</div>}
+                    {sub && <div className="text-[11px] text-textTitle/65">{sub.wordCount ?? 0} words · {Math.floor((sub.secondsSpent ?? 0) / 60)}m</div>}
                   </div>
                 </div>
               )
@@ -107,9 +107,9 @@ export default function StudentDetail() {
             <div key={u.unit} className="bg-white rounded-2xl shadow-sm p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="font-medium text-textTitle">
-                  <span className="text-textTitle/40 mr-2">U{u.unit}</span>{u.name}
+                  <span className="text-textTitle/65 mr-2">U{u.unit}</span>{u.name}
                 </div>
-                <div className="text-xs text-textTitle/50">{done}/{u.lessonCount}</div>
+                <div className="text-xs text-textTitle/65">{done}/{u.lessonCount}</div>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {ids.map((id, i) => {
@@ -135,7 +135,7 @@ export default function StudentDetail() {
         })}
       </div>
 
-      <div className="flex items-center gap-3 mt-5 text-xs text-textTitle/50">
+      <div className="flex items-center gap-3 mt-5 text-xs text-textTitle/65">
         <span className="w-4 h-4 rounded" style={{ background: '#4A5D4A' }} /><span>Complete</span>
         <span className="w-4 h-4 rounded" style={{ background: '#D1A945' }} /><span>Current</span>
         <span className="w-4 h-4 rounded" style={{ background: '#E6EDD9' }} /><span>Not started</span>

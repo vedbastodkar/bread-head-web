@@ -99,10 +99,10 @@ export default function BudgetOnboarding({ onComplete }: { onComplete: (r: Onboa
       {/* nav */}
       <div className="max-w-2xl mx-auto w-full mt-10 flex items-center gap-3">
         {i > 0 && (
-          <button onClick={back} disabled={busy} className="text-sm font-semibold text-textTitle/50 hover:text-textTitle px-4 py-3 disabled:opacity-50">← Back</button>
+          <button onClick={back} disabled={busy} className="text-sm font-semibold text-textTitle/65 hover:text-textTitle px-4 py-3 disabled:opacity-50">← Back</button>
         )}
         {i <= CONCEPT_LAST && (
-          <button onClick={skipIntro} className="text-sm text-textTitle/40 hover:text-textTitle underline">Skip intro</button>
+          <button onClick={skipIntro} className="text-sm text-textTitle/65 hover:text-textTitle underline">Skip intro</button>
         )}
         <div className="ml-auto">
           {step === 'ready' ? (
@@ -128,10 +128,10 @@ function H({ children }: { children: React.ReactNode }) {
   return <h1 className="font-display italic text-textTitle text-3xl md:text-4xl leading-tight mt-1">{children}</h1>
 }
 function Sub({ children }: { children: React.ReactNode }) {
-  return <p className="text-textTitle/60 text-[15px] leading-relaxed mt-3 max-w-[52ch]">{children}</p>
+  return <p className="text-textTitle/65 text-[15px] leading-relaxed mt-3 max-w-[52ch]">{children}</p>
 }
 function Note({ children }: { children: React.ReactNode }) {
-  return <p className="mt-6 text-[13px] text-textTitle/55 bg-white/60 border border-textTitle/10 rounded-xl px-4 py-3">{children}</p>
+  return <p className="mt-6 text-[13px] text-textTitle/65 bg-white/60 border border-textTitle/10 rounded-xl px-4 py-3">{children}</p>
 }
 function Badge({ icon, text }: { icon: string; text: string }) {
   return (
@@ -164,7 +164,7 @@ function How1() {
       <H>Step 1 · Available Bread</H>
       <Sub>Think of this as your monthly money pool — everything you have to work with.</Sub>
       <div className="mt-6 bg-white border border-textTitle/10 rounded-2xl p-5">
-        <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-textTitle/40 mb-2">Examples</p>
+        <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-textTitle/65 mb-2">Examples</p>
         <ul className="text-[14px] text-textTitle/70 space-y-1.5">
           <li>• $200 allowance per month</li>
           <li>• $400 from a part-time job</li>
@@ -195,12 +195,12 @@ function How3() {
         <div className="bg-white border border-textTitle/10 rounded-2xl p-5">
           <div className="text-2xl mb-2">🧾</div>
           <p className="font-semibold text-[14px] text-textTitle">1 · Print a receipt</p>
-          <p className="text-[13px] text-textTitle/60 mt-1">Enter an amount and what it was for.</p>
+          <p className="text-[13px] text-textTitle/65 mt-1">Enter an amount and what it was for.</p>
         </div>
         <div className="bg-white border border-textTitle/10 rounded-2xl p-5">
           <div className="text-2xl mb-2">📦</div>
           <p className="font-semibold text-[14px] text-textTitle">2 · Drag it into a box</p>
-          <p className="text-[13px] text-textTitle/60 mt-1">Drop the receipt onto a category to file it.</p>
+          <p className="text-[13px] text-textTitle/65 mt-1">Drop the receipt onto a category to file it.</p>
         </div>
       </div>
       <Note>Your progress bars update instantly — you always know exactly how much you have left. 💵 You can add income too, like birthday money, bonuses, or cash gifts.</Note>
@@ -244,7 +244,7 @@ function Overview() {
             <span className="shrink-0 w-7 h-7 grid place-items-center rounded-full bg-brandGreen text-white font-bold text-sm">{it.n}</span>
             <div>
               <p className="font-semibold text-[14px] text-textTitle">{it.t}</p>
-              <p className="text-[13px] text-textTitle/60">{it.d}</p>
+              <p className="text-[13px] text-textTitle/65">{it.d}</p>
             </div>
           </div>
         ))}
@@ -261,7 +261,7 @@ function Income({ value, onChange }: { value: string; onChange: (v: string) => v
       <Sub>Enter how much you expect to earn — your boxes scale automatically.</Sub>
       <div className="mt-7 bg-white border border-textTitle/10 rounded-2xl p-6">
         <label className="flex flex-col gap-2">
-          <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/40">Monthly amount</span>
+          <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/65">Monthly amount</span>
           <span className="font-display italic text-4xl text-textTitle">$
             <input autoFocus value={value} onChange={(e) => onChange(e.target.value)} inputMode="decimal" placeholder="600"
               className="w-40 border-b-2 border-textTitle/15 focus:border-brandGreen outline-none font-display italic text-4xl bg-transparent" />
@@ -290,7 +290,7 @@ function Templates({ selected, onSelect }: { selected: string | null; onSelect: 
                   {on && <span className="w-2 h-2 rounded-full bg-white" />}
                 </span>
               </div>
-              <p className="text-[13px] text-textTitle/60 mt-1.5 leading-relaxed">{t.description}</p>
+              <p className="text-[13px] text-textTitle/65 mt-1.5 leading-relaxed">{t.description}</p>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {t.categories.map((c) => (
                   <span key={c.name} className="inline-flex items-center gap-1 text-[11.5px] font-medium text-textTitle/70 bg-[#DCE5C9] rounded-full px-2.5 py-1">
@@ -320,7 +320,7 @@ function Settings({ autoSweep, setAutoSweep, weekday, setWeekday, skimPct, setSk
         <div className="flex items-center justify-between gap-4 bg-white border border-textTitle/10 rounded-2xl p-4">
           <div>
             <p className="font-semibold text-[14px] text-textTitle">Auto-sweep leftovers to savings</p>
-            <p className="text-[13px] text-textTitle/55">Move unspent money into savings at month’s end.</p>
+            <p className="text-[13px] text-textTitle/65">Move unspent money into savings at month’s end.</p>
           </div>
           <button role="switch" aria-checked={autoSweep} onClick={() => setAutoSweep(!autoSweep)}
             className={`shrink-0 w-12 h-7 rounded-full transition relative ${autoSweep ? 'bg-brandGreen' : 'bg-textTitle/20'}`}>
@@ -330,7 +330,7 @@ function Settings({ autoSweep, setAutoSweep, weekday, setWeekday, skimPct, setSk
         <div className="flex items-center justify-between gap-4 bg-white border border-textTitle/10 rounded-2xl p-4">
           <div>
             <p className="font-semibold text-[14px] text-textTitle">Weekly check-in day</p>
-            <p className="text-[13px] text-textTitle/55">When to nudge you to review your spending.</p>
+            <p className="text-[13px] text-textTitle/65">When to nudge you to review your spending.</p>
           </div>
           <select value={weekday} onChange={(e) => setWeekday(parseInt(e.target.value))}
             className="border border-textTitle/15 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40 bg-white">
@@ -340,12 +340,12 @@ function Settings({ autoSweep, setAutoSweep, weekday, setWeekday, skimPct, setSk
         <div className="flex items-center justify-between gap-4 bg-white border border-textTitle/10 rounded-2xl p-4">
           <div>
             <p className="font-semibold text-[14px] text-textTitle">Skim rate</p>
-            <p className="text-[13px] text-textTitle/55">Auto-save this % of new income.</p>
+            <p className="text-[13px] text-textTitle/65">Auto-save this % of new income.</p>
           </div>
           <div className="flex items-center gap-1">
             <input value={skimPct} onChange={(e) => setSkimPct(e.target.value)} inputMode="decimal"
               className="w-16 border border-textTitle/15 rounded-lg px-2 py-2 text-sm text-center outline-none focus:ring-2 focus:ring-brandGreen/40" />
-            <span className="text-textTitle/50 text-sm">%</span>
+            <span className="text-textTitle/65 text-sm">%</span>
           </div>
         </div>
       </div>
@@ -370,7 +370,7 @@ function Ready({ income, template }: { income: number; template: BudgetTemplate 
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between text-[14px]">
-      <span className="text-textTitle/55">{label}</span>
+      <span className="text-textTitle/65">{label}</span>
       <span className="font-semibold text-textTitle tabular-nums">{value}</span>
     </div>
   )

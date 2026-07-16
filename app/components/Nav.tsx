@@ -50,6 +50,11 @@ export default function Nav() {
   // its own logo + "Exit lesson" bar).
   const inLesson = /^\/mylessons\/\d+\/\d+/.test(pathname ?? '') || (pathname?.startsWith('/learn') ?? false)
 
+  // Authed app surfaces have their own sidebar nav (DashboardShell / StudentShell),
+  // so the marketing bar — with its "Download on the App Store" CTA and About/
+  // Partners links — is out of place there. Hide it on those routes.
+  const inApp = /^\/(dashboard|account|mybudget|myjournal|mylessons|grades|budgetchallenge|student)(\/|$)/.test(pathname ?? '')
+
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden'
@@ -59,7 +64,7 @@ export default function Nav() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  if (inLesson) return null
+  if (inLesson || inApp) return null
 
   return (
     <>

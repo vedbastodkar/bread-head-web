@@ -17,7 +17,7 @@ export function AssignedGroups({
     <div className="bg-white rounded-2xl shadow-sm p-5">
       <div className="text-sm font-medium text-textTitle mb-2">Currently assigned</div>
       {groups.length === 0 ? (
-        <p className="text-xs text-textTitle/50">{emptyLabel}</p>
+        <p className="text-xs text-textTitle/65">{emptyLabel}</p>
       ) : (
         <div className="space-y-4">
           {groups.map((g) => (
@@ -28,7 +28,7 @@ export function AssignedGroups({
                   <div key={t.classId} className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <div className="text-textTitle/75 truncate">{t.className}</div>
-                      <div className="text-textTitle/50">
+                      <div className="text-textTitle/65">
                         due {t.assignment.dueDate ?? '—'} · {t.done}/{t.total} done
                       </div>
                     </div>

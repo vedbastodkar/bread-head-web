@@ -157,7 +157,7 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
   if (!lesson) {
     return (
       <main className="min-h-screen bg-bgSage flex flex-col items-center justify-center px-6 text-center">
-        <p className="text-textTitle/60 mb-6">This lesson isn’t available.</p>
+        <p className="text-textTitle/65 mb-6">This lesson isn’t available.</p>
         <button onClick={() => router.push('/dashboard')} className="px-5 py-2.5 rounded-xl border border-textTitle/15 text-sm text-textTitle/70">Back to dashboard</button>
       </main>
     )

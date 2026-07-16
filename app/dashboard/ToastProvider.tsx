@@ -147,7 +147,7 @@ function ToastCard({ toast, onDone }: { toast: Toast; onDone: () => void }) {
         {style.icon}
       </span>
       <span className="text-textTitle/80 leading-snug flex-1">{toast.message}</span>
-      <button onClick={onDone} aria-label="Dismiss" className="shrink-0 text-textTitle/40 hover:text-textTitle text-lg leading-none">
+      <button onClick={onDone} aria-label="Dismiss" className="shrink-0 text-textTitle/65 hover:text-textTitle text-lg leading-none">
         ×
       </button>
     </div>

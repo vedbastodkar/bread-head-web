@@ -75,15 +75,15 @@ export function ClassTargetPicker({
           const checked = !!target
           return (
             <div key={c.id} className="rounded-xl border border-textTitle/15 p-3">
-              <label className="flex items-center gap-2 text-sm text-textTitle">
-                <input type="checkbox" checked={checked} onChange={() => toggleClass(c)} />
-                {c.name}
+              <label className="flex items-start gap-2 text-sm text-textTitle">
+                <input type="checkbox" checked={checked} onChange={() => toggleClass(c)} className="mt-0.5 shrink-0" />
+                <span className="leading-snug">{c.name}</span>
               </label>
 
               {checked && (
                 <div className="mt-2 pl-6 space-y-2">
                   <div>
-                    <label className="block text-xs text-textTitle/60 mb-1">Due date (optional)</label>
+                    <label className="block text-xs text-textTitle/65 mb-1">Due date (optional)</label>
                     <input
                       type="date"
                       value={target?.dueDate ?? ''}
@@ -106,7 +106,7 @@ export function ClassTargetPicker({
                         </label>
                       ))}
                       {c.students.length === 0 && (
-                        <p className="text-xs text-textTitle/40">No students in this class yet.</p>
+                        <p className="text-xs text-textTitle/65">No students in this class yet.</p>
                       )}
                     </div>
                   )}
@@ -115,7 +115,7 @@ export function ClassTargetPicker({
             </div>
           )
         })}
-        {classes.length === 0 && <p className="text-xs text-textTitle/40">No active classes.</p>}
+        {classes.length === 0 && <p className="text-xs text-textTitle/65">No active classes.</p>}
       </div>
     </div>
   )

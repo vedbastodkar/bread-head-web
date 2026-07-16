@@ -238,7 +238,7 @@ export default function LessonsContentPage() {
   return (
     <DashboardShell data={data!} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">Lessons</h1>
-      <p className="text-textTitle/60 text-sm mb-6">Browse the curriculum and assign lessons to a class or specific students.</p>
+      <p className="text-textTitle/65 text-sm mb-6">Browse the curriculum and assign lessons to a class or specific students.</p>
 
       <div className="mb-6">
         <AssignedGroups groups={groups} emptyLabel="Nothing assigned yet." onEdit={startEditFromTarget} onRemove={removeFromTarget} />
@@ -254,8 +254,8 @@ export default function LessonsContentPage() {
             return (
               <div key={u.unit} className="bg-white rounded-2xl shadow-sm">
                 <button onClick={() => toggleUnitOpen(u.unit)} className="w-full flex items-center justify-between p-4 text-left">
-                  <span className="font-medium text-textTitle"><span className="text-textTitle/40 mr-2">U{u.unit}</span>{u.name}</span>
-                  <span className="text-xs text-textTitle/50">{chosen > 0 ? `${chosen} selected` : `${u.lessonCount} lessons`} {open ? '▾' : '▸'}</span>
+                  <span className="font-medium text-textTitle"><span className="text-textTitle/65 mr-2">U{u.unit}</span>{u.name}</span>
+                  <span className="text-xs text-textTitle/65">{chosen > 0 ? `${chosen} selected` : `${u.lessonCount} lessons`} {open ? '▾' : '▸'}</span>
                 </button>
                 {open && (
                   <div className="px-4 pb-4">
@@ -274,7 +274,7 @@ export default function LessonsContentPage() {
                             <div className="flex-1 min-w-0">
                               <div className="text-sm text-textTitle">Lesson {i + 1}: {lessonName(u.unit, i + 1) ?? ''}</div>
                               {lessonSummary(u.unit, i + 1) && (
-                                <div className="text-xs text-textTitle/45 truncate">{lessonSummary(u.unit, i + 1)}</div>
+                                <div className="text-xs text-textTitle/65 truncate">{lessonSummary(u.unit, i + 1)}</div>
                               )}
                             </div>
                             <button
@@ -299,7 +299,7 @@ export default function LessonsContentPage() {
         <div className="space-y-4">
           <div className="bg-white rounded-2xl shadow-sm p-5 lg:sticky lg:top-28">
             <div className="text-sm font-medium text-textTitle mb-1">
-              {editing ? 'Edit assignment' : 'Assign'} {selected.size > 0 && <span className="text-textTitle/50">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}
+              {editing ? 'Edit assignment' : 'Assign'} {selected.size > 0 && <span className="text-textTitle/65">· {selected.size} lesson{selected.size > 1 ? 's' : ''}</span>}
             </div>
 
             <input
@@ -361,7 +361,7 @@ export default function LessonsContentPage() {
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="text-sm font-medium text-textTitle mb-1">Pacing &amp; controls</div>
-            <p className="text-xs text-textTitle/50 max-w-md">Release the curriculum gradually and set default in-lesson rules for a class. Assignments can override these per lesson or per student.</p>
+            <p className="text-xs text-textTitle/65 max-w-md">Release the curriculum gradually and set default in-lesson rules for a class. Assignments can override these per lesson or per student.</p>
           </div>
           <div className="flex items-center gap-2">
             <select
@@ -405,7 +405,7 @@ export default function LessonsContentPage() {
 
           {/* Default in-lesson controls */}
           <div className="space-y-2 text-sm text-textTitle/80">
-            <div className="text-xs uppercase tracking-wider text-textTitle/40">Default lesson controls</div>
+            <div className="text-xs uppercase tracking-wider text-textTitle/65">Default lesson controls</div>
             <label className="flex items-center gap-2">
               <input type="checkbox" checked={classControls.lockUntilCorrect}
                 onChange={(e) => setClassControls((c) => ({ ...c, lockUntilCorrect: e.target.checked }))} />
@@ -445,7 +445,7 @@ export default function LessonsContentPage() {
             ) : (
               <div className="absolute inset-0 flex items-center justify-center p-4">
                 <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-8 text-center" onClick={(e) => e.stopPropagation()}>
-                  <p className="text-sm text-textTitle/60 mb-4">Lesson content unavailable.</p>
+                  <p className="text-sm text-textTitle/65 mb-4">Lesson content unavailable.</p>
                   <button onClick={() => setPreview(null)} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70 hover:bg-bgSage">
                     Close
                   </button>

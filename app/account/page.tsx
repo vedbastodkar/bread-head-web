@@ -45,7 +45,7 @@ export default function AccountPage() {
   return (
     <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
       <div className="max-w-xl mx-auto">
-        <button onClick={() => router.push('/dashboard')} className="text-sm text-textTitle/50 hover:text-textTitle">← Dashboard</button>
+        <button onClick={() => router.push('/dashboard')} className="text-sm text-textTitle/65 hover:text-textTitle">← Dashboard</button>
         <h1 className="font-display text-3xl text-textTitle mt-1 mb-6">Account settings</h1>
 
         <div className="bg-white rounded-2xl shadow-sm p-6 space-y-5">
@@ -58,13 +58,13 @@ export default function AccountPage() {
             <div className="px-4 py-2.5 rounded-xl bg-bgSage/60 text-textTitle/70 text-sm">{user.email}</div>
           </div>
           <button onClick={saveName} disabled={busy} className="px-5 py-2.5 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">{busy ? 'Saving…' : 'Save'}</button>
-          {msg && <p className="text-sm text-textTitle/60">{msg}</p>}
+          {msg && <p className="text-sm text-textTitle/65">{msg}</p>}
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm p-6 mt-4 flex items-center justify-between gap-4">
           <div>
             <div className="text-sm text-textTitle">Password</div>
-            <div className="text-xs text-textTitle/50">We’ll email you a reset link.</div>
+            <div className="text-xs text-textTitle/65">We’ll email you a reset link.</div>
           </div>
           <button onClick={resetPw} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/80 hover:bg-bgSage shrink-0">Send reset email</button>
         </div>

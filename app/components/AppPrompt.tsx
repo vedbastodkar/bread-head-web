@@ -31,7 +31,7 @@ export function AppPrompt() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/icon_green.png" alt="" width={44} height={44} className="rounded-xl mb-3" />
         <h2 className="font-display text-2xl text-textTitle mb-1">Bread Head is better in the app</h2>
-        <p className="text-sm text-textTitle/60 mb-5">
+        <p className="text-sm text-textTitle/65 mb-5">
           Lessons, budgeting, and your journal are built for your phone. Grab the free app to keep going.
         </p>
         <a
@@ -42,7 +42,7 @@ export function AppPrompt() {
         >
           Open the App Store
         </a>
-        <button onClick={dismiss} className="block w-full text-center px-4 py-2.5 text-sm text-textTitle/55">
+        <button onClick={dismiss} className="block w-full text-center px-4 py-2.5 text-sm text-textTitle/65">
           Continue in browser
         </button>
       </div>

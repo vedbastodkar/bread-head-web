@@ -125,7 +125,7 @@ function TeacherPane() {
   return (
     <div className="bg-white rounded-2xl shadow-sm max-w-md mx-auto p-8">
       <h1 className="font-display text-2xl text-textTitle mb-1">Teacher / Admin</h1>
-      <p className="text-textTitle/60 text-sm mb-6">{mode === 'signup' ? 'Create your teacher account to set up classes.' : 'See your class progress dashboard.'}</p>
+      <p className="text-textTitle/65 text-sm mb-6">{mode === 'signup' ? 'Create your teacher account to set up classes.' : 'See your class progress dashboard.'}</p>
       <form onSubmit={submit} className="space-y-4">
         {mode === 'signup' && <Field label="Name" type="text" value={name} onChange={setName} />}
         <Field label="Email" type="email" value={email} onChange={setEmail} />
@@ -140,7 +140,7 @@ function TeacherPane() {
       </form>
 
       <button type="button" onClick={() => { setMode(mode === 'signup' ? 'signin' : 'signup'); setError('') }}
-        className="mt-4 text-sm text-textTitle/60 hover:text-textTitle mx-auto block">
+        className="mt-4 text-sm text-textTitle/65 hover:text-textTitle mx-auto block">
         {mode === 'signup' ? 'Have an account? Sign in' : 'New teacher? Create an account'}
       </button>
     </div>
@@ -204,7 +204,7 @@ function StudentPane() {
   return (
     <div className="bg-white rounded-2xl shadow-sm max-w-md mx-auto p-8">
       <h1 className="font-display text-2xl text-textTitle mb-1">Student</h1>
-      <p className="text-textTitle/60 text-sm mb-6">{mode === 'signup' ? 'Create your account, then join your class with a code.' : 'Jump into your lessons.'}</p>
+      <p className="text-textTitle/65 text-sm mb-6">{mode === 'signup' ? 'Create your account, then join your class with a code.' : 'Jump into your lessons.'}</p>
       <form onSubmit={submit} className="space-y-4">
         {mode === 'signup' && <Field label="Name" type="text" value={name} onChange={setName} />}
         <Field label="Email" type="email" value={email} onChange={setEmail} />
@@ -217,7 +217,7 @@ function StudentPane() {
 
       <div className="flex items-center gap-3 my-5">
         <div className="h-px flex-1 bg-textTitle/10" />
-        <span className="text-xs text-textTitle/40 uppercase tracking-wide">or</span>
+        <span className="text-xs text-textTitle/65 uppercase tracking-wide">or</span>
         <div className="h-px flex-1 bg-textTitle/10" />
       </div>
 
@@ -242,7 +242,7 @@ function StudentPane() {
       </div>
 
       <button type="button" onClick={() => { setMode(mode === 'signup' ? 'signin' : 'signup'); setError('') }}
-        className="mt-4 text-sm text-textTitle/60 hover:text-textTitle mx-auto block">
+        className="mt-4 text-sm text-textTitle/65 hover:text-textTitle mx-auto block">
         {mode === 'signup' ? 'Have an account? Sign in' : 'New here? Create an account'}
       </button>
     </div>

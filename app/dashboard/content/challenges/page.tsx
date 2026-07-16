@@ -139,7 +139,7 @@ export default function ChallengesContentPage() {
   return (
     <DashboardShell data={data!} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">Challenges</h1>
-      <p className="text-textTitle/60 text-sm mb-6">
+      <p className="text-textTitle/65 text-sm mb-6">
         Budget Challenges use fake money, so results are fully visible here — allocations, criteria, and reflections.
       </p>
 
@@ -154,7 +154,7 @@ export default function ChallengesContentPage() {
         </div>
 
         <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2">
-          <div className="text-xs uppercase tracking-wider text-textTitle/40">Budget Challenge</div>
+          <div className="text-xs uppercase tracking-wider text-textTitle/65">Budget Challenge</div>
           <select
             value={challengeId}
             onChange={(e) => setChallengeId(e.target.value)}
@@ -165,7 +165,7 @@ export default function ChallengesContentPage() {
             ))}
           </select>
           {getLibraryChallenge(challengeId) && (
-            <p className="text-xs text-textTitle/60">{getLibraryChallenge(challengeId)!.prompt}</p>
+            <p className="text-xs text-textTitle/65">{getLibraryChallenge(challengeId)!.prompt}</p>
           )}
         </div>
 
@@ -196,14 +196,14 @@ export default function ChallengesContentPage() {
 
       {/* Review — per-student allocation + criteria, grouped by class */}
       {challengeAssignmentsByClass.length === 0 ? (
-        <div className="bg-white rounded-2xl shadow-sm p-5 text-sm text-textTitle/50">
+        <div className="bg-white rounded-2xl shadow-sm p-5 text-sm text-textTitle/65">
           No Budget Challenges have been assigned yet.
         </div>
       ) : (
         <div className="space-y-8">
           {challengeAssignmentsByClass.map(({ cls: c, assignments }) => (
             <div key={c.id}>
-              <div className="text-xs uppercase tracking-wider text-textTitle/40 mb-2">{c.name}</div>
+              <div className="text-xs uppercase tracking-wider text-textTitle/65 mb-2">{c.name}</div>
               <div className="space-y-6">
                 {assignments.map((a) => (
                   <ChallengeCard key={a.id} classId={c.id} assignment={a} roster={c.students} />
@@ -233,20 +233,20 @@ function ChallengeCard({ classId, assignment, roster }: { classId: string; assig
       <div className="flex items-start justify-between gap-2 flex-wrap">
         <div className="min-w-0">
           <h2 className="font-display italic text-xl text-textTitle truncate">{title}</h2>
-          <p className="text-xs text-textTitle/45 mt-0.5">
+          <p className="text-xs text-textTitle/65 mt-0.5">
             {assignment.scope === 'class' ? 'Whole class' : `${(assignment.studentUids ?? []).length} student${(assignment.studentUids ?? []).length > 1 ? 's' : ''}`}
             {' · '}{done}/{students.length} complete
             {assignment.dueDate && <> · Due {assignment.dueDate}</>}
           </p>
         </div>
       </div>
-      {ch?.prompt && <p className="text-xs text-textTitle/55 mt-2">{ch.prompt}</p>}
+      {ch?.prompt && <p className="text-xs text-textTitle/65 mt-2">{ch.prompt}</p>}
 
       <div className="mt-3 divide-y divide-textTitle/5">
         {students.map((s) => (
           <StudentRow key={s.uid} classId={classId} assignmentId={assignment.id} student={s} ch={ch} sub={assignment.submissions?.[s.uid]} />
         ))}
-        {students.length === 0 && <p className="text-xs text-textTitle/40 py-3">No students targeted by this assignment.</p>}
+        {students.length === 0 && <p className="text-xs text-textTitle/65 py-3">No students targeted by this assignment.</p>}
       </div>
     </div>
   )
@@ -295,7 +295,7 @@ function StudentRow({
   const statusStyle =
     status === 'Complete' ? 'bg-brandGreen/15 text-brandGreen'
       : status === 'In progress' ? 'bg-accentGold/20 text-[#9c7d1f]'
-      : 'bg-textTitle/10 text-textTitle/50'
+      : 'bg-textTitle/10 text-textTitle/65'
 
   const total = ch?.criteria.length ?? (typeof detail === 'object' && detail ? detail.perCriterion.length : undefined)
   const scoreLabel =
@@ -316,30 +316,30 @@ function StudentRow({
         className="w-full flex items-center justify-between gap-3 text-left disabled:cursor-default"
       >
         <div className="min-w-0 flex items-center gap-2">
-          {canExpand && <span className="text-textTitle/40 text-xs shrink-0">{open ? '▾' : '▸'}</span>}
+          {canExpand && <span className="text-textTitle/65 text-xs shrink-0">{open ? '▾' : '▸'}</span>}
           <span className="text-textTitle truncate">{student.name}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          {scoreLabel && <span className="text-xs text-textTitle/50">{scoreLabel}</span>}
+          {scoreLabel && <span className="text-xs text-textTitle/65">{scoreLabel}</span>}
           <span className={`text-[11px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${statusStyle}`}>{status}</span>
         </div>
       </button>
 
       {open && sub && (
         <div className="mt-2 ml-4 pl-3 border-l-2 border-bgSage">
-          {detail === 'loading' && <p className="text-xs text-textTitle/40">Loading submission…</p>}
+          {detail === 'loading' && <p className="text-xs text-textTitle/65">Loading submission…</p>}
           {detail === null && (
-            <p className="text-xs text-textTitle/40">Couldn&apos;t load this submission.</p>
+            <p className="text-xs text-textTitle/65">Couldn&apos;t load this submission.</p>
           )}
           {detail && typeof detail === 'object' && (
             <>
               {detail.allocation.boxes.length > 0 && (
                 <div className="mb-3">
-                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-textTitle/40 mb-1">Allocation</p>
+                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-textTitle/65 mb-1">Allocation</p>
                   <ul className="space-y-1">
                     {detail.allocation.boxes.map((box) => (
                       <li key={box.id} className="flex items-center justify-between text-[13px] text-textTitle/75">
-                        <span>{box.name} <span className="text-textTitle/40">· {box.role}</span></span>
+                        <span>{box.name} <span className="text-textTitle/65">· {box.role}</span></span>
                         <span className="font-medium">${resolveBoxDollars(box, income).toFixed(2)}</span>
                       </li>
                     ))}
@@ -349,12 +349,12 @@ function StudentRow({
 
               {detail.perCriterion.length > 0 && (
                 <div className="mb-3">
-                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-textTitle/40 mb-1">Criteria</p>
+                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-textTitle/65 mb-1">Criteria</p>
                   <ul className="flex flex-col gap-1">
                     {detail.perCriterion.map((c, i) => (
                       <li key={i} className="flex items-center gap-2 text-[13px]">
                         <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
-                        <span className={c.passed ? 'text-textTitle' : 'text-textTitle/60'}>{c.detail}</span>
+                        <span className={c.passed ? 'text-textTitle' : 'text-textTitle/65'}>{c.detail}</span>
                       </li>
                     ))}
                   </ul>
@@ -363,7 +363,7 @@ function StudentRow({
 
               {detail.reflection && (
                 <div className="mb-3 bg-bgSage/60 rounded-xl p-3 text-[13px] text-textTitle/80">
-                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-textTitle/40 mb-1">Student reflection</p>
+                  <p className="text-[10.5px] font-bold uppercase tracking-wide text-textTitle/65 mb-1">Student reflection</p>
                   {detail.reflection}
                 </div>
               )}

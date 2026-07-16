@@ -155,7 +155,7 @@ export default function JournalContentPage() {
   return (
     <DashboardShell data={data!} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">Journal</h1>
-      <p className="text-textTitle/60 text-sm mb-6">
+      <p className="text-textTitle/65 text-sm mb-6">
         Write journal prompts and assign them. Student responses stay private — you only see whether they wrote and how much.
       </p>
 
@@ -177,7 +177,7 @@ export default function JournalContentPage() {
 
         <div className="rounded-xl bg-bgSage/60 p-3 mb-3 space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <div className="text-xs uppercase tracking-wider text-textTitle/40">Prompt questions</div>
+            <div className="text-xs uppercase tracking-wider text-textTitle/65">Prompt questions</div>
             <select
               value=""
               onChange={(e) => { const t = PROMPT_TEMPLATES.find((x) => x.id === e.target.value); if (t) applyTemplate(t) }}
@@ -197,7 +197,7 @@ export default function JournalContentPage() {
               />
               {questions.length > 1 && (
                 <button onClick={() => setQuestions((qs) => qs.filter((_, j) => j !== i))}
-                  className="px-2 text-textTitle/40 hover:text-red-600" aria-label="Remove question">×</button>
+                  className="px-2 text-textTitle/65 hover:text-red-600" aria-label="Remove question">×</button>
               )}
             </div>
           ))}
@@ -216,7 +216,7 @@ export default function JournalContentPage() {
                     onClick={() => setOpenCat(openCat === cat.id ? null : cat.id)}
                     className="w-full flex items-center justify-between text-left text-xs font-medium text-textTitle/80 px-2 py-1.5 rounded hover:bg-bgSage"
                   >
-                    {cat.name} <span className="text-textTitle/40">{openCat === cat.id ? '▾' : '▸'}</span>
+                    {cat.name} <span className="text-textTitle/65">{openCat === cat.id ? '▾' : '▸'}</span>
                   </button>
                   {openCat === cat.id && (
                     <div className="pl-2 pb-1 space-y-1.5">

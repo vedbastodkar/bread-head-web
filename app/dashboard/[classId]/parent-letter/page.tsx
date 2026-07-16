@@ -18,7 +18,7 @@ export default function ParentLetter() {
       <div className="max-w-3xl mx-auto">
         {/* toolbar (hidden when printing) */}
         <div className="flex items-center justify-between mb-4 print:hidden">
-          <Link href={`/dashboard/${classId}`} className="text-sm text-textTitle/50 hover:text-textTitle">← {cls.name}</Link>
+          <Link href={`/dashboard/${classId}`} className="text-sm text-textTitle/65 hover:text-textTitle">← {cls.name}</Link>
           <button onClick={() => window.print()} className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm">Print / Save PDF</button>
         </div>
 
@@ -33,9 +33,9 @@ export default function ParentLetter() {
           </p>
           <p className="mb-4">To get your student set up, have them join the class:</p>
           <div className="bg-bgSage rounded-xl p-5 my-6 text-center">
-            <div className="text-sm text-textTitle/60">Join code</div>
+            <div className="text-sm text-textTitle/65">Join code</div>
             <div className="font-display text-3xl tracking-wide my-1">{cls.joinCode ?? '—'}</div>
-            <div className="text-sm text-textTitle/60 mt-2">or visit</div>
+            <div className="text-sm text-textTitle/65 mt-2">or visit</div>
             <div className="font-medium">{link}</div>
           </div>
           <p className="mb-4">

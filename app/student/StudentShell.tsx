@@ -36,10 +36,10 @@ export function StudentShell({
 
         <aside className="w-full lg:w-72 shrink-0 order-1">
           <div className="lg:sticky lg:top-28 bg-white rounded-3xl shadow-sm p-5">
-            <div className="text-xs text-textTitle/50">Signed in</div>
+            <div className="text-xs text-textTitle/65">Signed in</div>
             <div className="text-sm text-textTitle font-medium truncate mb-4">{data.name}</div>
 
-            <div className="text-[11px] font-semibold tracking-wider text-textTitle/40 uppercase mb-2">My progress</div>
+            <div className="text-[11px] font-semibold tracking-wider text-textTitle/65 uppercase mb-2">My progress</div>
             <div className="mb-1 flex items-center justify-between text-sm">
               <span className="text-textTitle/70">Lessons</span>
               <span className="text-textTitle font-medium">{done} / {TOTAL_LESSONS}</span>
@@ -47,9 +47,9 @@ export function StudentShell({
             <div className="h-2 rounded-full bg-bgSage overflow-hidden mb-1">
               <div className="h-full bg-brandGreen" style={{ width: `${pct}%` }} />
             </div>
-            <div className="text-xs text-textTitle/50 mb-5">{pct}% complete</div>
+            <div className="text-xs text-textTitle/65 mb-5">{pct}% complete</div>
 
-            <div className="text-[11px] font-semibold tracking-wider text-textTitle/40 uppercase mb-1">Menu</div>
+            <div className="text-[11px] font-semibold tracking-wider text-textTitle/65 uppercase mb-1">Menu</div>
             <nav className="space-y-0.5 mb-5">
               {navItem('/dashboard', 'Dashboard')}
               {navItem('/mylessons', 'Lessons')}
@@ -116,7 +116,7 @@ export function StudentError({ message, onRetry }: { message?: string; onRetry?:
       <div className="max-w-md mx-auto bg-white rounded-3xl shadow-sm p-8 text-center mt-10">
         <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4 text-xl">!</div>
         <h1 className="font-display text-xl text-textTitle mb-1">Couldn&apos;t load this</h1>
-        <p className="text-sm text-textTitle/55 mb-5 break-words">{message || 'Something went wrong. Please try again.'}</p>
+        <p className="text-sm text-textTitle/65 mb-5 break-words">{message || 'Something went wrong. Please try again.'}</p>
         <button
           onClick={() => (onRetry ? onRetry() : window.location.reload())}
           className="px-5 py-2.5 rounded-xl bg-brandGreen text-white text-sm"

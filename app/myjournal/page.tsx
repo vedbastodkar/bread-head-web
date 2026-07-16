@@ -42,7 +42,7 @@ export default function JournalPage() {
         <button onClick={startNew} className="px-4 py-2 rounded-xl bg-brandGreen text-white text-sm">+ New entry</button>
       </div>
 
-      <p className="text-sm text-textTitle/55 mb-6 max-w-xl">
+      <p className="text-sm text-textTitle/65 mb-6 max-w-xl">
         Your journal is private. Only you can read what you write here — your teacher can never see the words,
         even for assigned prompts.
       </p>
@@ -51,7 +51,7 @@ export default function JournalPage() {
 
       {journalAssignments.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">Assigned prompts</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-textTitle/65 uppercase mb-2">Assigned prompts</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {journalAssignments.map((a) => {
               const entry = entries.find((e) => e.assignmentId === a.id)
@@ -60,12 +60,12 @@ export default function JournalPage() {
                 <button key={a.id} onClick={() => openAssigned(a)}
                   className={`text-left bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${overdue ? 'border-red-500' : 'border-accentGold'}`}>
                   <div className="text-sm font-medium text-textTitle truncate">{a.title || 'Journal prompt'}</div>
-                  <div className="text-xs text-textTitle/55 mt-0.5 line-clamp-2">{a.journal?.questions[0]}</div>
+                  <div className="text-xs text-textTitle/65 mt-0.5 line-clamp-2">{a.journal?.questions[0]}</div>
                   <div className="text-xs mt-1 flex gap-2">
-                    {entry ? <span className="text-brandGreen">Started · {entry.wordCount} words</span> : <span className="text-textTitle/50">Not started</span>}
-                    {a.dueDate && <span className={overdue ? 'text-red-600' : 'text-textTitle/50'}>{overdue ? 'Overdue' : 'Due'} {a.dueDate}</span>}
+                    {entry ? <span className="text-brandGreen">Started · {entry.wordCount} words</span> : <span className="text-textTitle/65">Not started</span>}
+                    {a.dueDate && <span className={overdue ? 'text-red-600' : 'text-textTitle/65'}>{overdue ? 'Overdue' : 'Due'} {a.dueDate}</span>}
                     {a.journal && (a.journal.minWords > 0 || a.journal.minSeconds > 0) && (
-                      <span className="text-textTitle/40">min {a.journal.minWords}w{a.journal.minSeconds ? ` · ${a.journal.minSeconds}s` : ''}</span>
+                      <span className="text-textTitle/65">min {a.journal.minWords}w{a.journal.minSeconds ? ` · ${a.journal.minSeconds}s` : ''}</span>
                     )}
                   </div>
                 </button>
@@ -75,11 +75,11 @@ export default function JournalPage() {
         </section>
       )}
 
-      <h2 className="text-xs font-semibold tracking-wider text-textTitle/40 uppercase mb-2">Past entries</h2>
+      <h2 className="text-xs font-semibold tracking-wider text-textTitle/65 uppercase mb-2">Past entries</h2>
       {loading ? (
-        <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/40">Loading…</div>
+        <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/65">Loading…</div>
       ) : entries.length === 0 ? (
-        <div className="bg-white rounded-2xl shadow-sm p-6 text-sm text-textTitle/50">
+        <div className="bg-white rounded-2xl shadow-sm p-6 text-sm text-textTitle/65">
           Nothing yet. Tap “New entry” to start writing.
         </div>
       ) : (
@@ -95,11 +95,11 @@ export default function JournalPage() {
                   {e.teacherAssigned && <span className="text-accentGold mr-1">●</span>}
                   {e.body.trim().slice(0, 80) || 'Untitled entry'}
                 </div>
-                <div className="text-xs text-textTitle/45">
+                <div className="text-xs text-textTitle/65">
                   {e.lastModified ? e.lastModified.toLocaleDateString() : 'Draft'} · {e.wordCount} words
                 </div>
               </div>
-              <span className="text-textTitle/30 text-sm shrink-0">Edit ›</span>
+              <span className="text-textTitle/65 text-sm shrink-0">Edit ›</span>
             </button>
           ))}
         </div>
@@ -219,7 +219,7 @@ function JournalEditor({
           />
         )}
         <div className="flex items-center justify-between mt-3">
-          <div className="text-xs text-textTitle/45">{words} words · {Math.floor(seconds / 60)}m {seconds % 60}s</div>
+          <div className="text-xs text-textTitle/65">{words} words · {Math.floor(seconds / 60)}m {seconds % 60}s</div>
           <div className="flex gap-2">
             <button onClick={onClose} className="px-4 py-2 rounded-xl border border-textTitle/15 text-sm text-textTitle/70">Cancel</button>
             <button onClick={save} disabled={busy} className="px-5 py-2 rounded-xl bg-brandGreen text-white text-sm disabled:opacity-60">
