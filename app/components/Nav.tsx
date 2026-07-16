@@ -5,7 +5,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -34,8 +34,10 @@ export default function Nav() {
   const cancelHide = () => { clearTimeout(leaveTimer.current) }
   const hideApp    = () => { leaveTimer.current = setTimeout(() => setAppHovered(false), 150) }
 
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
+  const router = useRouter()
   const pathname = usePathname()
+  const doSignOut = async () => { setMenuOpen(false); await signOut(); router.replace('/login') }
 
   const navLinkStyle: React.CSSProperties = {
     fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '14px',
@@ -102,7 +104,10 @@ export default function Nav() {
 
         {/* Desktop: Links + CTA */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>
-          {LINKS.map((link) =>
+          {/* Marketing links + App Store CTA only when logged out; signed-in users
+              get a minimal header (Dashboard + Sign out) — the App Store CTA and
+              About/Partners links are out of place inside the app. */}
+          {!user && LINKS.map((link) =>
             link.label === 'App' ? (
               <div
                 key="App"
@@ -217,29 +222,42 @@ export default function Nav() {
             </a>
           )}
 
-          <a
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 600,
-              fontSize: '14px',
-              color: '#E6EDD9',
-              textDecoration: 'none',
-              background: '#4A5D4A',
-              borderRadius: '100px',
-              padding: '10px 22px',
-              transition: 'opacity 0.2s ease',
-              minHeight: '44px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-          >
-            Download on the App Store
-          </a>
+          {user && (
+            <button
+              onClick={doSignOut}
+              style={navLinkStyle}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
+            >
+              Sign out
+            </button>
+          )}
+
+          {!user && (
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: '14px',
+                color: '#E6EDD9',
+                textDecoration: 'none',
+                background: '#4A5D4A',
+                borderRadius: '100px',
+                padding: '10px 22px',
+                transition: 'opacity 0.2s ease',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              Download on the App Store
+            </a>
+          )}
         </div>
 
         {/* Mobile: Hamburger */}
@@ -302,6 +320,7 @@ export default function Nav() {
           </button>
 
           <nav style={{ width: '100%', maxWidth: '320px' }}>
+            {!user && (<>
             {LINKS.map((link) => (
               <a
                 key={link.label}
@@ -344,6 +363,7 @@ export default function Nav() {
                 </a>
               ))}
             </div>
+            </>)}
 
             {/* Auth-aware controls (mobile) */}
             {user ? (
@@ -364,6 +384,16 @@ export default function Nav() {
               </a>
             )}
 
+            {user && (
+              <button
+                onClick={doSignOut}
+                style={{ display: 'block', width: '100%', textAlign: 'center', paddingTop: '20px', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: 'rgba(26,46,26,0.7)', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                Sign out
+              </button>
+            )}
+
+            {!user && (
             <a
               href={APP_STORE_URL}
               target="_blank"
@@ -390,6 +420,7 @@ export default function Nav() {
             >
               Download on the App Store
             </a>
+            )}
           </nav>
         </div>
       )}
