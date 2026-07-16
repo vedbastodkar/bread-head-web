@@ -46,6 +46,15 @@ export default function Nav() {
     alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: 0,
   }
 
+  // Prominent auth pill — same shape as the App Store CTA. Reads "Log in" when
+  // logged out, "Dashboard" when logged in, so the auth state is always obvious.
+  const authPillStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px',
+    color: '#E6EDD9', textDecoration: 'none', background: '#4A5D4A',
+    borderRadius: '100px', padding: '10px 22px', transition: 'opacity 0.2s ease',
+    minHeight: '44px', display: 'flex', alignItems: 'center',
+  }
+
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
 
   // Focus view: inside a lesson the marketing nav is hidden (the LessonPlayer draws
@@ -201,27 +210,7 @@ export default function Nav() {
             )
           )}
 
-          {/* Auth-aware controls */}
-          {user ? (
-            <a
-              href="/dashboard"
-              style={navLinkStyle}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
-            >
-              Dashboard
-            </a>
-          ) : (
-            <a
-              href="/login"
-              style={navLinkStyle}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
-            >
-              Log in
-            </a>
-          )}
-
+          {/* Auth-aware controls: Sign out (authed) · prominent Log in/Dashboard pill · App Store CTA (logged out) */}
           {user && (
             <button
               onClick={doSignOut}
@@ -232,6 +221,15 @@ export default function Nav() {
               Sign out
             </button>
           )}
+
+          <a
+            href={user ? '/dashboard' : '/login'}
+            style={authPillStyle}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+          >
+            {user ? 'Dashboard' : 'Log in'}
+          </a>
 
           {!user && (
             <a
@@ -366,23 +364,13 @@ export default function Nav() {
             </>)}
 
             {/* Auth-aware controls (mobile) */}
-            {user ? (
-              <a
-                href="/dashboard"
-                onClick={() => setMenuOpen(false)}
-                style={{ display: 'block', textAlign: 'center', paddingTop: '16px', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: '#1A2E1A', textDecoration: 'none' }}
-              >
-                Dashboard
-              </a>
-            ) : (
-              <a
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                style={{ display: 'block', textAlign: 'center', paddingTop: '16px', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: '#1A2E1A', textDecoration: 'none' }}
-              >
-                Log in
-              </a>
-            )}
+            <a
+              href={user ? '/dashboard' : '/login'}
+              onClick={() => setMenuOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '24px', width: '100%', background: '#4A5D4A', color: '#E6EDD9', padding: '16px', borderRadius: '100px', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '16px', textDecoration: 'none', textAlign: 'center', minHeight: '48px', boxSizing: 'border-box' }}
+            >
+              {user ? 'Dashboard' : 'Log in'}
+            </a>
 
             {user && (
               <button

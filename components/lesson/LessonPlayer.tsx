@@ -17,6 +17,7 @@ export function LessonPlayer({
   onSlideChange,
   controls = DEFAULT_CONTROLS,
   onReport,
+  dashboardHref,
 }: {
   lesson: Lesson
   onExit?: () => void
@@ -27,6 +28,7 @@ export function LessonPlayer({
   onSlideChange?: (index: number) => void
   controls?: LessonControls    // teacher-set enforcement (pacing lives upstream)
   onReport?: (info: { lessonId: string; slide: number; text: string }) => Promise<void>
+  dashboardHref?: string       // real lessons pass '/dashboard' → shows the auth pill in the top bar (omitted in the teacher preview)
 }) {
   const total = lesson.slides.length
   const start = Math.min(Math.max(initialSlide, 0), total - 1)
@@ -133,7 +135,15 @@ export function LessonPlayer({
       <div className="fixed top-0 left-0 right-0 z-20 bg-bgSage/95 backdrop-blur flex items-center justify-between" style={{ padding: '20px 32px' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/logo_w_text.png" alt="Bread Head" style={{ width: 163, height: 'auto' }} />
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          {dashboardHref && (
+            <a
+              href={dashboardHref}
+              className="bg-brandGreen text-bgSage rounded-full px-5 py-2.5 text-sm font-semibold hover:opacity-85 transition"
+            >
+              Dashboard
+            </a>
+          )}
           <button
             onClick={() => setReporting(true)}
             aria-label="Report a problem"
