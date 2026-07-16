@@ -263,7 +263,7 @@ export default function MyBudgetPage() {
           </div>
           <div className="bg-textTitle text-bgSage rounded-2xl px-6 py-4 min-w-[220px]">
             <p className="text-[10.5px] font-bold tracking-[0.14em] uppercase text-accentGold m-0">Available Bread</p>
-            <p className="font-display italic text-4xl leading-none mt-1 tabular-nums">{money(availableBread(income, transactions))}</p>
+            <p className="font-display italic text-4xl leading-none mt-1 tabular-nums text-bgSage">{money(availableBread(income, transactions))}</p>
             <p className="text-xs text-bgSage/60 mt-1">{money(spentTotal)} spent of {money(income)}</p>
           </div>
         </div>

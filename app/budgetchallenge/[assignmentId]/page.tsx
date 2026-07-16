@@ -144,7 +144,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
           </div>
           <div className="bg-textTitle text-bgSage rounded-2xl px-6 py-4 shrink-0">
             <p className="text-[10.5px] font-bold tracking-[0.14em] uppercase text-accentGold m-0">Monthly income</p>
-            <p className="font-display italic text-3xl leading-none mt-1 tabular-nums">{money(income)}</p>
+            <p className="font-display italic text-3xl leading-none mt-1 tabular-nums text-bgSage">{money(income)}</p>
             <p className="text-[11px] text-bgSage/60 mt-1">Fixed — you don’t set this</p>
           </div>
         </div>
