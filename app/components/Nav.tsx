@@ -47,13 +47,10 @@ export default function Nav() {
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
 
   // Focus view: inside a lesson the marketing nav is hidden (the LessonPlayer draws
-  // its own logo + "Exit lesson" bar).
+  // its own logo + "Exit lesson" bar). The full header stays on every other page —
+  // including standalone app pages like /mybudget and /budgetchallenge that have no
+  // sidebar shell and would otherwise have no header or way to navigate/exit.
   const inLesson = /^\/mylessons\/\d+\/\d+/.test(pathname ?? '') || (pathname?.startsWith('/learn') ?? false)
-
-  // Authed app surfaces have their own sidebar nav (DashboardShell / StudentShell),
-  // so the marketing bar — with its "Download on the App Store" CTA and About/
-  // Partners links — is out of place there. Hide it on those routes.
-  const inApp = /^\/(dashboard|account|mybudget|myjournal|mylessons|grades|budgetchallenge|student)(\/|$)/.test(pathname ?? '')
 
   useEffect(() => {
     if (menuOpen) {
@@ -64,7 +61,7 @@ export default function Nav() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  if (inLesson || inApp) return null
+  if (inLesson) return null
 
   return (
     <>
