@@ -97,7 +97,7 @@ function contactHtml(fields: {
 
               <!-- Message -->
               <p style="margin:0 0 8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(26,46,26,0.45);">Message</p>
-              <div style="background:#f5f5f0;border-radius:8px;padding:16px;font-size:14px;color:#1A2E1A;line-height:1.7;white-space:pre-wrap;">${message || '—'}</div>
+              <div style="background:#f5f5f0;border-radius:8px;padding:16px;font-size:14px;color:#1A2E1A;line-height:1.7;white-space:pre-wrap;">${message || 'None'}</div>
 
               <!-- Reply CTA -->
               <table cellpadding="0" cellspacing="0" style="margin-top:28px;">
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: email,
-      subject: `${SUBJECT_PREFIX[partnerType] ?? 'Inquiry'} — ${clippedFirstName} ${clippedLastName}${clippedOrg ? ` (${clippedOrg})` : ''}`,
+      subject: `${SUBJECT_PREFIX[partnerType] ?? 'Inquiry'} from ${clippedFirstName} ${clippedLastName}${clippedOrg ? ` (${clippedOrg})` : ''}`,
       html: contactHtml({
         firstName: clippedFirstName,
         lastName: clippedLastName,

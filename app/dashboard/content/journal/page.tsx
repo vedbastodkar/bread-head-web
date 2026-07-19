@@ -107,7 +107,7 @@ export default function JournalContentPage() {
         reload()
         notify('Journal updated.', 'success')
       } else {
-        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past — assign anyway?' }))) return
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past. Assign anyway?' }))) return
         const dup = targets.some((t) => {
           const targetCls = activeClasses.find((c) => c.id === t.classId)
           const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
@@ -128,11 +128,11 @@ export default function JournalContentPage() {
         } else {
           // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
           setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
-          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
+          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes. ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
         }
         reload()
       }
-    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
+    } catch { notify('Something went wrong. Please try again.', 'error') } finally { setBusy(false) }
   }
 
   async function removeFromTarget(t: AssignedTarget) {
@@ -143,7 +143,7 @@ export default function JournalContentPage() {
       if (editing?.assignment.id === t.assignment.id) resetComposer()
       reload()
       notify('Journal removed.', 'success')
-    } catch { notify('Could not remove the journal — please try again.', 'error') }
+    } catch { notify('Could not remove the journal. Please try again.', 'error') }
   }
 
   const groups = groupAssignments(
@@ -156,7 +156,7 @@ export default function JournalContentPage() {
     <DashboardShell data={data!} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">Journal</h1>
       <p className="text-textTitle/70 text-sm mb-6">
-        Write journal prompts and assign them. Student responses stay private — you only see whether they wrote and how much.
+        Write journal prompts and assign them. Student responses stay private. You only see whether they wrote and how much.
       </p>
 
       <div className="mb-6">

@@ -18,7 +18,7 @@ export default function CourseOverview() {
       <Link href="/dashboard" className="text-sm text-textTitle/70 hover:text-textTitle">← Dashboard</Link>
       <h1 className="font-display text-3xl text-textTitle mt-1 mb-2">Personal Finance</h1>
       <p className="text-textTitle/70 mb-8 max-w-2xl">
-        The complete Bread Head course — real money skills for teens, across ten units from budgeting to investing to taxes.
+        The complete Bread Head course: real money skills for teens, across ten units from budgeting to investing to taxes.
       </p>
 
       <div className="space-y-4">
@@ -30,7 +30,7 @@ export default function CourseOverview() {
             <div key={u.unit} className="bg-white rounded-2xl shadow-sm p-6">
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div className="max-w-xl">
-                  <div className="font-display text-xl text-textTitle mb-1">Unit {u.unit} — {u.name}</div>
+                  <div className="font-display text-xl text-textTitle mb-1">Unit {u.unit}: {u.name}</div>
                   <p className="text-textTitle/70 text-sm">{u.description}</p>
                   {(() => {
                     const objs = unitObjectives(u.unit).slice(0, 3)

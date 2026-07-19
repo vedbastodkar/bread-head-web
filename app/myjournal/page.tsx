@@ -43,7 +43,7 @@ export default function JournalPage() {
       </div>
 
       <p className="text-sm text-textTitle/70 mb-6 max-w-xl">
-        Your journal is private. Only you can read what you write here — your teacher can never see the words,
+        Your journal is private. Only you can read what you write here. Your teacher can never see the words,
         even for assigned prompts.
       </p>
 

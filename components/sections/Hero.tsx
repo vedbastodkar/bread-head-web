@@ -7,6 +7,7 @@ import FadeUp         from '@/app/components/FadeUp'
 import CountUp        from '@/app/components/CountUp'
 import PhoneParallax  from '@/app/components/PhoneParallax'
 import MagneticButton from '@/app/components/MagneticButton'
+import { APP_STORE_URL } from '@/lib/links'
 
 export default function Hero() {
   return (
@@ -102,7 +103,7 @@ export default function Hero() {
                   className="font-body"
                   style={{ fontSize: '13px', lineHeight: 1.6, color: 'rgba(26,46,26,0.65)', margin: 0 }}
                 >
-                  of teens have never seen a pay stub — yet they&apos;re expected
+                  of teens have never seen a pay stub, yet they&apos;re expected
                   to manage their own money within months of graduation.
                 </p>
               </div>
@@ -112,7 +113,9 @@ export default function Hero() {
             <FadeUp delay={0.35}>
               <MagneticButton>
                 <a
-                  href="#"
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hero-cta inline-flex items-center gap-2 font-body font-semibold rounded-full touch-cta"
                   style={{
                     background: '#4A5D4A',

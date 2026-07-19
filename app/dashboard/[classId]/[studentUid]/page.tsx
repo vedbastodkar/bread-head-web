@@ -31,8 +31,8 @@ export default function StudentDetail() {
       <h1 className="font-display text-3xl text-textTitle mt-1 mb-1">{s.name}</h1>
       <p className="text-textTitle/70 text-sm mb-6">
         {s.completedLessons.length} / {TOTAL_LESSONS} lessons · {pctComplete(s)}% ·
-        {' '}currently on U{s.currentUnit}·L{s.currentLesson} — {unitName(s.currentUnit)} ·
-        {' '}last active {d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}
+        {' '}currently on U{s.currentUnit}·L{s.currentLesson}: {unitName(s.currentUnit)} ·
+        {' '}last active {d === null ? '-' : d === 0 ? 'today' : `${d}d ago`}
         <span className="text-textTitle/70"> · {s.xp.toLocaleString()} XP · L{s.level}</span>
       </p>
 
@@ -72,7 +72,7 @@ export default function StudentDetail() {
         <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
           <div className="flex items-center justify-between mb-3">
             <div className="font-medium text-textTitle">Journal</div>
-            <div className="text-[11px] text-textTitle/70">Responses are private — counts only</div>
+            <div className="text-[11px] text-textTitle/70">Responses are private (counts only)</div>
           </div>
           <div className="space-y-2">
             {journalAssignments.map((a) => {
@@ -121,7 +121,7 @@ export default function StudentDetail() {
                   return (
                     <div
                       key={id}
-                      title={`Lesson ${lessonNo}${complete ? ' — complete' : isCurrent ? ' — current' : ''}`}
+                      title={`Lesson ${lessonNo}${complete ? ': complete' : isCurrent ? ': current' : ''}`}
                       className="w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-medium"
                       style={{ backgroundColor: bg, color: fg }}
                     >

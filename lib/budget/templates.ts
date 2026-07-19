@@ -27,7 +27,7 @@ export const BUDGET_TEMPLATES: BudgetTemplate[] = [
     id: '50-30-20',
     name: '50/30/20 Split',
     description:
-      'Splits your income into three buckets — half for needs, 30% for wants, 20% for savings — and enforces those caps automatically.',
+      'Splits your income into three buckets (half for needs, 30% for wants, 20% for savings) and enforces those caps automatically.',
     bestFor: 'Best for: beginners who want a simple, proven rule without tracking every category.',
     categories: [
       { name: 'Needs', iconKey: 'house.fill', targetValue: 50 },
@@ -65,7 +65,7 @@ export const BUDGET_TEMPLATES: BudgetTemplate[] = [
   {
     id: 'savings-challenge',
     name: 'Savings Challenge Mode',
-    description: 'An aggressive 40/10/50 split — only 40% for needs, 10% for wants, and a full 50% locked into savings.',
+    description: 'An aggressive 40/10/50 split: only 40% for needs, 10% for wants, and a full 50% locked into savings.',
     bestFor: 'Best for: goal-chasers who want to build savings fast and are comfortable cutting back on spending.',
     categories: [
       { name: 'Essentials Only', iconKey: 'house.fill', targetValue: 40 },

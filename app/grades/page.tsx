@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
+import { Icon } from '@/app/components/Icon'
 import { db } from '@/lib/firebase/client'
 import { useStudent, type StudentAssignment } from '@/app/student/useStudent'
 import { StudentShell, StudentSkeleton, StudentError } from '@/app/student/StudentShell'
@@ -142,7 +143,7 @@ function GradeCard({ row }: { row: GradeRow }) {
           <ul className="flex flex-col gap-1.5 mt-2">
             {perCriterion.map((c, i) => (
               <li key={i} className="flex items-center gap-2 text-[13.5px]">
-                <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
+                <span aria-hidden className="inline-flex">{c.passed ? <Icon name="check" size={16} style={{ color: '#4A5D4A' }} /> : <Icon name="x" size={16} style={{ color: '#D94F4F' }} />}</span>
                 <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
               </li>
             ))}

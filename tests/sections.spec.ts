@@ -27,27 +27,19 @@ test('Nav', async ({ page }) => {
 test('Hero', async ({ page }) => {
   await page.goto('/')
   await stabilise(page)
-  const hero = page.locator('.hero-section').first()
+  // Hero3D (scroll-driven 3D scene) — at scroll top the transforms are deterministic
+  const hero = page.getByTestId('hero')
   await expect(hero).toHaveScreenshot('hero.png', { maxDiffPixelRatio: 0.02 })
 })
 
 test('Lessons', async ({ page }) => {
   await page.goto('/')
   await stabilise(page)
-  // Scroll lessons section into view
-  const lessons = page.locator('section').filter({ hasText: 'Real topics. Zero condescension.' }).first()
+  // LessonsScroll flip tour (replaced LessonsPreview; the Journal section was folded in here)
+  const lessons = page.getByTestId('lessons')
   await lessons.scrollIntoViewIfNeeded()
   await page.waitForTimeout(200)
   await expect(lessons).toHaveScreenshot('lessons.png', { maxDiffPixelRatio: 0.02 })
-})
-
-test('Journal', async ({ page }) => {
-  await page.goto('/')
-  await stabilise(page)
-  const journal = page.locator('section').filter({ hasText: /journal|reflection|habit/i }).first()
-  await journal.scrollIntoViewIfNeeded()
-  await page.waitForTimeout(200)
-  await expect(journal).toHaveScreenshot('journal.png', { maxDiffPixelRatio: 0.02 })
 })
 
 test('Team', async ({ page }) => {

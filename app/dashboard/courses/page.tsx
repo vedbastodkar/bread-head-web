@@ -18,7 +18,7 @@ export default function AllCourses() {
   async function setArchived(id: string, archived: boolean) {
     if (!user) return
     try { await apiCall(user, `/api/classes/${id}`, 'PATCH', { archived }); reload(); notify(archived ? 'Class archived.' : 'Class unarchived.', 'success') }
-    catch { notify('Could not update the class — please try again.', 'error') }
+    catch { notify('Could not update the class. Please try again.', 'error') }
   }
 
   return (

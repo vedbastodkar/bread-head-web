@@ -13,18 +13,31 @@ import MagneticButton from '@/app/components/MagneticButton'
 
 export default function FinalCTA() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (loading) return
     const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value
+    setLoading(true)
+    setError('')
     try {
-      await fetch('/api/subscribe', {
+      const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
-    } catch {}
-    setSubmitted(true)
+      if (!res.ok) {
+        const msg = await res.json().then((d) => d?.error).catch(() => null)
+        throw new Error(msg || 'Something went wrong. Please try again.')
+      }
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -35,7 +48,7 @@ export default function FinalCTA() {
 
           {/* Eyebrow */}
           <p className="font-body font-medium text-[11px] tracking-[0.13em] uppercase mb-8"
-             style={{ color: 'rgba(230,237,217,0.40)' }}>
+             style={{ color: 'rgba(230,237,217,0.55)' }}>
             Ready when you are
           </p>
 
@@ -49,7 +62,7 @@ export default function FinalCTA() {
 
           <p className="font-body text-[16px] leading-[1.7] mb-12 max-w-lg mx-auto"
              style={{ color: 'rgba(230,237,217,0.55)' }}>
-            Join thousands of teens building better money habits — one
+            Join thousands of teens building better money habits, one
             5-minute lesson at a time.
           </p>
 
@@ -68,7 +81,7 @@ export default function FinalCTA() {
               name="email"
               placeholder="your@email.com"
               aria-label="Email address"
-              className="final-cta-input flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/30 focus:outline-none transition-colors"
+              className="final-cta-input flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/30 focus:outline-none focus-visible:outline-none focus:border-bgSage/60 focus:ring-2 focus:ring-bgSage/40 transition-colors"
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '0.5px solid rgba(255,255,255,0.15)',
@@ -80,13 +93,31 @@ export default function FinalCTA() {
             <MagneticButton>
               <button
                 type="submit"
+                disabled={loading}
                 className="final-cta-btn font-body font-medium text-bgSage bg-brandGreen rounded-full shrink-0 hover:opacity-90 transition-opacity touch-cta"
-                style={{ padding: '12px 28px', fontSize: '14px' }}
+                style={{ padding: '12px 28px', fontSize: '14px', opacity: loading ? 0.6 : 1, cursor: loading ? 'default' : 'pointer' }}
               >
-                Get Early Access →
+                {loading ? 'Joining…' : 'Get Early Access →'}
               </button>
             </MagneticButton>
           </form>
+          )}
+
+          {/* Inline error — dark section, readable light-red tone */}
+          {error && !submitted && (
+            <p
+              className="font-body text-[13px] max-w-md mx-auto mb-5"
+              role="alert"
+              style={{
+                color: 'rgba(240,180,180,0.95)',
+                background: 'rgba(220,80,80,0.10)',
+                border: '0.5px solid rgba(240,180,180,0.30)',
+                borderRadius: '12px',
+                padding: '10px 16px',
+              }}
+            >
+              {error}
+            </p>
           )}
 
           {/* Fine print */}

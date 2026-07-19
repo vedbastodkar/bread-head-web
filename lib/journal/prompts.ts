@@ -24,17 +24,17 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     id: 'spending',
     name: 'Spending awareness',
     prompts: [
-      'You logged three dining transactions this week. How did each one feel — planned, impulsive, or social?',
+      'You logged three dining transactions this week. How did each one feel: planned, impulsive, or social?',
       'You’ve overspent in the same category three months in a row. Is the budget wrong, or is the habit?',
       'Think of the last unplanned purchase you made. What were you feeling right before you bought it?',
-      'Do you notice any patterns in when or why you spend — boredom, celebration, anxiety?',
+      'Do you notice any patterns in when or why you spend: boredom, celebration, anxiety?',
     ],
   },
   {
     id: 'saving',
     name: 'Saving',
     prompts: [
-      'Your savings rate dropped below target this month. What got in the way — an unexpected expense, or a gradual drift?',
+      'Your savings rate dropped below target this month. What got in the way: an unexpected expense, or a gradual drift?',
       'You skipped your savings contribution this month. Was it a conscious trade-off, or something that just slipped by?',
       'You stayed under budget in every category this week. What made that easier than usual?',
     ],
@@ -44,29 +44,29 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     name: 'Budgeting',
     prompts: [
       'You allocated everything in your budget this month. How does having every dollar assigned feel compared to before?',
-      'What are your current fixed payments every month? List every recurring charge you can think of — phone, subscriptions, memberships. Add them up. Does that number surprise you?',
+      'What are your current fixed payments every month? List every recurring charge you can think of: phone, subscriptions, memberships. Add them up. Does that number surprise you?',
     ],
   },
   {
     id: 'income',
     name: 'Income & work',
     prompts: [
-      'What’s one source of income you’ve had lately — even a small one — and did you track it? If not, what would help you keep tabs next time?',
+      'What’s one source of income you’ve had lately, even a small one, and did you track it? If not, what would help you keep tabs next time?',
       'Is there something you’re already good at or interested in that someone else would pay for? What would your side hustle be if you had to start tomorrow?',
       'If you started freelancing tomorrow, what’s one thing you’d want to charge for? And what percentage would you set aside for taxes each time you got paid?',
-      'What’s one problem you notice in your everyday life — something annoying, slow, or done badly — that you could imagine solving for people?',
+      'What’s one problem you notice in your everyday life (something annoying, slow, or done badly) that you could imagine solving for people?',
       'Think of a job you’d actually take right now, even if it seems small. What skills could it teach you? Could it connect to a longer-term direction you’re interested in?',
-      'If you had two job offers — one at $18/hour and one at $38,000/year — what questions would you ask before deciding which pays better?',
-      'Think about a career you’re curious about. What path — college, trade, certification, or experience — makes the most sense to get there, and what would the cost and payoff look like?',
+      'If you had two job offers, one at $18/hour and one at $38,000/year, what questions would you ask before deciding which pays better?',
+      'Think about a career you’re curious about. What path (college, trade, certification, or experience) makes the most sense to get there, and what would the cost and payoff look like?',
       'Think of one person you know who works in a field you’re curious about. What’s one question you could ask them that would teach you something real about that career?',
-      'Have you ever been afraid to ask for something you deserved — at work, school, or anywhere else? What held you back, and what would you do differently now?',
+      'Have you ever been afraid to ask for something you deserved (at work, school, or anywhere else)? What held you back, and what would you do differently now?',
     ],
   },
   {
     id: 'goals',
     name: 'Goals & reflection',
     prompts: [
-      'Are the choices you’re making right now moving you toward what you said you wanted — or quietly working against it?',
+      'Are the choices you’re making right now moving you toward what you said you wanted, or quietly working against it?',
       'What money idea changed the way you think the most?',
       'What financial habits do you most want to improve?',
       'What money mistake do you most want to avoid?',
@@ -78,7 +78,7 @@ export const PROMPT_CATEGORIES: PromptCategory[] = [
     name: 'Money mindset',
     prompts: [
       'Is there a money situation in your life that feels stressful right now? What would make it feel more manageable?',
-      'When money feels tight, where do you notice it first — your choices, your mood, or your relationships?',
+      'When money feels tight, where do you notice it first: your choices, your mood, or your relationships?',
     ],
   },
 ]
@@ -113,7 +113,7 @@ export const PROMPT_TEMPLATES: PromptTemplate[] = [
     questions: [
       'Think of the last unplanned purchase you made. What were you feeling right before you bought it?',
       'Is there a money situation in your life that feels stressful right now? What would make it feel more manageable?',
-      'Do you notice any patterns in when or why you spend — boredom, celebration, anxiety?',
+      'Do you notice any patterns in when or why you spend: boredom, celebration, anxiety?',
     ],
   },
   {

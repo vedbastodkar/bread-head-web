@@ -1,6 +1,7 @@
 'use client'
 import { useMemo, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
+import { Icon } from '@/app/components/Icon'
 import { db } from '@/lib/firebase/client'
 import { useDashboard, apiCall, type Student, type Assignment } from '../../useDashboard'
 import { DashboardShell, DashboardSkeleton, DashboardError } from '../../DashboardShell'
@@ -86,7 +87,7 @@ export default function ChallengesContentPage() {
         reload()
         notify('Budget Challenge updated.', 'success')
       } else {
-        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past — assign anyway?' }))) return
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past. Assign anyway?' }))) return
         const dup = targets.some((t) => {
           const targetCls = activeClasses.find((c) => c.id === t.classId)
           const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
@@ -107,11 +108,11 @@ export default function ChallengesContentPage() {
         } else {
           // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
           setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
-          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
+          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes: ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
         }
         reload()
       }
-    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
+    } catch { notify('Something went wrong. Please try again.', 'error') } finally { setBusy(false) }
   }
 
   async function removeFromTarget(t: AssignedTarget) {
@@ -122,7 +123,7 @@ export default function ChallengesContentPage() {
       if (editing?.assignment.id === t.assignment.id) resetComposer()
       reload()
       notify('Budget Challenge removed.', 'success')
-    } catch { notify('Could not remove the challenge — please try again.', 'error') }
+    } catch { notify('Could not remove the challenge. Please try again.', 'error') }
   }
 
   const groups = groupAssignments(
@@ -140,7 +141,7 @@ export default function ChallengesContentPage() {
     <DashboardShell data={data!} user={user} signOut={signOut} reload={reload}>
       <h1 className="font-display text-3xl text-textTitle mb-1">Challenges</h1>
       <p className="text-textTitle/70 text-sm mb-6">
-        Budget Challenges use fake money, so results are fully visible here — allocations, criteria, and reflections.
+        Budget Challenges use fake money, so results are fully visible here: allocations, criteria, and reflections.
       </p>
 
       <div className="mb-6">
@@ -353,7 +354,7 @@ function StudentRow({
                   <ul className="flex flex-col gap-1">
                     {detail.perCriterion.map((c, i) => (
                       <li key={i} className="flex items-center gap-2 text-[13px]">
-                        <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
+                        <span aria-hidden className="inline-flex">{c.passed ? <Icon name="check" size={15} style={{ color: '#4A5D4A' }} /> : <Icon name="x" size={15} style={{ color: '#D94F4F' }} />}</span>
                         <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
                       </li>
                     ))}

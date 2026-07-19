@@ -54,7 +54,7 @@ export default function RosterPage() {
                     <Link href={`/dashboard/${cls.id}/${s.uid}`} className="text-textTitle font-medium hover:underline">{s.name}</Link>
                   </td>
                   <td className="py-3 px-4 text-textTitle/70">{s.completedLessons.length}</td>
-                  <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
+                  <td className="py-3 px-4 text-textTitle/70">{d === null ? '-' : d === 0 ? 'today' : `${d}d ago`}</td>
                   <td className="py-3 px-4 text-right">
                     <div className="flex items-center justify-end gap-3">
                       <button onClick={() => setMovingStudent(s)} className="text-xs text-textTitle/70 hover:text-textTitle underline">Move</button>

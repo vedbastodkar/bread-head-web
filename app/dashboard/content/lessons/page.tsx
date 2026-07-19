@@ -179,7 +179,7 @@ export default function LessonsContentPage() {
         reload()
         notify('Assignment updated.', 'success')
       } else {
-        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past — assign anyway?' }))) return
+        if (targets.some((t) => t.dueDate && t.dueDate < today) && !(await confirm({ message: 'One or more due dates are in the past. Assign anyway?' }))) return
         const dup = targets.some((t) => {
           const targetCls = activeClasses.find((c) => c.id === t.classId)
           const useStudents = Array.isArray(t.studentUids) && t.studentUids.length > 0
@@ -200,11 +200,11 @@ export default function LessonsContentPage() {
         } else {
           // Keep only the classes that failed, so a retry doesn't re-assign the ones that succeeded.
           setTargets((prev) => prev.filter((t) => failed.some((f) => f.classId === t.classId)))
-          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes — ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
+          notify(`Assigned to ${results.length - failed.length} of ${results.length} classes. ` + failed.map((f) => `${f.className}: ${f.error}`).join('; '), 'error')
         }
         reload()
       }
-    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
+    } catch { notify('Something went wrong. Please try again.', 'error') } finally { setBusy(false) }
   }
 
   async function removeFromTarget(t: AssignedTarget) {
@@ -215,7 +215,7 @@ export default function LessonsContentPage() {
       if (editing?.assignment.id === t.assignment.id) resetComposer()
       reload()
       notify('Assignment removed.', 'success')
-    } catch { notify('Could not remove the assignment — please try again.', 'error') }
+    } catch { notify('Could not remove the assignment. Please try again.', 'error') }
   }
 
   async function saveSettings() {
@@ -228,7 +228,7 @@ export default function LessonsContentPage() {
       })
       reload()
       notify('Settings saved.', 'success')
-    } catch { notify('Could not save settings — please try again.', 'error') } finally { setSavingSettings(false) }
+    } catch { notify('Could not save settings. Please try again.', 'error') } finally { setSavingSettings(false) }
   }
 
   const throughUnitLessonCount = CATALOG.find((u) => u.unit === throughUnit)?.lessonCount ?? 1

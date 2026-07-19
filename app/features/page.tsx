@@ -5,8 +5,12 @@ import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'App — Bread Head',
-  description: 'Three tools built to make financial literacy stick: bite-sized lessons, a personal budget tracker, and a reflection journal.',
+  title: 'The App',
+  description: 'One app, three tools that work as a loop: bite-sized lessons to learn, a real budget tracker to see what you do, and a journal to reflect and close the gap.',
+  openGraph: {
+    title: 'The Bread Head App: Learn, Track, Reflect',
+    description: 'Three tools built to make financial literacy stick: bite-sized lessons, a personal budget tracker, and a reflection journal.',
+  },
 }
 
 const FEATURES = [
@@ -14,7 +18,7 @@ const FEATURES = [
     number: '01',
     verb: 'Learn',
     name: 'Lessons',
-    description: 'Bite-sized slides on every personal finance concept that matters. Tap through, answer to unlock, and understand exactly why you got it right — or wrong.',
+    description: 'Bite-sized slides on every personal finance concept that matters. Tap through, answer to unlock, and understand exactly why you got it right, or wrong.',
     href: '/lessons',
     stat: '10 units · 80+ lessons',
   },
@@ -22,7 +26,7 @@ const FEATURES = [
     number: '02',
     verb: 'Track',
     name: 'Budgeting',
-    description: 'Set your income, build spending categories, and log purchases as you make them. Not a simulation — a real record of where your money actually goes.',
+    description: 'Set your income, build spending categories, and log purchases as you make them. Not a simulation: a real record of where your money actually goes.',
     href: '/budget',
     stat: 'Real-time tracking',
   },
@@ -40,12 +44,12 @@ const WHY = [
   {
     number: '01',
     lead: 'Learn without tracking or reflecting.',
-    body: 'You understand compound interest, opportunity cost, and why budgets matter. Then you get paid on Friday and the money is gone by Sunday. Knowledge without reflection is just trivia — it doesn\'t change behavior on its own.',
+    body: 'You understand compound interest, opportunity cost, and why budgets matter. Then you get paid on Friday and the money is gone by Sunday. Knowledge without reflection is just trivia; it doesn\'t change behavior on its own.',
   },
   {
     number: '02',
     lead: 'Track without learning or reflecting.',
-    body: 'You can see every dollar you\'ve spent. You can watch yourself make the same bad call every single month. But seeing a problem you don\'t understand — and haven\'t thought about — doesn\'t fix it. It just makes you feel worse.',
+    body: 'You can see every dollar you\'ve spent. You can watch yourself make the same bad call every single month. But seeing a problem you don\'t understand, and haven\'t thought about, doesn\'t fix it. It just makes you feel worse.',
   },
   {
     number: '03',
@@ -196,7 +200,7 @@ export default function FeaturesPage() {
               Each tool is incomplete without the others.
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, maxWidth: '560px', marginBottom: '0' }}>
-              Most financial apps do one thing. Bread Head is built around a complete cycle — because knowing, tracking, and reflecting don&apos;t work in isolation.
+              Most financial apps do one thing. Bread Head is built around a complete cycle, because knowing, tracking, and reflecting don&apos;t work in isolation.
             </p>
           </FadeUp>
 
@@ -252,7 +256,7 @@ export default function FeaturesPage() {
                 className="why-closing"
               >
                 <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: 'rgba(245,240,232,0.80)', lineHeight: 1.8, margin: 0, maxWidth: '660px' }}>
-                  The loop closes when you have all three. The lessons teach you what to do. The budget tracker shows you what you&apos;re actually doing. The journal helps you understand the gap between them — and close it.
+                  The loop closes when you have all three. The lessons teach you what to do. The budget tracker shows you what you&apos;re actually doing. The journal helps you understand the gap between them, and close it.
                 </p>
               </div>
             </FadeUp>

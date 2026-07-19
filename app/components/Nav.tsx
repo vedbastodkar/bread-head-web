@@ -39,20 +39,15 @@ export default function Nav() {
   const pathname = usePathname()
   const doSignOut = async () => { setMenuOpen(false); await signOut(); router.replace('/login') }
 
-  const navLinkStyle: React.CSSProperties = {
-    fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '14px',
-    letterSpacing: '0.03em', color: 'rgba(26,46,26,0.7)', textDecoration: 'none',
-    transition: 'color 0.2s ease', minHeight: '44px', display: 'flex',
-    alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-  }
-
-  // Prominent auth pill — same shape as the App Store CTA. Reads "Log in" when
-  // logged out, "Dashboard" when logged in, so the auth state is always obvious.
+  // Secondary auth pill — white with a green outline + dark text, so it reads as
+  // the quieter partner to the solid-green App Store CTA (not two identical pills).
+  // Reads "Log in" when logged out, "Dashboard" when logged in.
   const authPillStyle: React.CSSProperties = {
     fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px',
-    color: '#E6EDD9', textDecoration: 'none', background: '#4A5D4A',
-    borderRadius: '100px', padding: '10px 22px', transition: 'opacity 0.2s ease',
-    minHeight: '44px', display: 'flex', alignItems: 'center',
+    color: '#1A2E1A', textDecoration: 'none', background: '#FFFFFF',
+    border: '1px solid #4A5D4A', borderRadius: '100px', padding: '10px 22px',
+    transition: 'opacity 0.2s ease', minHeight: '44px', display: 'flex',
+    alignItems: 'center', boxSizing: 'border-box',
   }
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
@@ -113,10 +108,10 @@ export default function Nav() {
 
         {/* Desktop: Links + CTA */}
         <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>
-          {/* Marketing links + App Store CTA only when logged out; signed-in users
-              get a minimal header (Dashboard + Sign out) — the App Store CTA and
-              About/Partners links are out of place inside the app. */}
-          {!user && LINKS.map((link) =>
+          {/* Full marketing nav + App Store CTA show in every auth state. Signed-in
+              users additionally get the Dashboard pill + Sign out — the Dashboard tile
+              is layered on top of the header, it does not replace the other links. */}
+          {LINKS.map((link) =>
             link.label === 'App' ? (
               <div
                 key="App"
@@ -210,28 +205,19 @@ export default function Nav() {
             )
           )}
 
-          {/* Auth-aware controls: Sign out (authed) · prominent Log in/Dashboard pill · App Store CTA (logged out) */}
-          {user && (
-            <button
-              onClick={doSignOut}
-              style={navLinkStyle}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#1A2E1A')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(26,46,26,0.7)')}
+          {/* Auth-aware controls: Log in/Dashboard pill (secondary, white/outline) paired
+              tightly with the App Store CTA (primary, solid green). Sign out lives in the
+              dashboard/mobile menu — it's out of the top bar. */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <a
+              href={user ? '/dashboard' : '/login'}
+              style={authPillStyle}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
-              Sign out
-            </button>
-          )}
+              {user ? 'Dashboard' : 'Log in'}
+            </a>
 
-          <a
-            href={user ? '/dashboard' : '/login'}
-            style={authPillStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-          >
-            {user ? 'Dashboard' : 'Log in'}
-          </a>
-
-          {!user && (
             <a
               href={APP_STORE_URL}
               target="_blank"
@@ -249,13 +235,14 @@ export default function Nav() {
                 minHeight: '44px',
                 display: 'flex',
                 alignItems: 'center',
+                boxSizing: 'border-box',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
               Download on the App Store
             </a>
-          )}
+          </div>
         </div>
 
         {/* Mobile: Hamburger */}
@@ -318,7 +305,6 @@ export default function Nav() {
           </button>
 
           <nav style={{ width: '100%', maxWidth: '320px' }}>
-            {!user && (<>
             {LINKS.map((link) => (
               <a
                 key={link.label}
@@ -361,13 +347,12 @@ export default function Nav() {
                 </a>
               ))}
             </div>
-            </>)}
 
             {/* Auth-aware controls (mobile) */}
             <a
               href={user ? '/dashboard' : '/login'}
               onClick={() => setMenuOpen(false)}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '24px', width: '100%', background: '#4A5D4A', color: '#E6EDD9', padding: '16px', borderRadius: '100px', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '16px', textDecoration: 'none', textAlign: 'center', minHeight: '48px', boxSizing: 'border-box' }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '24px', width: '100%', background: '#FFFFFF', color: '#1A2E1A', border: '1px solid #4A5D4A', padding: '16px', borderRadius: '100px', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '16px', textDecoration: 'none', textAlign: 'center', minHeight: '48px', boxSizing: 'border-box' }}
             >
               {user ? 'Dashboard' : 'Log in'}
             </a>
@@ -381,7 +366,6 @@ export default function Nav() {
               </button>
             )}
 
-            {!user && (
             <a
               href={APP_STORE_URL}
               target="_blank"
@@ -408,7 +392,6 @@ export default function Nav() {
             >
               Download on the App Store
             </a>
-            )}
           </nav>
         </div>
       )}

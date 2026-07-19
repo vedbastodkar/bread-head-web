@@ -4,9 +4,11 @@
 // As the page scrolls 0 → 300px, the phone floats from y:0 → y:-40px.
 // useSpring adds spring physics so the motion feels natural, not mechanical.
 
-import { useScroll, useTransform, useSpring, motion } from 'framer-motion'
+import { useScroll, useTransform, useSpring, motion, useReducedMotion } from 'framer-motion'
 
 export default function PhoneParallax({ children }: { children: React.ReactNode }) {
+  const reduceMotion = useReducedMotion()
+
   // scrollY tracks the raw window scroll position
   const { scrollY } = useScroll()
 
@@ -15,6 +17,9 @@ export default function PhoneParallax({ children }: { children: React.ReactNode 
 
   // Add spring physics over the transform
   const y = useSpring(rawY, { stiffness: 80, damping: 20 })
+
+  // Reduced motion: no parallax, render the resting state.
+  if (reduceMotion) return <div>{children}</div>
 
   return <motion.div style={{ y }}>{children}</motion.div>
 }

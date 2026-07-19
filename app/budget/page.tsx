@@ -4,20 +4,24 @@ import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Budgeting — Bread Head',
-  description: 'A complete monthly budgeting system — plan your income, build categories, track every transaction, and get three-tier warnings before things go wrong.',
+  title: 'Budgeting',
+  description: 'A complete monthly budgeting system: plan your income, build categories, track every transaction, and get three-tier warnings before things go wrong.',
+  openGraph: {
+    title: 'Bread Head Budgeting: Know Where Your Money Goes',
+    description: 'Plan your income, build spending categories, and track every transaction with early warnings. A real record, not a simulation.',
+  },
 }
 
 const FEATURES = [
   {
     number: '01',
     title: 'Budget Simulator',
-    body: 'The main dashboard. See your full picture: Available Bread (what\'s left to spend), allocated vs. unallocated income, per-category progress, and your savings rate — all live in one place.',
+    body: 'The main dashboard. See your full picture: Available Bread (what\'s left to spend), allocated vs. unallocated income, per-category progress, and your savings rate, all live in one place.',
   },
   {
     number: '02',
     title: 'Category Center',
-    body: 'Create and organize your own spending categories. Add fixed payments — recurring bills, subscriptions — as children of any category. Archive what you\'re not using without losing history.',
+    body: 'Create and organize your own spending categories. Add fixed payments (recurring bills, subscriptions) as children of any category. Archive what you\'re not using without losing history.',
   },
   {
     number: '03',
@@ -40,7 +44,7 @@ const WARNINGS = [
     border: 'rgba(209,169,69,0.28)',
     examples: [
       "You've used 80% of your dining budget.",
-      "Your budget has unallocated income — every dollar should have a job.",
+      "Your budget has unallocated income. Every dollar should have a job.",
     ],
   },
   {
@@ -63,7 +67,7 @@ const WARNINGS = [
     border: 'rgba(217,79,79,0.28)',
     examples: [
       "You've spent more than your income this month.",
-      "Your budget is exhausted — no remaining funds.",
+      "Your budget is exhausted. No remaining funds.",
       "Savings rate is critically below your target.",
     ],
   },
@@ -72,7 +76,7 @@ const WARNINGS = [
 const METRICS = [
   {
     name: 'Available Bread',
-    description: 'Remaining spendable money this month — income minus committed bills, savings allocation, and what you\'ve already spent.',
+    description: 'Remaining spendable money this month: income minus committed bills, savings allocation, and what you\'ve already spent.',
   },
   {
     name: 'Allocated vs. Unallocated',
@@ -84,7 +88,7 @@ const METRICS = [
   },
   {
     name: 'Savings Rate',
-    description: 'Actual savings as a percentage of income, tracked against your personal target — not a generic rule.',
+    description: 'Actual savings as a percentage of income, tracked against your personal target, not a generic rule.',
   },
 ]
 
@@ -122,10 +126,10 @@ export default function BudgetingPage() {
               See where your money actually goes.
             </h1>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px', maxWidth: '540px' }}>
-              Most budgeting tools are built for adults with mortgages. Bread Head&apos;s is built for your life — part-time income, categories that actually make sense, and warnings that catch problems before they become habits.
+              Most budgeting tools are built for adults with mortgages. Bread Head&apos;s is built for your life: part-time income, categories that actually make sense, and warnings that catch problems before they become habits.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '540px' }}>
-              Plan your month, track every transaction, and watch <strong style={{ color: '#1A2E1A', fontWeight: 600 }}>Available Bread</strong> — your real, spendable balance — update in real time.
+              Plan your month, track every transaction, and watch <strong style={{ color: '#1A2E1A', fontWeight: 600 }}>Available Bread</strong> (your real, spendable balance) update in real time.
             </p>
             <a
               href="/"
@@ -246,7 +250,7 @@ export default function BudgetingPage() {
                 label: 'Categories',
                 title: 'Your budget, organized the way you live.',
                 bullets: [
-                  'Create categories that fit your life — Groceries, Rent, Dining, Savings',
+                  'Create categories that fit your life: Groceries, Rent, Dining, Savings',
                   'Allocate a portion of monthly income to each',
                   'Track allocated amount vs. actual spending in real time',
                   'Archive categories you\'re not using without losing history',
@@ -258,7 +262,7 @@ export default function BudgetingPage() {
                 bullets: [
                   'Add subscriptions, rent, phone bills as fixed payments inside a category',
                   'Committed at the start of the month before discretionary spending',
-                  'Available Bread always reflects what\'s actually free — not just unspent',
+                  'Available Bread always reflects what\'s actually free, not just unspent',
                   'High fixed payment ratio triggers a Significant (T2) warning',
                 ],
               },
@@ -266,7 +270,7 @@ export default function BudgetingPage() {
                 label: 'Transactions',
                 title: 'Every expense and income, tagged and counted.',
                 bullets: [
-                  'Log an expense or income with one tap — one modal handles both',
+                  'Log an expense or income with one tap; one modal handles both',
                   'Every transaction is tagged to a category',
                   'Budget and Available Bread update instantly on save',
                   'Transactions feed the Insights Engine for trend analysis',
@@ -295,7 +299,7 @@ export default function BudgetingPage() {
                   <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {item.bullets.map((b) => (
                       <li key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                        <span style={{ color: '#D1A945', fontSize: '13px', lineHeight: '22px', flexShrink: 0 }}>—</span>
+                        <span style={{ color: '#D1A945', fontSize: '13px', lineHeight: '22px', flexShrink: 0 }}>•</span>
                         <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(26,46,26,0.60)', lineHeight: 1.6 }}>{b}</span>
                       </li>
                     ))}
@@ -400,7 +404,7 @@ export default function BudgetingPage() {
               Three-tier warnings. Caught before they become habits.
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, maxWidth: '560px', marginBottom: '64px' }}>
-              Bread Head watches your spending, allocation, and savings rate automatically. When something&apos;s off, you get a warning — graded by how serious it is, not just that it exists.
+              Bread Head watches your spending, allocation, and savings rate automatically. When something&apos;s off, you get a warning, graded by how serious it is, not just that it exists.
             </p>
           </FadeUp>
 
@@ -456,7 +460,7 @@ export default function BudgetingPage() {
               </FadeUp>
             ))}
             <div style={{ borderTop: '1px solid rgba(245,240,232,0.08)', paddingTop: '32px' }}>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(245,240,232,0.35)', lineHeight: 1.7, maxWidth: '560px', margin: 0 }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(245,240,232,0.60)', lineHeight: 1.7, maxWidth: '560px', margin: 0 }}>
                 Warnings come from two sources: your live budget math (spending vs. allocation) and the Budget Insights Engine (trend analysis). Both feed the Financial Pulse Hub on your main screen.
               </p>
             </div>
@@ -491,7 +495,7 @@ export default function BudgetingPage() {
               Knowing your budget is already ahead.
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.7, marginBottom: '36px' }}>
-              Most adults have never built a real budget — not because they&apos;re bad with money, but because nobody taught them and the tools weren&apos;t made for them.
+              Most adults have never built a real budget, not because they&apos;re bad with money, but because nobody taught them and the tools weren&apos;t made for them.
             </p>
             <a
               href="/"

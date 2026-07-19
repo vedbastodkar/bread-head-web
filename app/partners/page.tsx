@@ -5,9 +5,14 @@ import Footer from '@/app/components/Footer'
 import PartnerForm from './PartnerForm'
 
 export const metadata: Metadata = {
-  title: 'Partners — Bread Head',
+  title: 'Partners',
   description:
-    'Partner with Bread Head to bring financial literacy to every teen you serve. Schools, nonprofits, and foundations welcome.',
+    'Bring standards-aligned financial literacy to every teen you serve. Bread Head partners with schools, districts, youth organizations, and foundations. Free for students, always.',
+  openGraph: {
+    title: 'Partner with Bread Head',
+    description:
+      'Partner with Bread Head to bring financial literacy to every teen you serve. Schools, districts, nonprofits, and foundations welcome.',
+  },
 }
 
 // ── Partner type rows ─────────────────────────────────────────────
@@ -18,7 +23,7 @@ const PARTNER_TYPES = [
     description:
       "No school. No program. No institution required. Bread Head is free to download and use for any student, anywhere. If you're a teen who wants to learn how money actually works, just get the app.",
     features: [
-      'Free to download, free to use — always',
+      'Free to download, free to use, always',
       'No account required to start',
       'Available on iPhone',
       'No ads, no upsells, no paywalls',
@@ -158,7 +163,7 @@ export default function PartnersPage() {
                 }}
               >
                 Whether you represent a school district, a youth nonprofit, or a
-                corporate foundation — Bread Head is built to scale with you.
+                corporate foundation, Bread Head is built to scale with you.
               </p>
 
               {/* CTA buttons */}
@@ -654,7 +659,7 @@ export default function PartnersPage() {
               {/* Right: paragraphs */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {[
-                  "Financial illiteracy isn't a personal failing. It's a systemic gap. The teenagers who struggle most with money in their twenties weren't irresponsible — they were just never taught.",
+                  "Financial illiteracy isn't a personal failing. It's a systemic gap. The teenagers who struggle most with money in their twenties weren't irresponsible. They were just never taught.",
                   "Bread Head exists to close that gap at scale. And we can only do that with institutional partners who believe the same thing.",
                   "Every partnership directly funds expanded access for students who can't afford to learn these lessons the hard way.",
                 ].map((text, i) => (

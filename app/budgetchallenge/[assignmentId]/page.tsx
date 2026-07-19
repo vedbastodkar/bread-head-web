@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useState } from 'react'
 import Link from 'next/link'
+import { Icon } from '@/app/components/Icon'
 import { useStudent } from '@/app/student/useStudent'
 import {
   getLibraryChallenge,
@@ -36,6 +37,25 @@ interface ServerResult {
   status: 'complete' | 'in_progress'
 }
 
+// Loading skeleton mirroring the challenge solver (header + allocation panel).
+function ChallengeSkeleton() {
+  return (
+    <main className="min-h-screen bg-bgSage pt-28 pb-20 px-4">
+      <div className="max-w-3xl mx-auto animate-pulse space-y-4">
+        <div className="h-3 w-48 rounded bg-white/70" />
+        <div className="h-9 w-72 rounded-lg bg-white/70" />
+        <div className="h-4 w-full max-w-md rounded bg-white/70" />
+        <div className="h-24 rounded-2xl bg-white/70" />
+        <div className="grid sm:grid-cols-3 gap-3">
+          <div className="h-28 rounded-2xl bg-white/70" />
+          <div className="h-28 rounded-2xl bg-white/70" />
+          <div className="h-28 rounded-2xl bg-white/70" />
+        </div>
+      </div>
+    </main>
+  )
+}
+
 export default function ChallengePage({ params }: { params: { assignmentId: string } }) {
   const assignmentId = params.assignmentId
   const { data, err, loading, user } = useStudent()
@@ -54,12 +74,9 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
   const lastAddedId = useRef<string | null>(null)
 
   // ---- loading / auth / not-found gates (useStudent redirects to /login) ----
-  if (loading || (!data && !err)) {
-    return <main className="min-h-screen bg-bgSage pt-28" />
-  }
-  if (!user) {
-    // useStudent() already router.replace('/login'); render nothing meanwhile.
-    return <main className="min-h-screen bg-bgSage pt-28" />
+  if (loading || (!data && !err) || !user) {
+    // While loading, or after useStudent() router.replace('/login') for signed-out.
+    return <ChallengeSkeleton />
   }
   if (!resolvable || !ch) {
     return (
@@ -145,7 +162,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
           <div className="bg-textTitle text-bgSage rounded-2xl px-6 py-4 shrink-0">
             <p className="text-[10.5px] font-bold tracking-[0.14em] uppercase text-accentGold m-0">Monthly income</p>
             <p className="font-display italic text-3xl leading-none mt-1 tabular-nums text-bgSage">{money(income)}</p>
-            <p className="text-[11px] text-bgSage/60 mt-1">Fixed — you don’t set this</p>
+            <p className="text-[11px] text-bgSage/60 mt-1">Fixed, you don’t set this</p>
           </div>
         </div>
         <p className="text-textTitle/70 text-[15px] leading-relaxed mt-3 max-w-[62ch]">{ch.prompt}</p>
@@ -171,7 +188,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
           </div>
 
           {boxes.length === 0 ? (
-            <p className="text-textTitle/70 text-sm py-4 text-center">Add your first bucket — give every dollar a job.</p>
+            <p className="text-textTitle/70 text-sm py-4 text-center">Add your first bucket: give every dollar a job.</p>
           ) : (
             <ul className="flex flex-col gap-2.5">
               {boxes.map((box) => (
@@ -197,12 +214,12 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
         <section className="mt-6 bg-white rounded-3xl border border-textTitle/10 p-5">
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">Live checklist</p>
-            <span className="text-[11px] text-textTitle/70">Preview — your grade is set when you submit</span>
+            <span className="text-[11px] text-textTitle/70">Preview: your grade is set when you submit</span>
           </div>
           <ul className="flex flex-col gap-2">
             {result.perCriterion.map((c, i) => (
               <li key={i} className="flex items-center gap-2.5 text-[14px]">
-                <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
+                <span aria-hidden className="inline-flex">{c.passed ? <Icon name="check" size={17} style={{ color: '#4A5D4A' }} /> : <Icon name="x" size={17} style={{ color: '#D94F4F' }} />}</span>
                 <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
                 <span className="sr-only">{c.passed ? 'passing' : 'not yet passing'}</span>
               </li>
@@ -221,7 +238,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
             <label htmlFor="reflection" className="block text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen mb-1">Reflection</label>
             <p className="text-[14px] text-textTitle/70 mb-2">{ch.reflection}</p>
             <textarea id="reflection" value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3}
-              placeholder="Optional — a sentence or two."
+              placeholder="Optional: a sentence or two."
               className="w-full border border-textTitle/15 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brandGreen/40 resize-y" />
           </section>
         )}
@@ -233,17 +250,17 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
 
         {dirtySinceSubmit && (
           <div className="mt-6 rounded-xl bg-[#D1A945]/15 border border-[#D1A945]/40 text-[#7a5f18] text-sm px-4 py-3">
-            You’ve changed your budget since submitting — resubmit to update your grade.
+            You’ve changed your budget since submitting. Resubmit to update your grade.
           </div>
         )}
 
         {server ? (
           <section className="mt-6 rounded-3xl border p-5" style={{ borderColor: server.allPassed ? '#4A5D4A55' : '#D1A94555', background: server.allPassed ? '#EEF4E6' : '#FBF6E7' }}>
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-2xl" aria-hidden>{server.allPassed ? '🎉' : '📋'}</span>
+              <span className="text-2xl inline-flex" aria-hidden style={{ color: server.allPassed ? '#4A5D4A' : '#D1A945' }}>{server.allPassed ? <Icon name="party" /> : <Icon name="clipboard" />}</span>
               <div>
                 <h2 className="font-display italic text-2xl text-textTitle m-0">
-                  {server.allPassed ? 'All criteria passed!' : 'Submitted — some criteria still open'}
+                  {server.allPassed ? 'All criteria passed!' : 'Submitted: some criteria still open'}
                 </h2>
                 <p className="text-[13px] text-textTitle/70 m-0">
                   Score {Math.round(server.score * 100)}% · Status: {server.status === 'complete' ? 'Complete' : 'In progress'}
@@ -253,7 +270,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
             <ul className="flex flex-col gap-2 mt-4">
               {server.perCriterion.map((c, i) => (
                 <li key={i} className="flex items-center gap-2.5 text-[14px]">
-                  <span aria-hidden>{c.passed ? '✅' : '❌'}</span>
+                  <span aria-hidden className="inline-flex">{c.passed ? <Icon name="check" size={17} style={{ color: '#4A5D4A' }} /> : <Icon name="x" size={17} style={{ color: '#D94F4F' }} />}</span>
                   <span className={c.passed ? 'text-textTitle' : 'text-textTitle/70'}>{c.detail}</span>
                 </li>
               ))}
@@ -274,7 +291,7 @@ export default function ChallengePage({ params }: { params: { assignmentId: stri
               className="bg-brandGreen text-white font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-[#3d4e3d] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accentGold">
               {pending ? 'Submitting…' : submittedSnapshot !== null ? 'Resubmit' : 'Submit challenge →'}
             </button>
-            <p className="text-[12px] text-textTitle/70 mt-2">Your grade is scored on the server — the checklist above is just a preview.</p>
+            <p className="text-[12px] text-textTitle/70 mt-2">Your grade is scored on the server; the checklist above is just a preview.</p>
           </div>
         )}
       </div>
@@ -333,8 +350,8 @@ function BoxRow({ box, income, autoFocus, onChange, onDelete }: {
       </div>
 
       <button type="button" onClick={onDelete} aria-label={`Delete ${box.name || 'bucket'}`}
-        className="ml-auto text-sm text-[#B23838] font-semibold px-2 py-1.5 rounded-lg hover:bg-[#D94F4F]/10 self-center">
-        🗑
+        className="ml-auto text-sm text-[#B23838] font-semibold px-2 py-1.5 rounded-lg hover:bg-[#D94F4F]/10 self-center inline-flex items-center">
+        <Icon name="trash" size={16} />
       </button>
     </div>
   )

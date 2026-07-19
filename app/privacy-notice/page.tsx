@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Notice — Bread Head',
-  description: 'Privacy Notice and Terms of Use for Bread Head.',
+  title: 'Privacy Notice',
+  description: 'How Bread Head handles your data, plus our Terms of Use. Built for teens 13+ with FERPA-compliant handling of student records and COPPA-conscious privacy practices.',
+  openGraph: {
+    title: 'Bread Head Privacy Notice & Terms',
+    description: 'How we handle your data, our Terms of Use, and our commitment to FERPA-compliant, teen-safe privacy practices.',
+  },
 }
 
 export default function PrivacyNoticePage() {
@@ -72,18 +76,18 @@ export default function PrivacyNoticePage() {
           </p>
           <ul>
             <li>
-              <strong>Account information</strong> — name and email address when
+              <strong>Account information</strong>: name and email address when
               you create an account or sign up for early access.
             </li>
             <li>
-              <strong>Usage data</strong> — in-app activity such as lessons
+              <strong>Usage data</strong>: in-app activity such as lessons
               completed, journal entries, and budgeting inputs. Your account,
               lesson progress, journal entries, and budget data are stored
               securely in Google Firebase (Firestore), our cloud data provider.
               We don't sell your data or share it with advertisers.
             </li>
             <li>
-              <strong>Device information</strong> — operating system version and
+              <strong>Device information</strong>: operating system version and
               app version, used solely for debugging and compatibility.
             </li>
           </ul>
@@ -127,7 +131,7 @@ export default function PrivacyNoticePage() {
           </p>
           <p>
             If you're in a class, your teacher can see your lesson and
-            challenge progress and whether you've completed journal entries —
+            challenge progress and whether you've completed journal entries,
             but never the contents of your journal.
           </p>
         </Section>
@@ -146,7 +150,7 @@ export default function PrivacyNoticePage() {
             When a school or teacher uses Bread Head with their students, we act
             as a "school official" with a legitimate educational interest under
             the Family Educational Rights and Privacy Act (FERPA). We use student
-            information only to provide and support the service for that school —
+            information only to provide and support the service for that school;
             we never sell it, use it for advertising, or build advertising
             profiles. Student data stays under the school's control: schools may
             request access, correction, deletion, or export of their students'

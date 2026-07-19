@@ -184,7 +184,7 @@ function StudentPane() {
     try { await signInWithGoogle(); router.push('/dashboard') }
     catch (e: any) {
       setError(e?.code === 'auth/account-exists-with-different-credential'
-        ? 'You already have an account with this email — sign in with your original method first, then link Google in settings.'
+        ? 'You already have an account with this email. Sign in with your original method first, then link Google in settings.'
         : 'Google sign-in failed.')
       setBusy(false)
     }
@@ -195,7 +195,7 @@ function StudentPane() {
     try { await signInWithApple(); router.push('/dashboard') }
     catch (e: any) {
       setError(e?.code === 'auth/account-exists-with-different-credential'
-        ? 'You already have an account with this email — sign in with your original method first, then link Apple in settings.'
+        ? 'You already have an account with this email. Sign in with your original method first, then link Apple in settings.'
         : 'Apple sign-in failed.')
       setBusy(false)
     }

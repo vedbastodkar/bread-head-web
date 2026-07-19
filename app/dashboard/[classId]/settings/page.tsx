@@ -46,19 +46,19 @@ export default function ClassSettings() {
     if (!user) return
     setBusy(true)
     try { await apiCall(user, `/api/classes/${classId}`, 'PATCH', { name, grade }); reload(); notify('Class saved.', 'success'); router.push(`/dashboard/${classId}`) }
-    catch { notify('Could not save the class — please try again.', 'error') } finally { setBusy(false) }
+    catch { notify('Could not save the class. Please try again.', 'error') } finally { setBusy(false) }
   }
   const toggleArchive = async () => {
     if (!user) return
     setBusy(true)
     try { await apiCall(user, `/api/classes/${classId}`, 'PATCH', { archived: !cls.archived }); reload(); notify(cls.archived ? 'Class unarchived.' : 'Class archived.', 'success'); router.push('/dashboard') }
-    catch { notify('Could not update the class — please try again.', 'error') } finally { setBusy(false) }
+    catch { notify('Could not update the class. Please try again.', 'error') } finally { setBusy(false) }
   }
   const del = async () => {
     if (!user || !(await confirm({ title: 'Delete class', message: 'Delete this class? Student accounts are not deleted, only the class + roster.', confirmLabel: 'Delete', destructive: true }))) return
     setBusy(true)
     try { await apiCall(user, `/api/classes/${classId}`, 'DELETE'); reload(); notify('Class deleted.', 'success'); router.push('/dashboard') }
-    catch { notify('Could not delete the class — please try again.', 'error') } finally { setBusy(false) }
+    catch { notify('Could not delete the class. Please try again.', 'error') } finally { setBusy(false) }
   }
   const addCoTeacher = async () => {
     if (!user || !coEmail.trim()) return
@@ -67,7 +67,7 @@ export default function ClassSettings() {
       const res = await apiCall(user, `/api/classes/${classId}/co-teachers`, 'POST', { email: coEmail.trim() })
       setTeachers((prev) => [...prev, res.teacher])
       setCoEmail(''); reload(); notify('Co-teacher added.', 'success')
-    } catch (e: any) { notify(e?.message || 'Could not add co-teacher — check the email.', 'error') } finally { setCoBusy(false) }
+    } catch (e: any) { notify(e?.message || 'Could not add co-teacher. Check the email.', 'error') } finally { setCoBusy(false) }
   }
   const removeCoTeacher = async (uid: string) => {
     if (!user || !(await confirm({ message: 'Remove this co-teacher?', confirmLabel: 'Remove', destructive: true }))) return
@@ -75,7 +75,7 @@ export default function ClassSettings() {
     try {
       await apiCall(user, `/api/classes/${classId}/co-teachers?uid=${uid}`, 'DELETE')
       setTeachers((prev) => prev.filter((t) => t.uid !== uid)); reload(); notify('Co-teacher removed.', 'success')
-    } catch { notify('Could not remove the co-teacher — please try again.', 'error') } finally { setCoBusy(false) }
+    } catch { notify('Could not remove the co-teacher. Please try again.', 'error') } finally { setCoBusy(false) }
   }
 
   return (

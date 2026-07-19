@@ -20,25 +20,25 @@ const SLIDES = [
         id: 'a',
         text: 'Your employer docked your pay.',
         correct: false,
-        wrongWhy: "Employers can't legally reduce wages you already earned. What came out wasn't a penalty — it was required by law, and it goes to the government, not your employer.",
+        wrongWhy: "Employers can't legally reduce wages you already earned. What came out wasn't a penalty; it was required by law, and it goes to the government, not your employer.",
       },
       {
         id: 'b',
         text: 'Taxes and deductions were withheld.',
         correct: true,
-        rightWhy: "Federal income tax, Social Security (6.2%), and Medicare (1.45%) are taken out before you see a cent. This is called withholding — it's automatic on every paycheck, and your employer sends it straight to the IRS on your behalf.",
+        rightWhy: "Federal income tax, Social Security (6.2%), and Medicare (1.45%) are taken out before you see a cent. This is called withholding; it's automatic on every paycheck, and your employer sends it straight to the IRS on your behalf.",
       },
       {
         id: 'c',
         text: 'The bank charged fees.',
         correct: false,
-        wrongWhy: "Banks don't intercept your paycheck. Your direct deposit arrives after payroll withholding — fees can hit your balance later, but they're not what caused this gap.",
+        wrongWhy: "Banks don't intercept your paycheck. Your direct deposit arrives after payroll withholding; fees can hit your balance later, but they're not what caused this gap.",
       },
       {
         id: 'd',
         text: 'It was a payroll error.',
         correct: false,
-        wrongWhy: "This is exactly how every paycheck is supposed to work. If it's your first one, the gap feels like a mistake — but it isn't. Every W-2 employee sees this.",
+        wrongWhy: "This is exactly how every paycheck is supposed to work. If it's your first one, the gap feels like a mistake, but it isn't. Every W-2 employee sees this.",
       },
     ],
   },
@@ -46,7 +46,7 @@ const SLIDES = [
     type: 'content' as const,
     unit: 'Unit 02 · Income',
     title: "That's withholding.",
-    body: "Every paycheck, your employer sends a portion of your earnings directly to the government — before you touch it.\n\nFederal tax. State tax. Social Security. Medicare.\n\nThis is why gross pay and net pay are always different numbers.",
+    body: "Every paycheck, your employer sends a portion of your earnings directly to the government, before you touch it.\n\nFederal tax. State tax. Social Security. Medicare.\n\nThis is why gross pay and net pay are always different numbers.",
     cta: null,
     last: true,
   },
@@ -340,7 +340,7 @@ export default function LessonDemo() {
             {/* Hint — wrong answer */}
             {answered && !isCorrect && (
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(230,237,217,0.35)', marginTop: '12px', textAlign: 'center' }}>
-                Not quite — try again to move forward.
+                Not quite. Try again to move forward.
               </p>
             )}
           </>

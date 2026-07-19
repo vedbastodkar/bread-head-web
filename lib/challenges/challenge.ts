@@ -103,7 +103,7 @@ function evalCriterion(c: Criterion, ch: Challenge, alloc: Allocation): Criterio
       passed,
       detail: passed
         ? `Essentials $${Math.floor(needs)} of $${floor.toFixed(0)}`
-        : `Essentials underfunded — $${Math.floor(needs)} of $${floor.toFixed(0)}`,
+        : `Essentials underfunded: $${Math.floor(needs)} of $${floor.toFixed(0)}`,
     }
   }
   // min_savings_rate

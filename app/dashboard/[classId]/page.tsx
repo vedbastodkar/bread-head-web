@@ -63,7 +63,7 @@ export default function ClassDetail() {
           Needs attention {needAttention.length > 0 && <span className="text-red-600">· {needAttention.length}</span>}
         </h2>
         {needAttention.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/70">Everyone's on track — no students flagged.</div>
+          <div className="bg-white rounded-2xl shadow-sm p-4 text-sm text-textTitle/70">Everyone's on track. No students flagged.</div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {needAttention.map(({ s, flags }) => (
@@ -123,8 +123,8 @@ export default function ClassDetail() {
                         <span className="text-textTitle/70 text-xs w-9 text-right">{pct}%</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-textTitle/70">U{s.currentUnit}·L{s.currentLesson}<span className="text-textTitle/70"> — {unitName(s.currentUnit)}</span></td>
-                    <td className="py-3 px-4 text-textTitle/70">{d === null ? '—' : d === 0 ? 'today' : `${d}d ago`}</td>
+                    <td className="py-3 px-4 text-textTitle/70">U{s.currentUnit}·L{s.currentLesson}<span className="text-textTitle/70">: {unitName(s.currentUnit)}</span></td>
+                    <td className="py-3 px-4 text-textTitle/70">{d === null ? '-' : d === 0 ? 'today' : `${d}d ago`}</td>
                     <td className="py-3 px-4 text-right text-textTitle/70">{s.xp.toLocaleString()}</td>
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-3">
@@ -146,7 +146,7 @@ export default function ClassDetail() {
           <select value={String(unitFilter)} onChange={(e) => setUnitFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
             className="text-sm px-2 py-1 rounded-lg border border-textTitle/15 bg-white text-textTitle/70">
             <option value="all">All units</option>
-            {CATALOG.map((u) => <option key={u.unit} value={u.unit}>U{u.unit} — {u.name}</option>)}
+            {CATALOG.map((u) => <option key={u.unit} value={u.unit}>U{u.unit}: {u.name}</option>)}
           </select>
         </div>
         <Heatmap students={sorted} classId={cls.id} units={units} />
@@ -236,7 +236,7 @@ function QuickAssign({
 
   async function assign() {
     if (!user) return
-    if (dueDate && dueDate < today && !(await confirm({ message: 'This due date is in the past — assign anyway?' }))) return
+    if (dueDate && dueDate < today && !(await confirm({ message: 'This due date is in the past. Assign anyway?' }))) return
 
     let payload: Record<string, unknown>
     if (type === 'challenge') {
@@ -257,7 +257,7 @@ function QuickAssign({
       resetForm()
       reload()
       notify(type === 'challenge' ? 'Budget Challenge assigned.' : 'Journal assigned.', 'success')
-    } catch { notify('Something went wrong — please try again.', 'error') } finally { setBusy(false) }
+    } catch { notify('Something went wrong. Please try again.', 'error') } finally { setBusy(false) }
   }
 
   return (

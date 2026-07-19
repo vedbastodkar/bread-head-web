@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import type { Lesson, Slide } from '@/lib/curriculum/slideTypes'
 import { isInteractive } from '@/lib/curriculum/slideTypes'
-import { sfEmoji } from '@/lib/sfIcon'
+import { Icon } from '@/app/components/Icon'
 import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
 
 // Mirrors LessonLogic: slideIndex + completedSlides; interactive slides gate next().
@@ -293,7 +293,7 @@ function ReportModal({ lesson, slide, onSubmit, onClose }: {
         {sent ? (
           <div className="text-center py-4">
             <div className="text-3xl mb-2">✓</div>
-            <p className="text-textTitle">Thanks — we’ll take a look.</p>
+            <p className="text-textTitle">Thanks, we’ll take a look.</p>
             <button onClick={onClose} className="mt-5 px-5 py-2 rounded-xl bg-brandGreen text-white text-sm">Close</button>
           </div>
         ) : (
@@ -318,10 +318,10 @@ function ReportModal({ lesson, slide, onSubmit, onClose }: {
 }
 
 // ---- shared ----
-function SlideImage({ src }: { src?: string | null }) {
+function SlideImage({ src, alt }: { src?: string | null; alt?: string }) {
   if (!src) return null
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt="" className="rounded-2xl mx-auto mb-6 max-h-80 md:max-h-96 object-contain" />
+  return <img src={src} alt={alt || 'Lesson illustration'} className="rounded-2xl mx-auto mb-6 max-h-80 md:max-h-96 object-contain" />
 }
 
 // ---- slide renderers ----
@@ -330,7 +330,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'title':
       return (
         <div className="text-center">
-          <SlideImage src={slide.image} />
+          <SlideImage src={slide.image} alt={slide.title} />
           <h1 className="font-display text-5xl md:text-6xl text-textTitle mb-6 leading-tight">{slide.title}</h1>
           {slide.subtitle && <p className="text-textTitle/70 text-xl md:text-2xl mb-3 leading-relaxed">{slide.subtitle}</p>}
           {slide.detailText && <p className="text-textTitle/70 text-lg md:text-xl">{slide.detailText}</p>}
@@ -339,7 +339,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'objectives':
       return (
         <div>
-          <SlideImage src={slide.image} />
+          <SlideImage src={slide.image} alt={slide.headerTitle} />
           <h2 className="font-display text-3xl md:text-4xl text-textTitle mb-2">{slide.headerTitle}</h2>
           {slide.subheader && <p className="text-textTitle/70 text-lg mb-6">{slide.subheader}</p>}
           <ul className="space-y-3">
@@ -375,7 +375,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'recap':
       return (
         <div className="text-center">
-          <SlideImage src={slide.image} />
+          <SlideImage src={slide.image} alt={slide.title} />
           {slide.eyebrow && <div className="text-sm uppercase tracking-wider text-textTitle/70 mb-2">{slide.eyebrow}</div>}
           {slide.title && <h2 className="font-display text-2xl md:text-3xl text-textTitle mb-4">{slide.title}</h2>}
           <div className="space-y-3">
@@ -413,7 +413,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
           <div className="space-y-3">
             {slide.items.map((it, i) => (
               <div key={i} className="flex items-start gap-3 bg-white rounded-2xl p-5 shadow-sm">
-                <span className="text-2xl mt-0.5 leading-none w-8 text-center shrink-0">{sfEmoji(it.icon)}</span>
+                <span className="text-2xl mt-0.5 leading-none w-8 flex justify-center shrink-0 text-brandGreen"><Icon sf={it.icon} /></span>
                 <div>
                   <div className="text-textTitle font-medium text-lg">{it.title}</div>
                   {it.description && <div className="text-textTitle/70">{it.description}</div>}
@@ -500,7 +500,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'image':
       return (
         <div className="text-center">
-          <SlideImage src={slide.image} />
+          <SlideImage src={slide.image} alt={slide.caption || slide.title} />
           <h2 className="font-display text-2xl text-textTitle mb-2">{slide.title}</h2>
           {slide.caption && <p className="text-textTitle/70">{slide.caption}</p>}
         </div>
@@ -511,7 +511,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
       return (
         <div className="text-center">
           <p className="font-display text-2xl italic text-textTitle">“{slide.quote}”</p>
-          {slide.author && <p className="text-textTitle/70 mt-3">— {slide.author}</p>}
+          {slide.author && <p className="text-textTitle/70 mt-3">{slide.author}</p>}
         </div>
       )
     case 'callToAction':

@@ -5,10 +5,10 @@
 export interface CatalogUnit { unit: number; name: string; lessonCount: number; description: string }
 
 export const CATALOG: CatalogUnit[] = [
-  { unit: 1,  name: 'Introduction to Personal Finance', lessonCount: 4,  description: 'What personal finance is and why it matters — an overview of everything you’ll learn.' },
+  { unit: 1,  name: 'Introduction to Personal Finance', lessonCount: 4,  description: 'What personal finance is and why it matters: an overview of everything you’ll learn.' },
   { unit: 2,  name: 'Income and Career Planning',       lessonCount: 15, description: 'Types of income and careers, and how to plan and budget what you earn.' },
   { unit: 3,  name: 'Smart Spending',                   lessonCount: 8,  description: 'Needs vs. wants, making smart purchases, and spending with intention.' },
-  { unit: 4,  name: 'Credit and Loans',                 lessonCount: 18, description: 'How credit, loans, and borrowing work — and how to use them responsibly.' },
+  { unit: 4,  name: 'Credit and Loans',                 lessonCount: 18, description: 'How credit, loans, and borrowing work, and how to use them responsibly.' },
   { unit: 5,  name: 'Saving',                           lessonCount: 9,  description: 'Why and how to save: emergencies, goals, and building healthy habits.' },
   { unit: 6,  name: 'Investing',                        lessonCount: 7,  description: 'Growing your money over time: risk, reward, stocks, and diversification.' },
   { unit: 7,  name: 'Insurance',                        lessonCount: 13, description: 'Protecting yourself and your money, and avoiding common scams.' },

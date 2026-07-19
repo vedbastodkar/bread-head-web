@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       replyTo: clippedEmail,
-      subject: `Early access signup — ${clippedEmail}`,
+      subject: `Early access signup: ${clippedEmail}`,
       html: subscribeHtml(clippedEmail),
     })
     if (error) {

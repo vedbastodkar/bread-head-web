@@ -4,8 +4,7 @@
 // h2: Playfair bold (non-italic — formal/institutional tone)
 // Button: light-section style (softGreen bg, brandGreen text)
 // accentGold: NOT used here
-// Pass 3: stat blocks wrapped in FadeUp (delays 0, 0.1, 0.2, 0.3)
-//         CountUp for 2400+ (format), 3, 100%; "5–9" stays static
+// Stat blocks wrapped in FadeUp (delays 0, 0.1): "5–9" static, 100% via CountUp
 
 import Link    from 'next/link'
 import FadeUp  from '@/app/components/FadeUp'
@@ -15,7 +14,7 @@ const partnerTypes = [
   {
     number: '01',
     label: 'Individual Students',
-    body: 'No school or program required. Any student can download Bread Head for free and start learning immediately — on any device, at any pace.',
+    body: 'No school or program required. Any student can download Bread Head for free and start learning immediately, on any device, at any pace.',
   },
   {
     number: '02',
@@ -30,7 +29,7 @@ const partnerTypes = [
   {
     number: '04',
     label: 'Corporate & Foundation',
-    body: 'Fund access for underserved communities, sponsor a cohort, or partner to build curriculum around your financial products — responsibly.',
+    body: 'Fund access for underserved communities, sponsor a cohort, or partner to build curriculum around your financial products, responsibly.',
   },
 ]
 
@@ -57,7 +56,7 @@ export default function Partners() {
                style={{ color: 'rgba(26,46,26,0.65)' }}>
               Bread Head is built to scale. Whether you represent a district,
               a youth nonprofit, or a foundation, we want to bring this to
-              every teen who needs it — regardless of zip code.
+              every teen who needs it, regardless of zip code.
             </p>
             {/* Light-section CTA button */}
             <Link
@@ -78,33 +77,11 @@ export default function Partners() {
 
         {/* Stats row — Playfair 700 48px per spec */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 mb-10 pb-10"
+          className="grid grid-cols-2 gap-8 lg:gap-16 mb-10 pb-10 max-w-xl"
           style={{ borderBottom: '0.5px solid rgba(26,46,26,0.10)' }}
         >
-          {/* 2,400+ — CountUp with format + suffix */}
-          <FadeUp delay={0}>
-            <div>
-              <CountUp target={2400} suffix="+" format={true} className="partners-stat-num font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }} />
-              <p className="font-body text-[13px] mt-3"
-                 style={{ color: 'rgba(26,46,26,0.50)' }}>
-                teens on the waitlist
-              </p>
-            </div>
-          </FadeUp>
-
-          {/* 3 — CountUp */}
-          <FadeUp delay={0.1}>
-            <div>
-              <CountUp target={3} className="partners-stat-num font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }} />
-              <p className="font-body text-[13px] mt-3"
-                 style={{ color: 'rgba(26,46,26,0.50)' }}>
-                states in initial rollout
-              </p>
-            </div>
-          </FadeUp>
-
           {/* 5–9 — static (range, not a number) */}
-          <FadeUp delay={0.2}>
+          <FadeUp delay={0}>
             <div>
               <p
                 className="partners-stat-num font-display font-bold text-textTitle leading-none mb-3"
@@ -120,7 +97,7 @@ export default function Partners() {
           </FadeUp>
 
           {/* 100% — CountUp */}
-          <FadeUp delay={0.3}>
+          <FadeUp delay={0.1}>
             <div>
               <CountUp target={100} suffix="%" className="partners-stat-num font-display font-bold text-textTitle leading-none" style={{ fontSize: '48px' }} />
               <p className="font-body text-[13px] mt-3"

@@ -48,7 +48,7 @@ export default function HandoutPage() {
             <ol className="space-y-3 text-sm text-textTitle/80">
               <li className="flex gap-3"><span className="w-6 h-6 shrink-0 rounded-full bg-bgSage flex items-center justify-center text-xs">1</span> Go to <span className="font-medium">bread-head.org/login</span></li>
               <li className="flex gap-3"><span className="w-6 h-6 shrink-0 rounded-full bg-bgSage flex items-center justify-center text-xs">2</span> Choose <span className="font-medium">Student</span> and create your account.</li>
-              <li className="flex gap-3"><span className="w-6 h-6 shrink-0 rounded-full bg-bgSage flex items-center justify-center text-xs">3</span> Enter the class code <span className="font-medium">{cls.joinCode ?? '——————'}</span> to join.</li>
+              <li className="flex gap-3"><span className="w-6 h-6 shrink-0 rounded-full bg-bgSage flex items-center justify-center text-xs">3</span> Enter the class code <span className="font-medium">{cls.joinCode ?? '------'}</span> to join.</li>
             </ol>
           </div>
 

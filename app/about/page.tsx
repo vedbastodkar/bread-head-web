@@ -7,9 +7,14 @@ import AboutCTA from './AboutCTA'
 import CongressionalWin from '@/components/sections/CongressionalWin'
 
 export const metadata: Metadata = {
-  title: 'About — Bread Head',
+  title: 'About',
   description:
-    'Learn why Bread Head exists, what we believe, and who\'s building it.',
+    'Meet the student-led team behind Bread Head, the mission to close the teen financial literacy gap, and the Congressional App Challenge win that put us on the map.',
+  openGraph: {
+    title: 'About Bread Head',
+    description:
+      'The mission, the values, and the student-led team building Bread Head, plus our Congressional App Challenge recognition.',
+  },
 }
 
 // ── Value card data ───────────────────────────────────────────────
@@ -24,7 +29,7 @@ const VALUES = [
   },
   {
     title: 'Habits over knowledge',
-    body: "Knowing isn't doing. Bread Head is built around repetition, reflection, and small daily actions — because that's what actually changes financial behavior.",
+    body: "Knowing isn't doing. Bread Head is built around repetition, reflection, and small daily actions, because that's what actually changes financial behavior.",
   },
   {
     title: 'Access for everyone',
@@ -36,7 +41,7 @@ const VALUES = [
   },
   {
     title: 'Ownership over excuses',
-    body: "Financial growth takes ownership, not perfection or shame. Bread Head is built to help teens track their choices, reflect over time, and turn responsibility into a lasting habit — not a one-time motivation spike.",
+    body: "Financial growth takes ownership, not perfection or shame. Bread Head is built to help teens track their choices, reflect over time, and turn responsibility into a lasting habit, not a one-time motivation spike.",
   },
 ]
 
@@ -98,7 +103,7 @@ export default function AboutPage() {
                 margin: 0,
               }}
             >
-              Bread Head started with a simple frustration — every teenager is
+              Bread Head started with a simple frustration: every teenager is
               expected to manage money, file taxes, and understand credit within
               months of graduating. Nobody teaches them how.
             </p>
@@ -138,7 +143,7 @@ export default function AboutPage() {
                 marginBottom: 0,
               }}
             >
-              Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth — so they can take control of their future no matter where they&apos;re starting from.
+              Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth, so they can take control of their future no matter where they&apos;re starting from.
             </h2>
           </FadeUp>
         </div>
@@ -316,7 +321,7 @@ export default function AboutPage() {
                 >
                   I&apos;m still in high school, and what I kept running into was
                   that the resources out there for teens just aren&apos;t put together
-                  right. Some tools have budgeting but no lessons behind them —
+                  right. Some tools have budgeting but no lessons behind them,
                   so what&apos;s the point? Others have content but skip journaling
                   entirely, which is always the first thing to get cut. The
                   individual pieces exist. Nobody had combined them in a way that
@@ -334,7 +339,7 @@ export default function AboutPage() {
                 >
                   My background is in software and product design. I&apos;ve spent
                   the last few years building apps and learning what makes people
-                  actually change their behavior — not just what makes them nod
+                  actually change their behavior, not just what makes them nod
                   along in a classroom.
                 </p>
                 <p
@@ -349,7 +354,7 @@ export default function AboutPage() {
                 >
                   The thing with teens is that we have to drive the change
                   ourselves. That&apos;s why Bread Head is built around
-                  self-reflection — not to check a box, but because it&apos;s
+                  self-reflection, not to check a box, but because it&apos;s
                   how you actually figure out what you need to do. It&apos;s
                   not connected to parents like most financial apps. There&apos;s
                   no one watching over your shoulder to tell you what to do or
@@ -564,7 +569,7 @@ export default function AboutPage() {
                     marginBottom: '16px',
                   }}
                 >
-                  I manage media for Bread Head with one goal in mind — make financial education actually reach people.
+                  I manage media for Bread Head with one goal in mind: make financial education actually reach people.
                 </p>
                 <p
                   style={{
@@ -588,7 +593,7 @@ export default function AboutPage() {
                     marginBottom: '16px',
                   }}
                 >
-                  My background is in digital media and content strategy. I focus on how ideas move — what makes someone stop scrolling, what makes them care, and what makes them come back.
+                  My background is in digital media and content strategy. I focus on how ideas move: what makes someone stop scrolling, what makes them care, and what makes them come back.
                 </p>
                 <p
                   style={{
@@ -786,7 +791,7 @@ export default function AboutPage() {
               }}
             >
               We&apos;re actively partnering with schools, youth organizations, and
-              foundations. Reach out — we respond to every message.
+              foundations. Reach out. We respond to every message.
             </p>
 
             <AboutCTA />

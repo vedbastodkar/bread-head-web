@@ -34,7 +34,7 @@ export default function UnitPage() {
   return (
     <StudentShell data={data!} user={user} signOut={signOut}>
       <Link href="/mylessons" className="text-sm text-textTitle/70 hover:text-textTitle">← Personal Finance</Link>
-      <h1 className="font-display text-3xl text-textTitle mt-1 mb-2">Unit {u.unit} — {u.name}</h1>
+      <h1 className="font-display text-3xl text-textTitle mt-1 mb-2">Unit {u.unit}: {u.name}</h1>
       <p className="text-textTitle/70 mb-5 max-w-2xl">{u.description}</p>
 
       <div className="flex items-center gap-3 mb-8">

@@ -29,7 +29,7 @@ export function AssignedGroups({
                     <div className="min-w-0">
                       <div className="text-textTitle/75 truncate">{t.className}</div>
                       <div className="text-textTitle/70">
-                        due {t.assignment.dueDate ?? '—'} · {t.done}/{t.total} done
+                        due {t.assignment.dueDate ?? '-'} · {t.done}/{t.total} done
                       </div>
                     </div>
                     <div className="flex gap-2 shrink-0">

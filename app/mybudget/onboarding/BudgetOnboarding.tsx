@@ -4,7 +4,7 @@
 // adapted to the web's receipt-printer + boxes interaction model. Pure UI + local
 // state; the parent performs the Firestore writes via onComplete.
 import { useState } from 'react'
-import { sfEmoji } from '@/lib/sfIcon'
+import { Icon } from '@/app/components/Icon'
 import { BUDGET_TEMPLATES, type BudgetTemplate } from '@/lib/budget/templates'
 
 export interface OnboardingResult {
@@ -133,10 +133,10 @@ function Sub({ children }: { children: React.ReactNode }) {
 function Note({ children }: { children: React.ReactNode }) {
   return <p className="mt-6 text-[13px] text-textTitle/70 bg-white/60 border border-textTitle/10 rounded-xl px-4 py-3">{children}</p>
 }
-function Badge({ icon, text }: { icon: string; text: string }) {
+function Badge({ name, text }: { name: string; text: string }) {
   return (
     <div className="flex items-center gap-3 bg-white border border-textTitle/10 rounded-xl px-4 py-3">
-      <span className="text-xl">{icon}</span>
+      <span className="text-xl text-brandGreen inline-flex"><Icon name={name} /></span>
       <span className="text-[14px] font-medium text-textTitle">{text}</span>
     </div>
   )
@@ -150,9 +150,9 @@ function Welcome() {
       <H>Welcome to Budgeting!</H>
       <Sub>Master your money with envelope-style budgeting made for teens.</Sub>
       <div className="flex flex-col gap-2.5 mt-7">
-        <Badge icon="📅" text="Continuous monthly tracking" />
-        <Badge icon="📊" text="Weekly advisory check-ins" />
-        <Badge icon="💵" text="Smart savings suggestions" />
+        <Badge name="calendar" text="Continuous monthly tracking" />
+        <Badge name="chart" text="Weekly advisory check-ins" />
+        <Badge name="piggy-bank" text="Smart savings suggestions" />
       </div>
     </div>
   )
@@ -162,7 +162,7 @@ function How1() {
     <div>
       <Eyebrow />
       <H>Step 1 · Available Bread</H>
-      <Sub>Think of this as your monthly money pool — everything you have to work with.</Sub>
+      <Sub>Think of this as your monthly money pool, everything you have to work with.</Sub>
       <div className="mt-6 bg-white border border-textTitle/10 rounded-2xl p-5">
         <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-textTitle/70 mb-2">Examples</p>
         <ul className="text-[14px] text-textTitle/70 space-y-1.5">
@@ -171,7 +171,7 @@ function How1() {
           <li>• $150 birthday money + $50 allowance</li>
         </ul>
       </div>
-      <Note>This is the starting point — the total money you have to work with each month.</Note>
+      <Note>This is the starting point: the total money you have to work with each month.</Note>
     </div>
   )
 }
@@ -180,8 +180,8 @@ function How2() {
     <div>
       <Eyebrow />
       <H>Step 2 · Category Boxes</H>
-      <Sub>Divide your money into spending categories — each box is one category.</Sub>
-      <Note>Each box gets its own “envelope” with a planned amount. When it’s gone, you know you’ve hit your limit. 💡 You can add, rename, and manage boxes anytime.</Note>
+      <Sub>Divide your money into spending categories: each box is one category.</Sub>
+      <Note>Each box gets its own “envelope” with a planned amount. When it’s gone, you know you’ve hit your limit. You can add, rename, and manage boxes anytime.</Note>
     </div>
   )
 }
@@ -193,17 +193,17 @@ function How3() {
       <Sub>Two easy moves to log an expense:</Sub>
       <div className="grid sm:grid-cols-2 gap-3 mt-5">
         <div className="bg-white border border-textTitle/10 rounded-2xl p-5">
-          <div className="text-2xl mb-2">🧾</div>
+          <div className="mb-2 text-brandGreen"><Icon name="receipt" size={26} /></div>
           <p className="font-semibold text-[14px] text-textTitle">1 · Print a receipt</p>
           <p className="text-[13px] text-textTitle/70 mt-1">Enter an amount and what it was for.</p>
         </div>
         <div className="bg-white border border-textTitle/10 rounded-2xl p-5">
-          <div className="text-2xl mb-2">📦</div>
+          <div className="mb-2 text-brandGreen"><Icon name="package" size={26} /></div>
           <p className="font-semibold text-[14px] text-textTitle">2 · Drag it into a box</p>
           <p className="text-[13px] text-textTitle/70 mt-1">Drop the receipt onto a category to file it.</p>
         </div>
       </div>
-      <Note>Your progress bars update instantly — you always know exactly how much you have left. 💵 You can add income too, like birthday money, bonuses, or cash gifts.</Note>
+      <Note>Your progress bars update instantly, so you always know exactly how much you have left. You can add income too, like birthday money, bonuses, or cash gifts.</Note>
     </div>
   )
 }
@@ -212,7 +212,7 @@ function How4() {
     <div>
       <Eyebrow />
       <H>Step 4 · Monthly Reset</H>
-      <Sub>A fresh start every month — completely automatic.</Sub>
+      <Sub>A fresh start every month, completely automatic.</Sub>
       <Note>No manual work needed. Your budget refreshes when a new month starts, based on your standing targets.</Note>
     </div>
   )
@@ -222,7 +222,7 @@ function How5() {
     <div>
       <Eyebrow />
       <H>Step 5 · Weekly Guidance</H>
-      <Sub>Helpful insights and suggestions — all optional.</Sub>
+      <Sub>Helpful insights and suggestions, all optional.</Sub>
       <Note>Nothing is automatic or mandatory. You’re always in control of your money.</Note>
     </div>
   )
@@ -249,7 +249,7 @@ function Overview() {
           </div>
         ))}
       </div>
-      <Note>💡 You can change any of this later.</Note>
+      <Note>You can change any of this later.</Note>
     </div>
   )
 }
@@ -258,7 +258,7 @@ function Income({ value, onChange }: { value: string; onChange: (v: string) => v
     <div>
       <Eyebrow />
       <H>What’s your income this month?</H>
-      <Sub>Enter how much you expect to earn — your boxes scale automatically.</Sub>
+      <Sub>Enter how much you expect to earn, and your boxes scale automatically.</Sub>
       <div className="mt-7 bg-white border border-textTitle/10 rounded-2xl p-6">
         <label className="flex flex-col gap-2">
           <span className="text-[10.5px] font-bold tracking-[0.1em] uppercase text-textTitle/70">Monthly amount</span>
@@ -294,7 +294,7 @@ function Templates({ selected, onSelect }: { selected: string | null; onSelect: 
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {t.categories.map((c) => (
                   <span key={c.name} className="inline-flex items-center gap-1 text-[11.5px] font-medium text-textTitle/70 bg-[#DCE5C9] rounded-full px-2.5 py-1">
-                    <span>{sfEmoji(c.iconKey)}</span>{c.name} {c.targetValue}%
+                    <span className="inline-flex"><Icon sf={c.iconKey} size={13} /></span>{c.name} {c.targetValue}%
                   </span>
                 ))}
               </div>

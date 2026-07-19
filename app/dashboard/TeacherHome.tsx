@@ -72,7 +72,7 @@ export function TeacherHome() {
       </div>
 
       {cards.length === 0 && (
-        <p className="text-textTitle/70">{showArchived ? 'No archived classes.' : 'No classes yet — use “New class”.'}</p>
+        <p className="text-textTitle/70">{showArchived ? 'No archived classes.' : 'No classes yet. Use “New class”.'}</p>
       )}
 
       <div className="grid sm:grid-cols-2 gap-4">

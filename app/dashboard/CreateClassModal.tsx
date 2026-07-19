@@ -46,7 +46,7 @@ export function CreateClassModal({
             autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder='e.g. "Period 3 — Personal Finance"'
+            placeholder='e.g. "Period 3: Personal Finance"'
             className="w-full px-4 py-2.5 rounded-xl border border-textTitle/15 focus:border-brandGreen outline-none text-sm"
           />
         </label>

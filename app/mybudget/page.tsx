@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/app/context/AuthContext'
-import { sfEmoji } from '@/lib/sfIcon'
+import { Icon } from '@/app/components/Icon'
 import {
   newBudgetId,
   resolveAllocated,
@@ -217,7 +217,21 @@ export default function MyBudgetPage() {
     return null
   }
 
-  if (loading || !ready) return <main className="min-h-screen bg-bgSage pt-28" />
+  if (loading || !ready) {
+    return (
+      <main className="min-h-screen bg-bgSage pt-28 pb-20 px-4">
+        <div className="max-w-5xl mx-auto animate-pulse space-y-4">
+          <div className="h-3 w-40 rounded bg-white/70" />
+          <div className="h-9 w-64 rounded-lg bg-white/70" />
+          <div className="h-28 rounded-2xl bg-white/70" />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="h-48 rounded-2xl bg-white/70" />
+            <div className="h-48 rounded-2xl bg-white/70" />
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   if (loadError) {
     return (
@@ -281,7 +295,7 @@ export default function MyBudgetPage() {
         <section className="mt-6 rounded-3xl border border-textTitle/10 p-5" style={{ background: 'linear-gradient(180deg,#EEF2E4,#E1E9D0)' }}>
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">The workbench</p>
-            <p className="text-[12.5px] text-textTitle/70">Make a receipt, then <b className="text-textTitle">drag it into a box</b> — or tap the receipt, then tap a box.</p>
+            <p className="text-[12.5px] text-textTitle/70">Make a receipt, then <b className="text-textTitle">drag it into a box</b>, or tap the receipt, then tap a box.</p>
           </div>
 
           {/* printer */}
@@ -323,7 +337,7 @@ export default function MyBudgetPage() {
             <p className="text-[12.5px] text-textTitle/70">Each box is a category.</p>
           </div>
           {categories.length === 0 ? (
-            <p className="text-sm text-textTitle/70 py-4">No boxes yet — add one below to start filing receipts.</p>
+            <p className="text-sm text-textTitle/70 py-4">No boxes yet. Add one below to start filing receipts.</p>
           ) : (
             <div className="grid gap-4 pt-2" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', perspective: '1400px' }}>
               {categories.map((c) => {
@@ -347,7 +361,7 @@ export default function MyBudgetPage() {
         <section className="mt-8 bg-white rounded-3xl border border-textTitle/10 p-6 md:p-8">
           <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brandGreen">Your stats</p>
           <h2 className="font-display italic text-3xl text-textTitle mt-1 mb-1">Every dollar, accounted for.</h2>
-          <p className="text-textTitle/70 text-sm mb-7 max-w-[60ch]">The same numbers the iOS app tracks — recomputed live as you file receipts.</p>
+          <p className="text-textTitle/70 text-sm mb-7 max-w-[60ch]">The same numbers the iOS app tracks, recomputed live as you file receipts.</p>
 
           <div className="grid md:grid-cols-2 gap-5">
             <div className="border border-textTitle/10 rounded-2xl p-5">
@@ -360,7 +374,7 @@ export default function MyBudgetPage() {
                 const over = a > 0 && s > a
                 return (
                   <div key={c.id} className="grid grid-cols-[24px_1fr_auto] gap-3 items-center mb-4 last:mb-0">
-                    <span className="text-lg">{sfEmoji(c.iconKey)}</span>
+                    <span className="text-lg inline-flex" style={{ color: c.color }}><Icon sf={c.iconKey} /></span>
                     <div>
                       <p className="text-[13px] font-semibold mb-1">{c.name}</p>
                       <div className="h-2 rounded-full bg-[#DCE5C9] overflow-hidden">
@@ -392,7 +406,7 @@ export default function MyBudgetPage() {
                   <div className="absolute w-[70px] h-[70px] rounded-full bg-white" />
                   <b className="absolute font-display italic text-xl tabular-nums">{sRate}%</b>
                 </div>
-                <p className="text-sm text-textTitle/70 m-0">Savings rate — money you filed into <b>Save</b>, as a share of income. Target <b>20%</b>.</p>
+                <p className="text-sm text-textTitle/70 m-0">Savings rate: money you filed into <b>Save</b>, as a share of income. Target <b>20%</b>.</p>
               </div>
             </div>
           </div>
@@ -454,7 +468,7 @@ function BoxView({ c, allocated, spent, pct, over, hot, refCb, onClick }: {
         <div className="absolute left-0 right-0 bottom-0 transition-[height] duration-500" style={{ height: `${pct}%`, background: over ? 'linear-gradient(180deg,rgba(217,79,79,.55),transparent)' : 'linear-gradient(180deg,rgba(255,255,255,.28),transparent)' }} />
         {hot && <div className="absolute inset-0 grid place-items-center z-[3] font-sans font-bold text-xs text-white" style={{ background: 'rgba(26,46,26,.34)' }}>Drop here</div>}
         <div className="absolute inset-0 flex flex-col justify-between p-3 z-[2]">
-          <div className="text-2xl" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,.15))' }}>{sfEmoji(c.iconKey)}</div>
+          <div className="text-2xl text-white" style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,.15))' }}><Icon sf={c.iconKey} /></div>
           <div>
             <p className="font-sans font-bold text-sm text-white m-0" style={{ textShadow: '0 1px 2px rgba(0,0,0,.25)' }}>{c.name}</p>
             <p className="font-mono text-[11.5px] text-white/90 tabular-nums mt-0.5">{money(spent)} / {money(allocated)}</p>
@@ -512,7 +526,7 @@ function AddBoxForm({ onAdd, disabledColors }: { onAdd: (name: string, key: stri
           {BOX_PRESETS.map((p) => (
             <button key={p.key} onClick={() => setPreset(p)} aria-pressed={preset.key === p.key}
               className={`w-9 h-9 rounded-lg grid place-items-center text-lg ${preset.key === p.key ? 'ring-2 ring-brandGreen' : 'ring-1 ring-textTitle/10'}`}
-              style={{ background: `${p.color}22` }}>{sfEmoji(p.key)}</button>
+              style={{ background: `${p.color}22`, color: p.color }}><Icon sf={p.key} /></button>
           ))}
         </div>
       </div>

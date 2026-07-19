@@ -15,9 +15,14 @@ export function StudentHome() {
   // Per-challenge submission status, so completed challenges don't keep showing
   // as unsolved "Solve challenge →" cards. Best-effort (owner-readable doc).
   const [challengeStatus, setChallengeStatus] = useState<Record<string, 'complete' | 'in_progress'>>({})
+  // Until the per-challenge reads resolve, status is *unknown* (not "not completed").
+  // Cards render a neutral "Checking…" state so a completed challenge never briefly
+  // flashes "Solve challenge →" before the reads land.
+  const [statusLoaded, setStatusLoaded] = useState(false)
   useEffect(() => {
     if (!data || !user) return
     let cancelled = false
+    setStatusLoaded(false)
     ;(async () => {
       const out: Record<string, 'complete' | 'in_progress'> = {}
       for (const a of data.assignments.filter((x) => x.type === 'challenge')) {
@@ -26,7 +31,7 @@ export function StudentHome() {
           if (snap.exists()) out[a.id] = (snap.data() as { status?: string }).status === 'complete' ? 'complete' : 'in_progress'
         } catch { /* no submission / blocked read → treat as not started */ }
       }
-      if (!cancelled) setChallengeStatus(out)
+      if (!cancelled) { setChallengeStatus(out); setStatusLoaded(true) }
     })()
     return () => { cancelled = true }
   }, [data, user])
@@ -111,19 +116,23 @@ export function StudentHome() {
               )
             })}
             {challengeTodo.map((c) => {
+              // `pending` = status not yet known; render neutral, don't assert "not completed".
+              const pending = !statusLoaded
               const done = c.status === 'complete'
               const inProgress = c.status === 'in_progress'
               return (
                 <Link key={c.id} href={`/budgetchallenge/${c.id}`}
-                  className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${done ? 'border-brandGreen' : c.overdue ? 'border-red-500' : 'border-brandGreen'}`}>
+                  className={`bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition border-l-4 ${pending ? 'border-textTitle/10' : done ? 'border-brandGreen' : c.overdue ? 'border-red-500' : 'border-brandGreen'}`}>
                   <div className="inline-block text-[10px] font-semibold tracking-wider uppercase text-brandGreen bg-brandGreen/10 rounded-full px-2 py-0.5 mb-1.5">Budget Challenge</div>
                   <div className="text-sm font-medium text-textTitle truncate">{c.title}</div>
-                  {done ? (
+                  {pending ? (
+                    <div className="mt-1.5 h-3 w-20 rounded bg-bgSage animate-pulse" />
+                  ) : done ? (
                     <div className="text-xs mt-1 text-brandGreen">Completed</div>
                   ) : (
                     c.dueDate && <div className={`text-xs mt-1 ${c.overdue ? 'text-red-600' : 'text-textTitle/70'}`}>{c.overdue ? 'Overdue' : 'Due'} {c.dueDate}</div>
                   )}
-                  <div className="text-xs text-brandGreen font-medium mt-2">{done ? '✓ Completed — review' : inProgress ? 'Continue →' : 'Solve challenge →'}</div>
+                  <div className={`text-xs font-medium mt-2 ${pending ? 'text-textTitle/50' : 'text-brandGreen'}`}>{pending ? 'Checking…' : done ? '✓ Completed. Review' : inProgress ? 'Continue →' : 'Solve challenge →'}</div>
                 </Link>
               )
             })}
@@ -136,7 +145,7 @@ export function StudentHome() {
         <div className="bg-brandGreen text-white px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
           <div>
             <div className="font-display text-2xl">Personal Finance</div>
-            <div className="text-white/80 text-sm">Know your dough — the full course</div>
+            <div className="text-white/80 text-sm">Know your dough: the full course</div>
           </div>
           <Link href="/mylessons" className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-sm">View course</Link>
         </div>
@@ -152,7 +161,7 @@ export function StudentHome() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col">
           <div className="text-xs uppercase tracking-wider text-textTitle/70 mb-2">Current unit</div>
-          <div className="font-display text-xl text-textTitle mb-1">Unit {u.unit} — {u.name}</div>
+          <div className="font-display text-xl text-textTitle mb-1">Unit {u.unit}: {u.name}</div>
           <p className="text-textTitle/70 text-sm mb-4">{u.description}</p>
           <div className="flex items-center gap-3 mb-4">
             <div className="flex-1 h-2 rounded-full bg-bgSage overflow-hidden">
@@ -167,7 +176,7 @@ export function StudentHome() {
           <div className="text-xs uppercase tracking-wider text-textTitle/70 mb-2">Current lesson</div>
           <div className="font-display text-xl text-textTitle mb-1">Lesson {cont.lesson}: {lname}</div>
           <p className="text-textTitle/70 text-sm mb-4">
-            {unitName(cont.unit)} · {slideCount} slide{slideCount !== 1 ? 's' : ''}. {started ? 'Pick up where you left off.' : 'Your first lesson — let’s go.'}
+            {unitName(cont.unit)} · {slideCount} slide{slideCount !== 1 ? 's' : ''}. {started ? 'Pick up where you left off.' : 'Your first lesson. Let’s go.'}
           </p>
           <Link href={`/mylessons/${cont.unit}/${cont.lesson}`} className="mt-auto self-start px-6 py-2.5 rounded-xl bg-brandGreen text-white text-sm">
             {started ? 'Continue' : 'Start'}
@@ -271,7 +280,7 @@ function SectionsPanel({ user }: { user: { getIdToken: () => Promise<string> } |
                     <td className="py-3 px-4 text-textTitle">{s.name}</td>
                     <td className="py-3 px-4 text-textTitle/70">{s.course}</td>
                     <td className="py-3 px-4 text-textTitle/70">{s.teacherName}</td>
-                    <td className="py-3 px-4 text-textTitle/70">{s.joinCode ?? '—'}</td>
+                    <td className="py-3 px-4 text-textTitle/70">{s.joinCode ?? '-'}</td>
                   </tr>
                 ))}
               </tbody>

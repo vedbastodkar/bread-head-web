@@ -21,7 +21,7 @@ export function RemoveStudentButton({
 
   async function remove() {
     if (!user) return
-    if (!(await confirm({ message: `Remove ${student.name} from this class? Their account and progress are kept — they just leave this class.`, confirmLabel: 'Remove', destructive: true }))) return
+    if (!(await confirm({ message: `Remove ${student.name} from this class? Their account and progress are kept. They just leave this class.`, confirmLabel: 'Remove', destructive: true }))) return
     setBusy(true)
     setError('')
     try {

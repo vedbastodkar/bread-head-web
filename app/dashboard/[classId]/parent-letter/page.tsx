@@ -29,12 +29,12 @@ export default function ParentLetter() {
           <p className="mb-4">Dear Parent or Guardian,</p>
           <p className="mb-4">
             Your student is joining <strong>{cls.name}</strong> on Bread Head, a financial-literacy program that
-            teaches teens real money skills — budgeting, saving, credit, and more — through short interactive lessons.
+            teaches teens real money skills (budgeting, saving, credit, and more) through short interactive lessons.
           </p>
           <p className="mb-4">To get your student set up, have them join the class:</p>
           <div className="bg-bgSage rounded-xl p-5 my-6 text-center">
             <div className="text-sm text-textTitle/70">Join code</div>
-            <div className="font-display text-3xl tracking-wide my-1">{cls.joinCode ?? '—'}</div>
+            <div className="font-display text-3xl tracking-wide my-1">{cls.joinCode ?? '-'}</div>
             <div className="text-sm text-textTitle/70 mt-2">or visit</div>
             <div className="font-medium">{link}</div>
           </div>

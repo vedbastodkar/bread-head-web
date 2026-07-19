@@ -10,7 +10,7 @@ const units = [
   {
     number: '01',
     topic: 'Introduction to Personal Finance',
-    shortDesc: 'What money is, how the system works, and why it matters to you now — not someday.',
+    shortDesc: 'What money is, how the system works, and why it matters to you now, not someday.',
     detail: 'Covers the basics of how money moves, what financial systems exist, and how to start thinking about your own money clearly.',
   },
   {
@@ -47,7 +47,7 @@ const units = [
     number: '07',
     topic: 'Insurance',
     shortDesc: 'What it is, when you need it, and how to not get caught off guard by the fine print.',
-    detail: 'Health, auto, renters, and life insurance — what each covers, what it costs, and how to evaluate whether a plan is actually worth it.',
+    detail: 'Health, auto, renters, and life insurance: what each covers, what it costs, and how to evaluate whether a plan is actually worth it.',
   },
   {
     number: '08',

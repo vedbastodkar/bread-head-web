@@ -24,7 +24,27 @@ export default function AccountPage() {
     })()
   }, [loading, user, router])
 
-  if (loading || !user || !loaded) return <main className="min-h-screen bg-bgSage pt-28" />
+  if (loading || !user || !loaded) {
+    return (
+      <main className="min-h-screen bg-bgSage pt-28 pb-16 px-4">
+        <div className="max-w-xl mx-auto animate-pulse">
+          <div className="h-3 w-24 rounded bg-white/70 mb-3" />
+          <div className="h-8 w-56 rounded-lg bg-white/70 mb-6" />
+          <div className="bg-white rounded-2xl shadow-sm p-6 space-y-5">
+            <div className="space-y-2">
+              <div className="h-3 w-28 rounded bg-bgSage" />
+              <div className="h-11 rounded-xl bg-bgSage" />
+            </div>
+            <div className="space-y-2">
+              <div className="h-3 w-16 rounded bg-bgSage" />
+              <div className="h-11 rounded-xl bg-bgSage" />
+            </div>
+            <div className="h-11 w-24 rounded-xl bg-bgSage" />
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   async function saveName() {
     if (!user) return

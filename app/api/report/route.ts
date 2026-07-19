@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
       from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
       ...(reporter.includes('@') ? { replyTo: reporter } : {}),
-      subject: `⚠️ Problem report · ${lessonId} · slide ${slide}`,
+      subject: `Problem report · ${lessonId} · slide ${slide}`,
       html: reportHtml({ lessonId, slide, text, reporter }),
     })
     if (error) {

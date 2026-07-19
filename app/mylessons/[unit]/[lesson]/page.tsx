@@ -151,7 +151,21 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
     }
   }, [user, isTeacher, target, lessonId, completedSet, classes])
 
-  if (loading || !target) return <div className="min-h-screen bg-bgSage" />
+  if (loading || !target) {
+    return (
+      <div className="min-h-screen bg-bgSage flex items-center justify-center px-6">
+        <div className="w-full max-w-2xl animate-pulse space-y-4">
+          <div className="h-2 w-full rounded-full bg-white/70" />
+          <div className="h-9 w-3/4 rounded-lg bg-white/70" />
+          <div className="h-64 rounded-2xl bg-white/70" />
+          <div className="flex justify-between">
+            <div className="h-10 w-28 rounded-xl bg-white/70" />
+            <div className="h-10 w-28 rounded-xl bg-white/70" />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const lesson = getLesson(target.unit, target.lesson)
   if (!lesson) {
@@ -194,7 +208,7 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
         role="alert"
         className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-xl bg-textTitle px-4 py-3 text-sm text-white shadow-lg"
       >
-        <span>Couldn’t save your progress — check your connection.</span>
+        <span>Couldn’t save your progress. Check your connection.</span>
         <button
           onClick={() => handleComplete()}
           className="rounded-lg bg-white/15 px-3 py-1 font-semibold hover:bg-white/25"
