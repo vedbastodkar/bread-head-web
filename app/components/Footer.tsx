@@ -64,6 +64,10 @@ export default function Footer() {
             </svg>
           </a>
 
+          <Link href="/apply" className="footer-legal-link">
+            Join the team
+          </Link>
+
           <Link href="/support" className="footer-legal-link">
             Support
           </Link>

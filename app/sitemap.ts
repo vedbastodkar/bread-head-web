@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/budget', changeFrequency: 'monthly', priority: 0.8 },
     { path: '/journal', changeFrequency: 'monthly', priority: 0.8 },
     { path: '/partners', changeFrequency: 'monthly', priority: 0.7 },
+    { path: '/apply', changeFrequency: 'weekly', priority: 0.7 },
     { path: '/support', changeFrequency: 'yearly', priority: 0.5 },
     { path: '/privacy-notice', changeFrequency: 'yearly', priority: 0.3 },
   ]

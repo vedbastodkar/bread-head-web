@@ -372,6 +372,34 @@ select:focus-visible,
     gap: 28px !important;
   }
 
+  /* ── Join-the-team strip (homepage, temporary) ── */
+  .join-team-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 28px !important;
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+  .join-team-actions {
+    width: 100% !important;
+  }
+
+  /* ── Apply page ── */
+  .apply-hero-inner {
+    padding-top: 120px !important;
+    padding-bottom: 64px !important;
+  }
+  .apply-hero-h1 {
+    font-size: 34px !important;
+  }
+  .apply-how-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .apply-roles-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   /* ── Lessons page ── */
   .lessons-hero-grid {
     grid-template-columns: 1fr !important;
@@ -444,6 +472,33 @@ select:focus-visible,
   .hero-h1 {
     font-size: 42px !important;
     line-height: 1.12 !important;
+  }
+  .apply-hero-h1 {
+    font-size: 42px !important;
+  }
+
+  /* ── Nav at tablet: three pills + three links share a 768px bar, so the
+     whole right-hand group steps down a size and the gaps tighten. Without
+     this the pills wrap their labels into circles (was already true of the
+     Log in / App Store pair before the Join chip was added). ── */
+  .nav-bar {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .nav-desktop-group {
+    gap: 20px !important;
+  }
+  .nav-desktop-group > a,
+  .nav-desktop-group > div > a {
+    font-size: 13px !important;
+  }
+  .nav-pill-row {
+    gap: 8px !important;
+  }
+  .nav-pill-row > a {
+    font-size: 13px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
   }
   .hero-stat-card {
     max-width: 100% !important;
