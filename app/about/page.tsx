@@ -105,7 +105,8 @@ export default function AboutPage() {
             >
               Bread Head started with a simple frustration: every teenager is
               expected to manage money, file taxes, and understand credit within
-              months of graduating. Nobody teaches them how.
+              months of graduating. Nobody teaches them how. Today we are a
+              501(c)(3) nonprofit doing something about it.
             </p>
           </FadeUp>
         </div>

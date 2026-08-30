@@ -84,7 +84,7 @@ export default function Footer() {
               color: 'rgba(230,237,217,0.3)',
             }}
           >
-            © 2026 Bread Head
+            © 2026 Bread Head · 501(c)(3) nonprofit
           </span>
         </div>
       </div>

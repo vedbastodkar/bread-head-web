@@ -3,6 +3,7 @@ import Image from 'next/image'
 import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 import PartnerForm from './PartnerForm'
+import PilotPartner from '@/components/sections/PilotPartner'
 
 export const metadata: Metadata = {
   title: 'Partners',
@@ -255,6 +256,13 @@ export default function PartnersPage() {
               ))}
             </FadeUp>
           </div>
+        </div>
+      </section>
+
+      {/* ── PILOT PARTNER ───────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 32px 72px' }}>
+          <PilotPartner />
         </div>
       </section>
 

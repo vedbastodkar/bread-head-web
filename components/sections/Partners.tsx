@@ -9,6 +9,7 @@
 import Link    from 'next/link'
 import FadeUp  from '@/app/components/FadeUp'
 import CountUp from '@/app/components/CountUp'
+import PilotPartner from './PilotPartner'
 
 const partnerTypes = [
   {
@@ -106,6 +107,11 @@ export default function Partners() {
               </p>
             </div>
           </FadeUp>
+        </div>
+
+        {/* Pilot partner proof */}
+        <div className="mb-10">
+          <PilotPartner />
         </div>
 
         {/* Partner type columns — white cards on sage */}

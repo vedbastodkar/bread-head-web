@@ -171,8 +171,8 @@ export default function ApplyPage() {
                 margin: '0 0 20px',
               }}
             >
-              We are a teen-built financial literacy company growing fast, and we are looking for
-              driven young people to grow with us. Most of our team is in high school, some are in
+              We are a teen-built financial literacy 501(c)(3) nonprofit growing fast, and we are
+              looking for driven young people to grow with us. Most of our team is in high school, some are in
               college, and every one of them ships real work that teens across the country use.
             </p>
 

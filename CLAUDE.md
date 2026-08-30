@@ -207,6 +207,7 @@ npx playwright test --project=mobile   # single viewport
 | `mason_photo.png` | Mason section (About) |
 | `omar_townhall_wide.png` | CongressionalWin background |
 | `omar_townhall_presenting_award.png` | CongressionalWin + AwardStrip photo |
+| `breakthroughmlps_logo.png` | PilotPartner band (homepage Partners + /partners) |
 
 ---
 

@@ -372,6 +372,14 @@ select:focus-visible,
     gap: 28px !important;
   }
 
+  /* ── Pilot partner band ── */
+  .pilot-partner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+    padding: 24px !important;
+  }
+
   /* ── Join-the-team strip (homepage, temporary) ── */
   .join-team-inner {
     flex-direction: column !important;
