@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { rateLimit, clientIp } from '@/lib/rateLimit'
 
-const TO = ['breadhead.org@gmail.com']
+const TO = ['ved@bread-head.org']
 
 const SUBJECT_LABELS: Record<string, string> = {
   general: 'General Question',
@@ -71,7 +72,7 @@ function supportHtml(fields: {
               </table>
 
               <p style="margin:0 0 8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(26,46,26,0.45);">Message</p>
-              <div style="background:#f5f5f0;border-radius:8px;padding:16px;font-size:14px;color:#1A2E1A;line-height:1.7;white-space:pre-wrap;">${escHtml(message || '—')}</div>
+              <div style="background:#f5f5f0;border-radius:8px;padding:16px;font-size:14px;color:#1A2E1A;line-height:1.7;white-space:pre-wrap;">${escHtml(message || 'None')}</div>
 
               <table cellpadding="0" cellspacing="0" style="margin-top:28px;">
                 <tr>
@@ -99,28 +100,49 @@ function supportHtml(fields: {
 }
 
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY)
-  const data = await req.json()
-  const { name, email, subject, message } = data
-
-  if (!name || !email || !subject) {
-    return NextResponse.json({ ok: false, error: 'Missing required fields' }, { status: 400 })
+  const rl = rateLimit(`support:${clientIp(req)}`)
+  if (!rl.ok) {
+    return NextResponse.json({ ok: false, error: 'Too many requests. Try again shortly.' }, { status: 429 })
   }
+
+  let data: any
+  try {
+    data = await req.json()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'Invalid request.' }, { status: 400 })
+  }
+  const { name, email, subject, message } = data ?? {}
+
+  const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!name || !emailOk || !subject) {
+    return NextResponse.json({ ok: false, error: 'Please provide your name, a valid email, and a subject.' }, { status: 400 })
+  }
+
+  const clip = (s: unknown, n: number) => (typeof s === 'string' ? s.slice(0, n) : '')
+  const clippedName = clip(name, 100)
+  const clippedMessage = clip(message, 5000)
+  const clippedEmail = clip(email, 200)
 
   const subjectLabel = SUBJECT_LABELS[subject] ?? 'Inquiry'
 
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   try {
-    await resend.emails.send({
-      from: 'Bread Head <onboarding@resend.dev>',
+    const { error } = await resend.emails.send({
+      from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
-      replyTo: email,
-      subject: `[${subjectLabel}] — ${name}`,
-      html: supportHtml({ name, email, subject, message }),
+      replyTo: clippedEmail,
+      subject: `[${subjectLabel}] from ${clippedName}`,
+      html: supportHtml({ name: clippedName, email: clippedEmail, subject, message: clippedMessage }),
     })
+    if (error) {
+      console.error('Support email error:', error)
+      return NextResponse.json({ ok: false, error: 'Could not send your message. Please try again shortly.' }, { status: 502 })
+    }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('Support email error:', err)
+    console.error('Support email exception:', err)
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

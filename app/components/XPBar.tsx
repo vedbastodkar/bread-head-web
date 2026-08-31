@@ -4,7 +4,7 @@
 // Framer Motion animates width from 0% → target% when the bar enters view.
 // Visual styles match Pass 2 exactly — only the width animates.
 
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 
 interface XPBarProps {
@@ -14,6 +14,7 @@ interface XPBarProps {
 export default function XPBar({ percentage }: XPBarProps) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
+  const reduceMotion = useReducedMotion()
 
   return (
     <div
@@ -24,13 +25,19 @@ export default function XPBar({ percentage }: XPBarProps) {
       <motion.div
         className="h-full rounded-full"
         style={{ background: '#D1A945' }}
-        initial={{ width: '0%' }}
-        animate={inView ? { width: `${percentage}%` } : { width: '0%' }}
-        transition={{
-          duration: 1.4,
-          ease: [0.25, 0.1, 0.25, 1],
-          delay: 0.3,
-        }}
+        initial={reduceMotion ? false : { width: '0%' }}
+        animate={
+          reduceMotion
+            ? { width: `${percentage}%` }
+            : inView
+            ? { width: `${percentage}%` }
+            : { width: '0%' }
+        }
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : { duration: 1.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }
+        }
       />
     </div>
   )

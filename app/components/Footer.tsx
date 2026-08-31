@@ -64,6 +64,10 @@ export default function Footer() {
             </svg>
           </a>
 
+          <Link href="/apply" className="footer-legal-link">
+            Join the team
+          </Link>
+
           <Link href="/support" className="footer-legal-link">
             Support
           </Link>
@@ -80,7 +84,7 @@ export default function Footer() {
               color: 'rgba(230,237,217,0.3)',
             }}
           >
-            © 2026 Bread Head
+            © 2026 Bread Head · 501(c)(3) nonprofit
           </span>
         </div>
       </div>

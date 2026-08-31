@@ -7,9 +7,14 @@ import AboutCTA from './AboutCTA'
 import CongressionalWin from '@/components/sections/CongressionalWin'
 
 export const metadata: Metadata = {
-  title: 'About — Bread Head',
+  title: 'About',
   description:
-    'Learn why Bread Head exists, what we believe, and who\'s building it.',
+    'Meet the student-led team behind Bread Head, the mission to close the teen financial literacy gap, and the Congressional App Challenge win that put us on the map.',
+  openGraph: {
+    title: 'About Bread Head',
+    description:
+      'The mission, the values, and the student-led team building Bread Head, plus our Congressional App Challenge recognition.',
+  },
 }
 
 // ── Value card data ───────────────────────────────────────────────
@@ -24,7 +29,7 @@ const VALUES = [
   },
   {
     title: 'Habits over knowledge',
-    body: "Knowing isn't doing. Bread Head is built around repetition, reflection, and small daily actions — because that's what actually changes financial behavior.",
+    body: "Knowing isn't doing. Bread Head is built around repetition, reflection, and small daily actions, because that's what actually changes financial behavior.",
   },
   {
     title: 'Access for everyone',
@@ -36,7 +41,7 @@ const VALUES = [
   },
   {
     title: 'Ownership over excuses',
-    body: "Financial growth takes ownership, not perfection or shame. Bread Head is built to help teens track their choices, reflect over time, and turn responsibility into a lasting habit — not a one-time motivation spike.",
+    body: "Financial growth takes ownership, not perfection or shame. Bread Head is built to help teens track their choices, reflect over time, and turn responsibility into a lasting habit, not a one-time motivation spike.",
   },
 ]
 
@@ -98,9 +103,10 @@ export default function AboutPage() {
                 margin: 0,
               }}
             >
-              Bread Head started with a simple frustration — every teenager is
+              Bread Head started with a simple frustration: every teenager is
               expected to manage money, file taxes, and understand credit within
-              months of graduating. Nobody teaches them how.
+              months of graduating. Nobody teaches them how. Today we are a
+              501(c)(3) nonprofit doing something about it.
             </p>
           </FadeUp>
         </div>
@@ -138,7 +144,7 @@ export default function AboutPage() {
                 marginBottom: 0,
               }}
             >
-              Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth — so they can take control of their future no matter where they&apos;re starting from.
+              Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth, so they can take control of their future no matter where they&apos;re starting from.
             </h2>
           </FadeUp>
         </div>
@@ -316,7 +322,7 @@ export default function AboutPage() {
                 >
                   I&apos;m still in high school, and what I kept running into was
                   that the resources out there for teens just aren&apos;t put together
-                  right. Some tools have budgeting but no lessons behind them —
+                  right. Some tools have budgeting but no lessons behind them,
                   so what&apos;s the point? Others have content but skip journaling
                   entirely, which is always the first thing to get cut. The
                   individual pieces exist. Nobody had combined them in a way that
@@ -334,7 +340,7 @@ export default function AboutPage() {
                 >
                   My background is in software and product design. I&apos;ve spent
                   the last few years building apps and learning what makes people
-                  actually change their behavior — not just what makes them nod
+                  actually change their behavior, not just what makes them nod
                   along in a classroom.
                 </p>
                 <p
@@ -349,7 +355,7 @@ export default function AboutPage() {
                 >
                   The thing with teens is that we have to drive the change
                   ourselves. That&apos;s why Bread Head is built around
-                  self-reflection — not to check a box, but because it&apos;s
+                  self-reflection, not to check a box, but because it&apos;s
                   how you actually figure out what you need to do. It&apos;s
                   not connected to parents like most financial apps. There&apos;s
                   no one watching over your shoulder to tell you what to do or
@@ -564,7 +570,7 @@ export default function AboutPage() {
                     marginBottom: '16px',
                   }}
                 >
-                  I manage media for Bread Head with one goal in mind — make financial education actually reach people.
+                  I manage media for Bread Head with one goal in mind: make financial education actually reach people.
                 </p>
                 <p
                   style={{
@@ -588,7 +594,7 @@ export default function AboutPage() {
                     marginBottom: '16px',
                   }}
                 >
-                  My background is in digital media and content strategy. I focus on how ideas move — what makes someone stop scrolling, what makes them care, and what makes them come back.
+                  My background is in digital media and content strategy. I focus on how ideas move: what makes someone stop scrolling, what makes them care, and what makes them come back.
                 </p>
                 <p
                   style={{
@@ -601,6 +607,90 @@ export default function AboutPage() {
                   }}
                 >
                   The goal is simple. Take something that&apos;s usually ignored and make it impossible to overlook. If the message doesn&apos;t reach people, it doesn&apos;t matter how good it is. That&apos;s the gap I try to work on every day.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ── BASHIR ────────────────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ height: '1px', background: 'rgba(26,46,26,0.12)' }} />
+        </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '80px', paddingBottom: '80px', paddingLeft: '24px', paddingRight: '24px' }}>
+          <FadeUp delay={0}>
+            <div className="about-founder-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '64px', alignItems: 'center' }}>
+              {/* Same rendered height as the Dorian/Mason photo box (which renders square),
+                  but the full portrait shown proportionally (no crop) and centered in the column. */}
+              <div style={{ alignSelf: 'center', aspectRatio: '1 / 1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Image
+                  src="/assets/bashir_photo.png"
+                  alt="Bashir Abdullahi, Marketing Content Strategist & Coordinator at Bread Head"
+                  width={941}
+                  height={1672}
+                  style={{ height: '100%', width: 'auto', display: 'block', borderRadius: '20px' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '34px', color: '#1A2E1A', marginBottom: '4px' }}>
+                  Bashir Abdullahi
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '16px', color: '#D1A945', marginBottom: '24px', lineHeight: 1 }}>
+                  Marketing Content Strategist &amp; Coordinator
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  At Bread Head, I help shape what our content actually says. That means coming up with ideas worth making, writing the scripts behind them, and helping run the filming so every piece comes together the way it should.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  I got interested because so much financial content online feels stiff or forgettable, and teens scroll right past it. I think the fix is not more information, it is better storytelling. A sharp script and a clear idea can turn a dry money concept into something people actually want to watch.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: 0 }}>
+                  My focus is on the details that make a piece land: how it opens, how it flows, and how it leaves you feeling like you learned something without being lectured. When the writing and the filming line up, the message sticks, and that is what makes the work worth doing.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ── AHAMDI ────────────────────────────────────────────────── */}
+      <section style={{ background: '#E6EDD9' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+          <div style={{ height: '1px', background: 'rgba(26,46,26,0.12)' }} />
+        </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '80px', paddingBottom: '80px', paddingLeft: '24px', paddingRight: '24px' }}>
+          <FadeUp delay={0}>
+            <div className="about-founder-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '64px', alignItems: 'center' }}>
+              {/* Same rendered height as the Dorian/Mason photo box (which renders square),
+                  but the full portrait shown proportionally (no crop) and centered in the column. */}
+              <div style={{ alignSelf: 'center', aspectRatio: '1 / 1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Image
+                  src="/assets/ahamdi_photo.png"
+                  alt="Ahamdi Nwachukwu, Social Media Growth & Engagement Coordinator at Bread Head"
+                  width={939}
+                  height={1675}
+                  style={{ height: '100%', width: 'auto', display: 'block', borderRadius: '20px' }}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '34px', color: '#1A2E1A', marginBottom: '4px' }}>
+                  Ahamdi Nwachukwu
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '16px', color: '#D1A945', marginBottom: '24px', lineHeight: 1 }}>
+                  Social Media Growth &amp; Engagement Coordinator
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  I run the day to day engagement for Bread Head across social media. A lot of that is exactly what it sounds like. I am in the comments, replying to people, joining conversations, and keeping the page active where our audience already spends its time.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px' }}>
+                  People underrate how much this matters. A page that only posts and disappears feels like a billboard. A page that shows up, responds, and actually talks to people feels like something you want to follow. Engagement is how a brand goes from being seen to being remembered.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: 0 }}>
+                  I got into this because reaching teens is not about shouting the loudest, it is about being present. The more we show up in the small moments, the more Bread Head becomes part of the everyday scroll instead of another thing people ignore. That steady presence is what turns a follower into someone who actually cares about learning.
                 </p>
               </div>
             </div>
@@ -702,7 +792,7 @@ export default function AboutPage() {
               }}
             >
               We&apos;re actively partnering with schools, youth organizations, and
-              foundations. Reach out — we respond to every message.
+              foundations. Reach out. We respond to every message.
             </p>
 
             <AboutCTA />

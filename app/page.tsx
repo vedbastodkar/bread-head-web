@@ -9,34 +9,35 @@
 //   §5 Gamification → dark    (#1A2E1A)  ← accentGold approved
 //   §6 Journal      → bgSage  (#E6EDD9)
 //   §7 Partners     → bgSage  (#E6EDD9)
+//   §7b JoinTeam    → white   (#FFFFFF)  ← TEMPORARY recruiting strip
 //   §8 Final CTA    → dark    (#1A2E1A)  ← accentGold headline
 
-import Hero           from '@/components/sections/Hero'
+import Hero3D         from '@/components/sections/Hero3D'
 import Problem        from '@/components/sections/Problem'
 import WhyItMatters  from '@/components/sections/WhyItMatters'
 import Pillars        from '@/components/sections/Pillars'
 import Ticker         from '@/components/sections/Ticker'
-import LessonsPreview from '@/components/sections/LessonsPreview'
+import LessonsScroll  from '@/components/sections/LessonsScroll'
 import Gamification   from '@/components/sections/Gamification'
-import Journal        from '@/components/sections/Journal'
 import AwardStrip     from '@/components/sections/AwardStrip'
 import Partners       from '@/components/sections/Partners'
+import JoinTeamStrip  from '@/components/sections/JoinTeamStrip'
 import FinalCTA       from '@/components/sections/FinalCTA'
 import Footer         from '@/app/components/Footer'
 
 export default function Home() {
   return (
     <main>
-      <Hero />
+      <Hero3D />
       <Problem />
       <WhyItMatters bg="#1A2E1A" />
       <AwardStrip />
       <Pillars />
       <Ticker />
-      <LessonsPreview />
+      <LessonsScroll />
       <Gamification />
-      <Journal />
       <Partners />
+      <JoinTeamStrip />
       <FinalCTA />
       <Footer />
     </main>

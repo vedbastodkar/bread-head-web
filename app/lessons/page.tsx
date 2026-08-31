@@ -5,15 +5,19 @@ import Footer from '@/app/components/Footer'
 import CurriculumAccordion from './CurriculumAccordion'
 
 export const metadata: Metadata = {
-  title: 'Lessons — Bread Head',
-  description: 'Bite-sized financial lessons built for discovery. Tap through slides, answer to unlock, and understand the why behind every right and wrong answer.',
+  title: 'Lessons',
+  description: 'A 10-unit, 95-lesson personal finance curriculum built for discovery. Tap through slides, answer to unlock, and understand the why behind every right and wrong answer.',
+  openGraph: {
+    title: 'Bread Head Lessons: A Full Personal Finance Curriculum',
+    description: 'Bite-sized financial lessons across 10 units. Tap through slides, answer to unlock, and understand the why behind every answer.',
+  },
 }
 
 const APPROACH = [
   {
     number: '01',
     title: 'Tap through like stories.',
-    body: "Short slides. One idea at a time. No walls of text, no 45-minute videos. Each lesson is a conversation — not a lecture.",
+    body: "Short slides. One idea at a time. No walls of text, no 45-minute videos. Each lesson is a conversation, not a lecture.",
   },
   {
     number: '02',
@@ -23,7 +27,7 @@ const APPROACH = [
   {
     number: '03',
     title: 'Wrong answers teach too.',
-    body: "Hit the wrong option? You'll see exactly why it's wrong — and exactly why the right answer is right. Not just a checkmark. An explanation.",
+    body: "Hit the wrong option? You'll see exactly why it's wrong, and exactly why the right answer is right. Not just a checkmark. An explanation.",
   },
 ]
 
@@ -68,7 +72,7 @@ export default function LessonsPage() {
                 Not just a course.
               </h1>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px', maxWidth: '480px' }}>
-                Bread Head teaches personal finance the way you actually learn — by doing, not by reading.
+                Bread Head teaches personal finance the way you actually learn: by doing, not by reading.
                 Tap through bite-sized slides, answer to move forward, and understand exactly why you got it right or wrong.
               </p>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '480px' }}>
@@ -218,7 +222,7 @@ export default function LessonsPage() {
                 Everything you actually need to know.
               </h2>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.65 }}>
-                Tap any unit to see every lesson inside it. Each one is 3–5 minutes — tap through slides, answer to unlock, understand the why.
+                Tap any unit to see every lesson inside it. Each one is 3–5 minutes: tap through slides, answer to unlock, understand the why.
               </p>
             </div>
           </FadeUp>

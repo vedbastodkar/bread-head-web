@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { rateLimit, clientIp } from '@/lib/rateLimit'
 
-const TO = ['breadhead.org@gmail.com']
+const TO = ['ved@bread-head.org']
 
-function subscribeHtml(email: string) {
+// Escape the signup email before interpolating it into the notification HTML.
+function escHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function subscribeHtml(rawEmail: string) {
+  const email = escHtml(rawEmail)
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,21 +75,44 @@ function subscribeHtml(email: string) {
 }
 
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`subscribe:${clientIp(req)}`)
+  if (!rl.ok) {
+    return NextResponse.json({ ok: false, error: 'Too many requests. Try again shortly.' }, { status: 429 })
+  }
+
+  let data: any
+  try {
+    data = await req.json()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'Invalid request.' }, { status: 400 })
+  }
+  const { email } = data ?? {}
+
+  const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!emailOk) {
+    return NextResponse.json({ ok: false, error: 'Please provide a valid email.' }, { status: 400 })
+  }
+  const clip = (s: unknown, n: number) => (typeof s === 'string' ? s.slice(0, n) : '')
+  const clippedEmail = clip(email, 200)
+
   const resend = new Resend(process.env.RESEND_API_KEY)
-  const { email } = await req.json()
 
   try {
-    await resend.emails.send({
-      from: 'Bread Head <onboarding@resend.dev>',
+    const { error } = await resend.emails.send({
+      from: 'Bread Head <noreply@bread-head.org>',
       to: TO,
-      replyTo: email,
-      subject: `Early access signup — ${email}`,
-      html: subscribeHtml(email),
+      replyTo: clippedEmail,
+      subject: `Early access signup: ${clippedEmail}`,
+      html: subscribeHtml(clippedEmail),
     })
+    if (error) {
+      console.error('Subscribe email error:', error)
+      return NextResponse.json({ ok: false, error: 'Could not complete signup. Please try again shortly.' }, { status: 502 })
+    }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('Subscribe email error:', err)
+    console.error('Subscribe email exception:', err)
     return NextResponse.json({ ok: false }, { status: 500 })
   }
 }

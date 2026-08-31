@@ -80,7 +80,7 @@ export default function FeatureCard({ number, name, tagline, description, href, 
           <div style={{ marginBottom: '20px' }}>
             <Icon />
           </div>
-          <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 700, fontSize: '11px', letterSpacing: '0.10em', color: 'rgba(230,237,217,0.40)', marginBottom: '6px', textTransform: 'uppercase' }}>
+          <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 700, fontSize: '11px', letterSpacing: '0.10em', color: 'rgba(230,237,217,0.60)', marginBottom: '6px', textTransform: 'uppercase' }}>
             {number}
           </p>
           <h2

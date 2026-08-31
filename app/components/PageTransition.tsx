@@ -5,9 +5,10 @@
 // AnimatePresence removes it from DOM after the animation completes.
 
 import { useState, useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 
 export default function PageTransition() {
+  const reduceMotion = useReducedMotion()
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
@@ -15,6 +16,9 @@ export default function PageTransition() {
     const id = setTimeout(() => setVisible(false), 850)
     return () => clearTimeout(id)
   }, [])
+
+  // Reduced motion: skip the intro overlay entirely.
+  if (reduceMotion) return null
 
   return (
     <AnimatePresence>

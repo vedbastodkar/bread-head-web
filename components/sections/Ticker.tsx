@@ -6,16 +6,16 @@
 import Image from 'next/image'
 
 const TICKER_ITEMS = [
-  'Unit 1 — Introduction to Personal Finance',
-  'Unit 2 — Income and Career Planning',
-  'Unit 3 — Budgeting',
-  'Unit 4 — Credit and Loans',
-  'Unit 5 — Saving',
-  'Unit 6 — Investing',
-  'Unit 7 — Insurance',
-  'Unit 8 — Taxes',
-  'Unit 9 — Other Topics',
-  'Unit 10 — Next Steps and Reflection',
+  'Unit 1: Introduction to Personal Finance',
+  'Unit 2: Income and Career Planning',
+  'Unit 3: Budgeting',
+  'Unit 4: Credit and Loans',
+  'Unit 5: Saving',
+  'Unit 6: Investing',
+  'Unit 7: Insurance',
+  'Unit 8: Taxes',
+  'Unit 9: Other Topics',
+  'Unit 10: Next Steps and Reflection',
 ]
 
 // Repeat 4× so the span width comfortably exceeds any viewport

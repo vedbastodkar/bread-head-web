@@ -18,23 +18,23 @@ const STATS: StatCard[] = [
   {
     prefix: 'More than',
     hero: '1 in 3',
-    label: 'dollars of U.S. wealth inequality can be traced back to differences in financial knowledge — not income, not circumstance.',
+    label: 'dollars of U.S. wealth inequality can be traced back to differences in financial knowledge, not income, not circumstance.',
     source: 'https://pensionresearchcouncil.wharton.upenn.edu/wp-content/uploads/2015/08/WP2015-01.pdf',
   },
   {
     hero: '$246B',
-    label: 'lost every year by Americans due to financial illiteracy. Not a knowledge gap — a national economic crisis.',
+    label: 'lost every year by Americans due to financial illiteracy. Not a knowledge gap, a national economic crisis.',
     source: 'https://www.financialeducatorscouncil.org/financial-illiteracy-costs/',
   },
   {
     hero: '68%',
     suffix: ' / 31%',
-    label: '68% of teens want a financial literacy class. Only 31% have access to one at school. The gap isn\'t apathy — it\'s access.',
+    label: '68% of teens want a financial literacy class. Only 31% have access to one at school. The gap isn\'t apathy. It\'s access.',
     source: 'https://jagkc.org/68-percent-teens-want-financial-education/',
   },
   {
     hero: '$34K',
-    label: 'average total debt for Gen Z — with a $3,000 credit card balance already. They\'re entering adulthood in a hole they were never taught to avoid.',
+    label: 'average total debt for Gen Z, with a $3,000 credit card balance already. They\'re entering adulthood in a hole they were never taught to avoid.',
     source: 'https://www.experian.com/blogs/ask-experian/average-american-debt-by-age/',
   },
 ]

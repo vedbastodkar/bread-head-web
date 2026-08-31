@@ -5,7 +5,7 @@
 // Pass className + style={{}} to override for contextual usage (e.g. streak).
 
 import { useEffect, useRef, useState } from 'react'
-import { useInView } from 'framer-motion'
+import { useInView, useReducedMotion } from 'framer-motion'
 
 interface CountUpProps {
   target: number
@@ -28,10 +28,17 @@ export default function CountUp({
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true })
+  const reduceMotion = useReducedMotion()
   const [value, setValue] = useState(0)
 
   useEffect(() => {
     if (!inView) return
+
+    // Reduced motion: jump straight to the final value, no ramp.
+    if (reduceMotion) {
+      setValue(target)
+      return
+    }
 
     const startTime = performance.now()
     let rafId: number
@@ -50,7 +57,7 @@ export default function CountUp({
 
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [inView, target, duration])
+  }, [inView, target, duration, reduceMotion])
 
   const display = format
     ? Math.round(value).toLocaleString()

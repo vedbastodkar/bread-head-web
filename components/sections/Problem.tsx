@@ -85,7 +85,7 @@ export default function Problem() {
               marginBottom: '32px',
             }}
           >
-            Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth — so they can take control of their future no matter where they&apos;re starting from.
+            Bread Head gives every teenager the financial literacy and real-world money skills to budget, save, and build wealth, so they can take control of their future no matter where they&apos;re starting from.
           </p>
           <a
             href="/about"

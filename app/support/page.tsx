@@ -5,8 +5,12 @@ import Footer from '@/app/components/Footer'
 import SupportForm from './SupportForm'
 
 export const metadata: Metadata = {
-  title: 'Support — Bread Head',
-  description: 'Get help with Bread Head. Reach out with questions, feedback, bug reports, or media inquiries.',
+  title: 'Support',
+  description: 'Get help with Bread Head. Reach out with questions, feedback, bug reports, or media inquiries. Every message gets a real response.',
+  openGraph: {
+    title: 'Bread Head Support',
+    description: 'Questions, feedback, bug reports, or media inquiries. Reach the Bread Head team and get a real response.',
+  },
 }
 
 export default function SupportPage() {
@@ -68,7 +72,7 @@ export default function SupportPage() {
                 marginBottom: '12px',
               }}
             >
-              Fill out the form below or email us directly — we respond to every message.
+              Fill out the form below or email us directly. We respond to every message.
             </p>
 
             <a

@@ -1,0 +1,109 @@
+/* ── §1 Hero — 3D barrel-loop (mockup-exact geometry + motion) ──── */
+
+.scroll { height: 280vh; position: relative; overflow: visible; }
+
+.stageWrap {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  overflow: hidden;
+  background: radial-gradient(1200px 700px at 70% 8%, #f3f7ea 0%, #E6EDD9 55%, #dbe4c9 100%);
+}
+.stage {
+  position: relative;
+  width: min(1120px, 92vw);
+  height: 640px;
+  transform-style: preserve-3d;
+}
+
+/* headline block — sits flat on the left */
+.copy { position: absolute; left: 0; top: 70px; max-width: 452px; z-index: 5;
+  transform: translateZ(60px); will-change: transform, opacity; }
+.eyebrowRow { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.eyebrowBar { width: 2px; height: 20px; background: #4A5D4A; flex-shrink: 0; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #4A5D4A; }
+.kicker { font-size: 13px; font-weight: 600; color: rgba(26,46,26,0.4); letter-spacing: 0.04em; margin-bottom: 16px; }
+.h1 { font-family: var(--font-display), Georgia, serif; font-style: italic; font-weight: 700;
+  font-size: 50px; line-height: 1.04; letter-spacing: -0.015em; color: #1A2E1A; margin-bottom: 20px; max-width: 452px; }
+.sub { font-size: 15px; line-height: 1.7; color: rgba(26,46,26,0.65); max-width: 430px; margin-bottom: 26px; }
+
+.ctas { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.cta { display: inline-flex; align-items: center; gap: 8px; background: #4A5D4A; color: #E6EDD9;
+  font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 999px; text-decoration: none;
+  box-shadow: 0 14px 30px rgba(74,93,74,0.28); }
+.micro { font-size: 12px; color: rgba(26,46,26,0.45); margin-top: 14px; }
+
+/* 3D scene */
+.scene { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.float { position: absolute; transform-style: preserve-3d; will-change: transform; }
+
+.phone { left: 52%; top: 50%; width: 252px; height: 516px; margin: -258px 0 0 -126px; border-radius: 42px;
+  background: linear-gradient(160deg, #20301f, #0e180d); padding: 9px; z-index: 10;
+  box-shadow: 0 60px 90px -30px rgba(20,34,18,0.55), 0 0 0 2px rgba(255,255,255,0.06) inset; }
+.phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 34px; display: block; }
+
+.card { background: rgba(255,255,255,0.93); border-radius: 20px; padding: 16px 18px;
+  box-shadow: 0 30px 55px -22px rgba(20,34,18,0.4), 0 1px 0 rgba(255,255,255,0.7) inset; backdrop-filter: blur(6px); }
+.dark { background: linear-gradient(160deg, #2b3d27, #1a2916); color: #eaf0df; }
+.k { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(26,46,26,0.62); font-weight: 600; }
+.dark .k { color: rgba(234,240,223,0.6); }
+.v { font-size: 26px; font-weight: 700; margin-top: 4px; letter-spacing: -0.01em; }
+.row { display: flex; align-items: center; gap: 10px; }
+.badge { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; font-size: 18px; background: rgba(74,93,74,0.12); }
+.dark .badge { background: rgba(255,255,255,0.12); }
+.spark { margin-top: 10px; height: 42px; width: 100%; display: block; }
+
+.cBudget { left: 75%; top: 64px; width: 216px; }
+.cStreak { left: 81%; top: 250px; width: 152px; }
+.cStat   { left: 69.5%; top: 392px; width: 226px; }
+.cReward { left: 46%; top: 73.5%; width: 206px; }
+
+.tok { font-size: 32px; filter: drop-shadow(0 12px 16px rgba(20,34,18,0.28)); }
+.tGem  { left: 31%; top: 15%; font-size: 34px; }
+.tCap  { left: 35%; top: 2%;  font-size: 44px; }
+.tGem2 { left: 88%; top: 55%; font-size: 28px; }
+.tCoin { left: 92%; top: 29%; }
+/* Bread Head wordmark as its own floating chip */
+.appicon { left: 61%; top: 12%; border-radius: 16px; background: #fff; padding: 11px 16px;
+  display: grid; place-items: center; box-shadow: 0 18px 30px -10px rgba(20,34,18,0.35); }
+.appicon img { width: 108px; height: auto; object-fit: contain; display: block; }
+
+.podium { left: 50%; top: 78%; width: 360px; height: 360px; margin-left: -180px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, rgba(255,247,214,0.9), rgba(209,169,69,0.25) 45%, rgba(74,93,74,0.05) 70%, transparent 72%);
+  transform: rotateX(78deg) translateZ(-40px); z-index: 1; }
+.podium::after { content: ""; position: absolute; inset: 96px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(209,169,69,0.3)); box-shadow: 0 0 60px 20px rgba(209,169,69,0.35); }
+
+.ribbon { left: 50%; top: 50%; width: 720px; height: 720px; margin: -360px 0 0 -360px;
+  transform: rotateX(74deg); transform-style: preserve-3d; opacity: 0.9; }
+/* two faces: the back one is mirror-corrected so the ring text stays readable
+   when the scene flips to 180° (Saturn-ring, legible from both sides) */
+.ribbonFace { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.ribbonBack { transform: rotateY(180deg); }
+.ribbonFace svg { width: 100%; height: 100%; overflow: visible; }
+.ribbonFace text { fill: #4A5D4A; font-family: var(--font-body), sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.28em; opacity: 0.8; }
+
+.cue { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 40; font-size: 12px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,46,26,0.5); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cueDot { width: 22px; height: 34px; border: 1.6px solid rgba(74,93,74,0.4); border-radius: 12px; position: relative; }
+.cueDot::after { content: ""; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 4px; height: 6px;
+  border-radius: 2px; background: #4A5D4A; animation: cue 1.4s infinite; }
+@keyframes cue { 0% { opacity: 0; transform: translate(-50%, 0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, 12px); } }
+
+/* ── Fallback: reduced motion / small screens → static hero ── */
+@media (max-width: 900px) {
+  .scroll { height: auto; }
+  .stageWrap { position: static; height: auto; display: block; padding: 128px 24px 72px; perspective: none; overflow: visible; }
+  .stage { width: 100%; height: auto; transform: none !important; text-align: center; }
+  .copy { position: static; max-width: 520px; margin: 0 auto; transform: none !important; opacity: 1 !important; }
+  .eyebrowRow, .ctas { justify-content: center; }
+  .scene, .cue { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene { transform: none !important; }
+  .copy { opacity: 1 !important; transform: translateZ(60px) !important; }
+  .cue { display: none; }
+}

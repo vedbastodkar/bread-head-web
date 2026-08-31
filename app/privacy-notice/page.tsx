@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Notice — Bread Head',
-  description: 'Privacy Notice and Terms of Use for Bread Head.',
+  title: 'Privacy Notice',
+  description: 'How Bread Head handles your data, plus our Terms of Use. Built for teens 13+ with FERPA-compliant handling of student records and COPPA-conscious privacy practices.',
+  openGraph: {
+    title: 'Bread Head Privacy Notice & Terms',
+    description: 'How we handle your data, our Terms of Use, and our commitment to FERPA-compliant, teen-safe privacy practices.',
+  },
 }
 
 export default function PrivacyNoticePage() {
-  const lastUpdated = 'April 9, 2026'
+  const lastUpdated = 'July 12, 2026'
 
   return (
     <main
@@ -72,16 +76,18 @@ export default function PrivacyNoticePage() {
           </p>
           <ul>
             <li>
-              <strong>Account information</strong> — name and email address when
+              <strong>Account information</strong>: name and email address when
               you create an account or sign up for early access.
             </li>
             <li>
-              <strong>Usage data</strong> — in-app activity such as lessons
-              completed, journal entries, and budgeting inputs. This data is
-              stored locally on your device and is not shared with third parties.
+              <strong>Usage data</strong>: in-app activity such as lessons
+              completed, journal entries, and budgeting inputs. Your account,
+              lesson progress, journal entries, and budget data are stored
+              securely in Google Firebase (Firestore), our cloud data provider.
+              We don't sell your data or share it with advertisers.
             </li>
             <li>
-              <strong>Device information</strong> — operating system version and
+              <strong>Device information</strong>: operating system version and
               app version, used solely for debugging and compatibility.
             </li>
           </ul>
@@ -107,19 +113,26 @@ export default function PrivacyNoticePage() {
         <Section title="3. Data Retention">
           <p>
             Account information is retained for as long as your account is
-            active. You may request deletion of your data at any time by
-            emailing{' '}
+            active. You may request deletion of your data, or a copy of the
+            data we hold about you (a data export), at any time by emailing{' '}
             <a href="mailto:breadhead.org@gmail.com" style={{ color: '#4A5D4A' }}>
               breadhead.org@gmail.com
             </a>
-            . We will process deletion requests within 30 days.
+            . We will process deletion and export requests within 30 days.
           </p>
         </Section>
 
         <Section title="4. Cookies and Tracking">
           <p>
-            The Bread Head website uses no third-party analytics or advertising
-            cookies. We do not track you across other websites.
+            We use Google Firebase to securely store your data and analyze how
+            you use Bread Head. This helps us improve the app and ensure it
+            works smoothly. We do not use advertising cookies or track you
+            across other websites.
+          </p>
+          <p>
+            If you're in a class, your teacher can see your lesson and
+            challenge progress and whether you've completed journal entries,
+            but never the contents of your journal.
           </p>
         </Section>
 
@@ -132,7 +145,24 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="6. Security">
+        <Section title="6. Schools and Student Records (FERPA)">
+          <p>
+            When a school or teacher uses Bread Head with their students, we act
+            as a "school official" with a legitimate educational interest under
+            the Family Educational Rights and Privacy Act (FERPA). We use student
+            information only to provide and support the service for that school;
+            we never sell it, use it for advertising, or build advertising
+            profiles. Student data stays under the school's control: schools may
+            request access, correction, deletion, or export of their students'
+            records at any time by emailing{' '}
+            <a href="mailto:breadhead.org@gmail.com" style={{ color: '#4A5D4A' }}>
+              breadhead.org@gmail.com
+            </a>
+            .
+          </p>
+        </Section>
+
+        <Section title="7. Security">
           <p>
             We use industry-standard practices to protect your data, including
             encrypted transmission (HTTPS) and access controls. No method of
@@ -160,7 +190,7 @@ export default function PrivacyNoticePage() {
           Terms of Use
         </h2>
 
-        <Section title="7. Acceptance">
+        <Section title="8. Acceptance">
           <p>
             By accessing bread-head.org or using the Bread Head app, you agree
             to these Terms of Use. If you do not agree, please do not use our
@@ -168,7 +198,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="8. Use of Service">
+        <Section title="9. Use of Service">
           <p>
             Bread Head is provided for personal, educational, and
             non-commercial use only. You agree not to:
@@ -183,7 +213,7 @@ export default function PrivacyNoticePage() {
           </ul>
         </Section>
 
-        <Section title="9. Educational Content Disclaimer">
+        <Section title="10. Educational Content Disclaimer">
           <p>
             Content provided by Bread Head is for general financial education
             only. It does not constitute financial, legal, or tax advice. Always
@@ -192,7 +222,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="10. Intellectual Property">
+        <Section title="11. Intellectual Property">
           <p>
             All content, design, and code on bread-head.org and within the
             Bread Head app is owned by Bread Head and protected by applicable
@@ -200,7 +230,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="11. Limitation of Liability">
+        <Section title="12. Limitation of Liability">
           <p>
             Bread Head is provided "as is" without warranties of any kind. To
             the fullest extent permitted by law, Bread Head and its creators
@@ -209,7 +239,7 @@ export default function PrivacyNoticePage() {
           </p>
         </Section>
 
-        <Section title="12. Changes to These Terms">
+        <Section title="13. Changes to These Terms">
           <p>
             We may update this Privacy Notice and Terms of Use periodically.
             When we do, we will revise the "Last updated" date at the top of

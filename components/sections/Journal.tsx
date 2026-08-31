@@ -114,7 +114,7 @@ export default function Journal() {
               {/* Body */}
               <p className="font-body"
                  style={{ fontSize: '15px', lineHeight: 1.7, color: 'rgba(26,46,26,0.65)', marginBottom: '32px', maxWidth: '480px' }}>
-                You can read every lesson about spending and still blow your paycheck — because habits aren&apos;t built by knowing. They&apos;re built by noticing, pausing, and choosing differently next time.
+                You can read every lesson about spending and still blow your paycheck, because habits aren&apos;t built by knowing. They&apos;re built by noticing, pausing, and choosing differently next time.
               </p>
             </FadeUp>
 

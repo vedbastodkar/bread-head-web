@@ -28,6 +28,9 @@ export default function WordReveal({ lines, headlineIndex, gaps }: WordRevealPro
     const container = containerRef.current
     if (!container) return
 
+    // Reduced motion: leave words in their final visible state, skip GSAP.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     const words = container.querySelectorAll<HTMLElement>('[data-word]')
 
     // gsap.context scopes cleanup to this component

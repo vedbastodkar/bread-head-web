@@ -7,6 +7,7 @@
 
 import XPBar   from '@/app/components/XPBar'
 import CountUp from '@/app/components/CountUp'
+import { Icon } from '@/app/components/Icon'
 
 const achievements = [
   { label: 'First Lesson',    earned: true  },
@@ -45,7 +46,7 @@ export default function Gamification() {
 
             <p className="font-body text-[15px] leading-[1.7] max-w-lg"
                style={{ color: 'rgba(230,237,217,0.50)' }}>
-              Bread Head uses the same mechanics that make games addictive —
+              Bread Head uses the same mechanics that make games addictive,
               aimed at a skill that compounds for the rest of your life.
             </p>
 
@@ -102,7 +103,7 @@ export default function Gamification() {
                     border: '0.5px solid rgba(209,169,69,0.30)',
                   }}
                 >
-                  <span className="text-[15px]">🔥</span>
+                  <span className="text-[15px] text-accentGold inline-flex"><Icon name="flame" /></span>
                   <div>
                     <CountUp
                     target={12}
@@ -193,7 +194,7 @@ export default function Gamification() {
                     <div className="text-right shrink-0">
                       <p className="font-body font-semibold text-[12px] text-accentGold">{item.xp}</p>
                       <p className="font-body text-[10px]"
-                         style={{ color: 'rgba(230,237,217,0.30)' }}>
+                         style={{ color: 'rgba(230,237,217,0.60)' }}>
                         {item.time}
                       </p>
                     </div>

@@ -139,7 +139,7 @@ export default function CongressionalWin() {
               }}
             >
               The Congressional App Challenge is one of the most prestigious student
-              technology competitions in the country — a nationwide program where
+              technology competitions in the country, a nationwide program where
               high school students compete by building original apps, judged district-by-district
               by members of the U.S. Congress.
             </p>
@@ -185,7 +185,7 @@ export default function CongressionalWin() {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '12px',
-                color: 'rgba(245,240,232,0.30)',
+                color: 'rgba(245,240,232,0.60)',
                 marginTop: '20px',
                 letterSpacing: '0.04em',
               }}

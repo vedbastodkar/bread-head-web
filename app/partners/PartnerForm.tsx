@@ -40,21 +40,31 @@ function onBlur(e: React.FocusEvent<FieldEl>) {
 export default function PartnerForm() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (loading) return
     setLoading(true)
+    setError('')
     const form = e.currentTarget
     const data = Object.fromEntries(new FormData(form))
     try {
-      await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-    } catch {}
-    setSubmitted(true)
-    setLoading(false)
+      if (!res.ok) {
+        const msg = await res.json().then((d) => d?.error).catch(() => null)
+        throw new Error(msg || 'Something went wrong. Please try again.')
+      }
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -160,28 +170,45 @@ export default function PartnerForm() {
             ✓ Message sent. We&apos;ll be in touch within 2 business days.
           </p>
         ) : (
-          <button
-            type="submit"
-            disabled={loading}
-            className="partners-submit-btn"
-            style={{
-              width: '100%',
-              background: '#4A5D4A',
-              color: '#E6EDD9',
-              border: 'none',
-              borderRadius: '100px',
-              padding: '16px',
-              fontFamily: 'var(--font-body)',
-              fontWeight: 700,
-              fontSize: '16px',
-              cursor: loading ? 'default' : 'pointer',
-              marginTop: '24px',
-              transition: 'opacity 0.15s ease',
-              opacity: loading ? 0.6 : 1,
-            }}
-          >
-            {loading ? 'Sending…' : 'Send message →'}
-          </button>
+          <>
+            <button
+              type="submit"
+              disabled={loading}
+              className="partners-submit-btn"
+              style={{
+                width: '100%',
+                background: '#4A5D4A',
+                color: '#E6EDD9',
+                border: 'none',
+                borderRadius: '100px',
+                padding: '16px',
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '16px',
+                cursor: loading ? 'default' : 'pointer',
+                marginTop: '24px',
+                transition: 'opacity 0.15s ease',
+                opacity: loading ? 0.6 : 1,
+              }}
+            >
+              {loading ? 'Sending…' : 'Send message →'}
+            </button>
+            {error && (
+              <p
+                role="alert"
+                className="text-red-600"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  textAlign: 'center',
+                  margin: '16px 0 0',
+                }}
+              >
+                {error}
+              </p>
+            )}
+          </>
         )}
       </form>
     </div>

@@ -12,7 +12,7 @@ const pillars = [
     number: '01',
     label: 'Learn',
     headline: 'Real topics. Not textbook examples.',
-    body: 'Bite-sized lessons on the money decisions that actually come up — reading your first pay stub, understanding your credit score, filing taxes, comparing apartments.',
+    body: 'Bite-sized lessons on the money decisions that actually come up: reading your first pay stub, understanding your credit score, filing taxes, comparing apartments.',
     bullets: [
       '5–7 minute lessons',
       'Built around teen decisions',

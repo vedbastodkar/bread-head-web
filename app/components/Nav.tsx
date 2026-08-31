@@ -5,8 +5,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
+import { useAuth } from '../context/AuthContext'
+import { APP_STORE_URL } from '@/lib/links'
 
 const LINKS = [
   { label: 'About',    href: '/about' },
@@ -16,7 +19,7 @@ const LINKS = [
 
 const APP_SUB_LINKS = [
   { label: 'Lessons',   href: '/lessons' },
-  { label: 'Budgeting', href: '/budgeting' },
+  { label: 'Budgeting', href: '/budget' },
   { label: 'Journal',   href: '/journal' },
 ]
 
@@ -31,7 +34,40 @@ export default function Nav() {
   const cancelHide = () => { clearTimeout(leaveTimer.current) }
   const hideApp    = () => { leaveTimer.current = setTimeout(() => setAppHovered(false), 150) }
 
+  const { user, signOut } = useAuth()
+  const router = useRouter()
+  const pathname = usePathname()
+  const doSignOut = async () => { setMenuOpen(false); await signOut(); router.replace('/login') }
+
+  // Secondary auth pill — white with a green outline + dark text, so it reads as
+  // the quieter partner to the solid-green App Store CTA (not two identical pills).
+  // Reads "Log in" when logged out, "Dashboard" when logged in.
+  const authPillStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px',
+    color: '#1A2E1A', textDecoration: 'none', background: '#FFFFFF',
+    border: '1px solid #4A5D4A', borderRadius: '100px', padding: '10px 22px',
+    transition: 'opacity 0.2s ease', minHeight: '44px', display: 'flex',
+    alignItems: 'center', whiteSpace: 'nowrap', boxSizing: 'border-box',
+  }
+
+  // Recruiting chip. Sage-tinted with a green outline so it reads as a third,
+  // quieter tier next to the white auth pill and the solid-green App Store CTA.
+  // Label is "Join the team", never "Apply", so nobody reads it as an app signup.
+  const joinChipStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px',
+    color: '#3C4C3C', textDecoration: 'none', background: 'rgba(74,93,74,0.10)',
+    border: '1px solid rgba(74,93,74,0.35)', borderRadius: '100px', padding: '10px 18px',
+    transition: 'opacity 0.2s ease', minHeight: '44px', display: 'flex',
+    alignItems: 'center', whiteSpace: 'nowrap', boxSizing: 'border-box',
+  }
+
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80))
+
+  // Focus view: inside a lesson the marketing nav is hidden (the LessonPlayer draws
+  // its own logo + "Exit lesson" bar). The full header stays on every other page —
+  // including standalone app pages like /mybudget and /budgetchallenge that have no
+  // sidebar shell and would otherwise have no header or way to navigate/exit.
+  const inLesson = /^\/mylessons\/\d+\/\d+/.test(pathname ?? '') || (pathname?.startsWith('/learn') ?? false)
 
   useEffect(() => {
     if (menuOpen) {
@@ -42,9 +78,12 @@ export default function Nav() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
+  if (inLesson) return null
+
   return (
     <>
       <nav
+        className="nav-bar"
         onMouseLeave={hideApp}
         onMouseEnter={cancelHide}
         style={{
@@ -80,7 +119,10 @@ export default function Nav() {
         </Link>
 
         {/* Desktop: Links + CTA */}
-        <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>
+        <div className="hidden md:flex nav-desktop-group" style={{ alignItems: 'center', gap: '32px' }}>
+          {/* Full marketing nav + App Store CTA show in every auth state. Signed-in
+              users additionally get the Dashboard pill + Sign out — the Dashboard tile
+              is layered on top of the header, it does not replace the other links. */}
           {LINKS.map((link) =>
             link.label === 'App' ? (
               <div
@@ -175,27 +217,55 @@ export default function Nav() {
             )
           )}
 
-          <a
-            href="https://apps.apple.com/us/app/bread-head-app/id6762026967"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 600,
-              fontSize: '14px',
-              color: '#E6EDD9',
-              textDecoration: 'none',
-              background: '#4A5D4A',
-              borderRadius: '100px',
-              padding: '10px 22px',
-              transition: 'opacity 0.2s ease',
-              minHeight: '44px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-          >
-            Download on App Store
-          </a>
+          {/* Auth-aware controls: Log in/Dashboard pill (secondary, white/outline) paired
+              tightly with the App Store CTA (primary, solid green). Sign out lives in the
+              dashboard/mobile menu — it's out of the top bar. */}
+          <div className="nav-pill-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Link
+              href="/apply"
+              style={joinChipStyle}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              Join the team
+            </Link>
+
+            <a
+              href={user ? '/dashboard' : '/login'}
+              style={authPillStyle}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              {user ? 'Dashboard' : 'Log in'}
+            </a>
+
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: '14px',
+                color: '#E6EDD9',
+                textDecoration: 'none',
+                background: '#4A5D4A',
+                borderRadius: '100px',
+                padding: '10px 22px',
+                transition: 'opacity 0.2s ease',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                whiteSpace: 'nowrap',
+                boxSizing: 'border-box',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              <span className="hidden lg:inline">Download on the App Store</span>
+              <span className="inline lg:hidden">Get the app</span>
+            </a>
+          </div>
         </div>
 
         {/* Mobile: Hamburger */}
@@ -301,8 +371,37 @@ export default function Nav() {
               ))}
             </div>
 
+            {/* Recruiting (mobile) */}
+            <Link
+              href="/apply"
+              onClick={() => setMenuOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '24px', width: '100%', background: 'rgba(74,93,74,0.10)', color: '#3C4C3C', border: '1px solid rgba(74,93,74,0.35)', padding: '16px', borderRadius: '100px', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '16px', textDecoration: 'none', textAlign: 'center', minHeight: '48px', boxSizing: 'border-box' }}
+            >
+              Join the team
+            </Link>
+
+            {/* Auth-aware controls (mobile) */}
             <a
-              href="https://apps.apple.com/us/app/bread-head-app/id6762026967"
+              href={user ? '/dashboard' : '/login'}
+              onClick={() => setMenuOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '12px', width: '100%', background: '#FFFFFF', color: '#1A2E1A', border: '1px solid #4A5D4A', padding: '16px', borderRadius: '100px', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '16px', textDecoration: 'none', textAlign: 'center', minHeight: '48px', boxSizing: 'border-box' }}
+            >
+              {user ? 'Dashboard' : 'Log in'}
+            </a>
+
+            {user && (
+              <button
+                onClick={doSignOut}
+                style={{ display: 'block', width: '100%', textAlign: 'center', paddingTop: '20px', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '16px', color: 'rgba(26,46,26,0.7)', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                Sign out
+              </button>
+            )}
+
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
               style={{
                 display: 'flex',
@@ -323,7 +422,7 @@ export default function Nav() {
                 boxSizing: 'border-box',
               }}
             >
-              Download on App Store
+              Download on the App Store
             </a>
           </nav>
         </div>

@@ -4,20 +4,24 @@ import FadeUp from '@/app/components/FadeUp'
 import Footer from '@/app/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Journal — Bread Head',
+  title: 'Journal',
   description: 'Short reflection prompts tied to your real financial activity. Notice your patterns, understand your habits, and build awareness that sticks.',
+  openGraph: {
+    title: 'Bread Head Journal: Reflect on Your Money Habits',
+    description: 'Short daily prompts drawn from your own budget data help you notice patterns, understand habits, and turn awareness into better decisions.',
+  },
 }
 
 const HOW_IT_WORKS = [
   {
     number: '01',
     title: 'Tied to your actual activity.',
-    body: 'Prompts are generated from your real budget data — your transactions, your categories, your warnings. You\'re never answering a generic question about money. You\'re answering one about what you specifically did this week.',
+    body: 'Prompts are generated from your real budget data: your transactions, your categories, your warnings. You\'re never answering a generic question about money. You\'re answering one about what you specifically did this week.',
   },
   {
     number: '02',
     title: 'Short by design.',
-    body: 'Each entry takes 2–3 minutes. The goal isn\'t volume — it\'s one honest thought, named before it drifts. You\'re not writing a financial diary. You\'re surfacing the thing you almost didn\'t notice.',
+    body: 'Each entry takes 2–3 minutes. The goal isn\'t volume. It\'s one honest thought, named before it drifts. You\'re not writing a financial diary. You\'re surfacing the thing you almost didn\'t notice.',
   },
   {
     number: '03',
@@ -30,12 +34,12 @@ const THEMES = [
   {
     number: '01',
     name: 'Spending Awareness',
-    description: 'When a pattern surfaces in your transactions — dining three times in a week, impulse purchases clustering together — the journal asks how each one felt. Not to judge. To make it visible before it becomes invisible again.',
+    description: 'When a pattern surfaces in your transactions (dining three times in a week, impulse purchases clustering together), the journal asks how each one felt. Not to judge. To make it visible before it becomes invisible again.',
   },
   {
     number: '02',
     name: 'Savings Check-In',
-    description: 'When your savings rate shifts, you\'re asked what changed. A one-time unexpected expense is different from a slow, unnoticed drift. The journal helps you tell the difference — and decide which one to fix.',
+    description: 'When your savings rate shifts, you\'re asked what changed. A one-time unexpected expense is different from a slow, unnoticed drift. The journal helps you tell the difference, and decide which one to fix.',
   },
   {
     number: '03',
@@ -45,7 +49,7 @@ const THEMES = [
   {
     number: '04',
     name: 'Goal Alignment',
-    description: 'Connects day-to-day spending to the bigger picture you\'ve set for yourself. Are the choices you\'re making right now moving you toward what you said you wanted — or quietly working against it?',
+    description: 'Connects day-to-day spending to the bigger picture you\'ve set for yourself. Are the choices you\'re making right now moving you toward what you said you wanted, or quietly working against it?',
   },
   {
     number: '05',
@@ -58,7 +62,7 @@ const WHY = [
   {
     stat: '90%',
     label: 'of financial habits form before 25',
-    body: 'The patterns you build right now — how you respond to stress, how you treat leftover money, whether you notice drift or let it slide — are the ones you carry into your adult financial life. The journal is where those patterns first become visible.',
+    body: 'The patterns you build right now (how you respond to stress, how you treat leftover money, whether you notice drift or let it slide) are the ones you carry into your adult financial life. The journal is where those patterns first become visible.',
   },
   {
     stat: '2–3 min',
@@ -67,18 +71,18 @@ const WHY = [
   },
   {
     stat: '1 prompt',
-    label: 'per event — never a wall of questions',
-    body: 'You\'ll never open the journal to ten pending questions. One prompt surfaces at a time, tied to one specific thing that happened. It stays small so you actually do it — and actually carry something away from it.',
+    label: 'per event, never a wall of questions',
+    body: 'You\'ll never open the journal to ten pending questions. One prompt surfaces at a time, tied to one specific thing that happened. It stays small so you actually do it, and actually carry something away from it.',
   },
 ]
 
 const PROMPTS = [
   {
-    prompt: 'You logged three dining transactions this week. How did each one feel — planned, impulsive, or social?',
+    prompt: 'You logged three dining transactions this week. How did each one feel: planned, impulsive, or social?',
     context: 'After a spending pattern surfaces',
   },
   {
-    prompt: 'Your savings rate dropped below target this month. What got in the way — an unexpected expense, or a gradual drift?',
+    prompt: 'Your savings rate dropped below target this month. What got in the way: an unexpected expense, or a gradual drift?',
     context: 'After a T2 savings warning',
   },
   {
@@ -133,10 +137,10 @@ export default function JournalPage() {
               Reflection is the skill schools skip hardest.
             </h1>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '16px', maxWidth: '540px' }}>
-              You can know exactly how budgets work, track every dollar, and still keep making the same choices. That&apos;s not a knowledge problem — it&apos;s a reflection problem.
+              You can know exactly how budgets work, track every dollar, and still keep making the same choices. That&apos;s not a knowledge problem; it&apos;s a reflection problem.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'rgba(26,46,26,0.65)', lineHeight: 1.75, marginBottom: '40px', maxWidth: '540px' }}>
-              The Bread Head journal surfaces prompts tied to your real financial activity — not generic advice, but questions based on what you&apos;re actually doing right now.
+              The Bread Head journal surfaces prompts tied to your real financial activity, not generic advice, but questions based on what you&apos;re actually doing right now.
             </p>
             <a
               href="/"
@@ -201,7 +205,7 @@ export default function JournalPage() {
               Knowing isn&apos;t enough. Neither is tracking.
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, maxWidth: '560px', marginBottom: '64px' }}>
-              Most financial apps stop at the data. Bread Head goes one step further — because patterns only change when you actually see them for what they are.
+              Most financial apps stop at the data. Bread Head goes one step further, because patterns only change when you actually see them for what they are.
             </p>
           </FadeUp>
 
@@ -224,7 +228,7 @@ export default function JournalPage() {
                     <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 700, fontSize: '40px', color: '#D1A945', lineHeight: 1, marginBottom: '6px' }}>
                       {item.stat}
                     </p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.35)', margin: 0 }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.60)', margin: 0 }}>
                       {item.label}
                     </p>
                   </div>
@@ -392,7 +396,7 @@ export default function JournalPage() {
               Questions that come from your data, not a template.
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(245,240,232,0.55)', lineHeight: 1.75, maxWidth: '540px', marginBottom: '64px' }}>
-              Prompts surface based on what&apos;s actually happened in your budget — a pattern, a warning, a strong week, or a month closed out. You never answer a question about something that didn&apos;t happen to you.
+              Prompts surface based on what&apos;s actually happened in your budget: a pattern, a warning, a strong week, or a month closed out. You never answer a question about something that didn&apos;t happen to you.
             </p>
           </FadeUp>
 
@@ -411,7 +415,7 @@ export default function JournalPage() {
                     alignItems: 'start',
                   }}
                 >
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.30)', margin: 0, paddingTop: '3px' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(245,240,232,0.60)', margin: 0, paddingTop: '3px' }}>
                     {p.context}
                   </p>
                   <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(15px, 1.4vw, 18px)', color: 'rgba(245,240,232,0.80)', lineHeight: 1.6, margin: 0 }}>
@@ -452,7 +456,7 @@ export default function JournalPage() {
               Your money story, in your own words.
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.7, marginBottom: '12px' }}>
-              The journal doesn&apos;t track your net worth. It tracks how you think and feel about money — which is where every financial decision actually starts.
+              The journal doesn&apos;t track your net worth. It tracks how you think and feel about money, which is where every financial decision actually starts.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: 'rgba(26,46,26,0.55)', lineHeight: 1.7, marginBottom: '36px' }}>
               Two minutes. One honest answer. Every time you use it, it gets more useful.

@@ -99,7 +99,7 @@ export default function AwardStrip() {
               }}
             >
               Bread Head was selected as the winning app for Minnesota&apos;s 5th Congressional
-              District — a nationwide competition run by the U.S. House of Representatives.
+              District, a nationwide competition run by the U.S. House of Representatives.
             </p>
 
             {/* Buttons row */}

@@ -12,6 +12,50 @@ html {
   scroll-padding-top: 84px;
 }
 
+/* ── Keyboard focus ring ──────────────────────────────────────── */
+/* :focus-visible only — keyboard users get the ring, mouse clicks don't. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #4A5D4A;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Stop the infinite marquees dead. */
+  .animate-ticker,
+  .waterfall-scroll {
+    animation: none !important;
+  }
+
+  /* Remove the card hover lift/scale. */
+  .card-hover,
+  .card-hover:hover,
+  .card-hover:not(:hover) {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  /* Near-instant for the animation utilities/transforms this file defines. */
+  .waterfall-scroll,
+  .source-pill,
+  .footer-legal-link,
+  .footer-social-icon {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   body {
     font-family: var(--font-body), sans-serif;
@@ -328,6 +372,42 @@ html {
     gap: 28px !important;
   }
 
+  /* ── Pilot partner band ── */
+  .pilot-partner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+    padding: 24px !important;
+  }
+
+  /* ── Join-the-team strip (homepage, temporary) ── */
+  .join-team-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 28px !important;
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+  .join-team-actions {
+    width: 100% !important;
+  }
+
+  /* ── Apply page ── */
+  .apply-hero-inner {
+    padding-top: 120px !important;
+    padding-bottom: 64px !important;
+  }
+  .apply-hero-h1 {
+    font-size: 34px !important;
+  }
+  .apply-how-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .apply-roles-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   /* ── Lessons page ── */
   .lessons-hero-grid {
     grid-template-columns: 1fr !important;
@@ -400,6 +480,33 @@ html {
   .hero-h1 {
     font-size: 42px !important;
     line-height: 1.12 !important;
+  }
+  .apply-hero-h1 {
+    font-size: 42px !important;
+  }
+
+  /* ── Nav at tablet: three pills + three links share a 768px bar, so the
+     whole right-hand group steps down a size and the gaps tighten. Without
+     this the pills wrap their labels into circles (was already true of the
+     Log in / App Store pair before the Join chip was added). ── */
+  .nav-bar {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .nav-desktop-group {
+    gap: 20px !important;
+  }
+  .nav-desktop-group > a,
+  .nav-desktop-group > div > a {
+    font-size: 13px !important;
+  }
+  .nav-pill-row {
+    gap: 8px !important;
+  }
+  .nav-pill-row > a {
+    font-size: 13px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
   }
   .hero-stat-card {
     max-width: 100% !important;

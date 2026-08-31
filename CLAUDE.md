@@ -17,7 +17,7 @@ Never commit or push if either fails. Fix the root cause first.
 
 ## Project overview
 
-**Bread Head** is a teen financial literacy web app (bread-head.org). This repo is the marketing website — Next.js 14 App Router, TypeScript, Tailwind CSS. The iOS app lives in a separate repo.
+**Bread Head** is a teen financial literacy platform (bread-head.org). This repo serves the **whole web presence under one domain** — code.org-style — combining the **marketing site** (`/`, `/about`, `/partners`, …) *and* the **full web app**: a teacher/student dashboard, the 95-lesson curriculum player, journals, and Budget Challenges. Next.js 14 App Router, TypeScript, Tailwind CSS, Firebase (Auth + Firestore), Resend. The native iOS app lives in a separate repo (`../breadhead`), which is the source of truth for the deployed Firestore security rules.
 
 **Stack:**
 - Next.js 14.2.5 (App Router)
@@ -39,6 +39,8 @@ Never commit or push if either fails. Fix the root cause first.
 | `/partners` | `app/partners/page.tsx` | Partnership inquiry page |
 | `/api/contact` | `app/api/contact/route.ts` | Partner form → email via Resend |
 | `/api/subscribe` | `app/api/subscribe/route.ts` | Early access signup → email via Resend |
+
+The table above is the **marketing** surface. The **app** surface (auth-gated) also lives in this repo: `/login`, the teacher dashboard + content authoring under `app/dashboard/**`, the student experience (`/dashboard`, `/lesson`, `/grades`, `/mybudget`), the challenge solver `app/challenge/[assignmentId]`, and the `app/api/**` routes backing them (assign, submit, roster, overview). Server writes go through the Firebase Admin SDK; client reads are gated by the Firestore rules in the iOS repo.
 
 ---
 
@@ -162,7 +164,7 @@ Mobile and tablet overrides live in `app/globals.css` using explicit class names
 
 - API key in `.env.local` as `RESEND_API_KEY` (must also be set in Vercel env vars)
 - Resend client is initialized **inside the POST handler** — never at module level (causes build errors when key is undefined)
-- All emails send to: `breadhead.org@gmail.com` (forwards to vedbastodkar@gmail.com)
+- All emails send to: `ved@bread-head.org`
 - `/api/contact` — partner form, subject prefixed by partner type
 - `/api/subscribe` — early access signup
 
@@ -205,6 +207,7 @@ npx playwright test --project=mobile   # single viewport
 | `mason_photo.png` | Mason section (About) |
 | `omar_townhall_wide.png` | CongressionalWin background |
 | `omar_townhall_presenting_award.png` | CongressionalWin + AwardStrip photo |
+| `breakthroughmlps_logo.png` | PilotPartner band (homepage Partners + /partners) |
 
 ---
 

@@ -4,7 +4,7 @@
 // Wraps any content; renders a motion.div that fades in from y:32 on inView.
 // Use delay to stagger sibling elements.
 
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 
 interface FadeUpProps {
@@ -25,6 +25,16 @@ export default function FadeUp({
   const ref = useRef<HTMLDivElement>(null)
   // Trigger when 15% of the element is visible; fire once only
   const inView = useInView(ref, { once: true, amount: 0.15 })
+  const reduceMotion = useReducedMotion()
+
+  // Reduced motion: render the resting state, no offset, opacity 1.
+  if (reduceMotion) {
+    return (
+      <motion.div ref={ref} className={className} style={style}>
+        {children}
+      </motion.div>
+    )
+  }
 
   return (
     <motion.div
