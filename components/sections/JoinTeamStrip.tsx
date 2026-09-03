@@ -41,7 +41,7 @@ export default function JoinTeamStrip() {
                 marginBottom: '20px',
               }}
             >
-              7 roles · applications close Sept 11
+              7 roles · applications close Sept 14
             </span>
 
             <h2
@@ -73,7 +73,7 @@ export default function JoinTeamStrip() {
               Bread Head is built by high school and college students, and we are taking
               applications for seven positions across design, engineering, content, research,
               social, and partnerships. Semester-long, renewable, and you hear back in 2 to 3
-              business days. Applications close September 11. This is a spot on the team, not a
+              business days. Applications close September 14. This is a spot on the team, not a
               signup for the app.
             </p>
           </div>

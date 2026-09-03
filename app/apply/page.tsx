@@ -75,7 +75,7 @@ const HOW_IT_WORKS = [
   },
   {
     label: 'Deadline',
-    title: 'Applications close September 11',
+    title: 'Applications close September 14',
     body: 'Get yours in before then. Once you submit, we reply with next steps within 2 to 3 business days.',
   },
 ]
@@ -141,7 +141,7 @@ export default function ApplyPage() {
                 marginBottom: '24px',
               }}
             >
-              7 roles · applications close Sept 11
+              7 roles · applications close Sept 14
             </span>
 
             <h1
@@ -471,7 +471,7 @@ export default function ApplyPage() {
                 maxWidth: '520px',
               }}
             >
-              Applications close September 11. The application takes about ten minutes, we read
+              Applications close September 14. The application takes about ten minutes, we read
               every one, and you will hear back about next steps within 2 to 3 business days.
             </p>
             <a
