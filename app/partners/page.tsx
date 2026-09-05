@@ -259,9 +259,55 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* ── PILOT PARTNER ───────────────────────────────────────── */}
+      {/* ── COMMUNITY PARTNERS ──────────────────────────────────── */}
       <section style={{ background: '#E6EDD9' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 32px 72px' }}>
+          <FadeUp delay={0}>
+            <div style={{ marginBottom: '28px' }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                  letterSpacing: '0.13em',
+                  textTransform: 'uppercase',
+                  color: '#4A5D4A',
+                  margin: '0 0 16px',
+                  lineHeight: 1,
+                }}
+              >
+                Community Partners
+              </p>
+
+              <h2
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 700,
+                  fontSize: 'clamp(26px, 3vw, 40px)',
+                  color: '#1A2E1A',
+                  lineHeight: 1.15,
+                  margin: '0 0 12px',
+                }}
+              >
+                The organizations putting Bread Head in front of students.
+              </h2>
+
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 400,
+                  fontSize: '15px',
+                  lineHeight: 1.7,
+                  color: 'rgba(26,46,26,0.65)',
+                  margin: 0,
+                  maxWidth: '620px',
+                }}
+              >
+                Youth programs and foundations already reaching the teens we built this for.
+              </p>
+            </div>
+          </FadeUp>
+
           <PilotPartner />
         </div>
       </section>

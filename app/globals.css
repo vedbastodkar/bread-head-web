@@ -171,6 +171,9 @@ select:focus-visible,
 
   /* Partners submit button */
   .partners-submit-btn:hover:not(:disabled) { opacity: 0.88 !important; }
+
+  /* Community partner band CTA */
+  .pilot-partner-cta:hover { opacity: 0.88 !important; }
 }
 
 @layer utilities {
@@ -378,6 +381,15 @@ select:focus-visible,
     align-items: flex-start !important;
     gap: 20px !important;
     padding: 24px !important;
+  }
+  .pilot-partner-logo {
+    justify-content: flex-start !important;
+  }
+  .pilot-partner-logo img {
+    max-height: 76px !important;
+  }
+  .pilot-partner-cta {
+    align-self: flex-start !important;
   }
 
   /* ── Join-the-team strip (homepage, temporary) ── */
