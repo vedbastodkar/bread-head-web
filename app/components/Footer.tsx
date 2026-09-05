@@ -39,7 +39,7 @@ export default function Footer() {
           </span>
         </div>
 
-        {/* Right — Instagram + Support + Privacy Notice + copyright */}
+        {/* Right — Instagram + LinkedIn + Support + Privacy Notice + copyright */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '28px', flexWrap: 'wrap' }}>
           <a
             href="https://www.instagram.com/breadhead_mn/"
@@ -61,6 +61,31 @@ export default function Footer() {
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
               <circle cx="12" cy="12" r="4" />
               <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/company/bread-head-org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bread Head on LinkedIn"
+            className="footer-social-icon"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <line x1="7" y1="11" x2="7" y2="17" />
+              <circle cx="7" cy="7.75" r="0.5" fill="currentColor" stroke="none" />
+              <path d="M11 17v-6" />
+              <path d="M11 13.5a2.5 2.5 0 0 1 5 0V17" />
             </svg>
           </a>
 
