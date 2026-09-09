@@ -117,7 +117,7 @@ export default function LessonsPage() {
                 </div>
                 <div style={{ position: 'absolute', inset: 0, top: '24px' }}>
                   <Image
-                    src="/assets/lesson_home_screen.png"
+                    src="/assets/lesson_home_screen.webp"
                     alt="Bread Head lesson in progress"
                     fill
                     style={{ objectFit: 'cover', objectPosition: 'top' }}

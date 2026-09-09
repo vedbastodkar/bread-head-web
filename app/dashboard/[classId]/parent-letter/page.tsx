@@ -24,7 +24,7 @@ export default function ParentLetter() {
 
         {/* letter */}
         <div className="bg-white rounded-2xl shadow-sm p-10 leading-relaxed text-textTitle print:shadow-none print:rounded-none">
-          <img src="/assets/logo_w_text.png" alt="Bread Head" width={160} className="mb-8" />
+          <img src="/assets/logo_w_text.webp" alt="Bread Head" width={160} className="mb-8" />
           <h1 className="font-display text-2xl mb-6">Welcome to Bread Head</h1>
           <p className="mb-4">Dear Parent or Guardian,</p>
           <p className="mb-4">

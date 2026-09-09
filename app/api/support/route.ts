@@ -111,6 +111,12 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ ok: false, error: 'Invalid request.' }, { status: 400 })
   }
+
+  // Honeypot: a real person never sees this field, so any value means a bot.
+  // Return the success shape so the bot can't tell it was rejected.
+  if (typeof data?.company_website === 'string' && data.company_website.trim() !== '') {
+    return NextResponse.json({ ok: true })
+  }
   const { name, email, subject, message } = data ?? {}
 
   const emailOk = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

@@ -13,10 +13,10 @@ import s from './LessonsScroll.module.css'
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v))
 
 const SCREENS = [
-  '/assets/lesson_home_screen.png', // 0 Learn
-  '/assets/app_journal.png',        // 1 Journal
-  '/assets/app_budget.png',         // 2 Budget
-  '/assets/app_progress.png',       // 3 Progress
+  '/assets/lesson_home_screen.webp', // 0 Learn
+  '/assets/app_journal.webp',        // 1 Journal
+  '/assets/app_budget.webp',         // 2 Budget
+  '/assets/app_progress.webp',       // 3 Progress
 ]
 
 export default function LessonsScroll() {

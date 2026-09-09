@@ -70,7 +70,14 @@ export default function SupportForm() {
 
   return (
     <div className="card-border" style={{ background: '#FFFFFF', borderRadius: '16px', padding: '40px' }}>
-      <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
+        {/* Honeypot — hidden from people, irresistible to bots. A filled
+            value makes the server drop the submission silently. */}
+        <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+          <label htmlFor="sf-company-website">Do not fill this in</label>
+          <input id="sf-company-website" name="company_website" type="text" tabIndex={-1} autoComplete="off" />
+        </div>
+
 
         {/* Name */}
         <div style={{ marginBottom: '20px' }}>
@@ -114,7 +121,7 @@ export default function SupportForm() {
                 top: '50%',
                 transform: 'translateY(-50%)',
                 pointerEvents: 'none',
-                color: 'rgba(26,46,26,0.4)',
+                color: 'rgba(26,46,26,0.55)',
                 fontSize: '11px',
               }}
             >
@@ -127,7 +134,7 @@ export default function SupportForm() {
         <div style={{ marginBottom: '0' }}>
           <label htmlFor="message" style={labelStyle}>
             Message{' '}
-            <span style={{ fontWeight: 400, color: 'rgba(26,46,26,0.4)' }}>(optional)</span>
+            <span style={{ fontWeight: 400, color: 'rgba(26,46,26,0.65)' }}>(optional)</span>
           </label>
           <textarea
             id="message" name="message" rows={5}

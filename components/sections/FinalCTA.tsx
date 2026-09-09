@@ -19,14 +19,16 @@ export default function FinalCTA() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (loading) return
-    const email = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value
+    const form = e.currentTarget
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value
+    const companyWebsite = (form.elements.namedItem('company_website') as HTMLInputElement | null)?.value ?? ''
     setLoading(true)
     setError('')
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, company_website: companyWebsite }),
       })
       if (!res.ok) {
         const msg = await res.json().then((d) => d?.error).catch(() => null)
@@ -69,15 +71,22 @@ export default function FinalCTA() {
             </p>
           ) : (
           <form
-            className="final-cta-form flex flex-col md:flex-row gap-3 max-w-md mx-auto mb-5"
+            className="final-cta-form relative flex flex-col md:flex-row gap-3 max-w-md mx-auto mb-5"
             onSubmit={handleSubmit}
           >
+            {/* Honeypot — hidden from people, irresistible to bots. A filled
+                value makes the server drop the submission silently. */}
+            <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+              <label htmlFor="cta-company-website">Do not fill this in</label>
+              <input id="cta-company-website" name="company_website" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
             <input
               type="email"
               name="email"
               placeholder="your@email.com"
+              required
               aria-label="Email address"
-              className="final-cta-input flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/30 focus:outline-none focus-visible:outline-none focus:border-bgSage/60 focus:ring-2 focus:ring-bgSage/40 transition-colors"
+              className="final-cta-input flex-1 font-body text-[14px] text-bgSage placeholder:text-bgSage/60 focus:outline-none focus-visible:outline-none focus:border-bgSage/60 focus:ring-2 focus:ring-bgSage/40 transition-colors"
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '0.5px solid rgba(255,255,255,0.15)',
@@ -118,7 +127,7 @@ export default function FinalCTA() {
 
           {/* Fine print */}
           <p className="font-body text-[12px]"
-             style={{ color: 'rgba(230,237,217,0.25)' }}>
+             style={{ color: 'rgba(230,237,217,0.55)' }}>
             No spam. No credit card. Unsubscribe anytime.
           </p>
 

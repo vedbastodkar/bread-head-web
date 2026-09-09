@@ -117,6 +117,12 @@ export default function PrivacyNoticePage() {
             across other websites.
           </p>
           <p>
+            On bread-head.org we use Vercel Analytics to count page views. It
+            is cookieless: it stores nothing on your device, does not build a
+            profile of you, and cannot follow you to other websites. We only
+            ever see anonymous, aggregated totals.
+          </p>
+          <p>
             If you're in a class, your teacher can see your lesson and
             challenge progress and whether you've completed journal entries,
             but never the contents of your journal.

@@ -218,12 +218,14 @@ npx playwright test --project=mobile   # single viewport
 | File | Used in |
 |------|---------|
 | `icon_green.png` | Favicon |
-| `icon_clear.png` | (legacy — not used on site) |
-| `logo_w_text.png` | Nav |
+| `icon_clear.png` | 404 bouncing logo, Footer mark, Ticker separator (512x512 — 192px is its largest render) |
+| `logo_w_text.webp` | Hero app-icon, login, lesson player, parent letter |
 | `bread.png` | Values cards (About) |
-| `welcome_screen.png` | Hero phone mockup |
-| `lesson_home_screen.png` | LessonsPreview phone mockup |
-| `journal_photo.png` | Journal section |
+| `welcome_screen.webp` | Hero phone mockup |
+| `lesson_home_screen.webp` | LessonsScroll + /lessons phone mockup |
+| `app_journal.webp`, `app_budget.webp`, `app_progress.webp` | LessonsScroll barrel faces |
+| `og_card.png` | 1200x630 social preview card (OG + Twitter) |
+| `journal_photo.png` | (unreferenced — no code points at it) |
 | `ved_photo.png` | Founder section (About) |
 | `dorian_photo.png` | Dorian section (About) |
 | `mason_photo.png` | Mason section (About) |

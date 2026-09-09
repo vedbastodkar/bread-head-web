@@ -16,7 +16,7 @@ export default function LoginPage() {
     <main className="min-h-screen bg-bgSage flex items-center justify-center px-4 pt-28 pb-16">
       <div className="w-full max-w-4xl">
         <div className="flex flex-col items-center mb-8">
-          <Image src="/assets/logo_w_text.png" alt="Bread Head" width={180} height={48} priority />
+          <Image src="/assets/logo_w_text.webp" alt="Bread Head" width={180} height={48} priority />
           <p className="mt-3 text-textTitle/70 font-body">Sign in to Bread Head</p>
         </div>
 

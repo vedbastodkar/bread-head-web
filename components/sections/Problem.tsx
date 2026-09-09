@@ -83,7 +83,7 @@ export default function Problem() {
               >
                 {s.hero}
                 {s.suffix && (
-                  <span style={{ color: 'rgba(230,237,217,0.30)', fontSize: '0.5em' }}>{s.suffix}</span>
+                  <span style={{ color: 'rgba(230,237,217,0.45)', fontSize: '0.5em' }}>{s.suffix}</span>
                 )}
               </p>
               <p
@@ -99,7 +99,7 @@ export default function Problem() {
                 className="source-link-dark font-body"
                 style={{
                   fontSize: '11px',
-                  color: 'rgba(230,237,217,0.38)',
+                  color: 'rgba(230,237,217,0.55)',
                   textDecoration: 'none',
                   transition: 'color 0.15s ease',
                 }}

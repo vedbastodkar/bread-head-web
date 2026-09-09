@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 // Custom 404 — a DVD-screensaver-style bouncing Bread Head logo behind a
 // "couldn't find this page" message. Also the destination for genuinely dead
@@ -56,12 +57,12 @@ export default function NotFound() {
       {/* bouncing logo layer */}
       <div ref={areaRef} className="absolute inset-0" aria-hidden>
         <div ref={logoRef} className="absolute left-0 top-0 will-change-transform">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/assets/icon_clear.png"
             alt=""
             width={192}
             height={192}
+            sizes="192px"
             draggable={false}
             className="w-[192px] h-[192px] select-none pointer-events-none drop-shadow-sm"
           />

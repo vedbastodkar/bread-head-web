@@ -142,7 +142,7 @@ export default function Hero3D() {
 
             <div className={`${s.float} ${s.phone}`} ref={phoneRef}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/welcome_screen.png" alt="Bread Head app welcome screen" />
+              <img src="/assets/welcome_screen.webp" alt="Bread Head app welcome screen" />
             </div>
 
             <div className={`${s.float} ${s.card} ${s.cBudget}`} data-depth="90">
@@ -186,7 +186,7 @@ export default function Hero3D() {
             <div className={`${s.float} ${s.tok} ${s.tCoin}`} data-depth="160" style={{ color: '#D1A945' }}><Icon name="coins" /></div>
             <div className={`${s.float} ${s.appicon}`} data-depth="175">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/logo_w_text.png" alt="Bread Head" />
+              <img src="/assets/logo_w_text.webp" alt="Bread Head" />
             </div>
 
           </div>

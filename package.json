@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
+    "@vercel/analytics": "^1.6.1",
     "firebase": "^12.15.0",
     "firebase-admin": "^14.1.0",
     "framer-motion": "^11.3.0",

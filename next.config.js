@@ -15,6 +15,17 @@ const csp = [
 ].join('; ')
 
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        // The Terms of Use live as the second half of the privacy notice.
+        // /terms is the URL people actually try — send them to that heading.
+        source: '/terms',
+        destination: '/privacy-notice#terms',
+        permanent: false,
+      },
+    ]
+  },
   async headers() {
     return [
       {

@@ -101,12 +101,16 @@ export default function Footer() {
             Privacy Notice
           </Link>
 
+          <Link href="/terms" className="footer-legal-link">
+            Terms
+          </Link>
+
           <span
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
               fontSize: '12px',
-              color: 'rgba(230,237,217,0.3)',
+              color: 'rgba(230,237,217,0.55)',
             }}
           >
             © 2026 Bread Head · 501(c)(3) nonprofit

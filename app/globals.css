@@ -552,13 +552,14 @@ select:focus-visible,
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 15px;
-  color: #4A5D4A;
+  /* bgSage, not brandGreen: this bar sits on #1A2E1A and brandGreen is 2.04:1 there. */
+  color: rgba(230, 237, 217, 0.72);
   text-decoration: none;
   letter-spacing: 0.01em;
   transition: color 0.2s;
 }
 .footer-legal-link:hover {
-  color: #7aA07a;
+  color: #E6EDD9;
 }
 
 /* ── Footer social icon ── */

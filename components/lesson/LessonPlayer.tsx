@@ -134,7 +134,7 @@ export function LessonPlayer({
           looks identical entering a lesson — nothing moves or resizes. */}
       <div className="fixed top-0 left-0 right-0 z-20 bg-bgSage/95 backdrop-blur flex items-center justify-between" style={{ padding: '20px 32px' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/logo_w_text.png" alt="Bread Head" style={{ width: 163, height: 'auto' }} />
+        <img src="/assets/logo_w_text.webp" alt="Bread Head" style={{ width: 163, height: 'auto' }} />
         <div className="flex items-center gap-2">
           {dashboardHref && (
             <a
