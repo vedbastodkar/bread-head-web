@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import NonprofitDisclosure from './NonprofitDisclosure'
 
 export default function Footer() {
   return (
@@ -113,9 +114,15 @@ export default function Footer() {
               color: 'rgba(230,237,217,0.55)',
             }}
           >
-            © 2026 Bread Head · 501(c)(3) nonprofit
+            © 2026 Bread Head
           </span>
         </div>
+      </div>
+
+      {/* Bottom row — nonprofit registration (Google for Nonprofits requires the
+          Charity ID + physical address to be displayed on the site). */}
+      <div className="footer-bottom-inner">
+        <NonprofitDisclosure tone="dark" />
       </div>
     </footer>
   )

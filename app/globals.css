@@ -586,3 +586,99 @@ select:focus-visible,
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ── Nonprofit disclosure (footer + /about) ─────────────────────────────
+   Legal name, 501(c)(3) status, street address, and an EIN chip that reveals
+   the number on hover / focus / tap, and an address chip that shows city/state
+   and reveals the street. Both values are always in the DOM; the chips only
+   animate their width. Required by Google for Nonprofits. */
+.nonprofit-disclosure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.nonprofit-disclosure__address {
+  font-style: normal;
+}
+.nonprofit-disclosure--dark {
+  color: rgba(230, 237, 217, 0.55);
+}
+.nonprofit-disclosure--light {
+  color: rgba(26, 46, 26, 0.55);
+}
+
+.reveal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.reveal-chip__label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+.reveal-chip__value {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  margin-left: 0;
+  font-variant-numeric: tabular-nums;
+  transition: max-width 0.28s ease, opacity 0.2s ease, margin-left 0.28s ease;
+}
+.reveal-chip:hover .reveal-chip__value,
+.reveal-chip:focus-visible .reveal-chip__value,
+.reveal-chip--pinned .reveal-chip__value {
+  max-width: var(--reveal-width, 10ch);
+  opacity: 1;
+  margin-left: 8px;
+}
+.reveal-chip:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.nonprofit-disclosure--dark .reveal-chip:hover,
+.nonprofit-disclosure--dark .reveal-chip--pinned {
+  background: rgba(230, 237, 217, 0.12);
+  color: #E6EDD9;
+}
+.nonprofit-disclosure--light .reveal-chip:hover,
+.nonprofit-disclosure--light .reveal-chip--pinned {
+  background: rgba(74, 93, 74, 0.10);
+  color: #1A2E1A;
+}
+
+/* Footer second row */
+.footer-bottom-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  border-top: 1px solid rgba(230, 237, 217, 0.08);
+  padding-top: 20px;
+}
+@media (max-width: 767px) {
+  .nonprofit-disclosure {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}

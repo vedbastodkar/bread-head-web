@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ORG_ADDRESS_LINES, ORG_EIN, ORG_LEGAL_NAME } from '@/lib/org'
 import { Playfair_Display, DM_Sans } from 'next/font/google'
 import './globals.css'
 import Nav            from './components/Nav'
@@ -61,6 +62,29 @@ export const metadata: Metadata = {
   },
 }
 
+// schema.org NGO record: lets Google (and Google for Nonprofits' reviewers)
+// read the Charity ID + street address without scraping the footer.
+const [streetAddress, cityStateZip = ''] = ORG_ADDRESS_LINES
+const [addressLocality = '', regionZip = ''] = cityStateZip.split(', ')
+const [addressRegion = '', postalCode = ''] = regionZip.split(' ')
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: ORG_LEGAL_NAME,
+  url: 'https://bread-head.org',
+  logo: 'https://bread-head.org/assets/icon_green.png',
+  taxID: ORG_EIN,
+  nonprofitStatus: 'Nonprofit501c3',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress,
+    addressLocality,
+    addressRegion,
+    postalCode,
+    addressCountry: 'US',
+  },
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -69,6 +93,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="font-body">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
         <AuthProvider>
           <PageTransition />
           <Nav />

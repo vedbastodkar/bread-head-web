@@ -4,6 +4,7 @@ import FadeUp from '@/app/components/FadeUp'
 
 import Footer from '@/app/components/Footer'
 import AboutCTA from './AboutCTA'
+import NonprofitDisclosure from '@/app/components/NonprofitDisclosure'
 import CongressionalWin from '@/components/sections/CongressionalWin'
 
 export const metadata: Metadata = {
@@ -778,6 +779,10 @@ export default function AboutPage() {
             </p>
 
             <AboutCTA />
+
+            <div style={{ marginTop: '48px' }}>
+              <NonprofitDisclosure tone="light" align="center" />
+            </div>
           </FadeUp>
         </div>
       </section>
