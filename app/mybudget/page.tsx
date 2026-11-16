@@ -99,6 +99,8 @@ export default function MyBudgetPage() {
       nwsLevel: receipt.nws,
       name: receipt.name,
       date: Date.now(),
+      createdAt: Date.now(),
+      platform: 'web',
     }
     setTransactions((t) => [...t, tx])
     setReceipts((r) => r.filter((x) => x.id !== receipt.id))
@@ -151,9 +153,9 @@ export default function MyBudgetPage() {
   }, [user])
 
   // ---- pointer drag ----
-  // Uses pointer capture so events keep flowing to the receipt even if the
-  // browser tries to start its own native drag; a pointercancel handler
-  // guarantees the ghost/original are always restored (never "stuck").
+  // Listens on `window` (capture phase), not on the receipt: the release is then seen no
+  // matter which element ends up under the pointer or whether pointer capture was lost
+  // mid-drag. pointercancel and window blur restore the ghost/original (never "stuck").
   const dragRef = useRef<{ receipt: Receipt; ghost: HTMLElement } | null>(null)
   const onReceiptPointerDown = (e: React.PointerEvent, receipt: Receipt) => {
     if (e.button && e.button !== 0) return
@@ -173,12 +175,14 @@ export default function MyBudgetPage() {
       setHot(null)
     }
     const cleanup = () => {
-      el.removeEventListener('pointermove', move)
-      el.removeEventListener('pointerup', up)
-      el.removeEventListener('pointercancel', cancel)
+      window.removeEventListener('pointermove', move, true)
+      window.removeEventListener('pointerup', up, true)
+      window.removeEventListener('pointercancel', cancel, true)
+      window.removeEventListener('blur', cancel)
       try { el.releasePointerCapture(pointerId) } catch { /* no-op */ }
     }
     const move = (ev: PointerEvent) => {
+      if (ev.pointerId !== pointerId) return
       if (!started && Math.hypot(ev.clientX - start.x, ev.clientY - start.y) > 6) {
         started = true
         ghost = el.cloneNode(true) as HTMLElement
@@ -193,6 +197,7 @@ export default function MyBudgetPage() {
       }
     }
     const up = (ev: PointerEvent) => {
+      if (ev.pointerId !== pointerId) return
       cleanup()
       if (started) {
         const target = boxUnder(ev.clientX, ev.clientY)
@@ -204,9 +209,10 @@ export default function MyBudgetPage() {
     }
     const cancel = () => { cleanup(); restore() }
 
-    el.addEventListener('pointermove', move)
-    el.addEventListener('pointerup', up)
-    el.addEventListener('pointercancel', cancel)
+    window.addEventListener('pointermove', move, true)
+    window.addEventListener('pointerup', up, true)
+    window.addEventListener('pointercancel', cancel, true)
+    window.addEventListener('blur', cancel)
   }
   const boxUnder = (x: number, y: number): string | null => {
     for (const [id, el] of Object.entries(boxRefs.current)) {

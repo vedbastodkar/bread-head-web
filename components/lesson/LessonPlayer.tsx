@@ -5,6 +5,10 @@ import type { Lesson, Slide } from '@/lib/curriculum/slideTypes'
 import { isInteractive } from '@/lib/curriculum/slideTypes'
 import { Icon } from '@/app/components/Icon'
 import { DEFAULT_CONTROLS, type LessonControls } from '@/lib/curriculum/controls'
+import type { AnswerKind } from '@/lib/analytics/lessonAnswers'
+
+/** One evaluated attempt on a graded slide (contract §4 `lesson_answer`). */
+export interface SlideAnswer { slideIndex: number; kind: AnswerKind; isCorrect: boolean }
 
 // Mirrors LessonLogic: slideIndex + completedSlides; interactive slides gate next().
 export function LessonPlayer({
@@ -18,6 +22,7 @@ export function LessonPlayer({
   controls = DEFAULT_CONTROLS,
   onReport,
   dashboardHref,
+  onAnswer,
 }: {
   lesson: Lesson
   onExit?: () => void
@@ -29,6 +34,7 @@ export function LessonPlayer({
   controls?: LessonControls    // teacher-set enforcement (pacing lives upstream)
   onReport?: (info: { lessonId: string; slide: number; text: string }) => Promise<void>
   dashboardHref?: string       // real lessons pass '/dashboard' → shows the auth pill in the top bar (omitted in the teacher preview)
+  onAnswer?: (a: SlideAnswer) => void // every attempt on a graded slide (trueFalse / multipleChoice / matchConcept)
 }) {
   const total = lesson.slides.length
   const start = Math.min(Math.max(initialSlide, 0), total - 1)
@@ -164,7 +170,7 @@ export function LessonPlayer({
       {/* slide */}
       <div className="flex-1 flex items-center justify-center px-6 pt-36 pb-36">
         <div className="w-full max-w-3xl lg:w-1/2 lg:max-w-none">
-          <SlideView slide={slide} onAnswered={markCurrentComplete} requireCorrect={requireCorrect} />
+          <SlideView slide={slide} onAnswered={markCurrentComplete} requireCorrect={requireCorrect} onAttempt={(kind, isCorrect) => onAnswer?.({ slideIndex: index, kind, isCorrect })} />
         </div>
       </div>
 
@@ -325,7 +331,9 @@ function SlideImage({ src, alt }: { src?: string | null; alt?: string }) {
 }
 
 // ---- slide renderers ----
-function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnswered: () => void; requireCorrect: boolean }) {
+type OnAttempt = (kind: AnswerKind, isCorrect: boolean) => void
+
+function SlideView({ slide, onAnswered, requireCorrect, onAttempt }: { slide: Slide; onAnswered: () => void; requireCorrect: boolean; onAttempt?: OnAttempt }) {
   switch (slide.type) {
     case 'title':
       return (
@@ -393,9 +401,9 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
         </div>
       )
     case 'trueFalse':
-      return <TrueFalse slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} />
+      return <TrueFalse slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} onAttempt={onAttempt} />
     case 'multipleChoice':
-      return <MultipleChoice slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} />
+      return <MultipleChoice slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} onAttempt={onAttempt} />
     case 'realLifeScenario':
       return <RealLifeScenario slide={slide} onAnswered={onAnswered} requireCorrect={requireCorrect} />
     case 'thisOrThat':
@@ -405,7 +413,7 @@ function SlideView({ slide, onAnswered, requireCorrect }: { slide: Slide; onAnsw
     case 'tapToReveal':
       return <TapToReveal slide={slide} onAnswered={onAnswered} />
     case 'matchConcept':
-      return <MatchConcept slide={slide} onAnswered={onAnswered} />
+      return <MatchConcept slide={slide} onAnswered={onAnswered} onAttempt={onAttempt} />
     case 'iconBreakdown':
       return (
         <div>
@@ -588,7 +596,7 @@ function Poll({ slide, onAnswered }: { slide: Extract<Slide, { type: 'poll' }>; 
   )
 }
 
-function TrueFalse({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide, { type: 'trueFalse' }>; onAnswered: () => void; requireCorrect: boolean }) {
+function TrueFalse({ slide, onAnswered, requireCorrect, onAttempt }: { slide: Extract<Slide, { type: 'trueFalse' }>; onAnswered: () => void; requireCorrect: boolean; onAttempt?: OnAttempt }) {
   const [picked, setPicked] = useState<boolean | null>(null)
   const correct = picked !== null && picked === slide.correctAnswer
   return (
@@ -602,6 +610,7 @@ function TrueFalse({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide
             onClick={() => {
               if (requireCorrect && picked === slide.correctAnswer) return // already correct
               setPicked(v)
+              onAttempt?.('trueOrFalse', v === slide.correctAnswer)
               if (!requireCorrect || v === slide.correctAnswer) onAnswered()
             }}
             className={`px-10 py-4 rounded-2xl shadow-sm text-lg ${
@@ -622,7 +631,7 @@ function TrueFalse({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide
   )
 }
 
-function MultipleChoice({ slide, onAnswered, requireCorrect }: { slide: Extract<Slide, { type: 'multipleChoice' }>; onAnswered: () => void; requireCorrect: boolean }) {
+function MultipleChoice({ slide, onAnswered, requireCorrect, onAttempt }: { slide: Extract<Slide, { type: 'multipleChoice' }>; onAnswered: () => void; requireCorrect: boolean; onAttempt?: OnAttempt }) {
   const [picked, setPicked] = useState<number | null>(null)
   const correctSet = new Set(slide.correctAnswerIndices)
   const alreadyCorrect = picked !== null && correctSet.has(picked)
@@ -642,9 +651,12 @@ function MultipleChoice({ slide, onAnswered, requireCorrect }: { slide: Extract<
                 if (requireCorrect) {
                   if (alreadyCorrect) return           // locked once correct
                   setPicked(i)
+                  onAttempt?.('multipleChoice', correctSet.has(i))
                   if (correctSet.has(i)) onAnswered()
                 } else if (picked === null) {
-                  setPicked(i); onAnswered()
+                  setPicked(i)
+                  onAttempt?.('multipleChoice', correctSet.has(i))
+                  onAnswered()
                 }
               }}
               className={`w-full text-left px-6 py-5 rounded-2xl shadow-sm transition text-lg ${
@@ -755,7 +767,7 @@ function TapToReveal({ slide, onAnswered }: { slide: Extract<Slide, { type: 'tap
 }
 
 // Click-to-match: pick a concept, then a definition — pairs validate against correctMatches.
-function MatchConcept({ slide, onAnswered }: { slide: Extract<Slide, { type: 'matchConcept' }>; onAnswered: () => void }) {
+function MatchConcept({ slide, onAnswered, onAttempt }: { slide: Extract<Slide, { type: 'matchConcept' }>; onAnswered: () => void; onAttempt?: OnAttempt }) {
   const shuffledDefs = useRef<string[]>(
     [...slide.definitions].sort(() => Math.random() - 0.5),
   )
@@ -768,6 +780,8 @@ function MatchConcept({ slide, onAnswered }: { slide: Extract<Slide, { type: 'ma
 
   function chooseDef(def: string) {
     if (!pickedConcept || usedDefs.has(def)) return
+    // One graded attempt per pair pick (iOS MatchConceptSlide parity).
+    onAttempt?.('matchConcept', correctDefFor(pickedConcept) === def)
     if (correctDefFor(pickedConcept) === def) {
       const nm = { ...matched, [pickedConcept]: def }
       setMatched(nm); setPickedConcept(null); setWrong(null)

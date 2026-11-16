@@ -14,7 +14,8 @@ import {
   doc, getDoc, setDoc, deleteDoc, collection, getDocs, runTransaction, Timestamp,
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/client'
-import type { BudgetCategory, BudgetTransaction, FixedPayment } from './budget'
+import { backdatedByDays, type BudgetCategory, type BudgetTransaction, type FixedPayment } from './budget'
+import { logEvent } from '@/lib/analytics/events'
 
 export interface LoadedBudget {
   categories: BudgetCategory[]
@@ -119,17 +120,24 @@ function parseTransactions(raw: unknown): BudgetTransaction[] {
         name: typeof o.name === 'string' ? o.name : undefined,
         note: typeof o.note === 'string' ? o.note : undefined,
         date: toMillis(o.date),
+        // Legacy rows without createdAt decode with createdAt = date (iOS does the same).
+        createdAt: toMillis(o.createdAt) ?? toMillis(o.date),
+        platform: o.platform === 'ios' || o.platform === 'web' ? o.platform : undefined,
       }
     })
     .filter((x): x is BudgetTransaction => x !== null)
 }
 
+// `createdAt` is the moment of entry (set once; `date` stays the user-reported, back-datable
+// date) and `platform` names the creating client — both required by data-contract §5.
 function transactionToFirestore(t: BudgetTransaction): Record<string, unknown> {
   const data: Record<string, unknown> = {
     id: t.id,
     type: t.type,
     amount: Math.abs(t.amount),
     date: t.date ? Timestamp.fromMillis(t.date) : Timestamp.now(),
+    createdAt: Timestamp.fromMillis(t.createdAt ?? Date.now()),
+    platform: t.platform ?? 'web',
     isPending: false,
   }
   if (t.categoryId) data.categoryId = t.categoryId
@@ -193,11 +201,20 @@ export async function removeCategory(uid: string, id: string): Promise<void> {
 // settings/snapshots/other iOS-only fields.
 export async function addTransaction(uid: string, tx: BudgetTransaction): Promise<void> {
   const ref = budgetDoc(uid)
+  const createdAt = tx.createdAt ?? Date.now()
+  const stored: BudgetTransaction = { ...tx, createdAt, platform: 'web' }
   await runTransaction(db, async (t) => {
     const snap = await t.get(ref)
     const existing = Array.isArray(snap.data()?.transactions) ? (snap.data()!.transactions as unknown[]) : []
-    t.set(ref, { transactions: [...existing, transactionToFirestore(tx)] }, { merge: true })
+    t.set(ref, { transactions: [...existing, transactionToFirestore(stored)] }, { merge: true })
   })
+  logEvent('transaction_created', { screen: 'budget', params: {
+    transactionId: stored.id,
+    type: stored.type,
+    nwsLevel: stored.nwsLevel ?? null,
+    hasCategory: !!stored.categoryId,
+    backdatedByDays: backdatedByDays(stored.date, createdAt),
+  } })
 }
 
 export async function deleteTransaction(uid: string, txId: string): Promise<void> {

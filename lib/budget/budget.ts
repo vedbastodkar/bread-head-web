@@ -40,7 +40,16 @@ export interface BudgetTransaction {
   nwsLevel?: NwsLevel
   name?: string
   note?: string
-  date?: number // ms epoch
+  date?: number // ms epoch — user-reported, back-datable
+  createdAt?: number // ms epoch — moment of entry, set once, never user-editable (data-contract §5)
+  platform?: 'ios' | 'web' // creating client; undefined on legacy rows
+}
+
+// Whole days between the user-reported date and the moment of entry. 0 = logged in real
+// time; large = a month-end data dump. Negative when the entry is post-dated.
+export function backdatedByDays(date: number | undefined, createdAt: number): number {
+  if (date == null) return 0
+  return Math.round((createdAt - date) / 86_400_000)
 }
 
 export interface BudgetConfig {

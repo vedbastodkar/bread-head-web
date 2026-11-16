@@ -13,6 +13,7 @@ import {
   budgetWarnings,
   sanitizeBudgetConfig,
   buildBudgetSubmission,
+  backdatedByDays,
   type BudgetCategory,
   type BudgetTransaction,
 } from '../../lib/budget/budget'
@@ -180,4 +181,13 @@ test('buildBudgetSubmission status is in_progress until the requirement is met',
 test('buildBudgetSubmission coerces a garbage lastUpdatedAt to 0', () => {
   const meta = buildBudgetSubmission({ boxesCount: 0, hasIncome: false, hasStarted: true, lastUpdatedAt: 'nope' as any }, { requireIncome: false, minBoxes: 0 })
   expect(meta.lastUpdatedAt).toBe(0)
+})
+
+// ---- entry-time vs reported date (data-contract §5) ----
+test('backdatedByDays: 0 when logged in real time, positive when back-dated, 0 with no date', () => {
+  const now = Date.UTC(2026, 8, 10, 12)
+  expect(backdatedByDays(now, now)).toBe(0)
+  expect(backdatedByDays(now - 3 * 86_400_000, now)).toBe(3)
+  expect(backdatedByDays(now + 86_400_000, now)).toBe(-1)
+  expect(backdatedByDays(undefined, now)).toBe(0)
 })

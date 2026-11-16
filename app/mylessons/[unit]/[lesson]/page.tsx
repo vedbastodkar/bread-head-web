@@ -1,7 +1,7 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { doc, getDoc, setDoc, arrayUnion } from 'firebase/firestore'
+import { doc, getDoc, setDoc, arrayUnion, writeBatch, serverTimestamp, Timestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase/client'
 import { useAuth } from '@/app/context/AuthContext'
 import { getLesson } from '@/lib/curriculum/lessons'
@@ -17,7 +17,10 @@ import {
   type LessonControls,
   type ClassLite,
 } from '@/lib/curriculum/controls'
-import { LessonPlayer } from '@/components/lesson/LessonPlayer'
+import { LessonPlayer, type SlideAnswer } from '@/components/lesson/LessonPlayer'
+import { isInteractive } from '@/lib/curriculum/slideTypes'
+import { logEvent } from '@/lib/analytics/events'
+import { recordAttempt, scoreOf, sortedRecords, type AnswerRecords } from '@/lib/analytics/lessonAnswers'
 
 type Target = { unit: number; lesson: number }
 
@@ -41,6 +44,10 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
   const [controls, setControls] = useState<LessonControls>(DEFAULT_CONTROLS)
   const [completedSet, setCompletedSet] = useState<Set<string>>(new Set())
   const [saveError, setSaveError] = useState(false)
+
+  // Graded-answer capture + lesson timer (data-contract §4/§5). Reset when a lesson starts.
+  const answersRef = useRef<AnswerRecords>(new Map())
+  const startedAtRef = useRef<number>(Date.now())
 
   // Any stale "couldn't save" banner is scoped to the lesson it happened on.
   useEffect(() => { setSaveError(false) }, [target])
@@ -81,6 +88,14 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
       }
       const id = `unit${t!.unit}lesson${t!.lesson}`
       setInitialSlide(done.has(id) ? 0 : (slideMap[id] ?? 0)) // resume unless already completed
+      // lesson_started goes out before the player mounts so it precedes the first
+      // lesson_slide_viewed. Teachers preview without telemetry (as with saveSlide).
+      const startedLesson = getLesson(t!.unit, t!.lesson)
+      if (!isTeacher && startedLesson) {
+        answersRef.current = new Map()
+        startedAtRef.current = Date.now()
+        logEvent('lesson_started', { screen: 'lesson', params: { lessonId: id, slideCount: startedLesson.slides.length, isOnboarding: false } })
+      }
       setTarget(t)
     })()
   }, [loading, user, isTeacher, router, unit, lessonNo])
@@ -94,8 +109,18 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
   }, [lessonId, user, isTeacher, classes])
 
   const saveSlide = useCallback((i: number) => {
-    if (!user || isTeacher || !lessonId) return
+    if (!user || isTeacher || !lessonId || !target) return
     setDoc(doc(db, 'users', user.uid), { lessonSlide: { [lessonId]: i } }, { merge: true }).catch(() => {})
+    const slide = getLesson(target.unit, target.lesson)?.slides[i]
+    logEvent('lesson_slide_viewed', { screen: 'lesson', params: { lessonId, slideIndex: i, isInteractive: slide ? isInteractive(slide) : false } })
+  }, [user, isTeacher, lessonId, target])
+
+  // Every attempt on a graded slide: accumulate the record (score/answers at completion)
+  // and emit lesson_answer with the running attempt number.
+  const handleAnswer = useCallback((a: SlideAnswer) => {
+    if (!user || isTeacher || !lessonId) return
+    const r = recordAttempt(answersRef.current, a.slideIndex, a.kind, a.isCorrect)
+    logEvent('lesson_answer', { screen: 'lesson', params: { lessonId, slideIndex: a.slideIndex, kind: a.kind, isCorrect: a.isCorrect, attempt: r.attempts } })
   }, [user, isTeacher, lessonId])
 
   const handleReport = useCallback(async (info: { lessonId: string; slide: number; text: string }) => {
@@ -116,15 +141,35 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
     // lessons must NOT move currentUnit/currentLesson — that pointer drives
     // cross-app (iOS) unlock (design D3).
     const onTrack = advancesFrontier(lessonId, completedSet)
+    const records = sortedRecords(answersRef.current)
+    const score = scoreOf(records)
+    const timeSpent = Math.round((Date.now() - startedAtRef.current) / 1000)
     try {
-      await setDoc(doc(db, 'users', user.uid), {
+      // One atomic batch: the top-level completedLessons arrayUnion (the cross-app UNLOCK
+      // signal both apps read) plus the per-lesson EVIDENCE record with score/time/answers
+      // (data-contract §5). Both merge — never a non-merge set on users/{uid}.
+      const batch = writeBatch(db)
+      batch.set(doc(db, 'users', user.uid), {
         lessonProgress: onTrack
           ? { completedLessons: arrayUnion(lessonId), currentUnit: target.unit, currentLesson: target.lesson }
           : { completedLessons: arrayUnion(lessonId) },
         profile: { updatedAt: new Date() },
       }, { merge: true })
+      batch.set(doc(db, 'users', user.uid, 'lessonProgress', lessonId), {
+        lessonId,
+        completedAt: serverTimestamp(),
+        score,
+        timeSpent,
+        answers: records.map((r) => ({
+          slideIndex: r.slideIndex, kind: r.kind, isCorrect: r.isCorrect,
+          attempts: r.attempts, wrongAttempts: r.wrongAttempts, answeredAt: Timestamp.fromMillis(r.answeredAt),
+        })),
+        platform: 'web',
+      }, { merge: true })
+      await batch.commit()
       setCompletedSet((prev) => { const n = new Set(prev); n.add(lessonId); return n })
       setSaveError(false)
+      logEvent('lesson_completed', { screen: 'lesson', params: { lessonId, score, timeSpent, gradedSlides: records.length } })
     } catch {
       // Recording the completion failed (offline / permission / quota). Surface it and
       // do NOT notify assignments — a submission must never be marked complete while the
@@ -197,6 +242,7 @@ export default function LessonPlayerPage({ params }: { params: { unit: string; l
       controls={controls}
       onSlideChange={saveSlide}
       onComplete={handleComplete}
+      onAnswer={handleAnswer}
       onReport={handleReport}
       onNext={goNext}
       nextLabel={next ? `Unit ${next.unit} · Lesson ${next.lesson}` : undefined}
