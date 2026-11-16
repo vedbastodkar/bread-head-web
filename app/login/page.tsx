@@ -52,6 +52,7 @@ function TeacherPane() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [orgCode, setOrgCode] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -95,10 +96,13 @@ function TeacherPane() {
         const res = await fetch('/api/auth/register-teacher', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ name: name.trim() }),
+          body: JSON.stringify({ name: name.trim(), orgCode: orgCode.trim() }),
         })
         if (!res.ok) {
-          setError('Could not create teacher account. Please try again.')
+          // 400 = bad organization code, 409 = the account already has a role (e.g. a student
+          // account) — show the server's message so they know what to fix.
+          const msg = res.status === 400 || res.status === 409 ? (await res.json().catch(() => null))?.error : null
+          setError(msg === 'Account already has a role.' ? 'That email is already registered to a student account.' : msg || 'Could not create teacher account. Please try again.')
           setBusy(false)
           return
         }
@@ -130,6 +134,12 @@ function TeacherPane() {
         {mode === 'signup' && <Field label="Name" type="text" value={name} onChange={setName} />}
         <Field label="Email" type="email" value={email} onChange={setEmail} />
         <Field label="Password" type="password" value={password} onChange={setPassword} />
+        {mode === 'signup' && (
+          <div>
+            <Field label="Organization code (optional)" type="text" value={orgCode} onChange={setOrgCode} required={false} />
+            <p className="text-xs text-textTitle/60 mt-1">If Bread Head gave your organization a code, enter it here. You can also add it later.</p>
+          </div>
+        )}
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit" disabled={busy}
@@ -249,14 +259,14 @@ function StudentPane() {
   )
 }
 
-function Field({ label, type, value, onChange }: {
-  label: string; type: string; value: string; onChange: (v: string) => void
+function Field({ label, type, value, onChange, required = true }: {
+  label: string; type: string; value: string; onChange: (v: string) => void; required?: boolean
 }) {
   return (
     <label className="block">
       <span className="block text-sm text-textTitle/70 mb-1">{label}</span>
       <input
-        type={type} value={value} onChange={(e) => onChange(e.target.value)} required
+        type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required}
         className="w-full px-4 py-2.5 rounded-xl border border-textTitle/15 focus:border-brandGreen outline-none"
       />
     </label>

@@ -11,6 +11,7 @@
     "test:update": "playwright test --update-snapshots"
   },
   "dependencies": {
+    "@google-cloud/bigquery": "^9.0.3",
     "@studio-freight/lenis": "^1.0.42",
     "@vercel/analytics": "^1.6.1",
     "firebase": "^12.15.0",

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useDashboard, pctComplete, attentionFlags } from './useDashboard'
 import { DashboardShell, DashboardSkeleton, DashboardError } from './DashboardShell'
 import { JoinInfo } from './parts'
+import { OrganizationCard } from './OrganizationCard'
 
 export function TeacherHome() {
   const { data, err, loading, user, signOut, reload } = useDashboard()
@@ -38,6 +39,8 @@ export function TeacherHome() {
         <AggStat label="Avg progress" value={`${avgProgress}%`} />
         <AggStat label="Need attention" value={String(flagged.length)} highlight={flagged.length > 0} />
       </div>
+
+      {user && <OrganizationCard user={user} />}
 
       {flagged.length > 0 && (
         <section className="mb-10">

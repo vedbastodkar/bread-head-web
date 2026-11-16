@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminAuth, adminDb } from '@/lib/firebase/admin'
 import { FieldValue } from 'firebase-admin/firestore'
 import { rateLimit, clientIp } from '@/lib/rateLimit'
+import { setTeacherSponsorId, sponsorIdForOrgCode } from '@/lib/sponsors/server'
 
 // Server-only: sets the `role: 'teacher'` custom claim, which only the Admin SDK can do.
 // Called by the login page (Task 8) right after a brand-new Firebase account is created,
@@ -59,6 +60,20 @@ export async function POST(req: NextRequest) {
   }
   const name = typeof body?.name === 'string' ? body.name.slice(0, 100).trim() : ''
 
+  // Optional organization code (issued by the admin per sponsoring partner). Checked BEFORE
+  // any write so a typo leaves the account roleless and the teacher can simply resubmit.
+  const orgCode = typeof body?.orgCode === 'string' ? body.orgCode.trim() : ''
+  let sponsorId: string | null = null
+  if (orgCode) {
+    sponsorId = await sponsorIdForOrgCode(orgCode)
+    if (!sponsorId) {
+      return NextResponse.json(
+        { ok: false, error: 'That organization code isn’t valid. Check it, or leave it blank and add it later.' },
+        { status: 400 },
+      )
+    }
+  }
+
   // Two writes that aren't a single atomic unit (Auth claim + Firestore doc). Set
   // the claim first, then the doc; if the doc write fails, roll the claim back so a
   // partial failure leaves a CLEAN roleless account the user can retry — never a
@@ -66,6 +81,9 @@ export async function POST(req: NextRequest) {
   // re-runnable: the guard above only blocks accounts that already have a role.)
   try {
     await adminAuth.setCustomUserClaims(uid, { role: 'teacher' })
+    // Before the profile doc: if this throws, the rollback below leaves a clean roleless
+    // account (the guard above keys on `profile.role`, which has not been written yet).
+    if (sponsorId) await setTeacherSponsorId(uid, sponsorId, 'code')
     await adminDb.doc(`users/${uid}`).set(
       {
         profile: {
@@ -75,9 +93,9 @@ export async function POST(req: NextRequest) {
           role: 'teacher',
           isTeacher: true,
           provider: 'email',
-          createdAt: FieldValue.serverTimestamp(),
           updatedAt: FieldValue.serverTimestamp(),
-          classIds: [],
+          // Only seed these on a brand-new doc — never wipe an existing account's classes.
+          ...(existing.exists ? {} : { createdAt: FieldValue.serverTimestamp(), classIds: [] }),
         },
       },
       { merge: true }
