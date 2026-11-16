@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
     const nextIds = Array.from(new Set(current.filter((c) => c !== fromClassId).concat(toClassId)))
     tx.delete(fromRoster)
     tx.set(toRoster, { studentUid, displayName, joinedAt: FieldValue.serverTimestamp(), status: 'active' })
-    tx.update(userRef, { 'profile.classIds': nextIds })
+    // Account gone (deleted, half-finished join): still move the roster row.
+    if (userSnap.exists) tx.update(userRef, { 'profile.classIds': nextIds })
   })
   return NextResponse.json({ ok: true })
 }

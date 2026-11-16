@@ -74,9 +74,15 @@ export function useDashboard() {
       try {
         const token = await user.getIdToken()
         const res = await fetch('/api/dashboard/overview', { headers: { Authorization: `Bearer ${token}` } })
-        if (!res.ok) throw new Error(await res.text())
+        if (!res.ok) {
+          const text = await res.text()
+          let msg = text
+          try { const j = JSON.parse(text); if (j?.error) msg = String(j.error) } catch { /* not json */ }
+          throw new Error(msg || `Request failed (${res.status})`)
+        }
         const json = await res.json()
         setData(json.classes)
+        setErr('')
       } catch (e: any) {
         setErr(e?.message || 'Failed to load')
       }

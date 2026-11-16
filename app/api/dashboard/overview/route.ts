@@ -98,9 +98,10 @@ export async function GET(req: NextRequest) {
       }))
       const students = await Promise.all(
         rosterSnap.docs.map(async (r) => {
-          const uid = r.get('studentUid') as string
-          const uDoc = await adminDb.collection('users').doc(uid).get()
-          const d = uDoc.data() ?? {}
+          // The roster doc id IS the student uid; fall back to it so a row missing the field
+          // (legacy / hand-written) cannot take the whole dashboard down.
+          const uid = (r.get('studentUid') as string | undefined) || r.id
+          const d = await adminDb.collection('users').doc(uid).get().then((u) => u.data() ?? {}, () => ({} as Record<string, any>))
           const lp = (d.lessonProgress ?? {}) as any
           const gp = (d.gamificationProgress ?? {}) as any
           const updatedAt = d.profile?.updatedAt

@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { onAuthStateChanged, signOut as fbSignOut, type User } from 'firebase/auth'
+import { onIdTokenChanged, signOut as fbSignOut, type User } from 'firebase/auth'
 import { auth } from '@/lib/firebase/client'
 
 interface AuthCtx {
@@ -20,15 +20,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    return onAuthStateChanged(auth, async (u) => {
+    // onIdTokenChanged (not onAuthStateChanged): it also fires when the token is refreshed, which
+    // is how a brand-new teacher's `role` claim arrives — the claim is set by
+    // /api/auth/register-teacher AFTER the account is created and the first event has fired.
+    return onIdTokenChanged(auth, async (u) => {
       setUser(u)
-      if (u) {
-        const res = await u.getIdTokenResult()
-        setRole((res.claims.role as string) ?? null)
-      } else {
-        setRole(null)
+      try {
+        setRole(u ? (((await u.getIdTokenResult()).claims.role as string) ?? null) : null)
+      } catch {
+        setRole(null) // token refresh failed (offline, revoked) — never leave pages on a skeleton
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     })
   }, [])
 

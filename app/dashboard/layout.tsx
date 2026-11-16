@@ -5,7 +5,7 @@ import { ComingSoon } from './ComingSoon'
 // Temporarily disabled: the dashboard is unstable, so every /dashboard/** route
 // renders a "coming soon" curtain instead. All page code is untouched — set this
 // back to true to restore the real dashboard.
-const DASHBOARD_ENABLED = false
+const DASHBOARD_ENABLED = true
 
 // Wraps every /dashboard/** route so teacher pages can use useToast() for
 // in-app notifications and confirmations instead of native alert()/confirm().

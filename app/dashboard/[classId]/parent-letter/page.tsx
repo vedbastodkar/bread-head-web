@@ -8,6 +8,7 @@ export default function ParentLetter() {
   const { data, err, loading } = useDashboard()
 
   if (loading || (!data && !err)) return <main className="min-h-screen bg-white p-10"><p>Loading…</p></main>
+  if (err) return <main className="min-h-screen bg-white p-10"><p>Couldn’t load this class. Refresh to try again.</p></main>
   const cls = data?.find((c) => c.id === classId)
   if (!cls) return <main className="min-h-screen bg-white p-10"><p>Class not found.</p></main>
 
@@ -35,8 +36,12 @@ export default function ParentLetter() {
           <div className="bg-bgSage rounded-xl p-5 my-6 text-center">
             <div className="text-sm text-textTitle/70">Join code</div>
             <div className="font-display text-3xl tracking-wide my-1">{cls.joinCode ?? '-'}</div>
-            <div className="text-sm text-textTitle/70 mt-2">or visit</div>
-            <div className="font-medium">{link}</div>
+            {cls.joinCode && (
+              <>
+                <div className="text-sm text-textTitle/70 mt-2">or visit</div>
+                <div className="font-medium">{link}</div>
+              </>
+            )}
           </div>
           <p className="mb-4">
             Bread Head keeps student data minimal and is designed for classroom use. If you have any questions,

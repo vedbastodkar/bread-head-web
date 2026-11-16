@@ -34,11 +34,13 @@ export async function POST(req: NextRequest, { params }: { params: { classId: st
   // Guard: only remove a student who is actually in this class.
   if (!rosterSnap.exists) return NextResponse.json({ error: 'Student not in class' }, { status: 404 })
 
+  // The student's account may no longer exist (deleted account, half-finished join); the
+  // roster row must still be removable, so only touch the user doc when it is there.
+  const userRef = adminDb.collection('users').doc(studentUid)
+  const userExists = (await userRef.get()).exists
   const batch = adminDb.batch()
   batch.delete(rosterRef)
-  batch.update(adminDb.collection('users').doc(studentUid), {
-    'profile.classIds': FieldValue.arrayRemove(classId),
-  })
+  if (userExists) batch.update(userRef, { 'profile.classIds': FieldValue.arrayRemove(classId) })
   await batch.commit()
 
   return NextResponse.json({ ok: true })

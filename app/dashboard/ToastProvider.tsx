@@ -63,13 +63,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setPending(null)
   }
 
-  // Focus the confirm button and wire Esc = cancel / Enter = confirm while open.
+  // Focus the confirm button and wire Esc = cancel while open. Enter needs no handler: it
+  // activates whichever button has focus, so tabbing to Cancel and pressing Enter cancels.
   useEffect(() => {
     if (!pending) return
     confirmBtnRef.current?.focus()
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') resolveConfirm(false)
-      if (e.key === 'Enter') resolveConfirm(true)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)

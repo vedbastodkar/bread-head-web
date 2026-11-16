@@ -1,4 +1,5 @@
 'use client'
+import { JOIN_CODE_KEY } from '@/lib/joinLink'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { doc, getDoc } from 'firebase/firestore'
@@ -208,13 +209,19 @@ function SectionsPanel({ user }: { user: { getIdToken: () => Promise<string> } |
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
 
+  // Arrived via a /join/CODE link: pre-fill the box (the student still presses Join).
+  useEffect(() => {
+    try { const c = window.sessionStorage.getItem(JOIN_CODE_KEY); if (c) setCode(c) } catch { /* private mode */ }
+  }, [])
+
   async function load() {
     if (!user) return
     try {
       const token = await user.getIdToken()
       const res = await fetch('/api/student/sections', { headers: { Authorization: `Bearer ${token}` } })
-      setSections(res.ok ? (await res.json()).sections : [])
-    } catch { setSections([]) }
+      if (!res.ok) throw new Error('sections')
+      setSections((await res.json()).sections)
+    } catch { setSections([]); setMsg('Couldn’t load your sections. Refresh to try again.') }
   }
   useEffect(() => { load() }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -230,7 +237,10 @@ function SectionsPanel({ user }: { user: { getIdToken: () => Promise<string> } |
       })
       const j = await res.json()
       if (!res.ok) setMsg(j.error || 'Could not join')
-      else { setMsg(`Joined ${j.name}.`); setCode(''); load() }
+      else {
+        setMsg(`Joined ${j.name}.`); setCode(''); load()
+        try { window.sessionStorage.removeItem(JOIN_CODE_KEY) } catch { /* private mode */ }
+      }
     } catch { setMsg('Could not join') } finally { setBusy(false) }
   }
 
