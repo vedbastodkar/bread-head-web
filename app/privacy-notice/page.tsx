@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyNoticePage() {
-  const lastUpdated = 'July 12, 2026'
+  const lastUpdated = 'September 10, 2026'
 
   return (
     <main
@@ -94,6 +94,15 @@ export default function PrivacyNoticePage() {
           <p>
             We do not sell, rent, or share your personal information with
             advertisers or data brokers.
+          </p>
+          <p>
+            <strong>Sponsoring partners</strong>: some Bread Head programs are
+            sponsored by community institutions such as banks and credit unions.
+            If you tell us a sponsoring partner introduced you to Bread Head, or
+            you join a class linked to one, we share{' '}
+            <strong>aggregate participation data only</strong> with that partner
+            (for example, how many students took part and how they progressed)
+            &mdash; never individual records.
           </p>
         </Section>
 
