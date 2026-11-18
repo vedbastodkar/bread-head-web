@@ -1,6 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import NonprofitDisclosure from './NonprofitDisclosure'
+import pkg from '../../package.json'
+
+// Build stamp: release version plus the deployed commit, so it's easy to tell which build is live.
+const BUILD_SHA = (process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ?? '').slice(0, 7)
+const BUILD_LABEL = `v${pkg.version}${BUILD_SHA ? ` · ${BUILD_SHA}` : ''}`
 
 export default function Footer() {
   return (
@@ -123,6 +128,16 @@ export default function Footer() {
           Charity ID + physical address to be displayed on the site). */}
       <div className="footer-bottom-inner">
         <NonprofitDisclosure tone="dark" />
+        <p
+          style={{
+            margin: 0,
+            fontFamily: 'var(--font-body)',
+            fontSize: '11px',
+            color: 'rgba(230,237,217,0.3)',
+          }}
+        >
+          {BUILD_LABEL}
+        </p>
       </div>
     </footer>
   )
